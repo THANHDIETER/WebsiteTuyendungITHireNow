@@ -1,6 +1,5 @@
-```php
 <?php
-// Migration: create_users_table
+// Migration: create_resumes_table
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -8,17 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('resumes', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
-            $table->string('password_hash');
-            $table->enum('role', ['job_seeker', 'employer', 'admin']);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->string('file_url')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('resumes');
     }
 };
