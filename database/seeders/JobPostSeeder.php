@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
-class JobSeeder extends Seeder
+class JobPostSeeder extends Seeder
 {
     public function run(): void
     {

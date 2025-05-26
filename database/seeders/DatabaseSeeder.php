@@ -1,5 +1,4 @@
 <?php
-// File: database/seeders/DatabaseSeeder.php
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -10,12 +9,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            UserProfileSeeder::class,
             CompanySeeder::class,
             ServicePackageSeeder::class,
             CvTemplateSeeder::class,
             JobTagSeeder::class,
-            JobSeeder::class,
+            UserProfileSeeder::class,
+            JobPostSeeder::class,
             ResumeSeeder::class,
             ExperienceSeeder::class,
             EducationSeeder::class,
@@ -26,10 +25,12 @@ class DatabaseSeeder extends Seeder
             JobViewSeeder::class,
             JobSuggestionSeeder::class,
             JobFavoriteSeeder::class,
+            SavedJobsSeeder::class,
             ChatThreadSeeder::class,
             ChatMessageSeeder::class,
             JobFeedbackSeeder::class,
             ExperienceRatingSeeder::class,
+            ExperienceVerificationsSeeder::class,
             NotificationSeeder::class,
             UserActivityLogSeeder::class,
             UserLoginHistorySeeder::class,
