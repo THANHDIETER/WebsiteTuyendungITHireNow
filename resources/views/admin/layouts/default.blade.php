@@ -16,6 +16,8 @@
             @include('admin.layouts.partials.sidebar')
 
             @yield('content')
+             @stack('scripts')
+
             {{-- <div class="page-body">
                 <div class="container-fluid">
                     <div class="row page-title">
