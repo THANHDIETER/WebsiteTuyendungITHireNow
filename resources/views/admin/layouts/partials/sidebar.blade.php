@@ -159,110 +159,17 @@
                                 <svg class="stroke-icon">
                                     <use href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#Wallet">
                                     </use>
-                                </svg><span>Duyệt bài đăng tuyển</span></a>
-                        </li>
-                        <li class="sidebar-list">
+                                </svg><span>Kanban Board</span></a>
+
                             <svg class="pinned-icon">
                                 <use href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#Pin"></use>
-                            </svg><a class="sidebar-link" href="javascript:void(0)">
+                            </svg><a class="sidebar-link" href="search.html">
                                 <svg class="stroke-icon">
-                                    <use href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#Bag">
+                                    <use href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#Search">
                                     </use>
-                                </svg><span>Ecommerce</span>
-                                <svg class="feather">
-                                    <use
-                                        href="https://admin.pixelstrap.net/edmin/assets/svg/feather-icons/dist/feather-sprite.svg#chevron-right">
-                                    </use>
-                                </svg></a>
-                            <ul class="sidebar-submenu">
-                                <li><a href="product.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Product</a></li>
-                                <li><a href="product-page.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Product Page </a></li>
-                                <li><a href="add-products.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Add Product </a></li>
-                                <li><a href="list-products.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Product List</a></li>
-                                <li><a href="payment-details.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Payment Details </a></li>
-                                <li><a href="order-history.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Order History </a></li>
-                                <li><a class="submenu-title" href="javascript:void(0)">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Invoice
-                                        <svg class="feather">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/feather-icons/dist/feather-sprite.svg#chevron-right">
-                                            </use>
-                                        </svg></a>
-                                    <ul class="according-submenu">
-                                        <li><a href="invoice-1.html">
-                                                Invoice-1</a></li>
-                                        <li><a href="invoice-2.html">
-                                                Invoice-2</a></li>
-                                        <li><a href="invoice-3.html">
-                                                Invoice-3</a></li>
-                                        <li><a href="invoice-4.html">
-                                                Invoice-4</a></li>
-                                        <li><a href="invoice-5.html">
-                                                Invoice-5</a></li>
-                                        <li><a href="invoice-template.html">
-                                                Invoice-6</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="cart.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Cart </a></li>
-                                <li><a href="list-wish.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Wishlist </a></li>
-                                <li><a href="checkout.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Checkout </a></li>
-                                <li><a href="pricing.html">
-                                        <svg class="svg-menu">
-                                            <use
-                                                href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#right-3">
-                                            </use>
-                                        </svg>Pricing</a></li>
-                            </ul>
+                                </svg><span>Search Result</span></a>
                         </li>
+                        <li class="line"></li>
                         
                     </ul>
                 </div>

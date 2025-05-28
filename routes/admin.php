@@ -2,10 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
 
 use App\Http\Controllers\Admin\JobController;
 
-Route::get('/admin', [UserController::class, 'index']);
+Route::get('/admin', [DashboardController::class, 'index']);
 
 
 

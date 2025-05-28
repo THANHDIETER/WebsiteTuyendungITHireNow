@@ -7,9 +7,7 @@ require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm']);
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
