@@ -159,7 +159,7 @@
                                 <svg class="stroke-icon">
                                     <use href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#Wallet">
                                     </use>
-                                </svg><span>Kanban Board</span></a>
+                                </svg><span>Duyệt tin tuyển dụng</span></a>
 
                             <svg class="pinned-icon">
                                 <use href="https://admin.pixelstrap.net/edmin/assets/svg/iconly-sprite.svg#Pin"></use>
