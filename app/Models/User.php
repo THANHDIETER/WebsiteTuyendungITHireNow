@@ -66,4 +66,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->password_hash;
     }
+
+    public function resumes()
+    {
+        return $this->hasMany(Resume::class);
+    }
+
 }

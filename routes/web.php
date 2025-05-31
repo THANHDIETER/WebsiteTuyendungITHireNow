@@ -8,6 +8,7 @@ require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
 
 
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -21,6 +22,7 @@ Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.r
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
 
 Route::get('/list-user', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('list-user');
+
 
 // Route::group([
 //     'prefix' => 'admin',

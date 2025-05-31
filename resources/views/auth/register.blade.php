@@ -32,7 +32,9 @@
     <!-- Ico Icon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('../assets/css/vendors/%40icon/icofont/icofont.css') }}">
     <!-- Flag Icon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('../assets/css/vendors/flag-icon.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/flag-icon.css')}}">
+
     <!-- Themify Icon css -->
     <link rel="stylesheet" type="text/css"
         href="{{ asset('../assets/css/vendors/themify-icons/themify-icons/css/themify.css') }}">
