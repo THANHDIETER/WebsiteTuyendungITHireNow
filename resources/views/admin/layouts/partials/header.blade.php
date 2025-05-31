@@ -9,42 +9,42 @@
 
 <title>Edmin - Premium Admin Template</title>
 <!-- Favicon icon-->
-<link rel="icon" href="../assets/images/favicon/favicon.png" type="image/x-icon">
-<link rel="shortcut icon" href="../assets/images/favicon/favicon.png" type="image/x-icon">
+<link rel="icon" href="{{ asset('assets/images/favicon/favicon.png')}}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png')}}" type="image/x-icon">
 <!-- Google font-->
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
     rel="stylesheet">
 <!-- Font awesome icon css -->
-<link rel="stylesheet" href="../assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css">
-<link rel="stylesheet" href="../assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css">
-<link rel="stylesheet" href="../assets/css/vendors/%40fortawesome/fontawesome-free/css/brands.css">
-<link rel="stylesheet" href="../assets/css/vendors/%40fortawesome/fontawesome-free/css/solid.css">
-<link rel="stylesheet" href="../assets/css/vendors/%40fortawesome/fontawesome-free/css/regular.css">
+<link rel="stylesheet" href="{{asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/brands.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/solid.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/regular.css')}}">
 <!-- Ico Icon css -->
-<link rel="stylesheet" type="text/css" href="../assets/css/vendors/%40icon/icofont/icofont.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css')}}">
 <!-- Flag Icon css -->
-<link rel="stylesheet" type="text/css" href="../assets/css/vendors/flag-icon.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css')}}">
 <!-- Themify Icon css -->
-<link rel="stylesheet" type="text/css" href="../assets/css/vendors/themify-icons/themify-icons/css/themify.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify-icons/themify-icons/css/themify.css')}}">
 <!-- Animation css -->
-<link rel="stylesheet" type="text/css" href="../assets/css/vendors/animate.css/animate.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css')}}">
 <!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css" href="../assets/css/vendors/weather-icons/css/weather-icons.min.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css')}}">
 <!-- Apex Chart css-->
-<link rel="stylesheet" type="text/css" href="../assets/css/vendors/apexcharts/dist/apexcharts.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css')}}">
 <!-- Data Table css-->
-<link rel="stylesheet" type="text/css" href="../assets/css/vendors/simple-datatables/dist/style.css">
-<link rel="stylesheet" type="text/css" href="../assets/css/vendors/scrollbar.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css')}}">
 <!-- App css-->
-<link rel="stylesheet" href="../assets/css/style.css">
-<link id="color" rel="stylesheet" href="../assets/css/color-1.css" media="screen">
+<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+<link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css')}}" media="screen">
 
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href="index.html"><img class="for-light"
-                src="../assets/images/logo/logo.png" alt="logo"><img class="for-dark"
-                src="../assets/images/logo/dark-logo.png" alt="logo"></a><a class="close-btn"
+                src="{{ asset('assets/images/logo/logo.png')}}" alt="logo"><img class="for-dark"
+                src="{{ asset('assets/images/logo/dark-logo.png')}}" alt="logo"></a><a class="close-btn"
             href="javascript:void(0)">
             <div class="toggle-sidebar">
                 <div class="line"></div>
@@ -97,7 +97,7 @@
                                     <h6>Rick Novak</h6>
                                 </div>
                                 <div class="flex-shrink-0"> <img class="b-r-15 img-40"
-                                        src="../assets/images/avatar/10.jpg" alt=""></div>
+                                        src="{{asset('assets/images/avatar/10.jpg')}}" alt=""></div>
                             </li>
                             <li class="d-flex align-items-center b-l-secondary">
                                 <div class="flex-grow-1"> <span>12:47 am</span><a href="private-chat.html">
@@ -106,7 +106,7 @@
                                     <h6>Susan Connor</h6>
                                 </div>
                                 <div class="flex-shrink-0"> <img class="b-r-15 img-40"
-                                        src="../assets/images/avatar/4.jpg" alt=""></div>
+                                        src="{{asset('assets/images/avatar/4.jpg')}}" alt=""></div>
                             </li>
                             <li class="d-flex align-items-center b-l-tertiary">
                                 <div class="flex-grow-1"> <span>06:10 pm</span><a href="private-chat.html">
@@ -115,7 +115,7 @@
                                     <h6>Roger Lum</h6>
                                 </div>
                                 <div class="flex-shrink-0"> <img class="b-r-15 img-40"
-                                        src="../assets/images/avatar/1.jpg" alt=""></div>
+                                        src="{{asset('assets/images/avatar/1.jpg')}}" alt=""></div>
                             </li>
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group"><a class="btn btn-secondary" href="private-chat.html">All
@@ -209,7 +209,7 @@
                         <ul>
                             <li class="cartbox d-flex bg-light-primary">
                                 <div class="flex-shrink-0 border-primary"><img
-                                        src="../assets/images/dashboard2/product/1.png" alt=""></div>
+                                        src="{{asset('assets/images/dashboard2/product/1.png')}}" alt=""></div>
                                 <div class="touchpin-details"><a href="cart.html">
                                         <h5>Apple Computers</h5>
                                     </a><span>$2600.00</span>
@@ -236,7 +236,7 @@
                             </li>
                             <li class="cartbox d-flex bg-light-secondary">
                                 <div class="flex-shrink-0 border-secondary"><img
-                                        src="../assets/images/dashboard2/product/2.png" alt=""></div>
+                                        src="{{asset('assets/images/dashboard2/product/2.png')}}" alt=""></div>
                                 <div class="touchpin-details"><a href="cart.html">
                                         <h5>Microwave</h5>
                                     </a><span>$1450.45</span>
@@ -263,7 +263,7 @@
                             </li>
                             <li class="cartbox d-flex bg-light-tertiary">
                                 <div class="flex-shrink-0 border-tertiary"><img
-                                        src="../assets/images/dashboard2/product/3.png" alt=""></div>
+                                        src="{{asset('assets/images/dashboard2/product/3.png')}}" alt=""></div>
                                 <div class="touchpin-details"><a href="cart.html">
                                         <h5>Mackup Kit</h5>
                                     </a><span>$300.45</span>
@@ -367,7 +367,7 @@
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
-                    <div class="d-flex align-items-center"><img src="../assets/images/profile.png" alt="">
+                    <div class="d-flex align-items-center"><img src="{{asset('assets/images/profile.png')}}" alt="">
                         <div class="flex-grow-1">
                             <h5>Wade Warren</h5><span>UI Designer</span>
                         </div>
