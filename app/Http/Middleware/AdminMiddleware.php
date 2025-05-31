@@ -14,10 +14,14 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Chưa xác thực'], 401);
+        }
+        
         if (Auth::check() && Auth::user()->role === 'admin') {
             return $next($request);
         }
 
-        return response()->json(['message' => 'Forbidden. Admin only.'], 403);
+        return response()->json(['message' => 'Bị cấm. Chỉ dành cho quản trị viên.'], 403);
     }
 }
