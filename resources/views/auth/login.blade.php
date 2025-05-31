@@ -44,6 +44,7 @@
     <!-- App css-->
     <link rel="stylesheet" href="{{ asset('../assets/css/style.css') }}">
     <link id="color" rel="stylesheet" href="{{ asset('../assets/css/color-1.css') }}" media="screen">
+    <script src="{{ url('https://apis.google.com/js/api:client') }}"></script>
 </head>
 
 <body>
@@ -91,8 +92,8 @@
                                 <div class="form-group">
                                     <label class="col-form-label">Password</label>
                                     <div class="form-input position-relative">
-                                        <input class="form-control" type="password" id="login[password]"
-                                            name="password" placeholder="*********">
+                                        <input class="form-control" type="password" id="login[password]" name="password"
+                                            placeholder="*********">
                                         <div class="show-hide"><span class="show"> </span></div>
                                     </div>
                                     @error('password')
@@ -112,16 +113,12 @@
                                 </div>
                                 <div class="form-group">
                                     <ul class="login-social">
-                                        <li><a href="{{ url('#') }}" target="_blank"><i
-                                                    class="fa-brands fa-linkedin"></i></a></li>
-                                        <li><a href="{{ url('#') }}" target="_blank"><i
+                                        <li><a href="{{ route('auth.redirect') }}"><i
                                                     class="fa-brands fa-google"></i></a></li>
-                                        <li><a href="{{ url('#') }}" target="_blank"><i
-                                                    class="fa-brands fa-facebook"></i></a></li>
-                                        <li><a href="{{ url('#') }}" target="_blank"><i
-                                                    class="fa-brands fa-instagram"></i></a></li>
                                     </ul>
                                 </div>
+                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn"
+                                    data-theme="dark"></div>
                                 <p class="mt-4 mb-0 text-center">Don't have account?<a class="ms-2"
                                         href="{{ route('register') }}">Create Account</a></p>
                             </form>
