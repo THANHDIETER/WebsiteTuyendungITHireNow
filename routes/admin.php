@@ -8,8 +8,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
 use PHPUnit\Framework\Attributes\Group;
 
+
 // Route::prefix('admin')->middleware('admin')->group(function () {
 Route::prefix('admin')->group(function () {
+
     // Dashboard route
     Route::get('/', [DashboardController::class, 'index']);
 
