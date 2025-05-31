@@ -8,8 +8,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -22,7 +20,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255|unique:users',
-            'password_hash' => 'required|string|min:6',
+            'password' => 'required|string|min:6',
             'role' => 'required|in:job_seeker,employer'
         ]);
 
@@ -32,28 +30,32 @@ class AuthController extends Controller
 
         try {
             $user = User::create([
-                // 'name'     => $request->name,
                 'email'    => $request->email,
-                'password_hash' => Hash::make($request->password_hash),
-                'role'     => $request->role
+                'password_hash' => Hash::make($request->password),
+                'role'     => $request->role,
+                'is_blocked' => false,
             ]);
 
-            $user->assignRole($request->role);
+            // Gán role nếu dùng spatie hoặc mặc định thì bỏ dòng này
+            if (method_exists($user, 'assignRole')) {
+                $user->assignRole($request->role);
+            }
 
-            $token = JWTAuth::fromUser($user);
+            // Tạo token bằng Sanctum
+            $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'message' => 'User registered successfully',
                 'user' => [
                     'id'    => $user->id,
-                    // 'name'  => $user->name,
                     'email' => $user->email,
                     'role'  => $user->role,
                 ],
-                // 'token' => $token,
+                'token' => $token,
+                'token_type' => 'Bearer',
             ], 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
         }
     }
 
@@ -68,27 +70,33 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $credentials = $request->only('email', 'password');
+        $user = User::where('email', $request->email)->first();
 
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Invalid credentials'], 401);
-            }
-
-            $user = JWTAuth::setToken($token)->authenticate();
-
-            return response()->json([
-                'token' => $token,
-                'role' => $user->role,
-                'user' => [
-                    'id' => $user->id,
-                    'email' => $user->email,
-                ]
-            ], 200);
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Could not create token: ' . $e->getMessage()], 500);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+        if (!$user || !Hash::check($request->password, $user->password_hash)) {
+            return response()->json(['error' => 'Email hoặc mật khẩu không đúng'], 401);
         }
+
+        if ($user->is_blocked) {
+            return response()->json(['error' => 'Tài khoản của bạn đã bị khóa'], 403);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type'   => 'Bearer',
+            'user'         => [
+                'id'    => $user->id,
+                'email' => $user->email,
+                'role'  => $user->role,
+            ],
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json(['message' => 'Đăng xuất thành công']);
     }
 }

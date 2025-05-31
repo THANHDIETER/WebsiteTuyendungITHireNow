@@ -2,74 +2,45 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Các trường có thể gán hàng loạt.
      */
     protected $fillable = [
         'email',
-        'password_hash',
+        'password', // Đã đổi từ password_hash sang password để Laravel/Sanctum hoạt động chuẩn
         'role',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Các trường ẩn khi trả về JSON.
      */
     protected $hidden = [
-        'password_hash',
+        'password',
         'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Kiểu dữ liệu tự động ép kiểu.
      */
-    protected function casts(): array
-    {
-        return [
-            // 'email_verified_at' => 'datetime',
-            // 'password_hash' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [
-            'role' => $this->role,
-            'permissions' => $this->getAllPermissions()->pluck('name'),
-        ];
-    }
-
-    // Ghi đè để chỉ định cột mật khẩu là password_hash
-    public function getAuthPassword()
-    {
-        return $this->password_hash;
-    }
-
+    /**
+     * Quan hệ: người dùng có nhiều hồ sơ.
+     */
     public function resumes()
     {
         return $this->hasMany(Resume::class);
     }
-
 }
