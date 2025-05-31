@@ -11,20 +11,20 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class EnsureAdminRole
 {
    public function handle(Request $request, Closure $next): Response
-{
-    $guard = $request->is('api/*') ? 'api' : 'web';
-    $user = Auth::guard($guard)->user();
+    {
+        $guard = $request->is('api/*') ? 'api' : 'web';
+        $user = Auth::guard($guard)->user();
 
-    if (!$user || (JWTAuth::parseToken()->getClaim('role') !== 'admin' && $user->role !== 'admin')) {
-        if ($request->is('api/*')) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Chỉ admin mới có quyền truy cập.',
-            ], 403);
+        if (!$user || (JWTAuth::parseToken()->getClaim('role') !== 'admin' && $user->role !== 'admin')) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Chỉ admin mới có quyền truy cập.',
+                ], 403);
+            }
+            abort(403, 'Chỉ admin mới có quyền truy cập.');
         }
-        abort(403, 'Chỉ admin mới có quyền truy cập.');
-    }
 
-    return $next($request);
-}
+        return $next($request);
+    }
 }

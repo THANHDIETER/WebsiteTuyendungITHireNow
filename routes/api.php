@@ -3,11 +3,16 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ResumeController;
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Admin\JobApiController;
+
+////
+use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\RoleMiddleware;
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -20,6 +25,7 @@ Route::prefix('admin')->middleware(['auth:api','throttle:10,1', 'admin'])->group
 
 Route::get('/user', function (Request $request) {
     return $request->user();
+
 })->middleware('auth:sanctum');
 
 
@@ -33,4 +39,15 @@ Route::prefix('admin')->middleware(['auth:api', 'admin'])->group(function () {
     Route::get('/jobs', [JobApiController::class, 'index'])->name('api.admin.jobs.index');
     Route::patch('/jobs/{id}/approve', [JobApiController::class, 'approve'])->name('api.admin.jobs.approve');
     Route::delete('/jobs/{id}', [JobApiController::class, 'destroy'])->name('api.admin.jobs.destroy');
+});
+
+
+/////////
+Route::prefix('admin')->middleware([AuthMiddleware::class])->group(function () {
+    // Dùng alias 'role:admin' thay cho closure
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/jobs', [JobApiController::class, 'index'])->name('api.admin.jobs.index');
+        Route::patch('/jobs/{id}/approve', [JobApiController::class, 'approve'])->name('api.admin.jobs.approve');
+        Route::delete('/jobs/{id}', [JobApiController::class, 'destroy'])->name('api.admin.jobs.destroy');
+    });
 });

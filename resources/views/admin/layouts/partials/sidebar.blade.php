@@ -170,7 +170,7 @@
                                 </svg><span>Search Result</span></a>
                         </li>
                         <li class="line"></li>
-                        
+
                     </ul>
                 </div>
                 <div class="right-arrow" id="right-arrow">
