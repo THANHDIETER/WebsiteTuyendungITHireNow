@@ -3,21 +3,28 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * Xử lý yêu cầu vào route có middleware này.
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        $user = $request->user(); // Tương thích cho cả Sanctum và Web
+
+        if ($user && $user->role === 'admin') {
             return $next($request);
         }
 
-        return response()->json(['message' => 'Forbidden. Admin only.'], 403);
+        // Nếu request là từ API
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Forbidden. Admin only.'], 403);
+        }
+
+        // Nếu request từ web (giao diện blade)
+        abort(403, 'Bạn không có quyền truy cập.');
     }
 }

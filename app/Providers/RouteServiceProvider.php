@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use App\Http\Middleware\RoleMiddleware;
+use App\Http\Middleware\AdminMiddleware;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -13,6 +13,8 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
 
 
-        Route::aliasMiddleware('role', RoleMiddleware::class);
+        Route::aliasMiddleware('role', AdminMiddleware::class);
+        
+
     }
 }
