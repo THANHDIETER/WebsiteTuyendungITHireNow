@@ -23,9 +23,6 @@ Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.c
 
 Route::get('/list-user', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('list-user');
 
-Route::get('/resumes',function(){
-    return view('admin.resumes.index');
-});
 
 // Route::group([
 //     'prefix' => 'admin',

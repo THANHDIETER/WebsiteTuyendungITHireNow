@@ -40,7 +40,7 @@ class AuthController extends Controller
 
             $user->assignRole($request->role);
 
-            $token = JWTAuth::fromUser($user);
+            // $token = JWTAuth::fromUser($user);
 
             return response()->json([
                 'message' => 'User registered successfully',
@@ -58,37 +58,38 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $credentials = $request->only('email', 'password');
-
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Invalid credentials'], 401);
-            }
-
-            $user = JWTAuth::setToken($token)->authenticate();
-
-            return response()->json([
-                'token' => $token,
-                'role' => $user->role,
-                'user' => [
-                    'id' => $user->id,
-                    'email' => $user->email,
-                ]
-            ], 200);
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Could not create token: ' . $e->getMessage()], 500);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
-        }
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
     }
+
+    $credentials = $request->only('email', 'password');
+
+    // Xác thực thủ công
+    if (!Auth::attempt($credentials)) {
+        return response()->json(['error' => 'Invalid credentials'], 401);
+    }
+
+    $user = Auth::user();
+
+    // Xoá các token cũ nếu muốn (tuỳ chọn)
+    // $user->tokens()->delete();
+
+    // Tạo token Sanctum
+    $token = $user->createToken('access_token')->plainTextToken;
+
+    return response()->json([
+        'token' => $token,
+        'role' => $user->role,
+        'user' => [
+            'id' => $user->id,
+            'email' => $user->email,
+        ]
+    ], 200);
+}
 }
