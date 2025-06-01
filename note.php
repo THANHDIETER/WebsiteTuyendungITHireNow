@@ -3,5 +3,5 @@ composer install
 composer require laravel/sanctum
 composer dump-autoload
 php artisan key:generate
-php artisan migrate
+php artisan migrate:fresh --seed
 -->
