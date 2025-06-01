@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use App\Models\User;
-use Illuminate\Container\Attributes\Log;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use League\OAuth2\Client\Provider\Google;
 
 class LoginController extends Controller
@@ -23,6 +19,7 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
+<<<<<<< HEAD
 {
     $credentials = $request->validate(
         [
@@ -42,9 +39,43 @@ class LoginController extends Controller
 
     if (!$user) {
         session()->flash('error', 'Email không tồn tại trong hệ thống.');
-        return redirect()->back()->withInput();
-    }
+=======
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:6',
+        ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $credentials = $request->only('email', 'password');
+
+        $user = User::where('email', $credentials['email'])->first();
+        if (!$user) {
+            return redirect()->back()->withInput()->with('error', 'Email không tồn tại trong hệ thống.');
+        }
+
+
+        if (Hash::check()($credentials)) {
+            $user = Auth::user();
+
+            // Tạo token Sanctum
+            $token = $user->createToken('access_token')->plainTextToken;
+
+            // Lưu token vào session (nếu cần cho frontend dùng)
+            session()->flash('access_token', $token);
+
+            return redirect()->route('list-user');
+        }
+
+
+        session()->flash('error', 'Mật khẩu không đúng.');
+>>>>>>> 4035a2e58ba48b229a45a10712f95d08333ce613
+        return redirect()->back()->withInput();
+
+<<<<<<< HEAD
     // So sánh mật khẩu người dùng nhập và mật khẩu đã hash
     if (Hash::check($credentials['password'], $user->password_hash)) {
         // Đăng nhập thủ công
@@ -65,6 +96,10 @@ class LoginController extends Controller
 }
 
 
+=======
+
+    // ---------- GOOGLE LOGIN ----------
+>>>>>>> 4035a2e58ba48b229a45a10712f95d08333ce613
     public function redirect()
     {
         $provider = new Google([
@@ -92,6 +127,7 @@ class LoginController extends Controller
         session()->flash('error', 'Invalid state');
         return redirect()->route('showLoginForm');
     }
+
 
     $token = $provider->getAccessToken('authorization_code', [
         'code' => $request->get('code')
@@ -133,4 +169,5 @@ class LoginController extends Controller
 
     return redirect()->intended(route('list-user'));
 }
+
 }

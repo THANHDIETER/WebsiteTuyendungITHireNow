@@ -8,8 +8,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -22,7 +20,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255|unique:users',
-            'password_hash' => 'required|string|min:6',
+            'password' => 'required|string|min:6',
             'role' => 'required|in:job_seeker,employer'
         ]);
 
@@ -32,28 +30,32 @@ class AuthController extends Controller
 
         try {
             $user = User::create([
-                // 'name'     => $request->name,
                 'email'    => $request->email,
-                'password_hash' => Hash::make($request->password_hash),
-                'role'     => $request->role
+                'password_hash' => Hash::make($request->password),
+                'role'     => $request->role,
+                'is_blocked' => false,
             ]);
 
-            $user->assignRole($request->role);
+            // Gán role nếu dùng spatie hoặc mặc định thì bỏ dòng này
+            if (method_exists($user, 'assignRole')) {
+                $user->assignRole($request->role);
+            }
 
             // $token = JWTAuth::fromUser($user);
+
 
             return response()->json([
                 'message' => 'User registered successfully',
                 'user' => [
                     'id'    => $user->id,
-                    // 'name'  => $user->name,
                     'email' => $user->email,
                     'role'  => $user->role,
                 ],
-                // 'token' => $token,
+                'token' => $token,
+                'token_type' => 'Bearer',
             ], 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
         }
     }
 
@@ -67,6 +69,7 @@ class AuthController extends Controller
     if ($validator->fails()) {
         return response()->json($validator->errors(), 422);
     }
+
 
     $credentials = $request->only('email', 'password');
 
@@ -92,4 +95,5 @@ class AuthController extends Controller
         ]
     ], 200);
 }
+
 }

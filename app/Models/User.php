@@ -10,16 +10,19 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+
     use HasApiTokens, Notifiable, HasRoles;
+
 
     protected $fillable = [
         'email',
-        'password_hash',
+        'password', // Đã đổi từ password_hash sang password để Laravel/Sanctum hoạt động chuẩn
         'role',
     ];
 
+
     protected $hidden = [
-        'password_hash',
+        'password',
         'remember_token',
     ];
 
@@ -28,6 +31,10 @@ class User extends Authenticatable
         return $this->password_hash;
     }
 
+
+    /**
+     * Quan hệ: người dùng có nhiều hồ sơ.
+     */
     public function resumes()
     {
         return $this->hasMany(Resume::class);

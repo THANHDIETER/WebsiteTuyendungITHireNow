@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
+use App\Http\Middleware\AdminMiddleware;
+
+
 class RouteServiceProvider extends ServiceProvider
 {
 public function boot(): void
@@ -30,5 +33,11 @@ public function boot(): void
     //     ->prefix('api/jobseeker')
     //     ->group(base_path('routes/jobseeker.php'));
 }
+
+
+        Route::aliasMiddleware('role', AdminMiddleware::class);
+        
+
+    }
 
 }
