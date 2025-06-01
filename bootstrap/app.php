@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,10 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
         // Đăng ký middleware toàn cục (nếu cần)
         $middleware->alias([
             'admin' => AdminMiddleware::class,
+
             'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 
         
+
 
     })
     ->withExceptions(function (Exceptions $exceptions) {

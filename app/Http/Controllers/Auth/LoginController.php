@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use App\Models\User;
-use Illuminate\Container\Attributes\Log;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use League\OAuth2\Client\Provider\Google;
 
 class LoginController extends Controller
@@ -24,36 +20,22 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate(
-            [
-                'email' => 'required|email|max:255',
-                'password' => 'required|string|min:8',
-            ],
-            [
-                'email.required' => 'Email là trường bắt buộc.',
-                'email.string' => 'Email phải là một chuỗi ký tự.',
-                'email.email' => 'Email phải có định dạng hợp lệ.',
-                'password.required' => 'Mật khẩu là trường bắt buộc.',
-                'password.string' => 'Mật khẩu phải là một chuỗi ký tự.',
-                'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
-            ]
-        );
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:6',
+        ]);
 
-        if (!$credentials['email'] || !$credentials['password']) {
-            session()->flash('error', 'Email và mật khẩu là bắt buộc.');
-            return redirect()->back()->withInput();
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        if (!filter_var($credentials['email'], FILTER_VALIDATE_EMAIL)) {
-            session()->flash('error', 'Email không hợp lệ.');
-            return redirect()->back()->withInput();
-        }
+        $credentials = $request->only('email', 'password');
 
         $user = User::where('email', $credentials['email'])->first();
         if (!$user) {
-            session()->flash('error', 'Email không tồn tại trong hệ thống.');
-            return redirect()->back()->withInput();
+            return redirect()->back()->withInput()->with('error', 'Email không tồn tại trong hệ thống.');
         }
+
 
         if (Hash::check()($credentials)) {
             $user = Auth::user();
@@ -70,8 +52,9 @@ class LoginController extends Controller
 
         session()->flash('error', 'Mật khẩu không đúng.');
         return redirect()->back()->withInput();
-    }
 
+
+    // ---------- GOOGLE LOGIN ----------
     public function redirect()
     {
         $provider = new Google([
@@ -99,6 +82,7 @@ class LoginController extends Controller
         session()->flash('error', 'Invalid state');
         return redirect()->route('showLoginForm');
     }
+
 
     $token = $provider->getAccessToken('authorization_code', [
         'code' => $request->get('code')
@@ -140,4 +124,5 @@ class LoginController extends Controller
 
     return redirect()->intended(route('list-user'));
 }
+
 }

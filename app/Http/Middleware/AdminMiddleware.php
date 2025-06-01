@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -10,12 +11,11 @@ use Illuminate\Http\Request;
 class AdminMiddleware
 {
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * Xử lý yêu cầu vào route có middleware này.
      */
     public function handle(Request $request, Closure $next)
     {
+
 
     if (!Auth::check()) {
         return response()->json(['message' => 'Chưa xác thực'], 401);
@@ -23,6 +23,7 @@ class AdminMiddleware
 
     if (Auth::user()->role === 'admin') {
         return $next($request);
+
     }
 
     logger('Không phải admin');

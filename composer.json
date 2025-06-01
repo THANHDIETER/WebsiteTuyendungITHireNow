@@ -16,7 +16,9 @@
         "laravel/sanctum": "^4.1",
         "laravel/tinker": "^2.10.1",
         "league/oauth2-client": "^2.8",
+
         "league/oauth2-google": "^4.0",
+
         "spatie/laravel-permission": "^6.18"
     },
     "require-dev": {
