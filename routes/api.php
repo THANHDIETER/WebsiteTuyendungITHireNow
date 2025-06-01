@@ -18,7 +18,7 @@ use App\Http\Middleware\RoleMiddleware;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
 
-Route::prefix('admin')->middleware(['auth:api','throttle:10,1', 'admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth:sanctum','throttle:10,1', 'admin'])->group(function () {
     Route::apiResource('/resumes', ResumeController::class)->only(['index', 'update', 'destroy']);
 });
 
@@ -29,12 +29,12 @@ Route::get('/user', function (Request $request) {
 
 
 
-Route::middleware('auth:api')->get('/me', function () {
+Route::middleware('auth:sanctum')->get('/me', function () {
     return response()->json(auth('api')->user());
 });
 
 
-Route::prefix('admin')->middleware(['auth:api', 'admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/jobs', [JobApiController::class, 'index'])->name('api.admin.jobs.index');
     Route::patch('/jobs/{id}/approve', [JobApiController::class, 'approve'])->name('api.admin.jobs.approve');
     Route::delete('/jobs/{id}', [JobApiController::class, 'destroy'])->name('api.admin.jobs.destroy');

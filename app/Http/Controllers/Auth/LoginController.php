@@ -19,6 +19,27 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
+<<<<<<< HEAD
+{
+    $credentials = $request->validate(
+        [
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:8',
+        ],
+        [
+            'email.required' => 'Email là trường bắt buộc.',
+            'email.email' => 'Email phải có định dạng hợp lệ.',
+            'password.required' => 'Mật khẩu là trường bắt buộc.',
+            'password.string' => 'Mật khẩu phải là một chuỗi ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+        ]
+    );
+
+    $user = User::where('email', $credentials['email'])->first();
+
+    if (!$user) {
+        session()->flash('error', 'Email không tồn tại trong hệ thống.');
+=======
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255',
@@ -51,10 +72,34 @@ class LoginController extends Controller
 
 
         session()->flash('error', 'Mật khẩu không đúng.');
+>>>>>>> 4035a2e58ba48b229a45a10712f95d08333ce613
         return redirect()->back()->withInput();
 
+<<<<<<< HEAD
+    // So sánh mật khẩu người dùng nhập và mật khẩu đã hash
+    if (Hash::check($credentials['password'], $user->password_hash)) {
+        // Đăng nhập thủ công
+        Auth::login($user);
+
+        // Tạo token Sanctum
+        $token = $user->createToken('access_token')->plainTextToken;
+
+        // Lưu token vào session (nếu frontend cần dùng)
+        session()->flash('access_token', $token);
+
+        return redirect()->route('list-user');
+    }
+
+    // Mật khẩu không đúng
+    session()->flash('error', 'Mật khẩu không đúng.');
+    return redirect()->back()->withInput();
+}
+
+
+=======
 
     // ---------- GOOGLE LOGIN ----------
+>>>>>>> 4035a2e58ba48b229a45a10712f95d08333ce613
     public function redirect()
     {
         $provider = new Google([

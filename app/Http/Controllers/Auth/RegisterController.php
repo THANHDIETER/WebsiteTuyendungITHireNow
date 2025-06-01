@@ -23,7 +23,7 @@ class RegisterController extends Controller
 
             $user = User::create([
                 'email' => $validated['email'],
-                'password_hash' => Hash::make($validated['password_hash']),
+                'password' => Hash::make($validated['password_hash']),
                 'role' => $validated['role'] ?? 'job_seeker',
             ]);
 
@@ -38,11 +38,11 @@ class RegisterController extends Controller
                 $user->assignRole('job_seeker');
             }
 
-            Auth::login($user);
+            // Auth::login($user);
 
-            session()->flash('success', 'Đăng ký thành công! Chào mừng bạn đến với hệ thống.');
+            // session()->flash('success', 'Đăng ký thành công! Chào mừng bạn đến với hệ thống.');
 
-            return redirect()->route('post-login');
+             return view('auth.login');
         } catch (\Exception $e) {
             session()->flash('error', 'Lỗi khi đăng ký: ' . $e->getMessage());
             return redirect()->route('register')->withInput();
