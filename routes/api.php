@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
+
+
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AdminResumeController;
 
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Admin\AdminResumeController;
 use App\Http\Controllers\Api\Admin\JobApiController;
 
 // ✅ Dùng middleware alias 'admin' bạn đã gán trong app hoặc Kernel

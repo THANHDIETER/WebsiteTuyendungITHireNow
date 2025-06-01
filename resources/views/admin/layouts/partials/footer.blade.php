@@ -17,25 +17,25 @@
 </footer>
 
 <!-- jquery-->
-<script src="../assets/js/vendors/jquery/dist/jquery.min.js"></script>
+<script src="{{ asset('assets/js/vendors/jquery/dist/jquery.min.js')}}"></script>
 <!-- bootstrap js-->
-<script src="../assets/js/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/js/config.js"></script>
+<script src="{{ asset('assets/js/vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{ asset('assets/js/config.js')}}"></script>
 <!-- Sidebar js-->
-<script src="../assets/js/sidebar.js"></script>
+<script src="{{ asset('assets/js/sidebar.js')}}"></script>
 <!-- Apexchart js-->
-<script src="../assets/js/vendors/apexcharts/dist/apexcharts.min.js"></script>
+<script src="{{ asset('assets/js/vendors/apexcharts/dist/apexcharts.min.js')}}"></script>
 <!-- Chart js-->
-<script src="../assets/js/vendors/chart.js/dist/chart.umd.js"></script>
+<script src="{{ asset('assets/js/vendors/chart.js/dist/chart.umd.js')}}"></script>
 <!-- Datatable js-->
-<script src="../assets/js/vendors/simple-datatables/dist/umd/simple-datatables.js"></script>
+<script src="{{ asset('assets/js/vendors/simple-datatables/dist/umd/simple-datatables.js')}}"></script>
 <!-- default dashboard js-->
-<script src="../assets/js/dashboard/default.js"></script>
+<script src="{{ asset('assets/js/dashboard/default.js')}}"></script>
 <!-- scrollbar js-->
-<script src="../assets/js/scrollbar/simplebar.js"></script>
-<script src="../assets/js/scrollbar/custom.js"></script>
+<script src="{{ asset('assets/js/scrollbar/simplebar.js')}}"></script>
+<script src="{{ asset('assets/js/scrollbar/custom.js')}}"></script>
 <!-- scrollable-->
 <!-- customizer-->
-<script src="../assets/js/theme-customizer/customizer.js"></script>
+<script src="{{ asset('assets/js/theme-customizer/customizer.js')}}"></script>
 <!-- custom script -->
-<script src="../assets/js/script.js"></script>
+<script src="{{ asset('assets/js/script.js')}}"></script>

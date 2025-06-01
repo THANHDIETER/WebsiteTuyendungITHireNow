@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminServicePackageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
+
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
@@ -29,3 +31,6 @@ Route::prefix('admin')
             Route::delete('{id}', 'destroy')->name('users.destroy');
         });
     });
+
+   
+});
