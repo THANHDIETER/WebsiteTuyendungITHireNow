@@ -36,25 +36,23 @@ class LoginController extends Controller
             return redirect()->back()->withInput()->with('error', 'Email không tồn tại trong hệ thống.');
         }
 
-        if (!Hash::check($credentials['password'], $user->password_hash)) {
-            return redirect()->back()->withInput()->with('error', 'Mật khẩu không đúng.');
+
+        if (Hash::check()($credentials)) {
+            $user = Auth::user();
+
+            // Tạo token Sanctum
+            $token = $user->createToken('access_token')->plainTextToken;
+
+            // Lưu token vào session (nếu cần cho frontend dùng)
+            session()->flash('access_token', $token);
+
+            return redirect()->route('list-user');
         }
 
-        if ($user->is_blocked) {
-            return redirect()->back()->withInput()->with('error', 'Tài khoản đã bị khóa.');
-        }
 
-        Auth::login($user);
+        session()->flash('error', 'Mật khẩu không đúng.');
+        return redirect()->back()->withInput();
 
-        return redirect()->route('list-user');
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        Session::flush();
-        return redirect()->route('login')->with('success', 'Đã đăng xuất thành công');
-    }
 
     // ---------- GOOGLE LOGIN ----------
     public function redirect()
@@ -72,57 +70,59 @@ class LoginController extends Controller
     }
 
     public function callback(Request $request)
-    {
-        $provider = new Google([
-            'clientId'     => env('GOOGLE_CLIENT_ID'),
-            'clientSecret' => env('GOOGLE_CLIENT_SECRET'),
-            'redirectUri'  => route('auth.callback'),
-            'scopes'       => ['email', 'profile'],
-        ]);
+{
+    $provider = new Google([
+        'clientId'     => env('GOOGLE_CLIENT_ID'),
+        'clientSecret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirectUri'  => route('auth.callback'),
+        'scopes'       => ['email', 'profile'],
+    ]);
 
-        if ($request->get('state') !== Session::pull('oauth2state')) {
-            return redirect()->route('login')->with('error', 'Invalid state');
-        }
-
-        try {
-            $token = $provider->getAccessToken('authorization_code', [
-                'code' => $request->get('code')
-            ]);
-
-            $googleUser = $provider->getResourceOwner($token);
-            $userData = $googleUser->toArray();
-
-            $email = $userData['email'] ?? null;
-            $name = $userData['name'] ?? 'Google User';
-            $googleId = $userData['sub'] ?? null;
-            $avatar = $userData['picture'] ?? null;
-
-            if (!$email) {
-                return redirect()->route('login')->with('error', 'Không lấy được email từ Google.');
-            }
-
-            $user = User::where('email', $email)->first();
-
-            if (!$user) {
-                $user = User::create([
-                    'email' => $email,
-                    'password_hash' => Hash::make(uniqid()),
-                    'role' => 'job_seeker',
-                    'google_id' => $googleId,
-                    'avatar' => $avatar,
-                ]);
-            } else {
-                $user->update([
-                    'google_id' => $googleId,
-                    'avatar' => $avatar,
-                ]);
-            }
-
-            Auth::login($user);
-            return redirect()->intended(route('list-user'));
-
-        } catch (\Exception $e) {
-            return redirect()->route('login')->with('error', 'Lỗi khi đăng nhập bằng Google: ' . $e->getMessage());
-        }
+    if ($request->get('state') !== Session::pull('oauth2state')) {
+        session()->flash('error', 'Invalid state');
+        return redirect()->route('showLoginForm');
     }
+
+
+    $token = $provider->getAccessToken('authorization_code', [
+        'code' => $request->get('code')
+    ]);
+
+    $googleUser = $provider->getResourceOwner($token);
+
+    // Lấy dữ liệu từ Google
+    $userData = $googleUser->toArray();
+    $email = $userData['email'] ?? null;
+    $name = $userData['name'] ?? 'Google User';
+    $googleId = $userData['sub'] ?? null;
+    $avatar = $userData['picture'] ?? null;
+
+    if (!$email) {
+        session()->flash('error', 'Không thể lấy email từ Google. Vui lòng kiểm tra quyền truy cập.');
+        return redirect()->route('showLoginForm');
+    }
+
+    // Tìm hoặc tạo user
+    $user = User::firstOrCreate(
+        ['email' => $email],
+        [
+            'password_hash' => Hash::make(uniqid()), // random password
+            'role' => 'job_seeker',
+        ]
+    );
+
+    $user->update([
+        'google_id' => $googleId,
+        'avatar' => $avatar,
+    ]);
+
+    Auth::login($user);
+
+    $accessToken = $user->createToken('access_token')->plainTextToken;
+
+    session()->put('access_token', $accessToken);
+
+    return redirect()->intended(route('list-user'));
+}
+
 }

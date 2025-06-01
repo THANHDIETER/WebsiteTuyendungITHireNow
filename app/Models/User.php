@@ -10,31 +10,27 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * Các trường có thể gán hàng loạt.
-     */
+    use HasApiTokens, Notifiable, HasRoles;
+
+
     protected $fillable = [
         'email',
         'password', // Đã đổi từ password_hash sang password để Laravel/Sanctum hoạt động chuẩn
         'role',
     ];
 
-    /**
-     * Các trường ẩn khi trả về JSON.
-     */
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Kiểu dữ liệu tự động ép kiểu.
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
+
 
     /**
      * Quan hệ: người dùng có nhiều hồ sơ.
