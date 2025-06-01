@@ -32,5 +32,5 @@ Route::prefix('admin')
         });
     });
 
-   
-});
+
+
