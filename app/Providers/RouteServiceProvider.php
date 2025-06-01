@@ -13,8 +13,9 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
 
 
-        Route::aliasMiddleware('role', AdminMiddleware::class);
-        
+        Route::middleware(['api', 'auth:api', 'admin'])
+        ->prefix('api')
+        ->group(base_path('routes/web.php'));
 
     }
 }

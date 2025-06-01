@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Container\Attributes\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use League\OAuth2\Client\Provider\Google;
 
 class LoginController extends Controller
@@ -19,44 +21,37 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'password' => 'required|string|min:6',
+    ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $credentials = $request->only('email', 'password');
-
-        $user = User::where('email', $credentials['email'])->first();
-        if (!$user) {
-            return redirect()->back()->withInput()->with('error', 'Email không tồn tại trong hệ thống.');
-        }
-
-        if (!Hash::check($credentials['password'], $user->password_hash)) {
-            return redirect()->back()->withInput()->with('error', 'Mật khẩu không đúng.');
-        }
-
-        if ($user->is_blocked) {
-            return redirect()->back()->withInput()->with('error', 'Tài khoản đã bị khóa.');
-        }
-
-        Auth::login($user);
-
-        return redirect()->route('list-user');
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        Session::flush();
-        return redirect()->route('login')->with('success', 'Đã đăng xuất thành công');
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user || !Hash::check($request->password, $user->password_hash)) {
+        return response()->json(['message' => 'Email hoặc mật khẩu không đúng'], 401);
     }
 
-    // ---------- GOOGLE LOGIN ----------
+    if ($user->is_blocked) {
+        return response()->json(['message' => 'Tài khoản đã bị khóa.'], 403);
+    }
+
+    // ✅ Tạo token API
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'Đăng nhập thành công',
+        'access_token' => $token,
+        'token_type' => 'Bearer',
+    ]);
+}
+
+
     public function redirect()
     {
         $provider = new Google([
@@ -81,48 +76,56 @@ class LoginController extends Controller
         ]);
 
         if ($request->get('state') !== Session::pull('oauth2state')) {
-            return redirect()->route('login')->with('error', 'Invalid state');
+            session()->flash('error', 'Invalid state');
+            return redirect()->route('showLoginForm');
         }
 
-        try {
-            $token = $provider->getAccessToken('authorization_code', [
-                'code' => $request->get('code')
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $request->get('code')
+        ]);
+
+        $googleUser = $provider->getResourceOwner($token);
+
+        // Lấy dữ liệu thô từ Google
+        $userData = $googleUser->toArray();
+        $email = $userData['email'] ?? null;
+        $name = $userData['name'] ?? 'Google User';
+        $googleId = $userData['sub'] ?? null;
+        $avatar = $userData['picture'] ?? null;
+
+        if (!$email) {
+            session()->flash('error', 'Không thể lấy email từ Google. Vui lòng kiểm tra quyền truy cập.');
+            return redirect()->route('showLoginForm');
+        }
+
+        // Kiểm tra người dùng đã tồn tại chưa
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            // Tạo người dùng mới nếu chưa tồn tại
+            $user = User::create([
+                'email' => $email,
+                'password_hash' => Hash::make(uniqid()),
+                'role' => 'job_seeker',
             ]);
+        } else {
+            // Cập nhật thông tin nếu người dùng đã tồn tại (tùy chọn)
+            $user->update([
+                'google_id' => $googleId,
+                'avatar' => $avatar,
+            ]);
+        }
 
-            $googleUser = $provider->getResourceOwner($token);
-            $userData = $googleUser->toArray();
+        // Đăng nhập người dùng
+        Auth::login($user);
 
-            $email = $userData['email'] ?? null;
-            $name = $userData['name'] ?? 'Google User';
-            $googleId = $userData['sub'] ?? null;
-            $avatar = $userData['picture'] ?? null;
-
-            if (!$email) {
-                return redirect()->route('login')->with('error', 'Không lấy được email từ Google.');
-            }
-
-            $user = User::where('email', $email)->first();
-
-            if (!$user) {
-                $user = User::create([
-                    'email' => $email,
-                    'password_hash' => Hash::make(uniqid()),
-                    'role' => 'job_seeker',
-                    'google_id' => $googleId,
-                    'avatar' => $avatar,
-                ]);
-            } else {
-                $user->update([
-                    'google_id' => $googleId,
-                    'avatar' => $avatar,
-                ]);
-            }
-
-            Auth::login($user);
+        // Tạo token JWT
+        try {
+            $jwtToken = JWTAuth::fromUser($user);
+            session()->put('access_token', $jwtToken);
             return redirect()->intended(route('list-user'));
-
-        } catch (\Exception $e) {
-            return redirect()->route('login')->with('error', 'Lỗi khi đăng nhập bằng Google: ' . $e->getMessage());
+        } catch (JWTException $e) {
+            return redirect()->route('showLoginForm');
         }
     }
 }

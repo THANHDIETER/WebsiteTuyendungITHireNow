@@ -42,9 +42,10 @@ return [
         ],
 
         'api' => [
-            'driver' => 'jwt',
+            'driver' => 'sanctum', // ✅ Đúng
             'provider' => 'users',
         ],
+
     ],
 
     /*
