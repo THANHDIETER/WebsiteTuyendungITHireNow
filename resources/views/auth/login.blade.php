@@ -53,6 +53,7 @@
         <svg class="feather">
             <use
                 href="{{ url('https://admin.pixelstrap.net/edmin/assets/svg/feather-icons/dist/feather-sprite.svg#arrow-up') }}">
+                
             </use>
         </svg>
     </div>

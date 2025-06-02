@@ -1,10 +1,3 @@
-<style>
-  .footer {
-  position: fixed;
-  bottom: 0;
-  left: auto;
-  width: 100%;
-}
 
 </style>
 <footer class="footer">

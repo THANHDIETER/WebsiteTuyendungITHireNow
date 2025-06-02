@@ -40,21 +40,17 @@ class LoginController extends Controller
             session()->flash('error', 'Email không tồn tại trong hệ thống.');
             return redirect()->back()->withInput();
         }
-        // So sánh mật khẩu người dùng nhập và mật khẩu đã hash
         if (Hash::check($credentials['password'], $user->password_hash)) {
-            // Đăng nhập thủ công
+
             Auth::login($user);
 
-            // Tạo token Sanctum
             $token = $user->createToken('access_token')->plainTextToken;
 
-            // Lưu token vào session (nếu frontend cần dùng)
             session()->flash('access_token', $token);
 
-            return redirect()->route('admin.resumes.index');
+            return redirect()->route('admin.dashboard');
         }
 
-        // Mật khẩu không đúng
         session()->flash('error', 'Mật khẩu không đúng.');
         return redirect()->back()->withInput();
     }
@@ -107,14 +103,14 @@ class LoginController extends Controller
             return redirect()->route('showLoginForm');
         }
 
-        // Tìm hoặc tạo user
-        $user = User::firstOrCreate(
-            ['email' => $email],
-            [
-                'password_hash' => Hash::make(uniqid()), // random password
+       $user = User::firstOrCreate(
+    ['email' => $email],
+    [
+        'password_hash' => Hash::make(uniqid()),
                 'role' => 'job_seeker',
             ]
         );
+
 
         $user->update([
             'google_id' => $googleId,
@@ -127,7 +123,14 @@ class LoginController extends Controller
 
         session()->put('access_token', $accessToken);
 
-        return redirect()->intended(route('admin.resumes.index'));
+        return redirect()->intended(route('admin.dashboard'));
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return redirect('/login');
     }
 
 }
