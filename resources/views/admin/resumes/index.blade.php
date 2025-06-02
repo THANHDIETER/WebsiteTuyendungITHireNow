@@ -92,25 +92,33 @@ createApp({
     const perPage = ref(10);
     const token = localStorage.getItem('access_token');
     const fetchResumes = async () => {
-      loading.value = true;
-      try {
-        const response = await axios.get('/api/admin/resumes', {
-          headers: { 
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-           }
-        });
-        allResumes.value = response.data;
-      } catch (error) {
-        if (error.response && error.response.data && error.response.data.message) {
-        alert(error.response.data.message);
+    loading.value = true;
+    try {
+      const response = await axios.get('/api/admin/resumes', {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      allResumes.value = response.data;
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 401) {
+          window.location.href = '/login';
+          alert('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại');
+        } else if (error.response.data && error.response.data.message) {
+          alert(error.response.data.message);
+        } else {
+          alert('Đã có lỗi xảy ra');
+        }
       } else {
         alert('Đã có lỗi xảy ra');
       }
-      } finally {
-        loading.value = false;
-      }
-    };
+    } finally {
+      loading.value = false;
+    }
+  };
+
 
     const paginatedResumes = computed(() => {
       const start = (page.value - 1) * perPage.value;

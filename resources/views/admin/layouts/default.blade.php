@@ -1145,13 +1145,7 @@
                 </div>
             </div> --}}
             @include('admin.layouts.partials.footer')
-            @if (session('access_token'))
-                <script>
-                    localStorage.setItem('access_token', '{{ session('access_token') }}');
-
-                    console.log("JWT Token saved to localStorage.");
-                </script>
-            @endif
+           
         </div>
     </main>
 </body>
