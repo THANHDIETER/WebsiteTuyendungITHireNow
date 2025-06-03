@@ -6,7 +6,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.index');
+        $title  = 'Trang chủ';
+        return view('admin.index',compact('title'));
     }
 }
 ?>

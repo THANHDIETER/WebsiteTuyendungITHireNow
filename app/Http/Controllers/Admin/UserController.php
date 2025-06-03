@@ -9,20 +9,18 @@ use App\Models\User;
 class UserController extends Controller
 {
     // Lấy danh sách user có phân trang & lọc theo role
-public function index(Request $request)
-{
-    $query = User::query();
+    public function index(Request $request)
+    {
+        $query = User::query();
 
-    if ($request->has('role') && $request->role !== null && $request->role !== '') {
-        $query->where('role', $request->role);
+        if ($request->has('role') && $request->role !== null && $request->role !== '') {
+            $query->where('role', $request->role);
+        }
+
+        $users = $query->paginate(10);
+
+        return view('admin.users.index', compact('users'));
     }
-
-    $users = $query->paginate(10);
-    
-    return view('admin.users.index', compact('users'));
-}
-
-
 
 
     // Xem chi tiết 1 user

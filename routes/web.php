@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\ResumeController;
-use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+
 
 // Public Routes
 Route::get('/', fn() => view('auth/login'));
@@ -75,18 +75,25 @@ Route::get('/registration', function(){
 });
 
 
+require __DIR__ . '/admin.php';
+require __DIR__ . '/employer.php';
+require __DIR__ . '/jobseeker.php';
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
+
+Route::get('/', fn() => view('auth/login'));
 
 Route::get('/', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/post-login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('post-login');
+
 Route::get('/register', [App\Http\Controllers\Auth\RegisterController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('register');
-
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
+Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
 Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
 
 Route::get('/docs', fn() => view('docs.index'));
 
@@ -130,4 +137,7 @@ Route::middleware(['auth:sanctum', 'employer'])->group(function () {
 Route::middleware(['auth:sanctum', 'job_seeker'])->group(function () {
     require __DIR__ . '/jobseeker.php';
 });
+
+
+
 

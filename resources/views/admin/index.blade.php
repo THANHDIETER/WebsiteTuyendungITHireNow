@@ -1,5 +1,7 @@
 @extends('admin.layouts.default')
 
 @section('content')
-    <h1>Trang Dashboard</h1>
+    <div class="container mt-5">
+       <h1>Trang chủ</h1>
+    </div>
 @endsection
