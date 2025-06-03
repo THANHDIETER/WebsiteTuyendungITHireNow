@@ -6,13 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,9 +18,9 @@ class User extends Authenticatable implements JWTSubject
      * @var list<string>
      */
     protected $fillable = [
+        'name',
         'email',
-        'password_hash',
-        'role',
+        'password',
     ];
 
     /**
@@ -31,7 +29,7 @@ class User extends Authenticatable implements JWTSubject
      * @var list<string>
      */
     protected $hidden = [
-        'password_hash',
+        'password',
         'remember_token',
     ];
 
@@ -43,33 +41,8 @@ class User extends Authenticatable implements JWTSubject
     protected function casts(): array
     {
         return [
-            // 'email_verified_at' => 'datetime',
-            // 'password_hash' => 'hashed',
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
         ];
     }
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [
-            'role' => $this->role,
-            'permissions' => $this->getAllPermissions()->pluck('name'),
-        ];
-    }
-
-    // Ghi đè để chỉ định cột mật khẩu là password_hash
-    public function getAuthPassword()
-    {
-        return $this->password_hash;
-    }
-
-    public function resumes()
-    {
-        return $this->hasMany(Resume::class);
-    }
-
 }
