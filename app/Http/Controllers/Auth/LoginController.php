@@ -18,43 +18,50 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
+
     public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
+{
+    $credentials = $request->validate(
+        [
             'email' => 'required|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
+            'password' => 'required|string|min:8',
+        ],
+        [
+            'email.required' => 'Email là trường bắt buộc.',
+            'email.email' => 'Email phải có định dạng hợp lệ.',
+            'password.required' => 'Mật khẩu là trường bắt buộc.',
+            'password.string' => 'Mật khẩu phải là một chuỗi ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+        ]
+    );
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+    $user = User::where('email', $credentials['email'])->first();
 
-        $credentials = $request->only('email', 'password');
-
-        $user = User::where('email', $credentials['email'])->first();
-        if (!$user) {
-            return redirect()->back()->withInput()->with('error', 'Email không tồn tại trong hệ thống.');
-        }
-
-
-        if (Hash::check()($credentials)) {
-            $user = Auth::user();
-
-            // Tạo token Sanctum
-            $token = $user->createToken('access_token')->plainTextToken;
-
-            // Lưu token vào session (nếu cần cho frontend dùng)
-            session()->flash('access_token', $token);
-
-            return redirect()->route('list-user');
-        }
-
-
-        session()->flash('error', 'Mật khẩu không đúng.');
+    if (!$user) {
+        session()->flash('error', 'Email không tồn tại trong hệ thống.');
         return redirect()->back()->withInput();
 
+    // So sánh mật khẩu người dùng nhập và mật khẩu đã hash
+    if (Hash::check($credentials['password'], $user->password_hash)) {
+        // Đăng nhập thủ công
+        Auth::login($user);
+
+        // Tạo token Sanctum
+        $token = $user->createToken('access_token')->plainTextToken;
+
+        // Lưu token vào session (nếu frontend cần dùng)
+        session()->flash('access_token', $token);
+
+        return redirect()->route('list-user');
     }
-    // ---------- GOOGLE LOGIN ----------
+
+    // Mật khẩu không đúng
+    session()->flash('error', 'Mật khẩu không đúng.');
+    return redirect()->back()->withInput();
+}
+}
+
+
     public function redirect()
     {
         $provider = new Google([
@@ -126,3 +133,4 @@ class LoginController extends Controller
 }
 
 }
+
