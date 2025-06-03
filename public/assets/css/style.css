@@ -41702,7 +41702,7 @@ html[data-theme=dark-sidebar] .page-sidebar {
   position: relative;
   z-index: 1;
   text-align: center;
-  margin-top: 75px;
+  margin-top: 40px;
   margin-bottom: 30px;
 }
 .login-card .login-main .theme-form .login-social-title h6, .login-card .login-main .theme-form .login-social-title .h6 {

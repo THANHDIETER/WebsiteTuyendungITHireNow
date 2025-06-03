@@ -16,10 +16,11 @@ class User extends Authenticatable
 
     protected $fillable = [
         'email',
-        'password', // Đã đổi từ password_hash sang password để Laravel/Sanctum hoạt động chuẩn
+        'password_hash', // Đã đổi từ password_hash sang password để Laravel/Sanctum hoạt động chuẩn
         'role',
     ];
 
+    public $timestamps = true;
 
     protected $hidden = [
         'password',

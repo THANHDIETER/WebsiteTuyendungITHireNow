@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminServicePackageController;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
-
+use App\Http\Controllers\Admin\ResumeController;
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
@@ -30,7 +31,10 @@ Route::prefix('admin')
             Route::patch('{id}/update', 'update')->name('users.update');
             Route::delete('{id}', 'destroy')->name('users.destroy');
         });
-    });
 
-   
-});
+        // trang sơ yếu lý dịch (cv)
+        Route::prefix('resumes')->controller(ResumeController::class)->group(function(){
+            Route::get('/', 'index')->name('resumes.index');
+        });
+     
+    });
