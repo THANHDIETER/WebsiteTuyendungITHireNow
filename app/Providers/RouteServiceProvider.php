@@ -34,10 +34,4 @@ public function boot(): void
     //     ->group(base_path('routes/jobseeker.php'));
 }
 
-
-        Route::aliasMiddleware('role', AdminMiddleware::class);
-        
-
-    }
-
 }
