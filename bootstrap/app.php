@@ -4,6 +4,7 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Auth\AuthenticationException;
 
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -14,10 +15,25 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-       $middleware->alias([
+
+        // Đăng ký middleware toàn cục (nếu cần)
+        $middleware->alias([
             'admin' => AdminMiddleware::class,
+
+            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
+
+        
+
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+        // Ghi đè xử lý lỗi AuthenticationException
+        $exceptions->render(function (AuthenticationException $e, $request) {
+            return response()->json([
+                'message' => 'Token không hợp lệ hoặc đã hết hạn',
+            ], 401);
+        });
+    })
+    ->create();
+    

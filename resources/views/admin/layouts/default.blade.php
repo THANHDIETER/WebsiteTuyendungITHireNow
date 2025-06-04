@@ -1145,6 +1145,7 @@
                 </div>
             </div> --}}
             @include('admin.layouts.partials.footer')
+           
         </div>
     </main>
 </body>

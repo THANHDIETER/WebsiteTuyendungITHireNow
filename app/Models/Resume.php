@@ -14,10 +14,16 @@ class Resume extends Model
         'file_url',
         'is_approved',
     ];
+    public $timestamps = true;
 
-    // Quan hệ: mỗi resume thuộc về một user
+
+    protected $casts = [
+        'is_approved' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+    
 }
