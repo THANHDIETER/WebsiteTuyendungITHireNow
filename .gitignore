@@ -29,9 +29,14 @@ public/assets/
 *.blade.php text eol=lf
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 app/Providers/RouteServiceProvider.php
 resources/views/admin.blade.php
 =======
 =======
 >>>>>>> b491f5cec2dc42594dcf88613234fcce7cc69751
 >>>>>>> 36876ee93749c708edf0c3d55663af956d1bee8d
+=======
+app/Providers/RouteServiceProvider.php
+resources/views/admin.blade.php
+>>>>>>> 789c6389f65d2cd7c8a15232e6c5bcd61b84409b
