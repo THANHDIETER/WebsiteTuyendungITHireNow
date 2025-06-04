@@ -1,10 +1,7 @@
 <?php
 
-<<<<<<< HEAD
 use App\Http\Middleware\AdminMiddleware;
 
-=======
->>>>>>> b491f5cec2dc42594dcf88613234fcce7cc69751
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,21 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-<<<<<<< HEAD
-
-        // Đăng ký middleware toàn cục (nếu cần)
-        $middleware->alias([
-            'admin' => AdminMiddleware::class,
-
-            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-        ]);
-
-        
-
-
-=======
         //
->>>>>>> b491f5cec2dc42594dcf88613234fcce7cc69751
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Ghi đè xử lý lỗi AuthenticationException
