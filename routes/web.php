@@ -75,6 +75,7 @@ Route::get('/registration', function(){
 });
 
 
+<<<<<<< HEAD
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
@@ -99,6 +100,10 @@ Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('/docs', function () {
     return view('docs.index');
+=======
+Route::get('/', function () {
+    return view('welcome');
+>>>>>>> b491f5cec2dc42594dcf88613234fcce7cc69751
 });
 
 Route::prefix('admin')->middleware(['auth:sanctum', 'throttle:10,1', 'admin'])->group(function () {

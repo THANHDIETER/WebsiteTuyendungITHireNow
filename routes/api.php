@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Admin\JobApiController;
 use App\Http\Controllers\api\Admin\resumeApiController;
@@ -22,3 +23,9 @@ Route::prefix('admin')->middleware(['auth:sanctum','throttle:10,1', 'admin'])->g
 
 
 
+=======
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+>>>>>>> b491f5cec2dc42594dcf88613234fcce7cc69751
