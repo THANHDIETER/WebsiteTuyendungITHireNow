@@ -21,26 +21,8 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-<<<<<<< HEAD
 public/assets/
 *.php text eol=lf
 *.js text eol=lf
 *.css text eol=lf
-<<<<<<< HEAD
 *.blade.php text eol=lf
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-app/Providers/RouteServiceProvider.php
-resources/views/admin.blade.php
-=======
-=======
->>>>>>> b491f5cec2dc42594dcf88613234fcce7cc69751
->>>>>>> 36876ee93749c708edf0c3d55663af956d1bee8d
-=======
-app/Providers/RouteServiceProvider.php
-resources/views/admin.blade.php
->>>>>>> 789c6389f65d2cd7c8a15232e6c5bcd61b84409b
-=======
-*.blade.php text eol=lf
->>>>>>> 6a595c609a3f34915d7da9f8c32aad10c0d37ddc
