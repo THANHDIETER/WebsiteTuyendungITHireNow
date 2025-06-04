@@ -18,7 +18,9 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
+
     public function login(Request $request)
+
     {
         $credentials = $request->validate(
             [
@@ -54,7 +56,6 @@ class LoginController extends Controller
         session()->flash('error', 'Mật khẩu không đúng.');
         return redirect()->back()->withInput();
     }
-
 
     public function redirect()
     {
@@ -134,3 +135,4 @@ class LoginController extends Controller
     }
 
 }
+

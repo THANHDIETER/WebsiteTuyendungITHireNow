@@ -33,5 +33,4 @@ public function boot(): void
     //     ->prefix('api/jobseeker')
     //     ->group(base_path('routes/jobseeker.php'));
 }
-
 }
