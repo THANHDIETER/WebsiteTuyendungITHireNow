@@ -10,8 +10,8 @@ class CreateFavoritesTable extends Migration
     {
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('job_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('job_id')->constrained()->onDelete('cascade');
             $table->text('note')->nullable();
             $table->timestamps();
         });

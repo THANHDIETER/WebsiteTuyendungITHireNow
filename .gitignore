@@ -26,6 +26,3 @@ public/assets/
 *.js text eol=lf
 *.css text eol=lf
 *.blade.php text eol=lf
-
-app/Providers/RouteServiceProvider.php
-resources/views/admin.blade.php

@@ -40,7 +40,7 @@
                                     <ul class="submenu-nav">
                                         <li><a href="about-us.html"><span>About us</span></a></li>
                                         <li><a href="login.html"><span>Login</span></a></li>
-                                        <li><a href="registration.html"><span>Registration</span></a></li>
+                                        <li><a href="{{ route('register') }}"><span>Registration</span></a></li>
                                         <li><a href="page-not-found.html"><span>Page Not Found</span></a></li>
                                     </ul>
                                 </li>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="header-align-end">
                         <div class="header-action-area">
-                            <a class="btn-registration" href="registration.html"><span>+</span> Registration</a>
+                            <a class="btn-registration" href="{{ route('register') }}"><span>+</span> Registration</a>
                             <button class="btn-menu" type="button" data-bs-toggle="offcanvas"
                                 data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
                                 <i class="icofont-navigation-menu"></i>
