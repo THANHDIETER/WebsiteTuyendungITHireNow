@@ -11,7 +11,6 @@ Route::get('/resumes', function () {
     return view('admin.resumes.index');
 });
 
-
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm']);
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 Route::get('/register', [App\Http\Controllers\Auth\RegisterController::class, 'showRegisterForm']);
