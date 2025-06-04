@@ -42,7 +42,6 @@ class UsersSeeder extends Seeder
             DB::table('users')->updateOrInsert(
                 ['email' => $user['email']],
                 array_merge($user, [
-                    'id' => Str::uuid(),
                     'email_verified_at' => now(),
                     'last_login_at' => now(),
                     'created_at' => now(),
