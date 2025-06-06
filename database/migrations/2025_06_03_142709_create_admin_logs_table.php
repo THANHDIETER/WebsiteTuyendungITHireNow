@@ -10,7 +10,7 @@ class CreateAdminLogsTable extends Migration
     {
         Schema::create('admin_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('admin_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('admin_id')->constrained('users')->onDelete('cascade');
             $table->string('action', 100);
             $table->string('target_type', 50)->nullable();
             $table->unsignedBigInteger('target_id')->nullable();

@@ -8,11 +8,12 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Middleware\AdminMiddleware;
 
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
-    ->middleware(['auth:sanctum', 'admin']) // Đảm bảo người dùng đăng nhập và có quyền admin
+    // ->middleware(['auth:sanctum', 'admin']) // Đảm bảo người dùng đăng nhập và có quyền admin
     ->name('admin.')
     ->group(function () {
 
@@ -39,7 +40,11 @@ Route::prefix('admin')
             Route::get('/', 'index')->name('resumes.index');
         });
 
-        // thông báo hệ thống
-        Route::get('/notifications/create', [NotificationController::class, 'create'])->name('admin.notifications.create');
-        Route::post('/notifications', [NotificationController::class, 'store'])->name('admin.notifications.store');
+        // Quản lý thống báo
+
+        Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
+        Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+
     });

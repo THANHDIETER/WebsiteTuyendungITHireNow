@@ -18,7 +18,6 @@ class JobsSeeder extends Seeder
 
         DB::table('jobs')->insert([
             [
-                'id' => Str::uuid(),
                 'company_id' => $companyId,
                 'title' => 'Senior Backend Developer',
                 'slug' => 'senior-backend-developer',

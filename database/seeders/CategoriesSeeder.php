@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -12,7 +13,7 @@ class CategoriesSeeder extends Seeder
         DB::table('categories')->insert([
             [
                 'name' => 'Backend Developer',
-                'slug' => 'backend-developer',
+                'slug' => Str::slug('Backend Developer'),
                 'description' => 'Lập trình viên Backend',
                 'icon_url' => null,
                 'is_active' => true,
@@ -22,7 +23,7 @@ class CategoriesSeeder extends Seeder
             ],
             [
                 'name' => 'Frontend Developer',
-                'slug' => 'frontend-developer',
+                'slug' => Str::slug('Frontend Developer'),
                 'description' => 'Lập trình viên Frontend',
                 'icon_url' => null,
                 'is_active' => true,

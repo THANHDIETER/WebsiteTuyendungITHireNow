@@ -10,8 +10,8 @@ class CreateCompanyReviewsTable extends Migration
     {
         Schema::create('company_reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('company_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('rating');
             $table->string('title', 150);
             $table->text('content');

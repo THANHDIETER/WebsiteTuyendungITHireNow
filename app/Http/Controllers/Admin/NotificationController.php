@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\Mail;
 
 class NotificationController extends Controller
 {
+    public function index()
+    {
+        $notifications = \App\Models\Notification::with('user')->latest()->paginate(10);
+        return view('admin.notifications.index', compact('notifications'));
+    }
+
+    public function show($id)
+    {
+        $notification = \App\Models\Notification::with('user')->findOrFail($id);
+        return view('admin.notifications.show', compact('notification'));
+    }
     public function create()
     {
         $users = User::select('id', 'email')->get();
