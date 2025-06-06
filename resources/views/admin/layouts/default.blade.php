@@ -16,7 +16,8 @@
             @include('admin.layouts.partials.sidebar')
 
             @yield('content')
-             @stack('scripts')
+            @stack('scripts')
+ 
 
             {{-- <div class="page-body">
                 <div class="container-fluid">
@@ -1145,7 +1146,8 @@
                 </div>
             </div> --}}
             @include('admin.layouts.partials.footer')
-           
+
+
         </div>
     </main>
 </body>

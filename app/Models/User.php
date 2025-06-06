@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,19 +14,30 @@ class User extends Authenticatable
 
     use HasApiTokens, Notifiable, HasRoles;
 
-
     protected $fillable = [
         'email',
-        'password_hash', // Đã đổi từ password_hash sang password để Laravel/Sanctum hoạt động chuẩn
+        'password',
+        'name',
+        'phone_number',
         'role',
+        'status',
+        'email_verified_at',
+        'last_login_at'
     ];
-
-    public $timestamps = true;
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
+    ];
+
+    public $timestamps = true;
+
+
 
     public function getAuthPassword()
     {
@@ -40,4 +52,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Resume::class);
     }
+    public function company()
+    {
+        return $this->hasOne(Company::class);
+    }
+
+
 }

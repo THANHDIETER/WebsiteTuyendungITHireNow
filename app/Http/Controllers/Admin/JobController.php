@@ -2,33 +2,47 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\JobPost;
+use App\Models\Job;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-
-
-    // Lấy danh sách các job chưa duyệt
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = JobPost::where('is_approved', false)->with('company')->get();
+        $query = Job::with(['company', 'category', 'skills'])
+                    ->where('is_approved', false);
+
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $jobs = $query->orderByDesc('created_at')->paginate(10);
+
         return view('admin.jobs.index', compact('jobs'));
     }
 
-    // Duyệt tin tuyển dụng
-    public function approve($id)
+    public function show(Job $job)
     {
-        $job = JobPost::findOrFail($id);
-        $job->update(['is_approved' => true]);
-        return redirect()->back()->with('success', value: 'Tin tuyển dụng đã được duyệt thành công.');
+        $job->load(['company', 'category', 'skills']);
+        return view('admin.jobs.show', compact('job'));
     }
 
-    // Xóa tin tuyển dụng
-    public function destroy($id)
+    public function approve(Request $request, Job $job)
     {
-        $job = JobPost::findOrFail($id);
+        $job->is_approved = true;
+        $job->save();
+
+        return redirect()->route('admin.jobs.index')->with('success', 'Tin tuyển dụng đã được duyệt.');
+    }
+
+    public function destroy(Job $job)
+    {
         $job->delete();
-        return redirect()->back()->with('success', 'Tin tuyển dụng đã bị xóa thành công.');
+
+        return redirect()->route('admin.jobs.index')->with('success', 'Tin tuyển dụng đã bị xoá.');
     }
 }

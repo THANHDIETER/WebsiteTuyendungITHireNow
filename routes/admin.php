@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminServicePackageController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
+
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\ResumeController;
+use App\Http\Controllers\Admin\ServicePackageController;
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
@@ -17,12 +18,24 @@ Route::prefix('admin')
         // Trang dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Quản lý việc làm (jobs)
+        // Duyệt tin tuyển dụng việc làm (jobs)
         Route::prefix('jobs')->controller(JobController::class)->group(function () {
-            Route::get('/', 'index')->name('jobs.index');
-            Route::patch('{id}/approve', 'approve')->name('jobs.approve');
-            Route::delete('{id}', 'destroy')->name('jobs.destroy');
+            Route::get('/', [JobController::class, 'index'])->name('jobs.index');
+            Route::get('/{job}/detail', [JobController::class, 'show'])->name('jobs.show');
+            Route::patch('/{job}/approve', [JobController::class, 'approve'])->name('jobs.approve');
+            Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
         });
+        // Quản lý gói dịch vụ (service packages)
+        Route::prefix('service-packages')->name('service-packages.')->controller(ServicePackageController::class)->group(function () {
+            Route::get('/', 'index')->name('index');                         // Danh sách gói
+            Route::get('create', 'create')->name('create');                  // Form tạo mới
+            Route::post('/', 'store')->name('store');                        // Xử lý tạo mới
+            Route::get('{service_package}/detail', 'show')->name('show');    // Chi tiết gói
+            Route::get('{service_package}/edit', 'edit')->name('edit');      // Form sửa
+            Route::put('{service_package}', 'update')->name('update');       // Xử lý cập nhật
+            Route::delete('{service_package}', 'destroy')->name('destroy');  // Xoá
+        });
+
 
         // Quản lý người dùng
         Route::prefix('users')->controller(UserController::class)->group(function () {
@@ -33,9 +46,7 @@ Route::prefix('admin')
         });
 
         // trang sơ yếu lý dịch (cv)
-        Route::prefix('resumes')->controller(ResumeController::class)->group(function(){
+        Route::prefix('resumes')->controller(ResumeController::class)->group(function () {
             Route::get('/', 'index')->name('resumes.index');
         });
-     
     });
-
