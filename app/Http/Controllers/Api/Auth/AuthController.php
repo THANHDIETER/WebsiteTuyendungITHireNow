@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return response()->json(['message' => 'Welcome to the API. Use /register to create a new user or /login to authenticate.']);
+        return response()->json(['message' => 'Chào mừng đến API. Sử dụng /register để đăng ký tài khoản mới hoặc /login để đăng nhập.']);
     }
 
     public function register(Request $request)
@@ -21,7 +21,9 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:job_seeker,employer'
+            'role' => 'required|in:job_seeker,employer,admin',
+            'name' => 'nullable|string|max:100',
+            'phone_number' => 'nullable|string|max:20',
         ]);
 
         if ($validator->fails()) {
@@ -30,26 +32,30 @@ class AuthController extends Controller
 
         try {
             $user = User::create([
-                'email'    => $request->email,
-                'password_hash' => Hash::make($request->password),
-                'role'     => $request->role,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+                'name' => $request->name,
+                'phone_number' => $request->phone_number,
+                'status' => 'inactive',
                 'is_blocked' => false,
             ]);
 
-            // Gán role nếu dùng spatie hoặc mặc định thì bỏ dòng này
+            // Gán vai trò nếu dùng spatie
             if (method_exists($user, 'assignRole')) {
                 $user->assignRole($request->role);
             }
 
-            // $token = JWTAuth::fromUser($user);
-
+            // Tạo token Sanctum
+            $token = $user->createToken('access_token')->plainTextToken;
 
             return response()->json([
-                'message' => 'User registered successfully',
+                'message' => 'Đăng ký người dùng thành công',
                 'user' => [
-                    'id'    => $user->id,
+                    'id' => $user->id,
                     'email' => $user->email,
-                    'role'  => $user->role,
+                    'role' => $user->role,
+                    'name' => $user->name,
                 ],
                 'token' => $token,
                 'token_type' => 'Bearer',
@@ -60,40 +66,24 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email',
-        'password' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid credentials'], 401);
+        }
+
+        $user = Auth::user();
+        $token = $user->createToken('token')->plainTextToken;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logged in successfully',
+            'token' => $token,
+        ]);
     }
-
-
-    $credentials = $request->only('email', 'password');
-
-    // Xác thực thủ công
-    if (!Auth::attempt($credentials)) {
-        return response()->json(['error' => 'Invalid credentials'], 401);
-    }
-
-    $user = Auth::user();
-
-    // Xoá các token cũ nếu muốn (tuỳ chọn)
-    // $user->tokens()->delete();
-
-    // Tạo token Sanctum
-    $token = $user->createToken('access_token')->plainTextToken;
-
-    return response()->json([
-        'token' => $token,
-        'role' => $user->role,
-        'user' => [
-            'id' => $user->id,
-            'email' => $user->email,
-        ]
-    ], 200);
-}
 
 }

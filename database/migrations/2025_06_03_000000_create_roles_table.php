@@ -10,9 +10,10 @@ class CreateRolesTable extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->unique();
-            $table->string('display_name', 100);
-            $table->text('description')->nullable();
+            $table->string('name', 50)->unique(); // Tên vai trò
+            $table->string('display_name', 100); // Tên hiển thị
+            $table->text('description')->nullable(); // Mô tả vai trò
+            $table->string('guard_name', 50)->default('web'); // Guard name
             $table->timestamps();
         });
     }
