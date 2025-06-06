@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\ResumeController;
+use App\Http\Controllers\Admin\NotificationController;
+
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
@@ -33,9 +35,11 @@ Route::prefix('admin')
         });
 
         // trang sơ yếu lý dịch (cv)
-        Route::prefix('resumes')->controller(ResumeController::class)->group(function(){
+        Route::prefix('resumes')->controller(ResumeController::class)->group(function () {
             Route::get('/', 'index')->name('resumes.index');
         });
-     
-    });
 
+        // thông báo hệ thống
+        Route::get('/notifications/create', [NotificationController::class, 'create'])->name('admin.notifications.create');
+        Route::post('/notifications', [NotificationController::class, 'store'])->name('admin.notifications.store');
+    });

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\NotificationController;
 
 
 // Public Routes
@@ -138,6 +139,10 @@ Route::middleware(['auth:sanctum', 'job_seeker'])->group(function () {
     require __DIR__ . '/jobseeker.php';
 });
 
-
+// Thông báo
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
+    Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
+});
 
 

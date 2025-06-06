@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Database\Seeders\AdminLogsSeeder;
 use Database\Seeders\BannersSeeder;
 use Database\Seeders\CategoriesSeeder;
