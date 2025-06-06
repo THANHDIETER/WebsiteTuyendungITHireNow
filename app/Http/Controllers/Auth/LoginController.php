@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use League\OAuth2\Client\Provider\Google;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -40,13 +41,22 @@ class LoginController extends Controller
             session()->flash('error', 'Email không tồn tại trong hệ thống.');
             return redirect()->back()->withInput();
         }
-        if (Hash::check($credentials['password'], $user->password_hash)) {
 
+        if (Hash::check($credentials['password'], $user->password)) {
             Auth::login($user);
 
+            // Tạo token (nếu dùng Sanctum)
             $token = $user->createToken('access_token')->plainTextToken;
-
             session()->flash('access_token', $token);
+
+            // Điều hướng theo vai trò
+            if ($user->role === 'employer' || (method_exists($user, 'hasRole') && $user->hasRole('employer'))) {
+                return redirect()->route('employer.details');
+            }
+
+            if( $user->role === 'job_seeker' || (method_exists($user, 'hasRole') && $user->hasRole('job_seeker'))) {
+                return redirect()->route('home');
+            }
 
             return redirect()->route('admin.dashboard');
         }
@@ -54,7 +64,6 @@ class LoginController extends Controller
         session()->flash('error', 'Mật khẩu không đúng.');
         return redirect()->back()->withInput();
     }
-
 
     public function redirect()
     {
@@ -84,7 +93,6 @@ class LoginController extends Controller
             return redirect()->route('showLoginForm');
         }
 
-
         $token = $provider->getAccessToken('authorization_code', [
             'code' => $request->get('code')
         ]);
@@ -103,25 +111,31 @@ class LoginController extends Controller
             return redirect()->route('showLoginForm');
         }
 
-       $user = User::firstOrCreate(
-    ['email' => $email],
-    [
-        'password_hash' => Hash::make(uniqid()),
+        $user = User::firstOrCreate(
+            ['email' => $email],
+            [
+                'name' => $name,
+                'password' => Hash::make(Str::random(40)), // mật khẩu giả, không dùng để đăng nhập
                 'role' => 'job_seeker',
+                'google_id' => $googleId,
+                'avatar' => $avatar,
             ]
         );
 
-
-        $user->update([
-            'google_id' => $googleId,
-            'avatar' => $avatar,
-        ]);
+        // Cập nhật thông tin nếu cần
+        if (!$user->google_id) {
+            $user->update([
+                'google_id' => $googleId,
+                'avatar' => $avatar,
+            ]);
+        }
 
         Auth::login($user);
 
+        // Tạo token (giả định dùng Laravel Sanctum)
         $accessToken = $user->createToken('access_token')->plainTextToken;
 
-        session()->put('access_token', $accessToken);
+        session(['access_token' => $accessToken]);
 
         return redirect()->intended(route('admin.dashboard'));
     }
@@ -130,7 +144,17 @@ class LoginController extends Controller
     {
         $request->user()->tokens()->delete();
 
-        return redirect('/login');
+        return redirect('/showLoginForm');
     }
 
+    public function employerDetails()
+    {
+        $user = Auth::user();
+
+        if (!$user || $user->role !== 'employer') {
+            abort(403, 'Bạn không có quyền truy cập trang này.');
+        }
+
+        return view('website.employers.employe-details', compact('user'));
+    }
 }

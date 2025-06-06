@@ -14,15 +14,20 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 Route::get('/showLoginForm', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
 
+Route::get('/register/employer', [RegisterController::class, 'showRegisterEmployerForm'])->name('showRegisterEmployerForm');
+Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('registerEmployer');
+
 Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/docs', fn() => view('docs.index'));
 
+Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+
 Route::get('/', function(){
     return view('website.index');
-});
+})->name('home');
 
 Route::get('/cong-viec', function(){
     return view('website.jobs.job');

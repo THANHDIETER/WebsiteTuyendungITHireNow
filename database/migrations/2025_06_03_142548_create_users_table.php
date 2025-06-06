@@ -9,10 +9,10 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('id')->primary();
+            $table->id();
             $table->string('email')->unique();
-            $table->string('password');
-            $table->string('name', 100);
+            $table->string('password')->default(bcrypt('password'));
+            $table->string('name', 100)->nullable();
             $table->string('phone_number', 20)->nullable();
             $table->enum('role', ['job_seeker', 'employer', 'admin']);
             $table->enum('status', ['active', 'inactive', 'banned'])->default('inactive');
