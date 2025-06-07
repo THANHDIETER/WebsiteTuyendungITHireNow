@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\ResumeController;
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
-    ->middleware(['auth:sanctum', 'admin']) // Đảm bảo người dùng đăng nhập và có quyền admin
+    // ->middleware(['auth:sanctum', 'admin']) // Đảm bảo người dùng đăng nhập và có quyền admin
     ->name('admin.')
     ->group(function () {
 
@@ -38,4 +38,3 @@ Route::prefix('admin')
         });
      
     });
-

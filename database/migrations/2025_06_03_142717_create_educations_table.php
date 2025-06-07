@@ -10,7 +10,7 @@ class CreateEducationsTable extends Migration
     {
         Schema::create('educations', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('school_name', 255);
             $table->string('major', 150)->nullable();
             $table->string('degree', 100)->nullable();

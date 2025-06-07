@@ -10,7 +10,7 @@ class CreateSeekerProfilesTable extends Migration
     {
         Schema::create('seeker_profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('headline', 150)->nullable();
             $table->text('summary')->nullable();
             $table->text('cv_url')->nullable();

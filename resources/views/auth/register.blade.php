@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('../assets/css/vendors/%40icon/icofont/icofont.css') }}">
     <!-- Flag Icon css -->
 
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/flag-icon.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css') }}">
 
     <!-- Themify Icon css -->
     <link rel="stylesheet" type="text/css"
@@ -93,10 +93,10 @@
                                 <div class="form-group">
                                     <label class="col-form-label">Password</label>
                                     <div class="form-input position-relative">
-                                        <input class="form-control" type="password" id="login[password]"
-                                            name="password_hash" placeholder="*********">
+                                        <input class="form-control" type="password" id="password" name="password"
+                                            placeholder="*********">
                                         <div class="show-hide"><span class="show"></span></div>
-                                        @error('password_hash')
+                                        @error('password')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -104,31 +104,13 @@
                                 <div class="form-group">
                                     <label class="col-form-label">Confirm Password</label>
                                     <div class="form-input position-relative">
-                                        <input class="form-control" type="password" id="login[confirm_password]"
-                                            name="confirm_password" placeholder="*********">
+                                        <input class="form-control" type="password" id="password_confirmation"
+                                            name="password_confirmation" placeholder="*********">
                                         <div class="show-hide"><span class="show"></span></div>
-                                        @error('confirm_password')
+                                        @error('password_confirmation')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="role">Vai trò</label>
-                                    <select name="role" id="role" class="form-control">
-                                        <option value="" disabled {{ old('role') === null ? 'selected' : '' }}>
-                                            -- Chọn vai trò --
-                                        </option>
-                                        <option value="job_seeker"
-                                            {{ old('role') === 'job_seeker' ? 'selected' : '' }}>
-                                            Người tìm việc
-                                        </option>
-                                        <option value="employer" {{ old('role') === 'employer' ? 'selected' : '' }}>
-                                            Nhà tuyển dụng
-                                        </option>
-                                    </select>
-                                    @error('role')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
                                 </div>
                                 <div class="form-group mb-0 checkbox-checked">
                                     <div class="form-check checkbox-solid-info">
@@ -143,22 +125,19 @@
                                 </div>
                                 <div class="form-group">
                                     <ul class="login-social">
-                                        <li><a href="{{ url('#') }}" target="_blank"><i
-                                                    class="fa-brands fa-linkedin"></i></a></li>
-                                        <li><a href="{{ url('#') }}" target="_blank"><i
+                                        <li><a href="{{ route('auth.redirect') }}"><i
                                                     class="fa-brands fa-google"></i></a></li>
-                                        <li><a href="{{ url('#') }}" target="_blank"><i
-                                                    class="fa-brands fa-facebook"></i></a></li>
-                                        <li><a href="{{ url('#') }}" target="_blank"><i
-                                                    class="fa-brands fa-instagram"></i></a></li>
                                     </ul>
                                 </div>
+                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn"
+                                    data-theme="dark"></div>
                                 <p
                                     class="mt-4 mb-0 text-center d-flex align-items-center justify-content-center gap-2">
                                     Already have an account?
                                     <a href="{{ route('showLoginForm') }}" class="ms-2">Sign in</a>
                                     <span>|</span>
-                                    <a href="#" class="ms-2">Create Employer Account</a>
+                                    <a href="{{ route('registerEmployer') }}" class="ms-2">Create Employer
+                                        Account</a>
                                 </p>
                             </form>
                         </div>
