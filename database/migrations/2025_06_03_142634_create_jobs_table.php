@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateJobsTable extends Migration
 {
-    public function up()
+ public function up()
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id('id')->primary();
@@ -26,10 +26,20 @@ class CreateJobsTable extends Migration
             $table->string('experience')->nullable();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->date('deadline')->nullable();
-             $table->enum('status', ['draft', 'published', 'closed', 'pending'])->default('pending');
+            $table->enum('status', ['draft', 'published', 'closed', 'pending'])->default('pending');
             $table->integer('views')->default(0);
             $table->boolean('is_featured')->default(false);
+
+            // 🔽 Các trường mới bổ sung từ ảnh
+            $table->string('apply_url')->nullable();
+            $table->string('remote_policy', 100)->nullable();
+            $table->string('language', 50)->nullable();
+            $table->string('meta_title', 150)->nullable();
+            $table->text('meta_description')->nullable();
+            $table->boolean('search_index')->default(true);
+
             $table->timestamps();
+            $table->softDeletes(); // tương đương với `deleted_at` DATETIME
         });
     }
 

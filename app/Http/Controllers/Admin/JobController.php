@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -9,8 +10,13 @@ class JobController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Job::with(['company', 'category', 'skills'])
-                    ->where('is_approved', false);
+        $query = Job::with(['company', 'category', 'skills']);
+
+        if ($request->has('is_approved')) {
+            $query->where('is_approved', $request->is_approved);
+        } else {
+            $query->where('is_approved', false);
+        }
 
         if ($request->filled('category')) {
             $query->where('category_id', $request->category);
@@ -21,7 +27,6 @@ class JobController extends Controller
         }
 
         $jobs = $query->orderByDesc('created_at')->paginate(10);
-
         return view('admin.jobs.index', compact('jobs'));
     }
 
@@ -33,16 +38,27 @@ class JobController extends Controller
 
     public function approve(Request $request, Job $job)
     {
-        $job->is_approved = true;
-        $job->save();
+        $job->update([
+            'is_approved' => true,
+            'status' => 'published',
+        ]);
 
         return redirect()->route('admin.jobs.index')->with('success', 'Tin tuyển dụng đã được duyệt.');
+    }
+
+    public function reject(Request $request, Job $job)
+    {
+        $job->update([
+            'is_approved' => false,
+            'status' => 'draft',
+        ]);
+
+        return redirect()->route('admin.jobs.index')->with('info', 'Tin tuyển dụng đã bị từ chối.');
     }
 
     public function destroy(Job $job)
     {
         $job->delete();
-
         return redirect()->route('admin.jobs.index')->with('success', 'Tin tuyển dụng đã bị xoá.');
     }
 }

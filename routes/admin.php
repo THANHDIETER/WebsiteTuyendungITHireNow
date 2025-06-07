@@ -21,8 +21,9 @@ Route::prefix('admin')
         // Duyệt tin tuyển dụng việc làm (jobs)
         Route::prefix('jobs')->controller(JobController::class)->group(function () {
             Route::get('/', [JobController::class, 'index'])->name('jobs.index');
-            Route::get('/{job}/detail', [JobController::class, 'show'])->name('jobs.show');
-            Route::patch('/{job}/approve', [JobController::class, 'approve'])->name('jobs.approve');
+            Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show');
+            Route::post('/{job}/approve', [JobController::class, 'approve'])->name('jobs.approve');
+            Route::post('/{job}/reject', [JobController::class, 'reject'])->name('jobs.reject');
             Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
         });
         // Quản lý gói dịch vụ (service packages)
