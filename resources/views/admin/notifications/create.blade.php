@@ -48,7 +48,7 @@
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-success">
-                                🚀 Gửi Thông Báo
+                                Gửi Thông Báo
                             </button>
                         </div>
                     </form>
