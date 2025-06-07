@@ -53,7 +53,7 @@ Route::prefix('admin')
             Route::get('{id}', 'show')->name('users.show');
             Route::patch('{id}/update', 'update')->name('users.update');
             Route::delete('{id}', 'destroy')->name('users.destroy');
-
+        });
         // Route CRUD cho users
         Route::prefix('users')->name('users.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
