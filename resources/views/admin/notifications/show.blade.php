@@ -1,47 +1,81 @@
 @extends('admin.layouts.default')
 
 @section('content')
-<div class="container py-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0">📄 Chi Tiết Thông Báo #{{ $notification->id }}</h5>
-        </div>
+<style>
+    footer {
+        display: none !important;
+    }
+</style>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow border-0">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle-fill me-2"></i>Chi Tiết Thông Báo #{{ $notification->id }}
+                    </h5>
+                </div>
 
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-3">Người nhận:</dt>
-                <dd class="col-sm-9">{{ $notification->user->email ?? 'Tất cả người dùng' }}</dd>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Người nhận:</div>
+                        <div class="col-sm-8">{{ $notification->user->email ?? 'Tất cả người dùng' }}</div>
+                    </div>
 
-                <dt class="col-sm-3">Loại thông báo:</dt>
-                <dd class="col-sm-9"><span class="badge bg-info text-dark">{{ $notification->type }}</span></dd>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Loại thông báo:</div>
+                        <div class="col-sm-8">
+                            <span class="badge bg-info text-dark text-uppercase">{{ $notification->type }}</span>
+                        </div>
+                    </div>
 
-                <dt class="col-sm-3">Nội dung:</dt>
-                <dd class="col-sm-9">{{ $notification->message }}</dd>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Nội dung:</div>
+                        <div class="col-sm-8">{{ $notification->message }}</div>
+                    </div>
 
-                <dt class="col-sm-3">Link đính kèm:</dt>
-                <dd class="col-sm-9">
-                    @if ($notification->link_url)
-                        <a href="{{ url($notification->link_url) }}" target="_blank">{{ $notification->link_url }}</a>
-                    @else
-                        <span class="text-muted">Không có</span>
-                    @endif
-                </dd>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Link đính kèm:</div>
+                        <div class="col-sm-8">
+                            @if ($notification->link_url)
+                                <a href="{{ url($notification->link_url) }}" target="_blank">{{ $notification->link_url }}</a>
+                            @else
+                                <span class="text-muted">Không có</span>
+                            @endif
+                        </div>
+                    </div>
 
-                <dt class="col-sm-3">Trạng thái:</dt>
-                <dd class="col-sm-9">
-                    @if ($notification->is_read)
-                        <span class="badge bg-success">✔️ Đã đọc</span>
-                    @else
-                        <span class="badge bg-secondary">Chưa đọc</span>
-                    @endif
-                </dd>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Trạng thái:</div>
+                        <div class="col-sm-8">
+                            @if ($notification->is_read)
+                                <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Đã đọc</span>
+                            @else
+                                <span class="badge bg-secondary"><i class="bi bi-eye-slash"></i> Chưa đọc</span>
+                            @endif
+                        </div>
+                    </div>
 
-                <dt class="col-sm-3">Thời gian gửi:</dt>
-                <dd class="col-sm-9">{{ $notification->created_at->format('d/m/Y H:i') }}</dd>
-            </dl>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Thời gian gửi:</div>
+                        <div class="col-sm-8">{{ $notification->created_at->timezone(config('app.timezone'))->format('d/m/Y H:i') }}</div>
+                    </div>
 
-            <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-primary mt-3">← Quay lại danh sách</a>
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ route('admin.notifications.edit', $notification->id) }}" class="btn btn-warning">
+                            <i class="bi bi-pencil-square"></i> Chỉnh sửa
+                        </a>
+                        <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-primary">
+                            ← Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+@endpush

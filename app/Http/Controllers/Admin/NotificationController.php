@@ -9,12 +9,33 @@ use App\Models\User;
 use App\Mail\SystemNotificationMail;
 use Illuminate\Support\Facades\Mail;
 
+
 class NotificationController extends Controller
 {
-    public function index()
+    /**
+     * Lấy danh sách các thông báo.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
     {
-        $notifications = \App\Models\Notification::with('user')->latest()->paginate(10);
-        return view('admin.notifications.index', compact('notifications'));
+        $query = Notification::query()->with('user');
+
+        if ($request->status === 'read') {
+            $query->where('is_read', true);
+        } elseif ($request->status === 'unread') {
+            $query->where('is_read', false);
+        }
+
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        $notifications = $query->orderByDesc('created_at')->paginate(10);
+        $users = User::select('id', 'email')->get(); // 👈 dòng cần thêm
+
+        return view('admin.notifications.index', compact('notifications', 'users'));
     }
 
     public function show($id)
@@ -26,6 +47,42 @@ class NotificationController extends Controller
     {
         $users = User::select('id', 'email')->get();
         return view('admin.notifications.create', compact('users'));
+    }
+
+    public function edit($id)
+    {
+        $notification = Notification::findOrFail($id);
+        $users = User::select('id', 'email')->get();
+        return view('admin.notifications.edit', compact('notification', 'users'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'type' => 'required|string|max:50',
+            'message' => 'required|string',
+            'link_url' => 'nullable|string|max:255',
+            'user_id' => 'nullable|exists:users,id',
+        ]);
+
+        $notification = Notification::findOrFail($id);
+
+        $notification->update([
+            'type' => $request->type,
+            'message' => $request->message,
+            'link_url' => $request->link_url,
+            'user_id' => $request->user_id !== 'all' ? $request->user_id : null,
+        ]);
+
+        return redirect()->route('admin.notifications.index')->with('success', 'Thông báo đã được cập nhật.');
+    }
+
+    public function destroy($id)
+    {
+        $notification = Notification::findOrFail($id);
+        $notification->delete();
+
+        return redirect()->route('admin.notifications.index')->with('success', 'Đã xoá thông báo.');
     }
 
     public function store(Request $request)
