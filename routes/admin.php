@@ -7,6 +7,9 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\ResumeController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Middleware\AdminMiddleware;
+
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
@@ -38,8 +41,18 @@ Route::prefix('admin')
         ->only(['index', 'show', 'update', 'destroy']);
 
         // trang sơ yếu lý dịch (cv)
-        Route::prefix('resumes')->controller(ResumeController::class)->group(function(){
+        Route::prefix('resumes')->controller(ResumeController::class)->group(function () {
             Route::get('/', 'index')->name('resumes.index');
         });
-     
+
+        // Quản lý thống báo
+
+        Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
+        Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+        Route::get('/notifications/{id}/edit', [NotificationController::class, 'edit'])->name('notifications.edit');
+        Route::put('/notifications/{id}', [NotificationController::class, 'update'])->name('notifications.update');
+        Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
     });
