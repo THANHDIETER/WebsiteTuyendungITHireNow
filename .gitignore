@@ -21,10 +21,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-
 public/assets/
-*.php text eol=lf
-*.js text eol=lf
-*.css text eol=lf
-*.blade.php text eol=lf
-

@@ -1,7 +1,7 @@
 @extends('admin.layouts.default')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-5">
         <h1>Danh sách tin tuyển dụng chưa duyệt</h1>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>

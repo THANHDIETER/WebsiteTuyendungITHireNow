@@ -15,17 +15,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-
         // Đăng ký middleware toàn cục (nếu cần)
         $middleware->alias([
             'admin' => AdminMiddleware::class,
 
             'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            
+            'api' => [
+                \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+                'throttle:api',
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            ],
+
         ]);
-
-        
-
-
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Ghi đè xử lý lỗi AuthenticationException
@@ -36,4 +38,3 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->create();
-    

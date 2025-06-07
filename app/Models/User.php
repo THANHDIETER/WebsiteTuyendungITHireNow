@@ -11,15 +11,16 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
 
-    use HasApiTokens, Notifiable, HasRoles;
+    use HasApiTokens, Notifiable, HasRoles, HasFactory;
 
 
     protected $fillable = [
         'email',
-        'password', // Đã đổi từ password_hash sang password để Laravel/Sanctum hoạt động chuẩn
+        'password',
         'role',
     ];
 
+    public $timestamps = true;
 
     protected $hidden = [
         'password',
@@ -28,7 +29,7 @@ class User extends Authenticatable
 
     public function getAuthPassword()
     {
-        return $this->password_hash;
+        return $this->password;
     }
 
 
