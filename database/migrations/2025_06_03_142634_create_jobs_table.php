@@ -9,8 +9,8 @@ class CreateJobsTable extends Migration
     public function up()
     {
         Schema::create('jobs', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('company_id')->constrained()->onDelete('cascade');
+            $table->id('id')->primary();
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description');

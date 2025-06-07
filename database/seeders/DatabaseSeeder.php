@@ -20,6 +20,7 @@ use Database\Seeders\SeekerProfilesSeeder;
 use Database\Seeders\SkillsSeeder;
 use Database\Seeders\UserRolesSeeder;
 use Database\Seeders\UsersSeeder;
+use Database\Seeders\ReportsSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -47,6 +48,7 @@ class DatabaseSeeder extends Seeder
             EducationsSeeder::class,
             ExperiencesSeeder::class,
             UserRolesSeeder::class,  // Gọi đúng tên seeder
+            ReportsSeeder::class,
         ]);
     }
 }

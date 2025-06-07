@@ -6,30 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
 {
-    /**
-     * Xác định người dùng có quyền gửi request này hay không.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Quy tắc kiểm tra dữ liệu đầu vào.
-     */
     public function rules(): array
     {
         return [
             'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8',
-            'confirm_password' => 'required|string|same:password',
-            'role' => 'required|in:job_seeker,employer',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string|min:8',
+            'role' => 'sometimes|in:job_seeker,employer',
         ];
     }
 
-    /**
-     * Thông báo lỗi tuỳ chỉnh.
-     */
     public function messages(): array
     {
         return [
@@ -42,12 +33,12 @@ class RegisterRequest extends FormRequest
             'password.required' => 'Mật khẩu là trường bắt buộc.',
             'password.string' => 'Mật khẩu phải là một chuỗi ký tự.',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
 
-            'confirm_password.required' => 'Xác nhận mật khẩu là trường bắt buộc.',
-            'confirm_password.string' => 'Xác nhận mật khẩu phải là một chuỗi ký tự.',
-            'confirm_password.same' => 'Xác nhận mật khẩu phải khớp với mật khẩu.',
+            'password_confirmation.required' => 'Xác nhận mật khẩu là trường bắt buộc.',
+            'password_confirmation.string' => 'Xác nhận mật khẩu phải là một chuỗi ký tự.',
+            'password_confirmation.min' => 'Xác nhận mật khẩu phải có ít nhất 8 ký tự.',
 
-            'role.required' => 'Vai trò là trường bắt buộc.',
             'role.in' => 'Vai trò chỉ được phép là job_seeker hoặc employer.',
         ];
     }

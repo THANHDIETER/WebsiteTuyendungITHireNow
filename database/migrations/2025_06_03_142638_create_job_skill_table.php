@@ -10,7 +10,7 @@ class CreateJobSkillTable extends Migration
     {
         Schema::create('job_skill', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('job_id')->constrained()->onDelete('cascade');
+            $table->foreignId('job_id')->constrained()->onDelete('cascade');
             $table->foreignId('skill_id')->constrained()->onDelete('cascade');
             $table->integer('priority_level')->default(0);
             $table->boolean('required')->default(false);

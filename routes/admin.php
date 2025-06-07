@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\ResumeController;
+use App\Http\Controllers\Admin\ReportController;
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
@@ -24,13 +25,18 @@ Route::prefix('admin')
             Route::delete('{id}', 'destroy')->name('jobs.destroy');
         });
 
-        // Quản lý người dùng
-        Route::prefix('users')->controller(UserController::class)->group(function () {
-            Route::get('/', 'index')->name('users.index');
-            Route::get('{id}', 'show')->name('users.show');
-            Route::patch('{id}/update', 'update')->name('users.update');
-            Route::delete('{id}', 'destroy')->name('users.destroy');
+        // Route CRUD cho users
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('index');
+            Route::get('create', [UserController::class, 'create'])->name('create');
+            Route::post('/', [UserController::class, 'store'])->name('store');
+            Route::get('{user}', [UserController::class, 'show'])->name('show');
+            Route::get('{user}/edit', [UserController::class, 'edit'])->name('edit');
+            Route::put('{user}', [UserController::class, 'update'])->name('update');
+            Route::delete('{user}', [UserController::class, 'destroy'])->name('destroy');
         });
+        Route::resource('reports', ReportController::class)
+        ->only(['index', 'show', 'update', 'destroy']);
 
         // trang sơ yếu lý dịch (cv)
         Route::prefix('resumes')->controller(ResumeController::class)->group(function(){
@@ -38,4 +44,3 @@ Route::prefix('admin')
         });
      
     });
-
