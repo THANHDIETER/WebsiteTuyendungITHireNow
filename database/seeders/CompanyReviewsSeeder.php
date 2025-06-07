@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -8,18 +9,23 @@ class CompanyReviewsSeeder extends Seeder
 {
     public function run()
     {
-        // Lấy company_id dựa theo slug hoặc tên công ty
-        $companyId = DB::table('companies')->where('slug', 'cong-ty-abc')->value('id');
+        // Lấy company_id ngẫu nhiên từ bảng companies
+        $companyId = DB::table('companies')
+            ->inRandomOrder()
+            ->value('id');
 
         if (!$companyId) {
-            throw new \Exception('Công ty ABC chưa tồn tại trong bảng companies.');
+            throw new \Exception('Không tìm thấy công ty nào trong bảng companies.');
         }
 
-        // Lấy user_id dựa theo email
-        $userId = DB::table('users')->where('email', 'seeker@example.com')->value('id');
+        // Lấy user_id có role là job_seeker ngẫu nhiên
+        $userId = DB::table('users')
+            ->where('role', 'job_seeker')
+            ->inRandomOrder()
+            ->value('id');
 
         if (!$userId) {
-            throw new \Exception('User seeker@example.com chưa tồn tại trong bảng users.');
+            throw new \Exception('Không tìm thấy user nào có role là "job_seeker".');
         }
 
         DB::table('company_reviews')->insert([
