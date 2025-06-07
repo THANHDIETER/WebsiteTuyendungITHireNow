@@ -8,6 +8,8 @@
 </head>
 
 <body>
+@vite(['resources/js/app.js', 'resources/sass/app.scss'])
+
     <!-- tap to top-->
     @include('admin.layouts.partials.navbar')
     <main class="page-wrapper compact-wrapper" id="pageWrapper">

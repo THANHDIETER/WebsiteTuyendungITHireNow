@@ -1,16 +1,16 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminServicePackageController;
-use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobController;
-use App\Http\Controllers\Admin\ResumeController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\admin\SeekerProfileController;
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
-    ->middleware(['auth:sanctum', 'admin']) // Đảm bảo người dùng đăng nhập và có quyền admin
+    // ->middleware(['auth:sanctum', 'admin']) 
+    // Đảm bảo người dùng đăng nhập và có quyền admin
     ->name('admin.')
     ->group(function () {
 
@@ -33,8 +33,12 @@ Route::prefix('admin')
         });
 
         // trang sơ yếu lý dịch (cv)
-        Route::prefix('resumes')->controller(ResumeController::class)->group(function(){
-            Route::get('/', 'index')->name('resumes.index');
+        Route::prefix('seekerprofile')->controller(SeekerProfileController::class)->group(function(){
+            Route::get('/', 'index')->name('seekerprofile.index');
+        });
+
+         Route::prefix('payment')->controller(PaymentController::class)->group(function(){
+            Route::get('/', 'index')->name('payment.index');
         });
      
     });
