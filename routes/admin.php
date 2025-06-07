@@ -34,6 +34,9 @@ Route::prefix('admin')
             Route::put('{user}', [UserController::class, 'update'])->name('update');
             Route::delete('{user}', [UserController::class, 'destroy'])->name('destroy');
         });
+        Route::resource('reports', \App\Http\Controllers\Admin\ReportController::class)
+        ->only(['index', 'show', 'update', 'destroy']);
+
         // trang sơ yếu lý dịch (cv)
         Route::prefix('resumes')->controller(ResumeController::class)->group(function(){
             Route::get('/', 'index')->name('resumes.index');
