@@ -27,12 +27,6 @@ Route::middleware([])->group(function () {
     Route::apiResource('payments', PaymentController::class);
 });
 
-Route::prefix('admin')->middleware(['auth:sanctum','throttle:10,1', 'admin'])->group(function () {
-
-    Route::get('/jobs', [JobApiController::class, 'index'])->name('api.admin.jobs.index');
-    Route::patch('/jobs/{id}/approve', [JobApiController::class, 'approve'])->name('api.admin.jobs.approve');
-    Route::delete('/jobs/{id}', [JobApiController::class, 'destroy'])->name('api.admin.jobs.destroy');
-
 
 Route::prefix('admin/stats')->group(function () {
     Route::get('/users', [DashboardController::class, 'userStats']);

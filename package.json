@@ -8,14 +8,15 @@
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
         "@vitejs/plugin-vue": "^5.2.4",
+        "autoprefixer": "^10.4.21",
         "axios": "^1.8.2",
         "bootstrap": "^5.3.6",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
+        "postcss": "^8.5.4",
         "sass": "^1.89.1",
-        "tailwindcss": "^4.0.0",
+        "tailwindcss": "^4.1.8",
         "vite": "^6.2.4"
-<<<<<<< HEAD
     },
     "dependencies": {
         "@popperjs/core": "^2.11.8",
@@ -24,7 +25,5 @@
         "jspdf": "^3.0.1",
         "vue": "^3.5.15",
         "vue-loader": "^17.4.2"
-=======
->>>>>>> b491f5cec2dc42594dcf88613234fcce7cc69751
     }
 }

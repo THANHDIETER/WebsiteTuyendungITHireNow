@@ -16,7 +16,7 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         // $userId = $request->user()->id;
-        $userId = 2;
+        $userId = 10;
 
         $payments = Payment::with('package')
             ->where('user_id', $userId)

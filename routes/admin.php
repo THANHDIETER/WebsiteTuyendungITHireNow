@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\admin\SeekerProfileController;
 
 
-use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\ServicePackageController;
 use App\Http\Controllers\Admin\ReportController;
@@ -85,7 +84,7 @@ Route::prefix('admin')
 
          Route::prefix('payment')->controller(PaymentController::class)->group(function(){
             Route::get('/', 'index')->name('payment.index');
-
+            });
         Route::prefix('resumes')->controller(ResumeController::class)->group(function () {
             Route::get('/', 'index')->name('resumes.index');
 
