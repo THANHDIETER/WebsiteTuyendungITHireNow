@@ -21,21 +21,15 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 public/assets/
+
 *.php text eol=lf
 *.js text eol=lf
 *.css text eol=lf
 *.blade.php text eol=lf
 
-<<<<<<< HEAD
-=======
->>>>>>> b491f5cec2dc42594dcf88613234fcce7cc69751
-=======
 app/Providers/RouteServiceProvider.php
 resources/views/admin.blade.php
->>>>>>> 789c6389f65d2cd7c8a15232e6c5bcd61b84409b
-=======
-public/assets/
->>>>>>> e0e36186883f36aa4762d3ee5ab823aebc33cf07
+
+
