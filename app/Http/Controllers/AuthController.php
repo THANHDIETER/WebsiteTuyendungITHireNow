@@ -30,18 +30,17 @@ class AuthController extends Controller
         try {
             $user = User::create([
                 'email'    => $request->email,
-                'password_hash' => Hash::make($request->password),
+                'password' => Hash::make($request->password),
                 'role'     => $request->role,
                 'is_blocked' => false,
             ]);
 
-            // Gán role nếu dùng spatie hoặc mặc định thì bỏ dòng này
             if (method_exists($user, 'assignRole')) {
                 $user->assignRole($request->role);
             }
 
-            // $token = JWTAuth::fromUser($user);
-
+            // ✅ Tạo token Sanctum
+            $token = $user->createToken('access_token')->plainTextToken;
 
             return response()->json([
                 'message' => 'User registered successfully',
@@ -59,40 +58,39 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email',
-        'password' => 'required|string',
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+
+        $credentials = $request->only('email', 'password');
+
+        // Xác thực thủ công
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+
+        $user = Auth::user();
+
+        // Xoá các token cũ nếu muốn (tuỳ chọn)
+        // $user->tokens()->delete();
+
+        // Tạo token Sanctum
+        $token = $user->createToken('access_token')->plainTextToken;
+
+        return response()->json([
+            'token' => $token,
+            'role' => $user->role,
+            'user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+            ]
+        ], 200);
     }
-
-
-    $credentials = $request->only('email', 'password');
-
-    // Xác thực thủ công
-    if (!Auth::attempt($credentials)) {
-        return response()->json(['error' => 'Invalid credentials'], 401);
-    }
-
-    $user = Auth::user();
-
-    // Xoá các token cũ nếu muốn (tuỳ chọn)
-    // $user->tokens()->delete();
-
-    // Tạo token Sanctum
-    $token = $user->createToken('access_token')->plainTextToken;
-
-    return response()->json([
-        'token' => $token,
-        'role' => $user->role,
-        'user' => [
-            'id' => $user->id,
-            'email' => $user->email,
-        ]
-    ], 200);
-}
-
 }
