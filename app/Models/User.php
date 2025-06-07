@@ -12,13 +12,14 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
 
-    use HasApiTokens, Notifiable, HasRoles;
+    use HasApiTokens, Notifiable, HasRoles, HasFactory;
 
     protected $fillable = [
         'email',
         'password',
         'name',
         'phone_number',
+
         'role',
         'status',
         'email_verified_at',
@@ -41,7 +42,7 @@ class User extends Authenticatable
 
     public function getAuthPassword()
     {
-        return $this->password_hash;
+        return $this->password;
     }
 
 

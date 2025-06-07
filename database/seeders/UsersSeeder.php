@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -11,43 +11,31 @@ class UsersSeeder extends Seeder
 {
     public function run()
     {
-        $users = [
-            [
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
-                'name' => 'Admin User',
-                'phone_number' => '0123456789',
-                'role' => 'admin',
-                'status' => 'active',
-            ],
-            [
-                'email' => 'employer@example.com',
-                'password' => Hash::make('password'),
-                'name' => 'Employer User',
-                'phone_number' => '0987654321',
-                'role' => 'employer',
-                'status' => 'active',
-            ],
-            [
-                'email' => 'seeker@example.com',
-                'password' => Hash::make('password'),
-                'name' => 'Job Seeker',
-                'phone_number' => '0912345678',
-                'role' => 'job_seeker',
-                'status' => 'active',
-            ],
-        ];
+        $faker = \Faker\Factory::create();
 
-        foreach ($users as $user) {
-            DB::table('users')->updateOrInsert(
-                ['email' => $user['email']],
-                array_merge($user, [
-                    'email_verified_at' => now(),
-                    'last_login_at' => now(),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ])
-            );
+        // Tạo danh sách referral codes trước để có thể sử dụng cho referred_by
+        $referralCodes = [];
+
+        for ($i = 1; $i <= 10; $i++) {
+            $referral_code = strtoupper(Str::random(6));
+            $referralCodes[] = $referral_code;
+
+            User::create([
+                'email' => $faker->unique()->safeEmail(),
+                'password' => Hash::make('password'), // Mặc định mật khẩu là "password"
+                'name' => $faker->name(),
+                'phone_number' => $faker->phoneNumber(),
+                'role' => $faker->randomElement(['admin', 'employer', 'job_seeker']),
+                'status' => $faker->randomElement(['active', 'inactive', 'banned']),
+                'is_blocked' => $faker->boolean(20), // 20% bị block
+                'email_verified_at' => now(),
+                'last_login_at' => now(),
+                'referral_code' => $referral_code,
+                'referred_by' => $faker->optional()->randomElement($referralCodes),
+                'ip_address' => $faker->ipv4(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
     }
 }

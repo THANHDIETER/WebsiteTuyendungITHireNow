@@ -8,12 +8,12 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    // Lấy danh sách user có phân trang & lọc theo role
+    // 📄 Lấy danh sách user có phân trang & lọc theo role
     public function index(Request $request)
     {
         $query = User::query();
 
-        if ($request->has('role') && $request->role !== null && $request->role !== '') {
+        if ($request->filled('role')) {
             $query->where('role', $request->role);
         }
 
@@ -22,29 +22,39 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    // 👁️ Xem chi tiết 1 user
+   public function show($id)
+{
+    $user = User::findOrFail($id);
+    return view('admin.users.show', compact('user'));
+}
 
-    // Xem chi tiết 1 user
-    public function show($id)
-    {
-        $user = User::findOrFail($id);
-        return response()->json($user);
-    }
-
-    // Cập nhật trạng thái block
+    // ⚙️ Cập nhật trạng thái "status" (thay vì is_blocked)
     public function update(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'role' => 'required|in:admin,employer,job_seeker',
+        'status' => 'required|in:active,inactive,banned',
+    ]);
+
+    $user = User::findOrFail($id);
+    $user->name = $request->name;
+    $user->role = $request->role;
+    $user->status = $request->status;
+    $user->save();
+
+    return redirect()->route('admin.users.index')
+        ->with('success', 'Thông tin người dùng đã được cập nhật.');
+}
+
+    public function edit($id)
     {
-        $request->validate([
-            'is_blocked' => 'required|boolean',
-        ]);
-
         $user = User::findOrFail($id);
-        $user->is_blocked = $request->is_blocked;
-        $user->save();
-
-        return response()->json(['message' => 'User block status updated successfully.']);
+        return view('admin.users.edit', compact('user'));
     }
 
-    // Xóa user
+    // ❌ Xóa user
     public function destroy($id)
     {
         $user = User::findOrFail($id);

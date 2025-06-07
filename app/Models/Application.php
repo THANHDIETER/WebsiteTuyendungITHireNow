@@ -6,8 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Application extends Model
 {
-    protected $table = 'application';
-    protected $primaryKey = 'id';
-    protected $fillable = ['job_id', 'jobseeker_id', 'cover_letter', 'status', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'job_id', 'user_id', 'cv_url', 'cover_letter',
+        'status', 'applied_at', 'is_shortlisted',
+        'source', 'note'
+    ];
+
     public $timestamps = true;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
+    }
 }
