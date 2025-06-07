@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -10,16 +11,20 @@ class CompaniesSeeder extends Seeder
 
     public function run()
     {
-        // Lấy user_id đúng từ bảng users dựa vào email (hoặc điều kiện phù hợp)
-        $userId = DB::table('users')->where('email', 'employer@example.com')->value('id');
+        // Lấy user đầu tiên có role là employer
+        $userId = DB::table('users')
+            ->where('role', 'employer')
+            ->inRandomOrder()
+            ->value('id');
 
+        // Nếu không có user role employer nào thì dừng
         if (!$userId) {
-            throw new \Exception('User employer@example.com chưa tồn tại trong bảng users.');
+            throw new \Exception('Không tìm thấy người dùng nào có vai trò "employer".');
         }
 
-        // Sử dụng insertGetId để lấy ID của bản ghi vừa được thêm
+        // Thêm công ty mẫu
         $companyId = DB::table('companies')->insertGetId([
-            'user_id' => $userId,          
+            'user_id' => $userId,
             'name' => 'Công ty ABC',
             'slug' => 'cong-ty-abc',
             'email' => 'contact@abc.com',
@@ -40,7 +45,6 @@ class CompaniesSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // Lưu lại ID công ty vừa thêm
         self::$companyId = $companyId;
     }
 }
