@@ -84,15 +84,3 @@ Route::get('/login', function(){
 Route::get('/registration', function(){
     return view('website.login-register.registration');
 });
-
-
-
-
-
-
-
-
-
-
-
-
