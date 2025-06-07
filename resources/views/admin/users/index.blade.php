@@ -1,70 +1,60 @@
 @extends('admin.layouts.default')
-@section('title', 'Quản lý người dùng')
-
 @section('content')
-<div class="container-fluid">
+<div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold">👤 Quản lý người dùng</h4>
-        <form method="GET" action="{{ route('admin.users.index') }}" class="d-flex align-items-center">
-            <label class="me-2 fw-semibold">Lọc vai trò:</label>
-            <select name="role" class="form-select form-select-sm" onchange="this.form.submit()">
-                <option value="">-- Tất cả --</option>
-                <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                <option value="employer" {{ request('role') == 'employer' ? 'selected' : '' }}>Nhà tuyển dụng</option>
-                <option value="job_seeker" {{ request('role') == 'job_seeker' ? 'selected' : '' }}>Ứng viên</option>
-            </select>
-        </form>
+        <h2 class="mb-0">Danh sách người dùng</h2>
+        <a href="#" class="btn btn-primary">+ Thêm người dùng</a>
     </div>
 
-    {{-- Bảng người dùng --}}
-    <div class="card shadow-sm">
-        <div class="card-body table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">📧 Email</th>
-                        <th scope="col">🔖 Vai trò</th>
-                        <th scope="col">🚫 Bị chặn?</th>
-                        <th scope="col">⚙️ Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($users as $user)
-                    <tr>
-                        <td>{{ $user->email }}</td>
-                        <td>
-                            <span class="badge bg-{{ $user->role === 'admin' ? 'primary' : ($user->role === 'employer' ? 'info' : 'secondary') }}">
-                                {{ ucfirst(str_replace('_', ' ', $user->role)) }}
-                            </span>
-                        </td>
-                        <td>
-                            <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="d-inline">
-                                @csrf @method('PATCH')
-                                <input type="hidden" name="is_blocked" value="{{ $user->is_blocked ? 0 : 1 }}">
-                                <button type="submit" class="btn btn-sm btn-{{ $user->is_blocked ? 'success' : 'warning' }}">
-                                    {{ $user->is_blocked ? 'Bỏ chặn' : 'Chặn' }}
-                                </button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?');" class="d-inline">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Xoá</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="text-center text-muted">Không có người dùng nào.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Họ tên</th>
+                <th scope="col">Email</th>
+                <th scope="col">Số điện thoại</th>
+                <th scope="col">Vai trò</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($users as $user)
+            <tr>
+                <td>{{ $user->id }}</td>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->phone_number }}</td>
+                <td>
+                    <span class="badge bg-info text-dark">{{ ucfirst($user->role) }}</span>
+                </td>
+                <td>
+                    @if ($user->status === 'active')
+                        <span class="badge bg-success">Đang hoạt động</span>
+                    @elseif ($user->status === 'inactive')
+                        <span class="badge bg-secondary">Chưa kích hoạt</span>
+                    @else
+                        <span class="badge bg-danger">Đã chặn</span>
+                    @endif
+                </td>
+                <td>
+                    <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-sm btn-outline-primary">Xem</a>
+                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-warning">Sửa</a>
+                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Xác nhận xoá người dùng này?')">Xoá</button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-        <div class="card-footer d-flex justify-content-center">
-            {{ $users->links() }}
-        </div>
+    {{-- Phân trang --}}
+    <div class="mt-3">
+        {{ $users->links('pagination::bootstrap-5') }}
     </div>
 </div>
+
 @endsection

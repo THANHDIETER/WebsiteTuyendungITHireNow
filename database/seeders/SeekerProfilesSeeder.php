@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -8,11 +9,14 @@ class SeekerProfilesSeeder extends Seeder
 {
     public function run()
     {
-        // Lấy user_id đúng theo email (ứng viên đã tạo trước đó trong UsersSeeder)
-        $userId = DB::table('users')->where('email', 'seeker@example.com')->value('id');
+        // Lấy user có role = job_seeker ngẫu nhiên
+        $userId = DB::table('users')
+            ->where('role', 'job_seeker')
+            ->inRandomOrder()
+            ->value('id');
 
         if (!$userId) {
-            throw new \Exception('User seeker@example.com chưa tồn tại trong bảng users.');
+            throw new \Exception('Không tìm thấy user nào có role là "job_seeker".');
         }
 
         DB::table('seeker_profiles')->insert([

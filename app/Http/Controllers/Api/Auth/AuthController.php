@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return response()->json(['message' => 'Chào mừng đến API. Sử dụng /register để đăng ký tài khoản mới hoặc /login để đăng nhập.']);
+        return response()->json(['message' => 'Welcome to the API. Use /register to create a new user or /login to authenticate.']);
     }
 
     public function register(Request $request)
@@ -21,9 +21,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:job_seeker,employer,admin',
-            'name' => 'nullable|string|max:100',
-            'phone_number' => 'nullable|string|max:20',
+            'role' => 'required|in:job_seeker,employer'
         ]);
 
         if ($validator->fails()) {
@@ -32,30 +30,25 @@ class AuthController extends Controller
 
         try {
             $user = User::create([
-                'email' => $request->email,
+                'email'    => $request->email,
                 'password' => Hash::make($request->password),
-                'role' => $request->role,
-                'name' => $request->name,
-                'phone_number' => $request->phone_number,
-                'status' => 'inactive',
+                'role'     => $request->role,
                 'is_blocked' => false,
             ]);
 
-            // Gán vai trò nếu dùng spatie
             if (method_exists($user, 'assignRole')) {
                 $user->assignRole($request->role);
             }
 
-            // Tạo token Sanctum
+            // ✅ Tạo token Sanctum
             $token = $user->createToken('access_token')->plainTextToken;
 
             return response()->json([
-                'message' => 'Đăng ký người dùng thành công',
+                'message' => 'User registered successfully',
                 'user' => [
-                    'id' => $user->id,
+                    'id'    => $user->id,
                     'email' => $user->email,
-                    'role' => $user->role,
-                    'name' => $user->name,
+                    'role'  => $user->role,
                 ],
                 'token' => $token,
                 'token_type' => 'Bearer',
@@ -67,23 +60,38 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['status' => 'error', 'message' => 'Invalid credentials'], 401);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+
+        $credentials = $request->only('email', 'password');
+
+        // Xác thực thủ công
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
         $user = Auth::user();
-        $token = $user->createToken('token')->plainTextToken;
+
+        // Xoá các token cũ nếu muốn (tuỳ chọn)
+        // $user->tokens()->delete();
+
+        // Tạo token Sanctum
+        $token = $user->createToken('access_token')->plainTextToken;
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Logged in successfully',
             'token' => $token,
-        ]);
+            'role' => $user->role,
+            'user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+            ]
+        ], 200);
     }
-
 }
