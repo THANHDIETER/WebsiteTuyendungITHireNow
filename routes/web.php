@@ -25,74 +25,64 @@ Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
-Route::get('/', function(){
+Route::get('/', function () {
     return view('website.index');
 })->name('home');
 
-Route::get('/cong-viec', function(){
+Route::get('/cong-viec', function () {
     return view('website.jobs.job');
 });
 
-Route::get('/chi-tiet-cong-viec', function(){
+Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
 });
 
-Route::get('/chi-tiet-nhan-vien', function(){
+Route::get('/chi-tiet-nhan-vien', function () {
     return view('website.employers.employe-details');
 });
 
-Route::get('/ung-vien', function(){
+Route::get('/ung-vien', function () {
     return view('website.candidate.candidate');
 });
 
-Route::get('/chi-tiet-ung-vien', function(){
+Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
 });
 
-Route::get('/blog', function(){
+Route::get('/blog', function () {
     return view('website.blog.blog');
 });
 
-Route::get('/blog-details', function(){
+Route::get('/blog-details', function () {
     return view('website.blog.blog-details');
 });
 
-Route::get('/blog-grid', function(){
+Route::get('/blog-grid', function () {
     return view('website.blog.blog-grid');
 });
 
-Route::get('/blog-right-sidebar', function(){
+Route::get('/blog-right-sidebar', function () {
     return view('website.blog.blog-right-sidebar');
 });
 
-Route::get('/contact', function(){
+Route::get('/contact', function () {
     return view('website.pages.contact');
 });
 
-Route::get('/404', function(){
+Route::get('/404', function () {
     return view('website.pages.404');
 });
 
-Route::get('/about-us', function(){
+Route::get('/about-us', function () {
     return view('website.pages.about-us');
 });
 
-Route::get('/login', function(){
+Route::get('/login', function () {
     return view('website.login-register.login');
 });
 
-Route::get('/registration', function(){
+Route::get('/registration', function () {
     return view('website.login-register.registration');
+
 });
-
-
-
-
-
-
-
-
-
-
-
 

@@ -457,10 +457,23 @@
                             alt="">
                         <div class="flex-grow-1">
                             <h5>
-                                {{ auth()->user()->role }}
-                                {{-- <sup style="font-size: 0.7em; color: red;">{{ auth()->user()->id }}</sup> --}}
+
+                                @if(auth()->check())
+                                    {{ auth()->user()->role }}
+                                    <sup style="font-size: 0.7em; color: red;">{{ auth()->user()->id }}</sup>
+                                @else
+                                    <span class="text-muted">Guest</span>
+                                @endif
+
+
+
                             </h5>
-                            <span>{{ auth()->user()->email }}</span>
+                            @if(auth()->check())
+                                <span>{{ auth()->user()->email }}</span>
+                            @else
+                                <span class="text-muted">Chưa đăng nhập</span>
+                            @endif
+
                         </div>
 
                     </div>

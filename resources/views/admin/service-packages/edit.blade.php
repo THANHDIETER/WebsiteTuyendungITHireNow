@@ -1,13 +1,12 @@
 @extends('admin.layouts.default')
 
-@section('title', 'Chỉnh sửa Gói Dịch Vụ')
-
 @section('content')
-    <h1>Chỉnh sửa Gói Dịch Vụ</h1>
+<div class="container py-4 max-w-2xl">
+    <h1 class="h4 mb-4">Chỉnh sửa Gói Dịch Vụ</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
-            <ul>
+            <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -15,54 +14,44 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.service-packages.update', $servicePackage) }}">
+    <form method="POST" action="{{ route('admin.service-packages.update', $service_package) }}">
         @csrf
         @method('PUT')
 
         <div class="mb-3">
-            <label for="name" class="form-label">Tên Gói</label>
-            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $servicePackage->name) }}">
-            @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+            <label class="form-label">Tên gói</label>
+            <input type="text" name="name" value="{{ old('name', $service_package->name) }}" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label for="price" class="form-label">Giá (VNĐ)</label>
-            <input type="number" name="price" id="price" class="form-control @error('price') is-invalid @enderror" value="{{ old('price', $servicePackage->price) }}" step="0.01">
-            @error('price')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+            <label class="form-label">Số ngày sử dụng *</label>
+            <input type="number" name="duration_days" value="{{ old('duration_days', $service_package->duration_days) }}" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label for="duration_days" class="form-label">Thời gian (ngày)</label>
-            <input type="number" name="duration_days" id="duration_days" class="form-control @error('duration_days') is-invalid @enderror" value="{{ old('duration_days', $servicePackage->duration_days) }}">
-            @error('duration_days')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+            <label class="form-label">Số bài đăng *</label>
+            <input type="number" name="post_limit" value="{{ old('post_limit', $service_package->post_limit) }}" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label for="features" class="form-label">Tính năng</label>
-            <textarea name="features" id="features" class="form-control @error('features') is-invalid @enderror">{{ old('features', $servicePackage->features) }}</textarea>
-            @error('features')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+            <label class="form-label">Giá</label>
+            <input type="number" name="price" value="{{ old('price', $service_package->price) }}" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label">Trạng thái</label>
-            <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
-                <option value="active" {{ old('status', $servicePackage->status) == 'active' ? 'selected' : '' }}>Hoạt động</option>
-                <option value="inactive" {{ old('status', $servicePackage->status) == 'inactive' ? 'selected' : '' }}>Không hoạt động</option>
-            </select>
-            @error('status')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+            <label class="form-label">Mô tả</label>
+            <textarea name="description" rows="3" class="form-control">{{ old('description', $service_package->description) }}</textarea>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="is_active" value="1" id="is_active" {{ old('is_active', $service_package->is_active) ? 'checked' : '' }}>
+            <label class="form-check-label" for="is_active">
+                Hiển thị
+            </label>
         </div>
 
         <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a href="{{ route('admin.service-packages.index') }}" class="btn btn-secondary">Hủy</a>
+        <a href="{{ route('admin.service-packages.index') }}" class="btn btn-secondary">Quay lại danh sách</a>
     </form>
+</div>
 @endsection

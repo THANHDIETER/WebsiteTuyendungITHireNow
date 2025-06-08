@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -8,11 +9,14 @@ class NotificationsSeeder extends Seeder
 {
     public function run()
     {
-        // Lấy user_id dựa trên email
-        $userId = DB::table('users')->where('email', 'seeker@example.com')->value('id');
+        // Lấy user ngẫu nhiên có role là job_seeker
+        $userId = DB::table('users')
+            ->where('role', 'job_seeker')
+            ->inRandomOrder()
+            ->value('id');
 
         if (!$userId) {
-            throw new \Exception('User seeker@example.com chưa tồn tại trong bảng users.');
+            throw new \Exception('Không tìm thấy user nào có role là "job_seeker".');
         }
 
         DB::table('notifications')->insert([
@@ -25,6 +29,7 @@ class NotificationsSeeder extends Seeder
                 'is_sent' => false,
                 'read_at' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }
