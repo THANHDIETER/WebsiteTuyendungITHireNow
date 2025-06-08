@@ -23,6 +23,7 @@ use Database\Seeders\NotificationsSeeder;
 use Database\Seeders\CompanyReviewsSeeder;
 use Database\Seeders\SeekerProfilesSeeder;
 use Database\Seeders\EmployerPackagesSeeder;
+use Database\Seeders\ServicePackagesSeeder; // Thêm ServicePackagesSeeder
 
 class DatabaseSeeder extends Seeder
 {
@@ -51,6 +52,7 @@ class DatabaseSeeder extends Seeder
             UserRolesSeeder::class,  // Gọi đúng tên seeder
             ReportsSeeder::class,
             ApplicationsSeeder::class,
+            servicePackagesSeeder::class, // Thêm ServicePackagesSeeder
         ]);
     }
 }

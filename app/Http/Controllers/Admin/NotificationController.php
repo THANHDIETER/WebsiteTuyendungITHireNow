@@ -116,6 +116,6 @@ class NotificationController extends Controller
             Mail::to($user->email)->send(new SystemNotificationMail($request->message, $request->link_url));
         }
 
-        return redirect()->back()->with('success', 'Đã gửi thông báo thành công!');
+        return redirect()->route('admin.notifications.index')->with('success', 'Đã gửi thông báo thành công!');
     }
 }
