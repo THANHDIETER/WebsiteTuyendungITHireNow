@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Middleware\EnsureAdminRole;
+use App\Http\Middleware\AdminMiddleware;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Auth\AuthenticationException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,12 +17,24 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Đăng ký middleware toàn cục (nếu cần)
         $middleware->alias([
-            'admin' => EnsureAdminRole::class,
-        ]);
+            'admin' => AdminMiddleware::class,
 
-        // Đăng ký middleware cho nhóm route hoặc cụ thể (tùy chọn)
-        $middleware->group('admin', [EnsureAdminRole::class]);
+            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            
+            'api' => [
+                \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+                'throttle:api',
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            ],
+
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+        // Ghi đè xử lý lỗi AuthenticationException
+        $exceptions->render(function (AuthenticationException $e, $request) {
+            return response()->json([
+                'message' => 'Token không hợp lệ hoặc đã hết hạn',
+            ], 401);
+        });
+    })
+    ->create();

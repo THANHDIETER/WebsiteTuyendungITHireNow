@@ -2,53 +2,87 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Requests\RegisterRequest;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
+use App\Http\Requests\RegisterEmployerRequest;
 
 class RegisterController extends Controller
 {
-    /**
-     * Hiển thị form đăng ký
-     */
-    public function showRegistrationForm()
+    public function showRegisterForm()
     {
         return view('auth.register');
     }
 
-    /**
-     * Xử lý đăng ký
-     */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'role' => 'required|in:seeker,employer',
-        ]);
+        try {
+            $validated = $request->validated();
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-        ]);
+            // Luôn gán role mặc định là 'job_seeker'
+            $role = 'job_seeker';
 
-        $user->assignRole($validated['role']);
-        $token = JWTAuth::fromUser($user);
+            $user = User::create([
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => $role,
+            ]);
 
-        return response()->json([
-            'message' => 'Đăng ký thành công',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-            ],
-            'token' => $token,
-        ], 201);
+            // Gán role bằng Spatie (nếu có)
+            try {
+                $user->assignRole($role);
+            } catch (RoleDoesNotExist $e) {
+                // Nếu role không tồn tại trong bảng roles => bỏ qua
+            }
+
+            // Nếu muốn đăng nhập luôn sau khi đăng ký:
+            // Auth::login($user);
+
+            // Trả về view login (hoặc redirect nếu bạn dùng route login)
+            return redirect()->route('showLoginForm')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Lỗi khi đăng ký: ' . $e->getMessage());
+            return redirect()->route('register')->withInput();
+        }
+    }
+
+    public function showRegisterEmployerForm()
+    {
+        return view('auth.registerEmployer');
+    }
+
+    public function registerEmployer(RegisterEmployerRequest $request)
+    {
+        try {
+            // dd('Form đã gửi thành công vào POST!');
+
+            $validated = $request->validated();
+
+            // Đảm bảo vai trò là 'employer'
+            $validated['role'] = 'employer';
+
+            // Tạo tài khoản cho Employer
+            $user = User::create([
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => 'employer', // Mặc định vai trò là employer
+            ]);
+
+            // Gán vai trò cho người dùng
+            try {
+                $user->assignRole('employer');
+            } catch (RoleDoesNotExist $e) {
+                $user->assignRole('job_seeker');  // Mặc định gán vai trò 'job_seeker' nếu không có role 'employer'
+            }
+
+            session()->flash('success', 'Đăng ký nhà tuyển dụng thành công! Bạn có thể đăng nhập ngay.');
+            return redirect()->route('showLoginForm');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Lỗi khi đăng ký nhà tuyển dụng: ' . $e->getMessage());
+            return redirect()->route('showRegisterEmployerForm')->withInput();
+        }
     }
 }
