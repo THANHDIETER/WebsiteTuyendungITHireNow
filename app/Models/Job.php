@@ -2,12 +2,45 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    protected $table = 'jobs';
-    protected $primaryKey = 'id';
-    protected $fillable = ['employer_id', 'title', 'description', 'requirements', 'benefits', 'salary', 'location', 'job_type', 'experience_level', 'education_level', 'skills_required', 'deadline', 'status', 'created_at', 'updated_at'];
-    public $timestamps = true;
+
+    use HasFactory;
+
+protected $fillable = [
+    'company_id', 'title', 'slug', 'description', 'requirements', 'benefits',
+    'job_type', 'salary_min', 'salary_max', 'currency', 'location', 'address',
+    'level', 'experience', 'category_id', 'deadline', 'status', 'views', 'is_featured',
+    'apply_url', 'remote_policy', 'language', 'meta_title', 'meta_description', 'search_index'
+];
+
+protected $casts = [
+    'benefits' => 'array',
+    'is_featured' => 'boolean',
+    'search_index' => 'boolean',
+    'deadline' => 'datetime',
+    'deleted_at' => 'datetime',
+];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'job_skill')
+                    ->withPivot('priority_level', 'required');
+    }
 }
+
+
+

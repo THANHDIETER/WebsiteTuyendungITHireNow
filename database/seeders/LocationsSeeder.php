@@ -9,10 +9,10 @@ class LocationsSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('locations')->insert([
+        DB::table('locations')->updateOrInsert(
+            ['slug' => 'ha-noi'],
             [
                 'name' => 'Hà Nội',
-                'slug' => 'ha-noi',
                 'region' => 'Bắc',
                 'country_code' => 'VN',
                 'latitude' => 21.028511,
@@ -20,10 +20,13 @@ class LocationsSeeder extends Seeder
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
+            ]
+        );
+
+        DB::table('locations')->updateOrInsert(
+            ['slug' => 'ho-chi-minh'],
             [
                 'name' => 'Hồ Chí Minh',
-                'slug' => 'ho-chi-minh',
                 'region' => 'Nam',
                 'country_code' => 'VN',
                 'latitude' => 10.762622,
@@ -31,7 +34,7 @@ class LocationsSeeder extends Seeder
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-        ]);
+            ]
+        );
     }
 }
