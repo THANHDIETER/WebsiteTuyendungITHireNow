@@ -31,16 +31,27 @@ class UserController extends Controller
 
     // ⚙️ Cập nhật trạng thái "status" (thay vì is_blocked)
     public function update(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'role' => 'required|in:admin,employer,job_seeker',
+        'status' => 'required|in:active,inactive,banned',
+    ]);
+
+    $user = User::findOrFail($id);
+    $user->name = $request->name;
+    $user->role = $request->role;
+    $user->status = $request->status;
+    $user->save();
+
+    return redirect()->route('admin.users.index')
+        ->with('success', 'Thông tin người dùng đã được cập nhật.');
+}
+
+    public function edit($id)
     {
-        $request->validate([
-            'status' => 'required|in:active,inactive,blocked',
-        ]);
-
         $user = User::findOrFail($id);
-        $user->status = $request->status;
-        $user->save();
-
-        return response()->json(['message' => 'User status updated successfully.']);
+        return view('admin.users.edit', compact('user'));
     }
 
     // ❌ Xóa user

@@ -252,7 +252,7 @@
                 </a>
             </li>
 
-            <!-- Duyệt CV ứng viên -->
+             <!-- Duyệt CV ứng viên -->
             <li class="sidebar-list">
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
@@ -288,6 +288,79 @@
                     <span>Quản lý users</span>
                 </a>
             </li>
+            <li class="sidebar-list">
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <circle cx="12" cy="7" r="4"></circle>
+                    <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                </svg>
+                <a class="sidebar-link" href="{{ route('admin.reports.index') }}">
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                    </svg>
+                    <span>Quản lý nội dung vi phạm</span>
+                </a>
+            </li>
+            <li class="sidebar-list">
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+                <a class="sidebar-link" href="{{ route('admin.service-packages.index') }}">
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z" />
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                        <line x1="12" y1="22.08" x2="12" y2="12" />
+                    </svg>
+                    <span>Quản lý gói dịch vụ</span>
+                </a>
+            </li>
+            <li class="sidebar-list">
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <circle cx="12" cy="7" r="4"></circle>
+                    <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                </svg>
+                <a class="sidebar-link" href="{{ route('admin.seekerprofile.index') }}">
+                    <!-- Icon mới ở đây -->
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                    </svg>
+                    <span>Duyệt CV ứng viên</span>
+                </a>
+            </li>
+             <li class="sidebar-list">
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <circle cx="12" cy="7" r="4"></circle>
+                    <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                </svg>
+                <a class="sidebar-link" href="{{ route('admin.payment.index') }}">
+                    <!-- Icon mới ở đây -->
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                    </svg>
+                    <span>Payments</span>
+                </a>
+            </li>
+            
 
 
             <!-- Gửi Thông Báo Hệ Thống -->
