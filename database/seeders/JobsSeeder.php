@@ -5,47 +5,52 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 use Carbon\Carbon;
 
 class JobsSeeder extends Seeder
 {
     public function run()
     {
-        // Lấy lại company_id đã tạo từ CompaniesSeeder, hoặc fallback
-        $companyId = \Database\Seeders\CompaniesSeeder::$companyId;
-        if (!$companyId) {
-            $companyId = DB::table('companies')->where('slug', 'cong-ty-abc')->value('id');
+        $faker = Faker::create('vi_VN');
+
+        // Lấy danh sách company_id có sẵn
+        $companyIds = DB::table('companies')->pluck('id');
+        $categoryIds = DB::table('categories')->pluck('id');
+
+        if ($companyIds->isEmpty()) {
+            throw new \Exception('Không có công ty nào để gán job.');
         }
 
-        if (!$companyId) {
-            throw new \Exception('Không tìm thấy công ty để gán cho job.');
-        }
+        for ($i = 1; $i <= 10; $i++) {
+            $title = $faker->jobTitle;
+            $slug = Str::slug($title) . '-' . $i;
 
-        // Dùng updateOrInsert để tránh lỗi duplicate
-        DB::table('jobs')->updateOrInsert(
-            ['slug' => 'senior-backend-developer'],
-            [
-                'company_id' => $companyId,
-                'title' => 'Senior Backend Developer',
-                'description' => 'Phát triển API và backend hệ thống',
-                'requirements' => 'Kinh nghiệm 3+ năm PHP, Laravel',
-                'benefits' => json_encode(['Lương cao', 'Thưởng KPI']),
-                'job_type' => 'full-time',
-                'salary_min' => 15000000,
-                'salary_max' => 25000000,
+            DB::table('jobs')->insert([
+                'company_id' => $faker->randomElement($companyIds),
+                'title' => $title,
+                'slug' => $slug,
+                'description' => $faker->paragraph,
+                'requirements' => $faker->sentence(10),
+                'benefits' => json_encode([$faker->catchPhrase, $faker->bs]),
+                'job_type' => $faker->randomElement(['full-time', 'part-time', 'remote']),
+                'salary_min' => $faker->numberBetween(8000000, 15000000),
+                'salary_max' => $faker->numberBetween(15000000, 30000000),
                 'currency' => 'VND',
-                'location' => 'Hà Nội',
-                'address' => 'Tầng 10, Tòa nhà XYZ',
-                'level' => 'Senior',
-                'experience' => '3+ years',
-                'category_id' => 1,
-                'deadline' => Carbon::now()->addMonth(),
+                'location' => $faker->city,
+                'address' => $faker->address,
+                'level' => $faker->randomElement(['Junior', 'Mid', 'Senior']),
+                'experience' => $faker->randomElement(['1+ years', '3+ years', '5+ years']),
+                'category_id' => $faker->randomElement($categoryIds->toArray() ?: [1]),
+                'deadline' => Carbon::now()->addDays(rand(15, 60)),
                 'status' => 'published',
-                'views' => 0,
-                'is_featured' => true,
+                'views' => rand(0, 200),
+                'is_featured' => $faker->boolean(30),
+                'remote_policy' => $faker->randomElement(['on-site', 'hybrid', 'remote']),
+                'language' => $faker->randomElement(['Vietnamese', 'English']),
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
-        );
+            ]);
+        }
     }
 }

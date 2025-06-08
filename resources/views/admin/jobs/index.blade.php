@@ -86,7 +86,7 @@
                                 <div class="d-flex justify-content-center gap-2">
                                     <form action="{{ route('admin.jobs.approve', $job) }}" method="POST">
                                         @csrf
-                                        @method('PATCH')
+                                        @method('POST')
                                         <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Xác nhận duyệt tin này?')">Duyệt</button>
                                     </form>
 
