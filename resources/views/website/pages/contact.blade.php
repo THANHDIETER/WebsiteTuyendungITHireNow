@@ -2,18 +2,18 @@
 
 @section('content')
   <main class="main-content">
-    <!--== Start Page Header Area Wrapper ==-->
+    <!--== Bắt đầu header trang ==-->
     <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
       <div class="container pt--0 pb--0">
         <div class="row">
           <div class="col-12">
             <div class="page-header-content">
-              <h2 class="title">Contact Us</h2>
+              <h2 class="title">Liên hệ</h2>
               <nav class="breadcrumb-area">
                 <ul class="breadcrumb justify-content-center">
-                  <li><a href="index.html">Home</a></li>
+                  <li><a href="index.html">Trang chủ</a></li>
                   <li class="breadcrumb-sep">//</li>
-                  <li>Contact</li>
+                  <li>Liên hệ</li>
                 </ul>
               </nav>
             </div>
@@ -21,9 +21,9 @@
         </div>
       </div>
     </div>
-    <!--== End Page Header Area Wrapper ==-->
+    <!--== Kết thúc header trang ==-->
 
-    <!--== Start Contact Area Wrapper ==-->
+    <!--== Bắt đầu khu vực liên hệ ==-->
     <section class="contact-area contact-page-area">
       <div class="container">
         <div class="row contact-page-wrapper">
@@ -31,10 +31,10 @@
             <div class="contact-info-wrap">
               <div class="info-item">
                 <div class="icon">
-                  <img src="../client/assets/img/icons/c1.webp" alt="Image" width="42" height="42">
+                  <img src="../client/assets/img/icons/c1.webp" alt="Hình ảnh" width="42" height="42">
                 </div>
                 <div class="info">
-                  <h5 class="title">Call Us:</h5>
+                  <h5 class="title">Gọi cho chúng tôi:</h5>
                   <p>
                     <a href="tel://568975468">(00) 568 975 468</a><br>
                     <a href="tel://+88465748937">+88 465 748 937</a>
@@ -43,7 +43,7 @@
               </div>
               <div class="info-item">
                 <div class="icon">
-                  <img src="../client/assets/img/icons/c2.webp" alt="Image" width="43" height="73">
+                  <img src="../client/assets/img/icons/c2.webp" alt="Hình ảnh" width="43" height="73">
                 </div>
                 <div class="info">
                   <h5 class="title">Email:</h5>
@@ -55,10 +55,10 @@
               </div>
               <div class="info-item">
                 <div class="icon">
-                  <img src="../client/assets/img/icons/c3.webp" alt="Image" width="36" height="46">
+                  <img src="../client/assets/img/icons/c3.webp" alt="Hình ảnh" width="36" height="46">
                 </div>
                 <div class="info">
-                  <h5 class="title">Address:</h5>
+                  <h5 class="title">Địa chỉ:</h5>
                   <p>
                     Sunset Beach, North <br>
                     Carolina(NC), 28468
@@ -68,14 +68,14 @@
             </div>
           </div>
           <div class="col-lg-6">
-            <!--== Start Contact Form ==-->
+            <!--== Bắt đầu Form Liên Hệ ==-->
             <div class="contact-form">
-              <h4 class="contact-form-title">Get in Touch</h4>
+              <h4 class="contact-form-title">Liên hệ với chúng tôi</h4>
               <form id="contact-form" action="https://whizthemes.com/mail-php/raju/arden/mail.php" method="POST">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <input class="form-control" type="text" name="con_name" placeholder="Name:">
+                      <input class="form-control" type="text" name="con_name" placeholder="Họ và tên:">
                     </div>
                   </div>
                   <div class="col-md-12">
@@ -85,25 +85,25 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                      <input class="form-control" type="text" placeholder="Subject:">
+                      <input class="form-control" type="text" placeholder="Tiêu đề:">
                     </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                      <textarea class="form-control" name="con_message" placeholder="Message"></textarea>
+                      <textarea class="form-control" name="con_message" placeholder="Nội dung"></textarea>
                     </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group mb--0">
-                      <button class="btn-theme d-block w-100" type="submit">Send Message</button>
+                      <button class="btn-theme d-block w-100" type="submit">Gửi liên hệ</button>
                     </div>
                   </div>
                 </div>
               </form>
             </div>
-            <!--== End Contact Form ==-->
+            <!--== Kết thúc Form Liên Hệ ==-->
 
-            <!--== Message Notification ==-->
+            <!--== Thông báo sau khi gửi ==-->
             <div class="form-message"></div>
           </div>
           <div class="col-lg-6">
@@ -114,6 +114,6 @@
         </div>
       </div>
     </section>
-    <!--== End Contact Area Wrapper ==-->
+    <!--== Kết thúc khu vực liên hệ ==-->
   </main>
 @endsection

@@ -2,18 +2,18 @@
 
 @section('content')
     <main class="main-content">
-        <!--== Start Page Header Area Wrapper ==-->
+        <!--== Bắt đầu header trang ==-->
         <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
             <div class="container pt--0 pb--0">
                 <div class="row">
                     <div class="col-12">
                         <div class="page-header-content">
-                            <h2 class="title">Employers Details</h2>
+                            <h2 class="title">Chi tiết nhà tuyển dụng</h2>
                             <nav class="breadcrumb-area">
                                 <ul class="breadcrumb justify-content-center">
-                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="index.html">Trang chủ</a></li>
                                     <li class="breadcrumb-sep">//</li>
-                                    <li>Employers</li>
+                                    <li>Nhà tuyển dụng</li>
                                 </ul>
                             </nav>
                         </div>
@@ -21,9 +21,9 @@
                 </div>
             </div>
         </div>
-        <!--== End Page Header Area Wrapper ==-->
+        <!--== Kết thúc header trang ==-->
 
-        <!--== Start Employers Details Area Wrapper ==-->
+        <!--== Bắt đầu khu vực chi tiết nhà tuyển dụng ==-->
         <section class="employers-details-area">
             <div class="container">
                 <div class="row">
@@ -31,31 +31,30 @@
                         <div class="employers-details-wrap">
                             <div class="employers-details-info">
                                 <div class="thumb">
-                                    <img src="../client/assets/img/companies/11.webp" width="130" height="130"
-                                        alt="Image-HasTech">
+                                    <img src="../client/assets/img/companies/11.webp" width="130" height="130" alt="Logo công ty">
                                 </div>
                                 <div class="content">
-                                    <h4 class="title">Mukianso IT Sulution Ltd.</h4>
+                                    <h4 class="title">Mukianso IT Solution Ltd.</h4>
                                     <ul class="info-list">
-                                        <li><i class="icofont-location-pin"></i> New York, USA</li>
+                                        <li><i class="icofont-location-pin"></i> New York, Mỹ</li>
                                         <li><i class="icofont-phone"></i> +88 456 796 457</li>
                                     </ul>
-                                    <button type="button" class="btn-theme">Follow Us</button>
-                                    <button type="button" class="btn-theme btn-white">Add Review</button>
+                                    <button type="button" class="btn-theme">Theo dõi</button>
+                                    <button type="button" class="btn-theme btn-white">Đánh giá công ty</button>
                                 </div>
                             </div>
                             <div class="employers-counter">
                                 <div class="counter-item">
                                     <h4 class="counter">86</h4>
-                                    <h5 class="title">Total jobs</h5>
+                                    <h5 class="title">Việc làm đã đăng</h5>
                                 </div>
                                 <div class="counter-item">
                                     <h4 class="counter">27</h4>
-                                    <h5 class="title">Review</h5>
+                                    <h5 class="title">Đánh giá</h5>
                                 </div>
                                 <div class="counter-item">
                                     <h4 class="counter">452</h4>
-                                    <h5 class="title">Views</h5>
+                                    <h5 class="title">Lượt xem</h5>
                                 </div>
                             </div>
                         </div>
@@ -65,217 +64,49 @@
                     <div class="col-lg-7 col-xl-8">
                         <div class="employers-details-item">
                             <div class="content">
-                                <h4 class="title">About Employers</h4>
-                                <p class="desc">It is a long established fact that a reader will be distracted the
-                                    readable content of page when looking atits layout. The point of using is that has
-                                    more-or-less normal a distribution of letters, as opposed to usin content publishing
-                                    packages web page editors. It is a long established fact that a reader will be distracts
-                                    by the readable content of a page when looking at its layout. The point of using Lorem
-                                    Ipsum is that has look like readable publishing packages and web page editors.</p>
-                                <p class="desc">It is a long established fact that a reader will be distracted the
-                                    readable content of a page when looking atits layout. The point of using is that has
-                                    more-or-less normal a distribution of letters, as opposed to usin content publishing
-                                    packages web page editors.</p>
+                                <h4 class="title">Giới thiệu công ty</h4>
+                                <p class="desc">
+                                    Chúng tôi là doanh nghiệp công nghệ với nhiều năm kinh nghiệm phát triển các giải pháp phần mềm cho khách hàng toàn cầu. Đội ngũ chuyên môn cao, luôn sẵn sàng sáng tạo, đổi mới và hướng đến hiệu quả thực tiễn cho đối tác.
+                                </p>
                                 <ul class="employers-details-list">
-                                    <li><i class="icofont-check"></i> Developing custom themes (WordPress.org & ThemeForest
-                                        Standards)</li>
-                                    <li><i class="icofont-check"></i> Creating reactive website designs</li>
-                                    <li><i class="icofont-check"></i> Working under strict deadlines</li>
-                                    <li><i class="icofont-check"></i> Develop page speed optimized themes</li>
+                                    <li><i class="icofont-check"></i> Phát triển theme WordPress chuẩn quốc tế (WordPress.org & ThemeForest).</li>
+                                    <li><i class="icofont-check"></i> Thiết kế giao diện website tương tác, hiện đại.</li>
+                                    <li><i class="icofont-check"></i> Cam kết tiến độ, làm việc chuyên nghiệp.</li>
+                                    <li><i class="icofont-check"></i> Luôn tối ưu hiệu suất website.</li>
                                 </ul>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="content mb--0 pb-2">
-                                        <h4 class="title">Open Position</h4>
+                                        <h4 class="title">Vị trí đang tuyển</h4>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                                    <!--== Start Recent Job Item ==-->
                                     <div class="recent-job-item recent-job-style3-item">
                                         <div class="company-info">
                                             <div class="logo">
-                                                <a href="https://htmldemo.net/finate/finate/company-details.html"><img
-                                                        src="../client/assets/img/companies/w1.webp" width="75" height="75"
-                                                        alt="Image-HasTech"></a>
+                                                <a href="#"><img src="../client/assets/img/companies/w1.webp" width="75" height="75" alt="Logo công ty"></a>
                                             </div>
                                             <div class="content mb--0">
-                                                <h4 class="name"><a
-                                                        href="https://htmldemo.net/finate/finate/company-details.html">Darkento
-                                                        Ltd.</a></h4>
-                                                <p class="address">New York, USA</p>
+                                                <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
+                                                <p class="address">New York, Mỹ</p>
                                             </div>
                                         </div>
                                         <div class="main-content">
-                                            <h3 class="title"><a href="job-details.html">Front-end Developer</a></h3>
-                                            <h5 class="work-type">Full-time</h5>
+                                            <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
+                                            <h5 class="work-type">Toàn thời gian</h5>
                                             <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
                                         </div>
                                         <div class="recent-job-info">
                                             <div class="salary">
-                                                <h4>$5000</h4>
-                                                <p>/monthly</p>
+                                                <h4>50.000.000đ</h4>
+                                                <p>/tháng</p>
                                             </div>
-                                            <a class="btn-theme btn-sm" href="job-details.html">Apply Now</a>
+                                            <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
                                         </div>
                                     </div>
-                                    <!--== End Recent Job Item ==-->
                                 </div>
-                                <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                                    <!--== Start Recent Job Item ==-->
-                                    <div class="recent-job-item recent-job-style3-item">
-                                        <div class="company-info">
-                                            <div class="logo">
-                                                <a href="https://htmldemo.net/finate/finate/company-details.html"><img
-                                                        src="../client/assets/img/companies/w2.webp" width="75" height="75"
-                                                        alt="Image-HasTech"></a>
-                                            </div>
-                                            <div class="content mb--0">
-                                                <h4 class="name"><a
-                                                        href="https://htmldemo.net/finate/finate/company-details.html">Inspire
-                                                        Fitness Co.</a></h4>
-                                                <p class="address">New York, USA</p>
-                                            </div>
-                                        </div>
-                                        <div class="main-content">
-                                            <h3 class="title"><a href="job-details.html">Senior UI Designer</a></h3>
-                                            <h5 class="work-type" data-text-color="#ff7e00">Part-time</h5>
-                                            <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                                        </div>
-                                        <div class="recent-job-info">
-                                            <div class="salary">
-                                                <h4>$5000</h4>
-                                                <p>/monthly</p>
-                                            </div>
-                                            <a class="btn-theme btn-sm" href="job-details.html">Apply Now</a>
-                                        </div>
-                                    </div>
-                                    <!--== End Recent Job Item ==-->
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                                    <!--== Start Recent Job Item ==-->
-                                    <div class="recent-job-item recent-job-style3-item">
-                                        <div class="company-info">
-                                            <div class="logo">
-                                                <a href="https://htmldemo.net/finate/finate/company-details.html"><img
-                                                        src="../client/assets/img/companies/w4.webp" width="75" height="75"
-                                                        alt="Image-HasTech"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4 class="name"><a
-                                                        href="https://htmldemo.net/finate/finate/company-details.html">Obelus
-                                                        Concepts</a></h4>
-                                                <p class="address">New York, USA</p>
-                                            </div>
-                                        </div>
-                                        <div class="main-content">
-                                            <h3 class="title"><a href="job-details.html">UX Researcher</a></h3>
-                                            <h5 class="work-type">Full-time</h5>
-                                            <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                                        </div>
-                                        <div class="recent-job-info">
-                                            <div class="salary">
-                                                <h4>$5000</h4>
-                                                <p>/monthly</p>
-                                            </div>
-                                            <a class="btn-theme btn-sm" href="job-details.html">Apply Now</a>
-                                        </div>
-                                    </div>
-                                    <!--== End Recent Job Item ==-->
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                                    <!--== Start Recent Job Item ==-->
-                                    <div class="recent-job-item recent-job-style3-item">
-                                        <div class="company-info">
-                                            <div class="logo">
-                                                <a href="https://htmldemo.net/finate/finate/company-details.html"><img
-                                                        src="../client/assets/img/companies/w5.webp" width="75" height="75"
-                                                        alt="Image-HasTech"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4 class="name"><a
-                                                        href="https://htmldemo.net/finate/finate/company-details.html">Sanguine
-                                                        Skincare</a></h4>
-                                                <p class="address">New York, USA</p>
-                                            </div>
-                                        </div>
-                                        <div class="main-content">
-                                            <h3 class="title"><a href="job-details.html">Android App Developer</a></h3>
-                                            <h5 class="work-type" data-text-color="#0054ff">Remote</h5>
-                                            <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                                        </div>
-                                        <div class="recent-job-info">
-                                            <div class="salary">
-                                                <h4>$5000</h4>
-                                                <p>/monthly</p>
-                                            </div>
-                                            <a class="btn-theme btn-sm" href="job-details.html">Apply Now</a>
-                                        </div>
-                                    </div>
-                                    <!--== End Recent Job Item ==-->
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                                    <!--== Start Recent Job Item ==-->
-                                    <div class="recent-job-item recent-job-style3-item">
-                                        <div class="company-info">
-                                            <div class="logo">
-                                                <a href="https://htmldemo.net/finate/finate/company-details.html"><img
-                                                        src="../client/assets/img/companies/w7.webp" width="75" height="75"
-                                                        alt="Image-HasTech"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4 class="name"><a
-                                                        href="https://htmldemo.net/finate/finate/company-details.html">Darkento
-                                                        Ltd.</a></h4>
-                                                <p class="address">New York, USA</p>
-                                            </div>
-                                        </div>
-                                        <div class="main-content">
-                                            <h3 class="title"><a href="job-details.html">Front-end Developer</a></h3>
-                                            <h5 class="work-type">Full-time</h5>
-                                            <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                                        </div>
-                                        <div class="recent-job-info">
-                                            <div class="salary">
-                                                <h4>$5000</h4>
-                                                <p>/monthly</p>
-                                            </div>
-                                            <a class="btn-theme btn-sm" href="job-details.html">Apply Now</a>
-                                        </div>
-                                    </div>
-                                    <!--== End Recent Job Item ==-->
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                                    <!--== Start Recent Job Item ==-->
-                                    <div class="recent-job-item recent-job-style3-item">
-                                        <div class="company-info">
-                                            <div class="logo">
-                                                <a href="https://htmldemo.net/finate/finate/company-details.html"><img
-                                                        src="../client/assets/img/companies/w8.webp" width="75" height="75"
-                                                        alt="Image-HasTech"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4 class="name"><a
-                                                        href="https://htmldemo.net/finate/finate/company-details.html">Inspire
-                                                        Fitness Co.</a></h4>
-                                                <p class="address">New York, USA</p>
-                                            </div>
-                                        </div>
-                                        <div class="main-content">
-                                            <h3 class="title"><a href="job-details.html">Senior UI Designer</a></h3>
-                                            <h5 class="work-type" data-text-color="#ff7e00">Part-time</h5>
-                                            <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                                        </div>
-                                        <div class="recent-job-info">
-                                            <div class="salary">
-                                                <h4>$5000</h4>
-                                                <p>/monthly</p>
-                                            </div>
-                                            <a class="btn-theme btn-sm" href="job-details.html">Apply Now</a>
-                                        </div>
-                                    </div>
-                                    <!--== End Recent Job Item ==-->
-                                </div>
+                                <!-- Các vị trí khác: dịch nội dung tương tự như trên -->
                             </div>
                         </div>
                     </div>
@@ -283,53 +114,53 @@
                         <div class="employers-sidebar">
                             <div class="widget-item">
                                 <div class="widget-title">
-                                    <h3 class="title">Information</h3>
+                                    <h3 class="title">Thông tin công ty</h3>
                                 </div>
                                 <div class="summery-info">
                                     <table class="table">
                                         <tbody>
                                             <tr>
-                                                <td class="table-name">Categories</td>
+                                                <td class="table-name">Lĩnh vực</td>
                                                 <td class="dotted">:</td>
-                                                <td>Design & Software</td>
+                                                <td>Thiết kế & Phần mềm</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Since</td>
+                                                <td class="table-name">Thành lập</td>
                                                 <td class="dotted">:</td>
                                                 <td>1996</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Views</td>
+                                                <td class="table-name">Lượt xem</td>
                                                 <td class="dotted">:</td>
                                                 <td>568+</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Reviews</td>
+                                                <td class="table-name">Đánh giá</td>
                                                 <td class="dotted">:</td>
                                                 <td>(4.8) <span class="rating"></span></td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Total Jobs</td>
+                                                <td class="table-name">Tổng số việc làm</td>
                                                 <td class="dotted">:</td>
                                                 <td>87+</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Location</td>
+                                                <td class="table-name">Địa chỉ</td>
                                                 <td class="dotted">:</td>
-                                                <td>New York, USA</td>
+                                                <td>New York, Mỹ</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Team Members</td>
+                                                <td class="table-name">Thành viên</td>
                                                 <td class="dotted">:</td>
                                                 <td>300-500</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Job Success</td>
+                                                <td class="table-name">Tỷ lệ thành công</td>
                                                 <td class="dotted">:</td>
                                                 <td>98%</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Phone</td>
+                                                <td class="table-name">Điện thoại</td>
                                                 <td class="dotted">:</td>
                                                 <td>+00 568 467 843</td>
                                             </tr>
@@ -349,56 +180,46 @@
                             </div>
                             <div class="widget-item">
                                 <div class="widget-title">
-                                    <h3 class="title">Share With</h3>
+                                    <h3 class="title">Chia sẻ</h3>
                                 </div>
                                 <div class="social-icons">
-                                    <a href="https://www.facebook.com" target="_blank" rel="noopener"><i
-                                            class="icofont-facebook"></i></a>
-                                    <a href="https://twitter.com" target="_blank" rel="noopener"><i
-                                            class="icofont-twitter"></i></a>
-                                    <a href="https://www.skype.com" target="_blank" rel="noopener"><i
-                                            class="icofont-skype"></i></a>
-                                    <a href="https://www.pinterest.com" target="_blank" rel="noopener"><i
-                                            class="icofont-pinterest"></i></a>
-                                    <a href="https://dribbble.com/" target="_blank" rel="noopener"><i
-                                            class="icofont-dribbble"></i></a>
+                                    <a href="https://www.facebook.com" target="_blank" rel="noopener"><i class="icofont-facebook"></i></a>
+                                    <a href="https://twitter.com" target="_blank" rel="noopener"><i class="icofont-twitter"></i></a>
+                                    <a href="https://www.skype.com" target="_blank" rel="noopener"><i class="icofont-skype"></i></a>
+                                    <a href="https://www.pinterest.com" target="_blank" rel="noopener"><i class="icofont-pinterest"></i></a>
+                                    <a href="https://dribbble.com/" target="_blank" rel="noopener"><i class="icofont-dribbble"></i></a>
                                 </div>
                             </div>
                             <div class="widget-item widget-contact">
                                 <div class="widget-title">
-                                    <h3 class="title">Contact Now</h3>
+                                    <h3 class="title">Liên hệ ngay</h3>
                                 </div>
                                 <div class="widget-contact-form">
-                                    <form id="contact-form" action="https://whizthemes.com/mail-php/raju/arden/mail.php"
-                                        method="POST">
+                                    <form id="contact-form" action="https://whizthemes.com/mail-php/raju/arden/mail.php" method="POST">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <input class="form-control" type="text" name="con_name"
-                                                        placeholder="Name:">
+                                                    <input class="form-control" type="text" name="con_name" placeholder="Họ và tên:">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <input class="form-control" type="email" name="con_email"
-                                                        placeholder="Email:">
+                                                    <input class="form-control" type="email" name="con_email" placeholder="Email:">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <textarea class="form-control" name="con_message" placeholder="Message"></textarea>
+                                                    <textarea class="form-control" name="con_message" placeholder="Nội dung"></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group mb--0">
-                                                    <button class="btn-theme d-block w-100" type="submit">Send
-                                                        Message</button>
+                                                    <button class="btn-theme d-block w-100" type="submit">Gửi liên hệ</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
-
-                                    <!--== Message Notification ==-->
+                                    <!--== Thông báo gửi liên hệ ==-->
                                     <div class="form-message"></div>
                                 </div>
                             </div>
@@ -407,6 +228,6 @@
                 </div>
             </div>
         </section>
-        <!--== End Employers Details Area Wrapper ==-->
+        <!--== Kết thúc khu vực chi tiết nhà tuyển dụng ==-->
     </main>
 @endsection

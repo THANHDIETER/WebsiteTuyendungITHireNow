@@ -20,3 +20,12 @@
 
   <!--=== jQuery Custom Js ===-->
   <script src="../client/assets/js/custom.js"></script>
+  <style>
+    .widget-title,
+    .widget-collapsed-title {
+        font-size: 36px !important;   
+        font-weight: 600;
+        white-space: nowrap;           
+    }
+
+  </style>
