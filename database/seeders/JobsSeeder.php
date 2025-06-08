@@ -1,27 +1,33 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class JobsSeeder extends Seeder
 {
     public function run()
     {
-        // Lấy company_id đúng (ví dụ như lưu static trong CompaniesSeeder)
+        // Lấy lại company_id đã tạo từ CompaniesSeeder, hoặc fallback
         $companyId = \Database\Seeders\CompaniesSeeder::$companyId;
-
         if (!$companyId) {
-            $companyId = DB::table('companies')->value('id');
+            $companyId = DB::table('companies')->where('slug', 'cong-ty-abc')->value('id');
         }
 
-        DB::table('jobs')->insert([
+        if (!$companyId) {
+            throw new \Exception('Không tìm thấy công ty để gán cho job.');
+        }
+
+        // Dùng updateOrInsert để tránh lỗi duplicate
+        DB::table('jobs')->updateOrInsert(
+            ['slug' => 'senior-backend-developer'],
             [
                 'company_id' => $companyId,
                 'title' => 'Senior Backend Developer',
-                'slug' => 'senior-backend-developer',
-                'description' => 'Phát triển API và backend hệ thống',  // Cần thêm dòng này
+                'description' => 'Phát triển API và backend hệ thống',
                 'requirements' => 'Kinh nghiệm 3+ năm PHP, Laravel',
                 'benefits' => json_encode(['Lương cao', 'Thưởng KPI']),
                 'job_type' => 'full-time',
@@ -33,13 +39,13 @@ class JobsSeeder extends Seeder
                 'level' => 'Senior',
                 'experience' => '3+ years',
                 'category_id' => 1,
-                'deadline' => now()->addMonth(),
+                'deadline' => Carbon::now()->addMonth(),
                 'status' => 'published',
                 'views' => 0,
                 'is_featured' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-        ]);
+            ]
+        );
     }
 }
