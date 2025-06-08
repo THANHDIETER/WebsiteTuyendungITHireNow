@@ -23,7 +23,7 @@ use App\Http\Middleware\AdminMiddleware;
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
-    // ->middleware(['auth:sanctum', 'admin']) 
+    ->middleware(['auth:sanctum', 'admin']) 
     // Đảm bảo người dùng đăng nhập và có quyền admin
     ->name('admin.')
     ->group(function () {

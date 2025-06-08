@@ -28,7 +28,9 @@ Route::middleware([])->group(function () {
 });
 
 
-Route::prefix('admin/stats')->group(function () {
+Route::prefix('admin/stats')
+->middleware([])
+->group(function () {
     Route::get('/users', [DashboardController::class, 'userStats']);
     Route::get('/jobs', [DashboardController::class, 'jobStats']);
     Route::get('/applications', [DashboardController::class, 'applicationStats']);

@@ -137,7 +137,16 @@ class LoginController extends Controller
 
         session(['access_token' => $accessToken]);
 
-        return redirect()->intended(route('admin.dashboard'));
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'employer':
+                return redirect()->route('employer.details'); // bạn cần định nghĩa route này
+            case 'job_seeker':
+            default:
+                return redirect()->route('home'); // bạn cần định nghĩa route này
+        }
+
     }
 
     public function logout(Request $request)
