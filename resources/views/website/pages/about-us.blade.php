@@ -1,535 +1,613 @@
 @extends('website.layouts.master')
 
 @section('content')
-  <main class="main-content">
+    <main class="main-content">
 
-    <!--== Start Page Header Area Wrapper ==-->
-    <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
-      <div class="container pt--0 pb--0">
-        <div class="row">
-          <div class="col-12">
-            <div class="page-header-content">
-              <h2 class="title">About Us</h2>
-              <nav class="breadcrumb-area">
-                <ul class="breadcrumb justify-content-center">
-                  <li><a href="index.html">Home</a></li>
-                  <li class="breadcrumb-sep">//</li>
-                  <li>About Us</li>
-                </ul>
-              </nav>
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <div class="job-search-wrap">
+                                <div class="job-search-form">
+                                    <form action="index.html#">
+                                        <div class="row row-gutter-10">
+                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Tiêu đề việc làm hoặc từ khóa">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                                <div class="form-group">
+                                                    <select class="form-control">
+                                                        <option value="1" selected>Chọn Thành Phố</option>
+                                                        <option value="2">Hà Nội</option>
+                                                        <option value="3">Hồ Chí Minh</option>
+                                                        <option value="4">Đà Nẵng</option>
+                                                        <option value="5">Huế</option>
+                                                        <option value="6">Hà Nam</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                                <div class="form-group">
+                                                    <select class="form-control">
+                                                        <option value="1" selected>Loại Công Việc</option>
+                                                        <option value="2">Web Designer</option>
+                                                        <option value="3">Web Developer</option>
+                                                        <option value="4">Graphic Designer</option>
+                                                        <option value="5">App Developer</option>
+                                                        <option value="6">UI &amp; UX Expert</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn-form-search"><i
+                                                            class="icofont-search-1"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-    <!--== End Page Header Area Wrapper ==-->
+        <!--== End Page Header Area Wrapper ==-->
 
-    <!--== Start About Area Wrapper ==-->
-    <section class="about-area about-default-wrapper">
-      <div class="container">
-        <div class="about-item">
-          <div class="row">
-            <div class="col-md-6 col-lg-3">
-              <div class="about-thumb" data-aos="fade-down" data-aos-duration="1000">
-                <img src="../client/assets/img/about/1.webp" alt="Image-HasTech">
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <div class="about-thumb about-thumb-two" data-aos="fade-down" data-aos-duration="1200">
-                <img src="../client/assets/img/about/2.webp" alt="Image-HasTech">
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="about-content" data-aos="fade-down" data-aos-duration="1000">
-                <h4 class="sub-title">// About Finate</h4>
-                <h3 class="title">Finate help your for get your dream job and build your bright career.</h3>
-                <p class="desc">It is a long established fact that a reader will be distracted the readable content of a page when looking at its layout. The point of using is that has more-or-less normal a distribution of letters, as opposed to using 'Content publishing packages web page editors.</p>
-                <div class="member-join-content" data-aos="fade-right" data-aos-duration="1200">
-                  <div class="member-join-thumb">
-                    <ul>
-                      <li>
-                        <a href="candidate-details.html">
-                          <img src="../client/assets/img/about/member1.webp" width="50" height="50" alt="Image-HasTech">
-                        </a>
-                      </li>
-                      <li>
-                        <a href="candidate-details.html">
-                          <img src="../client/assets/img/about/member2.webp" width="50" height="50" alt="Image-HasTech">
-                        </a>
-                      </li>
-                      <li>
-                        <a href="candidate-details.html">
-                          <img src="../client/assets/img/about/member3.webp" width="50" height="50" alt="Image-HasTech">
-                        </a>
-                      </li>
-                      <li>
-                        <a href="candidate-details.html">
-                          <img src="../client/assets/img/about/member4.webp" width="50" height="50" alt="Image-HasTech">
-                        </a>
-                      </li>
-                      <li>
-                        <a href="candidate-details.html">
-                          <img src="../client/assets/img/about/member4.webp" width="50" height="50" alt="Image-HasTech">
-                          <span>+</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="member-join-btn">
-                    <a class="join-now-btn" href="job-details.html"><span>+</span> Join Now</a>
-                  </div>
+        <!--== Start About Area Wrapper ==-->
+        <section class="about-area about-default-wrapper">
+            <div class="container">
+                <div class="about-item">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="about-thumb" data-aos="fade-down" data-aos-duration="1000">
+                                <img src="../client/assets/img/about/1.webp" alt="Image-HasTech">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="about-thumb about-thumb-two" data-aos="fade-down" data-aos-duration="1200">
+                                <img src="../client/assets/img/about/2.webp" alt="Image-HasTech">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="about-content" data-aos="fade-down" data-aos-duration="1000">
+                                <h4 class="sub-title">// Giới thiệu Finate</h4>
+                                <h3 class="title">
+                                    Finate giúp bạn tìm công việc mơ ước và xây dựng sự nghiệp tươi sáng.
+                                </h3>
+                                <p class="desc">
+                                    Đã là sự thật từ lâu rằng người đọc sẽ bị phân tâm bởi nội dung có thể đọc được trên
+                                    trang khi nhìn vào bố cục. Điểm khác biệt của Lorem Ipsum là nó có phân bố chữ cái khá
+                                    tự nhiên, trái ngược với việc sử dụng các gói xuất bản nội dung hay trình chỉnh sửa
+                                    trang web.
+                                </p>
+                                <div class="member-join-content" data-aos="fade-right" data-aos-duration="1200">
+                                    <div class="member-join-thumb">
+                                        <ul>
+                                            <li>
+                                                <a href="candidate-details.html">
+                                                    <img src="../client/assets/img/about/member1.webp" width="50"
+                                                        height="50" alt="Image-HasTech">
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="candidate-details.html">
+                                                    <img src="../client/assets/img/about/member2.webp" width="50"
+                                                        height="50" alt="Image-HasTech">
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="candidate-details.html">
+                                                    <img src="../client/assets/img/about/member3.webp" width="50"
+                                                        height="50" alt="Image-HasTech">
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="candidate-details.html">
+                                                    <img src="../client/assets/img/about/member4.webp" width="50"
+                                                        height="50" alt="Image-HasTech">
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="candidate-details.html">
+                                                    <img src="../client/assets/img/about/member4.webp" width="50"
+                                                        height="50" alt="Image-HasTech">
+                                                    <span>+</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="member-join-btn">
+                                        <a class="join-now-btn" href="job-details.html"><span>+</span> Tham gia ngay</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!--== End About Area Wrapper ==-->
+        </section>
+        <!--== End About Area Wrapper ==-->
 
-    <!--== Start Funfact Area Wrapper ==-->
-    <section class="funfact-area bg-color-gray">
-      <div class="container">
-        <div class="row no-gutter">
-          <div class="col-12">
-            <div class="funfact-content-wrap">
-              <div class="funfact-col">
-                <!--== Start Funfact Item ==-->
-                <div class="funfact-item" data-aos="fade-down">
-                  <h2 class="counter-number"><span class="counter" data-counterup-delay="50">5689</span></h2>
-                  <h6 class="counter-title">Total Jobs</h6>
+        <!--== Start Funfact Area Wrapper ==-->
+        <section class="funfact-area bg-color-gray">
+            <div class="container">
+                <div class="row no-gutter">
+                    <div class="col-12">
+                        <div class="funfact-content-wrap">
+                            <div class="funfact-col">
+                                <!--== Start Funfact Item ==-->
+                                <div class="funfact-item" data-aos="fade-down">
+                                    <h2 class="counter-number"><span class="counter"
+                                            data-counterup-delay="50">5689</span></h2>
+                                    <h6 class="counter-title">Tổng số việc làm</h6>
+                                </div>
+                                <!--== End Funfact Item ==-->
+                            </div>
+                            <div class="funfact-col">
+                                <!--== Start Funfact Item ==-->
+                                <div class="funfact-item" data-aos="fade-down" data-aos-duration="1500">
+                                    <h2 class="counter-number"><span class="counter"
+                                            data-counterup-delay="50">8567</span></h2>
+                                    <h6 class="counter-title">Ứng viên</h6>
+                                </div>
+                                <!--== End Funfact Item ==-->
+                            </div>
+                            <div class="funfact-col">
+                                <!--== Start Funfact Item ==-->
+                                <div class="funfact-item" data-aos="fade-down" data-aos-duration="1700">
+                                    <h2 class="counter-number"><span class="counter"
+                                            data-counterup-delay="50">7457</span></h2>
+                                    <h6 class="counter-title">Hồ sơ</h6>
+                                </div>
+                                <!--== End Funfact Item ==-->
+                            </div>
+                            <div class="funfact-col">
+                                <!--== Start Funfact Item ==-->
+                                <div class="funfact-item" data-aos="fade-down" data-aos-duration="1900">
+                                    <h2 class="counter-number"><span class="counter"
+                                            data-counterup-delay="50">6483</span></h2>
+                                    <h6 class="counter-title">Các công ty</h6>
+                                </div>
+                                <!--== End Funfact Item ==-->
+                            </div>
+                            <div class="funfact-col">
+                                <!--== Start Funfact Item ==-->
+                                <div class="funfact-item" data-aos="fade-down" data-aos-duration="2200">
+                                    <h2 class="counter-number"><span class="counter" data-counterup-delay="50">358</span>
+                                    </h2>
+                                    <h6 class="counter-title">Quốc gia</h6>
+                                </div>
+                                <!--== End Funfact Item ==-->
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!--== End Funfact Item ==-->
-              </div>
-              <div class="funfact-col">
-                <!--== Start Funfact Item ==-->
-                <div class="funfact-item" data-aos="fade-down" data-aos-duration="1500">
-                  <h2 class="counter-number"><span class="counter" data-counterup-delay="50">8567</span></h2>
-                  <h6 class="counter-title">Candidates</h6>
-                </div>
-                <!--== End Funfact Item ==-->
-              </div>
-              <div class="funfact-col">
-                <!--== Start Funfact Item ==-->
-                <div class="funfact-item" data-aos="fade-down" data-aos-duration="1700">
-                  <h2 class="counter-number"><span class="counter" data-counterup-delay="50">7457</span></h2>
-                  <h6 class="counter-title">Resume</h6>
-                </div>
-                <!--== End Funfact Item ==-->
-              </div>
-              <div class="funfact-col">
-                <!--== Start Funfact Item ==-->
-                <div class="funfact-item" data-aos="fade-down" data-aos-duration="1900">
-                  <h2 class="counter-number"><span class="counter" data-counterup-delay="50">6483</span></h2>
-                  <h6 class="counter-title">Compnay’s</h6>
-                </div>
-                <!--== End Funfact Item ==-->
-              </div>
-              <div class="funfact-col">
-                <!--== Start Funfact Item ==-->
-                <div class="funfact-item" data-aos="fade-down" data-aos-duration="2200">
-                  <h2 class="counter-number"><span class="counter" data-counterup-delay="50">358</span></h2>
-                  <h6 class="counter-title">Country’s</h6>
-                </div>
-                <!--== End Funfact Item ==-->
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!--== End Funfact Area Wrapper ==-->
+        </section>
+        <!--== End Funfact Area Wrapper ==-->
 
-    <!--== Start Team Area Wrapper ==-->
-    <section class="team-area team-inner-area">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="section-title text-center" data-aos="fade-down">
-              <h3 class="title">Best Candidate</h3>
-              <div class="desc">
-                <p>Many desktop publishing packages and web page editors</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row" data-aos="fade-down">
-          <div class="col-sm-6 col-lg-4 col-xl-3">
-            <!--== Start Team Item ==-->
-            <div class="team-item">
-              <div class="thumb">
-                <a href="candidate-details.html">
-                  <img src="../client/assets/img/team/1.webp" width="160" height="160" alt="Image-HasTech">
-                </a>
-              </div>
-              <div class="content">
-                <h4 class="title"><a href="candidate-details.html">Lauran Benitez</a></h4>
-                <h5 class="sub-title">Web Designer</h5>
-                <div class="rating-box">
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
+        <!--== Start Team Area Wrapper ==-->
+        <section class="team-area team-inner-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title text-center" data-aos="fade-down">
+                            <h3 class="title">Ứng viên xuất sắc</h3>
+                            <div class="desc">
+                                <p>Nhiều gói xuất bản bản in và trình chỉnh sửa trang web</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p class="desc">CSS3, HTML5, Javascript Bootstrap, Jquery</p>
-                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">View Profile</a>
-              </div>
-              <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp" alt="Image-HasTech"></div>
-              <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp" alt="Image-HasTech"></div>
-            </div>
-            <!--== End Team Item ==-->
-          </div>
-          <div class="col-sm-6 col-lg-4 col-xl-3">
-            <!--== Start Team Item ==-->
-            <div class="team-item">
-              <div class="thumb">
-                <a href="candidate-details.html">
-                  <img src="../client/assets/img/team/2.webp" width="160" height="160" alt="Image-HasTech">
-                </a>
-              </div>
-              <div class="content">
-                <h4 class="title"><a href="candidate-details.html">Valentine Anders</a></h4>
-                <h5 class="sub-title">UI/UX Designer</h5>
-                <div class="rating-box">
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
+                <div class="row" data-aos="fade-down">
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                        <!--== Start Team Item ==-->
+                        <div class="team-item">
+                            <div class="thumb">
+                                <a href="candidate-details.html">
+                                    <img src="../client/assets/img/team/1.webp" width="160" height="160"
+                                        alt="Image-HasTech">
+                                </a>
+                            </div>
+                            <div class="content">
+                                <h4 class="title"><a href="candidate-details.html">Lauran Benitez</a></h4>
+                                <h5 class="sub-title">Web Designer</h5>
+                                <div class="rating-box">
+                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                    <i class="icofont-star"></i>
+                                </div>
+                                <p class="desc">CSS3, HTML5, Javascript, Bootstrap, jQuery</p>
+                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">Xem hồ sơ</a>
+                            </div>
+                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
+                                    alt="Image-HasTech"></div>
+                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
+                                    alt="Image-HasTech"></div>
+                        </div>
+                        <!--== End Team Item ==-->
+                    </div>
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                        <!--== Start Team Item ==-->
+                        <div class="team-item">
+                            <div class="thumb">
+                                <a href="candidate-details.html">
+                                    <img src="../client/assets/img/team/2.webp" width="160" height="160"
+                                        alt="Image-HasTech">
+                                </a>
+                            </div>
+                            <div class="content">
+                                <h4 class="title"><a href="candidate-details.html">Valentine Anders</a></h4>
+                                <h5 class="sub-title">UI/UX Designer</h5>
+                                <div class="rating-box">
+                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                    <i class="icofont-star"></i>
+                                </div>
+                                <p class="desc">CSS3, HTML5, Javascript, Bootstrap, jQuery</p>
+                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">Xem hồ sơ</a>
+                            </div>
+                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
+                                    alt="Image-HasTech"></div>
+                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
+                                    alt="Image-HasTech"></div>
+                        </div>
+                        <!--== End Team Item ==-->
+                    </div>
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                        <!--== Start Team Item ==-->
+                        <div class="team-item">
+                            <div class="thumb">
+                                <a href="candidate-details.html">
+                                    <img src="../client/assets/img/team/3.webp" width="160" height="160"
+                                        alt="Image-HasTech">
+                                </a>
+                            </div>
+                            <div class="content">
+                                <h4 class="title"><a href="candidate-details.html">Shakia Aguilera</a></h4>
+                                <h5 class="sub-title">Web Designer</h5>
+                                <div class="rating-box">
+                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                    <i class="icofont-star"></i>
+                                </div>
+                                <p class="desc">CSS3, HTML5, Javascript, Bootstrap, jQuery</p>
+                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">Xem hồ sơ</a>
+                            </div>
+                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
+                                    alt="Image-HasTech"></div>
+                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
+                                    alt="Image-HasTech"></div>
+                        </div>
+                        <!--== End Team Item ==-->
+                    </div>
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                        <!--== Start Team Item ==-->
+                        <div class="team-item">
+                            <div class="thumb">
+                                <a href="candidate-details.html">
+                                    <img src="../client/assets/img/team/4.webp" width="160" height="160"
+                                        alt="Image-HasTech">
+                                </a>
+                            </div>
+                            <div class="content">
+                                <h4 class="title"><a href="candidate-details.html">Assunta Manson</a></h4>
+                                <h5 class="sub-title">App. Developer</h5>
+                                <div class="rating-box">
+                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                    <i class="icofont-star"></i>
+                                </div>
+                                <p class="desc">CSS3, HTML5, Javascript, Bootstrap, jQuery</p>
+                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">Xem hồ sơ</a>
+                            </div>
+                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
+                                    alt="Image-HasTech"></div>
+                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
+                                    alt="Image-HasTech"></div>
+                        </div>
+                        <!--== End Team Item ==-->
+                    </div>
                 </div>
-                <p class="desc">CSS3, HTML5, Javascript Bootstrap, Jquery</p>
-                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">View Profile</a>
-              </div>
-              <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp" alt="Image-HasTech"></div>
-              <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp" alt="Image-HasTech"></div>
             </div>
-            <!--== End Team Item ==-->
-          </div>
-          <div class="col-sm-6 col-lg-4 col-xl-3">
-            <!--== Start Team Item ==-->
-            <div class="team-item">
-              <div class="thumb">
-                <a href="candidate-details.html">
-                  <img src="../client/assets/img/team/3.webp" width="160" height="160" alt="Image-HasTech">
-                </a>
-              </div>
-              <div class="content">
-                <h4 class="title"><a href="candidate-details.html">Shakia Aguilera</a></h4>
-                <h5 class="sub-title">Web Designer</h5>
-                <div class="rating-box">
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                </div>
-                <p class="desc">CSS3, HTML5, Javascript Bootstrap, Jquery</p>
-                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">View Profile</a>
-              </div>
-              <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp" alt="Image-HasTech"></div>
-              <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp" alt="Image-HasTech"></div>
-            </div>
-            <!--== End Team Item ==-->
-          </div>
-          <div class="col-sm-6 col-lg-4 col-xl-3">
-            <!--== Start Team Item ==-->
-            <div class="team-item">
-              <div class="thumb">
-                <a href="candidate-details.html">
-                  <img src="../client/assets/img/team/4.webp" width="160" height="160" alt="Image-HasTech">
-                </a>
-              </div>
-              <div class="content">
-                <h4 class="title"><a href="candidate-details.html">Assunta Manson</a></h4>
-                <h5 class="sub-title">App. Developer</h5>
-                <div class="rating-box">
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                  <i class="icofont-star"></i>
-                </div>
-                <p class="desc">CSS3, HTML5, Javascript Bootstrap, Jquery</p>
-                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">View Profile</a>
-              </div>
-              <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp" alt="Image-HasTech"></div>
-              <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp" alt="Image-HasTech"></div>
-            </div>
-            <!--== End Team Item ==-->
-          </div>
-        </div>
-      </div>
-    </section>
-    <!--== End Team Area Wrapper ==-->
+        </section>
+        <!--== End Team Area Wrapper ==-->
 
-    <!--== Start Divider Area Wrapper ==-->
-    <section class="sec-overlay sec-overlay-theme bg-img" data-bg-img="../client/assets/img/photos/bg1.webp">
-      <div class="container pt--0 pb--0">
-        <div class="row justify-content-center divider-style1">
-          <div class="col-lg-7">
-            <div class="divider-content text-center">
-              <h4 class="sub-title" data-aos="fade-down">Trial Version Available</h4>
-              <h2 class="title" data-aos="fade-down">Download Our Mobile App. <br>You Can Ready Resume & Apply Job.</h2>
-              <div class="divider-btn-group">
-                <a class="btn-divider" data-aos="fade-down" href="page-not-found.html">
-                  <img src="../client/assets/img/photos/google-play.webp" width="201" height="63" class="icon" alt="Image-HasTech">
-                </a>
-                <a class="btn-divider btn-divider-app-store" data-aos="fade-down" href="page-not-found.html">
-                  <img src="../client/assets/img/photos/mac-os.webp" width="201" height="63" class="icon" alt="Image-HasTech">
-                </a>
-              </div>
+        <!--== Start Divider Area Wrapper ==-->
+        {{-- <section class="sec-overlay sec-overlay-theme bg-img" data-bg-img="../client/assets/img/photos/bg1.webp">
+            <div class="container pt--0 pb--0">
+                <div class="row justify-content-center divider-style1">
+                    <div class="col-lg-7">
+                        <div class="divider-content text-center">
+                            <h4 class="sub-title" data-aos="fade-down">Có phiên bản dùng thử</h4>
+                            <h2 class="title" data-aos="fade-down">
+                                Tải ứng dụng di động của chúng tôi.<br>Bạn có thể xem trước hồ sơ &amp; ứng tuyển ngay.
+                            </h2>
+                            <div class="divider-btn-group">
+                                <a class="btn-divider" data-aos="fade-down" href="page-not-found.html">
+                                    <img src="../client/assets/img/photos/google-play.webp" width="201" height="63"
+                                        class="icon" alt="Image-HasTech">
+                                </a>
+                                <a class="btn-divider btn-divider-app-store" data-aos="fade-down"
+                                    href="page-not-found.html">
+                                    <img src="../client/assets/img/photos/mac-os.webp" width="201" height="63"
+                                        class="icon" alt="Image-HasTech">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-layer-style1"></div>
-      <div class="bg-layer-style2"></div>
-    </section>
-    <!--== End Divider Area Wrapper ==-->
+            <div class="bg-layer-style1"></div>
+            <div class="bg-layer-style2"></div>
+        </section> --}}
+        <!--== End Divider Area Wrapper ==-->
 
-    <!--== Start Testimonial Area Wrapper ==-->
-    <section class="testimonial-area">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="section-title text-center" data-aos="fade-down">
-              <h3 class="title">Our Happy Clients</h3>
-              <div class="desc">
-                <p>Many desktop publishing packages and web page editors</p>
-              </div>
+        <!--== Start Testimonial Area Wrapper ==-->
+        <section class="testimonial-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title text-center" data-aos="fade-down">
+                            <h3 class="title">Khách hàng hài lòng của chúng tôi</h3>
+                            <div class="desc">
+                                <p>Nhiều gói xuất bản bản in và trình chỉnh sửa trang web</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" data-aos="fade-down">
+                        <div class="swiper testi-slider-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <!--== Start Testimonial Item ==-->
+                                    <div class="testimonial-item testimonial-style2-item">
+                                        <div class="testi-inner-content">
+                                            <div class="testi-author d-flex align-items-center">
+                                                <div class="testi-thumb me-3">
+                                                    <img src="../client/assets/img/testimonial/1.webp" width="75"
+                                                        height="75" alt="Image-HasTech">
+                                                </div>
+                                                <div class="testi-info">
+                                                    <h4 class="name">Roselia Hamets</h4>
+                                                    <span class="designation">Quản lý tuyển dụng</span>
+                                                </div>
+                                            </div>
+                                            <div class="testi-content">
+                                                <p class="desc">
+                                                    Đã là sự thật từ lâu rằng người đọc sẽ bị phân tâm bởi nội dung có thể
+                                                    đọc được trên trang khi nhìn vào bố cục của nó.
+                                                </p>
+                                                <div class="rating-box">
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i>
+                                                </div>
+                                                <div class="testi-quote">
+                                                    <img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--== End Testimonial Item ==-->
+                                </div>
+                                <div class="swiper-slide">
+                                    <!--== Start Testimonial Item ==-->
+                                    <div class="testimonial-item testimonial-style2-item">
+                                        <div class="testi-inner-content">
+                                            <div class="testi-author d-flex align-items-center">
+                                                <div class="testi-thumb me-3">
+                                                    <img src="../client/assets/img/testimonial/2.webp" width="75"
+                                                        height="75" alt="Image-HasTech">
+                                                </div>
+                                                <div class="testi-info">
+                                                    <h4 class="name">Assunta Manson</h4>
+                                                    <span class="designation">Quản lý tuyển dụng</span>
+                                                </div>
+                                            </div>
+                                            <div class="testi-content">
+                                                <p class="desc">
+                                                    Đã là sự thật từ lâu rằng người đọc sẽ bị phân tâm bởi nội dung có thể
+                                                    đọc được trên trang khi nhìn vào bố cục của nó.
+                                                </p>
+                                                <div class="rating-box">
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i>
+                                                </div>
+                                                <div class="testi-quote">
+                                                    <img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--== End Testimonial Item ==-->
+                                </div>
+                                <div class="swiper-slide">
+                                    <!--== Start Testimonial Item ==-->
+                                    <div class="testimonial-item testimonial-style2-item">
+                                        <div class="testi-inner-content">
+                                            <div class="testi-author d-flex align-items-center">
+                                                <div class="testi-thumb me-3">
+                                                    <img src="../client/assets/img/testimonial/3.webp" width="75"
+                                                        height="75" alt="Image-HasTech">
+                                                </div>
+                                                <div class="testi-info">
+                                                    <h4 class="name">Amira Shepard</h4>
+                                                    <span class="designation">Quản lý tuyển dụng</span>
+                                                </div>
+                                            </div>
+                                            <div class="testi-content">
+                                                <p class="desc">
+                                                    Đã là sự thật từ lâu rằng người đọc sẽ bị phân tâm bởi nội dung có thể
+                                                    đọc được trên trang khi nhìn vào bố cục của nó.
+                                                </p>
+                                                <div class="rating-box">
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i>
+                                                </div>
+                                                <div class="testi-quote">
+                                                    <img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--== End Testimonial Item ==-->
+                                </div>
+                                <div class="swiper-slide">
+                                    <!--== Start Testimonial Item ==-->
+                                    <div class="testimonial-item testimonial-style2-item">
+                                        <div class="testi-inner-content">
+                                            <div class="testi-author d-flex align-items-center">
+                                                <div class="testi-thumb me-3">
+                                                    <img src="../client/assets/img/testimonial/4.webp" width="75"
+                                                        height="75" alt="Image-HasTech">
+                                                </div>
+                                                <div class="testi-info">
+                                                    <h4 class="name">Joshua George</h4>
+                                                    <span class="designation">Quản lý tuyển dụng</span>
+                                                </div>
+                                            </div>
+                                            <div class="testi-content">
+                                                <p class="desc">
+                                                    Đã là sự thật từ lâu rằng người đọc sẽ bị phân tâm bởi nội dung có thể
+                                                    đọc được trên trang khi nhìn vào bố cục của nó.
+                                                </p>
+                                                <div class="rating-box">
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i>
+                                                </div>
+                                                <div class="testi-quote">
+                                                    <img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--== End Testimonial Item ==-->
+                                </div>
+                                <div class="swiper-slide">
+                                    <!--== Start Testimonial Item ==-->
+                                    <div class="testimonial-item testimonial-style2-item">
+                                        <div class="testi-inner-content">
+                                            <div class="testi-author d-flex align-items-center">
+                                                <div class="testi-thumb me-3">
+                                                    <img src="../client/assets/img/testimonial/5.webp" width="75"
+                                                        height="75" alt="Image-HasTech">
+                                                </div>
+                                                <div class="testi-info">
+                                                    <h4 class="name">Rosie Patton</h4>
+                                                    <span class="designation">Quản lý tuyển dụng</span>
+                                                </div>
+                                            </div>
+                                            <div class="testi-content">
+                                                <p class="desc">
+                                                    Đã là sự thật từ lâu rằng người đọc sẽ bị phân tâm bởi nội dung có thể
+                                                    đọc được trên trang khi nhìn vào bố cục của nó.
+                                                </p>
+                                                <div class="rating-box">
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i><i class="icofont-star"></i>
+                                                    <i class="icofont-star"></i>
+                                                </div>
+                                                <div class="testi-quote">
+                                                    <img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--== End Testimonial Item ==-->
+                                </div>
+                            </div>
+                            <!--== Add Swiper Pagination ==-->
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12" data-aos="fade-down">
-            <div class="swiper testi-slider-container">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                  <!--== Start Testimonial Item ==-->
-                  <div class="testimonial-item testimonial-style2-item">
-                    <div class="testi-inner-content">
-                      <div class="testi-author">
-                        <div class="testi-thumb">
-                          <img src="../client/assets/img/testimonial/1.webp" width="75" height="75" alt="Image-HasTech">
-                        </div>
-                        <div class="testi-info">
-                          <h4 class="name">Roselia Hamets</h4>
-                          <span class="designation">Hiring Manager</span>
-                        </div>
-                      </div>
-                      <div class="testi-content">
-                        <p class="desc">It is a long established fact that reader will distracted the readable content page looking at its layout point using that has more-or-less normal distribution of letters opposed using content making.</p>
-                        <div class="rating-box">
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                        </div>
-                        <div class="testi-quote"><img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--== End Testimonial Item ==-->
-                </div>
-                <div class="swiper-slide">
-                  <!--== Start Testimonial Item ==-->
-                  <div class="testimonial-item testimonial-style2-item">
-                    <div class="testi-inner-content">
-                      <div class="testi-author">
-                        <div class="testi-thumb">
-                          <img src="../client/assets/img/testimonial/2.webp" width="75" height="75" alt="Image-HasTech">
-                        </div>
-                        <div class="testi-info">
-                          <h4 class="name">Assunta Manson</h4>
-                          <span class="designation">Hiring Manager</span>
-                        </div>
-                      </div>
-                      <div class="testi-content">
-                        <p class="desc">It is a long established fact that reader will distracted the readable content page looking at its layout point using that has more-or-less normal distribution of letters opposed using content making.</p>
-                        <div class="rating-box">
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                        </div>
-                        <div class="testi-quote"><img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--== End Testimonial Item ==-->
-                </div>
-                <div class="swiper-slide">
-                  <!--== Start Testimonial Item ==-->
-                  <div class="testimonial-item testimonial-style2-item">
-                    <div class="testi-inner-content">
-                      <div class="testi-author">
-                        <div class="testi-thumb">
-                          <img src="../client/assets/img/testimonial/3.webp" width="75" height="75" alt="Image-HasTech">
-                        </div>
-                        <div class="testi-info">
-                          <h4 class="name">Amira Shepard</h4>
-                          <span class="designation">Hiring Manager</span>
-                        </div>
-                      </div>
-                      <div class="testi-content">
-                        <p class="desc">It is a long established fact that reader will distracted the readable content page looking at its layout point using that has more-or-less normal distribution of letters opposed using content making.</p>
-                        <div class="rating-box">
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                        </div>
-                        <div class="testi-quote"><img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--== End Testimonial Item ==-->
-                </div>
-                <div class="swiper-slide">
-                  <!--== Start Testimonial Item ==-->
-                  <div class="testimonial-item testimonial-style2-item">
-                    <div class="testi-inner-content">
-                      <div class="testi-author">
-                        <div class="testi-thumb">
-                          <img src="../client/assets/img/testimonial/4.webp" width="75" height="75" alt="Image-HasTech">
-                        </div>
-                        <div class="testi-info">
-                          <h4 class="name">Joshua George</h4>
-                          <span class="designation">Hiring Manager</span>
-                        </div>
-                      </div>
-                      <div class="testi-content">
-                        <p class="desc">It is a long established fact that reader will distracted the readable content page looking at its layout point using that has more-or-less normal distribution of letters opposed using content making.</p>
-                        <div class="rating-box">
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                        </div>
-                        <div class="testi-quote"><img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--== End Testimonial Item ==-->
-                </div>
-                <div class="swiper-slide">
-                  <!--== Start Testimonial Item ==-->
-                  <div class="testimonial-item testimonial-style2-item">
-                    <div class="testi-inner-content">
-                      <div class="testi-author">
-                        <div class="testi-thumb">
-                          <img src="../client/assets/img/testimonial/5.webp" width="75" height="75" alt="Image-HasTech">
-                        </div>
-                        <div class="testi-info">
-                          <h4 class="name">Rosie Patton</h4>
-                          <span class="designation">Hiring Manager</span>
-                        </div>
-                      </div>
-                      <div class="testi-content">
-                        <p class="desc">It is a long established fact that reader will distracted the readable content page looking at its layout point using that has more-or-less normal distribution of letters opposed using content making.</p>
-                        <div class="rating-box">
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                          <i class="icofont-star"></i>
-                        </div>
-                        <div class="testi-quote"><img src="../client/assets/img/icons/quote1.webp" alt="Image-HasTech"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--== End Testimonial Item ==-->
-                </div>
-              </div>
+        </section>
+        <!--== End Testimonial Area Wrapper ==-->
 
-              <!--== Add Swiper Pagination ==-->
-              <div class="swiper-pagination"></div>
+        <!--== Start Brand Logo Area Wrapper ==-->
+        <div class="brand-logo-area">
+            <div class="container pt--0 pb--0" data-aos="fade-down">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="brand-logo-content">
+                            <div class="swiper brand-logo-slider-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <!--== Start Brand Logo Item ==-->
+                                        <div class="brand-logo-item">
+                                            <img src="../client/assets/img/brand-logo/1.webp" alt="Image-HasTech">
+                                        </div>
+                                        <!--== End Brand Logo Item ==-->
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <!--== Start Brand Logo Item ==-->
+                                        <div class="brand-logo-item">
+                                            <img src="../client/assets/img/brand-logo/2.webp" alt="Image-HasTech">
+                                        </div>
+                                        <!--== End Brand Logo Item ==-->
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <!--== Start Brand Logo Item ==-->
+                                        <div class="brand-logo-item">
+                                            <img src="../client/assets/img/brand-logo/3.webp" alt="Image-HasTech">
+                                        </div>
+                                        <!--== End Brand Logo Item ==-->
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <!--== Start Brand Logo Item ==-->
+                                        <div class="brand-logo-item">
+                                            <img src="../client/assets/img/brand-logo/4.webp" alt="Image-HasTech">
+                                        </div>
+                                        <!--== End Brand Logo Item ==-->
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <!--== Start Brand Logo Item ==-->
+                                        <div class="brand-logo-item">
+                                            <img src="../client/assets/img/brand-logo/5.webp" alt="Image-HasTech">
+                                        </div>
+                                        <!--== End Brand Logo Item ==-->
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <!--== Start Brand Logo Item ==-->
+                                        <div class="brand-logo-item">
+                                            <img src="../client/assets/img/brand-logo/6.webp" alt="Image-HasTech">
+                                        </div>
+                                        <!--== End Brand Logo Item ==-->
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <!--== Start Brand Logo Item ==-->
+                                        <div class="brand-logo-item">
+                                            <img src="../client/assets/img/brand-logo/1.webp" alt="Image-HasTech">
+                                        </div>
+                                        <!--== End Brand Logo Item ==-->
+                                    </div>
+                                </div>
+                            </div>
+                            <!--== Add Swiper Arrows ==-->
+                            <div class="swiper-btn-wrap">
+                                <div class="brand-swiper-btn-prev"><i class="icofont-long-arrow-left"></i></div>
+                                <div class="brand-swiper-btn-next"><i class="icofont-long-arrow-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </section>
-    <!--== End Testimonial Area Wrapper ==-->
 
-    <!--== Start Brand Logo Area Wrapper ==-->
-    <div class="brand-logo-area">
-      <div class="container pt--0 pb--0" data-aos="fade-down">
-        <div class="row">
-          <div class="col-12">
-            <div class="brand-logo-content" >
-              <div class="swiper brand-logo-slider-container">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <!--== Start Brand Logo Item ==-->
-                    <div class="brand-logo-item">
-                      <img src="../client/assets/img/brand-logo/1.webp" alt="Image-HasTech">
-                    </div>
-                    <!--== End Brand Logo Item ==-->
-                  </div>
-                  <div class="swiper-slide">
-                    <!--== Start Brand Logo Item ==-->
-                    <div class="brand-logo-item">
-                      <img src="../client/assets/img/brand-logo/2.webp" alt="Image-HasTech">
-                    </div>
-                    <!--== End Brand Logo Item ==-->
-                  </div>
-                  <div class="swiper-slide">
-                    <!--== Start Brand Logo Item ==-->
-                    <div class="brand-logo-item">
-                      <img src="../client/assets/img/brand-logo/3.webp" alt="Image-HasTech">
-                    </div>
-                    <!--== End Brand Logo Item ==-->
-                  </div>
-                  <div class="swiper-slide">
-                    <!--== Start Brand Logo Item ==-->
-                    <div class="brand-logo-item">
-                      <img src="../client/assets/img/brand-logo/4.webp" alt="Image-HasTech">
-                    </div>
-                    <!--== End Brand Logo Item ==-->
-                  </div>
-                  <div class="swiper-slide">
-                    <!--== Start Brand Logo Item ==-->
-                    <div class="brand-logo-item">
-                      <img src="../client/assets/img/brand-logo/5.webp" alt="Image-HasTech">
-                    </div>
-                    <!--== End Brand Logo Item ==-->
-                  </div>
-                  <div class="swiper-slide">
-                    <!--== Start Brand Logo Item ==-->
-                    <div class="brand-logo-item">
-                      <img src="../client/assets/img/brand-logo/6.webp" alt="Image-HasTech">
-                    </div>
-                    <!--== End Brand Logo Item ==-->
-                  </div>
-                  <div class="swiper-slide">
-                    <!--== Start Brand Logo Item ==-->
-                    <div class="brand-logo-item">
-                      <img src="../client/assets/img/brand-logo/1.webp" alt="Image-HasTech">
-                    </div>
-                    <!--== End Brand Logo Item ==-->
-                  </div>
-                </div>
-              </div>
-              <!--== Add Swiper Arrows ==-->
-              <div class="swiper-btn-wrap">
-                <div class="brand-swiper-btn-prev">
-                  <i class="icofont-long-arrow-left"></i>
-                </div>
-                <div class="brand-swiper-btn-next">
-                  <i class="icofont-long-arrow-right"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--== End Brand Logo Area Wrapper ==-->
+        <!--== End Brand Logo Area Wrapper ==-->
 
-  </main>
+    </main>
 @endsection

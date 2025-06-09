@@ -9,7 +9,7 @@
     <meta name="keywords" content="accessories, digital products, electronic html, modern, products, responsive" />
     <meta name="author" content="hastech" />
 
-    <title>Finate - Job Portal Website Template Using Bootstrap 5</title>
+    <title>HireNow</title>
 
     @include('website.layouts.particals.css')
 
