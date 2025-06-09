@@ -23,7 +23,7 @@ Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.c
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/docs', fn() => view('docs.index'));
 
-Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+Route::get('employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 Route::get('/', function () {
     return view('website.index');

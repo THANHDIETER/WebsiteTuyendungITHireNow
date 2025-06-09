@@ -1,12 +1,14 @@
 <?php
 
+use App\Http\Controllers\Employer\DashboardController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Employer\JobController;
 
-// 🔐 Route dành riêng cho EMPLOYER
-Route::middleware(['auth:sanctum', 'employer'])->group(function () {
-    Route::get('/cong-viec', function () {
-        return view('website.jobs.job');
+Route::prefix('employer')
+    // ->middleware(['auth:sanctum', 'employer'])
+    // Đảm bảo người dùng đăng nhập và có quyền employer
+    ->name('employer.')
+    ->group(function () {
+
+        // Trang dashboard
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     });
-    
-});

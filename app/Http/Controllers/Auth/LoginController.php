@@ -57,7 +57,7 @@ class LoginController extends Controller
     }
 
     public function redirect()
-    {   
+    {
         $provider = new Google([
             'clientId' => env('GOOGLE_CLIENT_ID'),
             'clientSecret' => env('GOOGLE_CLIENT_SECRET'),
@@ -78,7 +78,7 @@ class LoginController extends Controller
             'redirectUri' => route('auth.callback'),
             'scopes' => ['email', 'profile'],
         ]);
-        
+
         if ($request->get('state') !== Session::pull('oauth2state')) {
             session()->flash('error', 'Invalid state');
             return redirect()->route('showLoginForm');
@@ -128,7 +128,6 @@ class LoginController extends Controller
         session(['access_token' => $accessToken]);
 
         return redirect()->route('home');
-
     }
 
     public function logout(Request $request)
@@ -144,7 +143,7 @@ class LoginController extends Controller
             $request->user()->tokens()->delete();
         }
 
-        return redirect('/'); 
+        return redirect('/');
     }
 
     public function employerDetails()
@@ -155,6 +154,6 @@ class LoginController extends Controller
             abort(403, 'Bạn không có quyền truy cập trang này.');
         }
 
-        return view('website.employers.employe-details', compact('user'));
+        return view('employer.index', compact('user'));
     }
 }
