@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\JobSeeker\JobSearchController;
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
@@ -29,9 +30,11 @@ Route::get('/', function () {
     return view('website.index');
 })->name('home');
 
-Route::get('/cong-viec', function () {
-    return view('website.jobs.job');
-})->name('cong-viec');
+
+
+Route::get('/cong-viec', [JobSearchController::class, 'index'])->name('cong-viec');
+
+
 
 Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
@@ -50,8 +53,7 @@ Route::get('/chi-tiet-ung-vien', function () {
 })->name('chi-tiet-ung-vien');
 
 Route::get('/blog', function () {
-        return view('website.blog.blog-grid');
-
+    return view('website.blog.blog-grid');
 })->name('blog');
 
 Route::get('/blog-details', function () {
@@ -59,8 +61,7 @@ Route::get('/blog-details', function () {
 })->name('blog-details');
 
 Route::get('/blog-grid', function () {
-        return view('website.blog.blog');
-
+    return view('website.blog.blog');
 })->name('blog-grid');
 
 Route::get('/blog-right-sidebar', function () {
@@ -86,4 +87,3 @@ Route::get('/login', function () {
 Route::get('/registration', function () {
     return view('website.login-register.registration');
 });
-
