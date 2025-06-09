@@ -1,5 +1,5 @@
 <header class="header-area transparent">
-    
+
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
@@ -16,9 +16,9 @@
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
                                 <li><a href="{{ route('home') }}"><span>Trang chủ</span></a></li>
-                                <li class="has-submenu"><a href="{{ route('cong-viec') }}"><span>Tìm việc</span></a>
+                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm việc</span></a>
                                     <ul class="submenu-nav">
-                                        <li><a href="{{ route('cong-viec') }}"><span>Danh sách việc làm</span></a></li>
+                                        <li><a href="{{ route('jobs.index') }}"><span>Danh sách việc làm</span></a></li>
                                         <li><a href="{{ route('chi-tiet-cong-viec') }}"><span>Chi tiết việc
                                                     làm</span></a></li>
                                     </ul>
@@ -117,5 +117,5 @@
             localStorage.setItem('access_token', "{{ session('access_token') }}");
         </script>
     @endif
-    
+
 </header>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\JobController;
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
@@ -29,9 +30,8 @@ Route::get('/', function () {
     return view('website.index');
 })->name('home');
 
-Route::get('/cong-viec', function () {
-    return view('website.jobs.job');
-})->name('cong-viec');
+Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
 
 Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
