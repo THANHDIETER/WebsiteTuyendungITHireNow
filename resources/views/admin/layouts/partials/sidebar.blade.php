@@ -8,6 +8,24 @@
                 stroke-linejoin="round" />
         </svg>
     </div>
+    <style>
+        footer {
+            display: none !important;
+        }
+
+        .sidebar-menu a {
+            text-decoration: none !important;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 6px;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: #f0f8ff;
+            color: #379279 !important;
+        }
+    </style>
     <div id="sidebar-menu">
         <ul class="sidebar-menu" id="simple-bar">
 
@@ -251,6 +269,7 @@
             </li>
 
             <!-- Duyệt CV ứng viên -->
+
             <li class="sidebar-list">
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
@@ -269,6 +288,7 @@
                     <span>Duyệt CV ứng viên</span>
                 </a>
             </li>
+
             <li class="sidebar-list">
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
@@ -322,18 +342,30 @@
                 </a>
             </li>
             <li class="sidebar-list">
+
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24">
+
                     <path
                         d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z" />
                     <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
                     <line x1="12" y1="22.08" x2="12" y2="12" />
                 </svg>
                 <a class="sidebar-link" href="{{ route('admin.service-packages.index') }}">
+
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+
                     <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24">
+
                         <path
                             d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z" />
                         <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
@@ -361,9 +393,15 @@
                 </a>
             </li>
             <li class="sidebar-list">
+
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24">
+
                     <circle cx="12" cy="7" r="4"></circle>
                     <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
                 </svg>
