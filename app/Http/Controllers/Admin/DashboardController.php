@@ -8,7 +8,7 @@ use App\Models\Job;
 use App\Models\Application;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller 
+class DashboardController extends Controller
 {
     /**
      * Trang dashboard tổng quan cho admin (hiển thị Blade view)
@@ -35,17 +35,22 @@ class DashboardController extends Controller
     /**
      * API: Thống kê job theo trạng thái
      */
-   public function jobStats()
-{
-    $today = now()->toDateString();
 
-    $data = [
-        'active' => Job::whereDate('deadline', '>=', $today)->count(),
-        'closed' => Job::whereDate('deadline', '<', $today)->count(),
-    ];
+    public function jobStats()
+    {
+        $today = now()->toDateString();
 
-    return response()->json($data);
-}
+        $data = [
+            'active' => Job::whereDate('deadline', '>=', $today)->count(),
+            'closed' => Job::whereDate('deadline', '<', $today)->count(),
+        ];
+
+        return response()->json($data);
+    }
+
+
+
+
 
     /**
      * API: Thống kê lượt ứng tuyển theo tuần hoặc tháng

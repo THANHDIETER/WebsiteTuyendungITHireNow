@@ -1,5 +1,5 @@
 <header class="header-area transparent">
-    
+
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
@@ -66,8 +66,8 @@
                             @else
                                 <!-- Nếu đã đăng nhập -->
                                 <div class="user-info dropdown">
-                                    <a href="#" class="user-info-toggle d-flex align-items-center" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
+                                    <a href="#" class="user-info-toggle d-flex align-items-center"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="user-avatar me-2">
                                             <i class="icofont-user-alt-3"></i>
                                         </span>
@@ -75,12 +75,20 @@
                                         <i class="icofont-caret-down ms-1"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 180px;">
-                                        @if (Auth::user()->role === 'admin')
-                                            <li>
-                                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                                    <i class="icofont-ui-settings me-1"></i> Trang quản trị
-                                                </a>
-                                            </li>
+                                        @if (Auth::check())
+                                            @if (Auth::user()->role === 'admin')
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                        <i class="icofont-ui-settings me-1"></i> rang quản trị
+                                                    </a>
+                                                </li>
+                                            @elseif (Auth::user()->role === 'employer')
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ route('employer.details') }}">
+                                                        <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
+                                                    </a>
+                                                </li>
+                                            @endif
                                         @endif
                                         <li>
                                             <a class="dropdown-item" href="{{ url('profile.edit') }}">
@@ -91,7 +99,7 @@
                                             <hr class="dropdown-divider">
                                         </li>
                                         <li>
-                                            <a class="dropdown-item text-danger" href="{{route('logout')}}">
+                                            <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                                 <i class="icofont-logout me-1"></i> Đăng xuất
                                             </a>
                                         </li>
@@ -112,10 +120,10 @@
             </div>
         </div>
     </div>
-     @if (session('access_token'))
+    @if (session('access_token'))
         <script>
             localStorage.setItem('access_token', "{{ session('access_token') }}");
         </script>
     @endif
-    
+
 </header>

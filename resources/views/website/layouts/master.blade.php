@@ -9,7 +9,11 @@
     <meta name="keywords" content="việc làm, tuyển dụng, website việc làm, hiện đại, responsive, tìm việc" />
     <meta name="author" content="hastech" />
 
+
+    <title>HireNow</title>
+
     <title>Finate - Nền tảng việc làm, tuyển dụng, Bootstrap 5</title>
+
 
     @include('website.layouts.particals.css')
 

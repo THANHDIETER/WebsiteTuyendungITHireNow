@@ -52,7 +52,7 @@
                                 ← Quay lại
                             </a>
                             <button type="submit" class="btn btn-warning">
-                                💾 Cập nhật
+                                Cập nhật
                             </button>
                         </div>
                     </form>

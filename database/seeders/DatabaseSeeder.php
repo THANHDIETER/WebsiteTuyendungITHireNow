@@ -24,6 +24,7 @@ use Database\Seeders\CompanyReviewsSeeder;
 use Database\Seeders\SeekerProfilesSeeder;
 use Database\Seeders\EmployerPackagesSeeder;
 use Database\Seeders\ServicePackagesSeeder;
+// use Database\Seeders\job_applicationsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -52,7 +53,10 @@ class DatabaseSeeder extends Seeder
             UserRolesSeeder::class,  // Gọi đúng tên seeder
             ReportsSeeder::class,
             ApplicationsSeeder::class,
+
             ServicePackagesSeeder::class,
+            // job_applicationsSeeder::class,
+
         ]);
     }
 }
