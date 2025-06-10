@@ -525,9 +525,4 @@
             </ul>
         </div>
     </div>
-    @if (session('access_token'))
-        <script>
-            localStorage.setItem('access_token', '{{ session('access_token') }}');
-        </script>
-    @endif
 </header>

@@ -1,22 +1,16 @@
 <header class="header-area transparent">
+
     <div class="container">
+        
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
                 <div class="header-align">
                     <div class="header-align-start">
                         <div class="header-logo-area">
-                            <a href="{{ route('home') }}">
-                                <img class="logo-main" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" alt="Logo" />
-                                <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" alt="Logo" />
-                            </a>
-                        </div>
-                    </div>
+                    
                     <div class="header-align-center">
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
-                                <li><a href="{{ route('home') }}"><span>Trang Chủ</span></a></li>
-
-                                <li class="has-submenu">
                                     <a href="{{ route('cong-viec') }}"><span>Tìm Việc Làm</span></a>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('cong-viec') }}">Tìm Việc Làm IT</a></li>
@@ -55,24 +49,65 @@
                                         <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
                                     </ul>
                                 </li>
-                            </ul>
-                        </div>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('cong-viec') }}"><span>Danh sách việc làm</span></a></li>
+                                        <li><a href="{{ route('chi-tiet-cong-viec') }}"><span>Chi tiết việc
+                                                    làm</span></a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="{{ route('chi-tiet-nhan-vien') }}"><span>Chi tiết nhà tuyển dụng</span></a>
+                                </li>
+                                <li class="has-submenu"><a href="{{ route('ung-vien') }}"><span>Ứng viên</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('ung-vien') }}"><span>Danh sách ứng viên</span></a></li>
+                                        <li><a href="{{ route('chi-tiet-ung-vien') }}"><span>Chi tiết ứng
+                                                    viên</span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="has-submenu"><a href="{{ route('blog') }}"><span>Tin tức</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('blog') }}">Lưới tin tức</a></li>
+                                        <li><a href="{{ route('blog-grid') }}">Blog (sidebar trái)</a></li>
+                                        <li><a href="{{ route('blog-right-sidebar') }}">Blog (sidebar phải)</a></li>
+                                        <li><a href="{{ route('blog-details') }}">Chi tiết bài viết</a></li>
+                                    </ul>
+                                </li>
+                                <li class="has-submenu">
+                                    <a href="index.html#/"><span>Trang khác</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('about-us') }}"><span>Giới thiệu</span></a></li>
+                                        @guest
+                                            <li><a href="{{ route('showLoginForm') }}"><span>Đăng nhập</span></a></li>
+                                            <li><a href="{{ route('register') }}"><span>Đăng ký</span></a></li>
+                                        @endguest
+                                        <li><a href="{{ route('404') }}"><span>Không tìm thấy trang</span></a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="{{ route('contact') }}"><span>Liên hệ</span></a></li>
                     </div>
                     <div class="header-align-end">
                         <div class="header-action-area">
                             @guest
-                                <a class="btn-registration" href="{{ route('register') }}">
-                                    Đăng ký
                                 </a>
                             @else
                                 <div class="user-info dropdown">
                                     <a href="#" class="user-info-toggle d-flex align-items-center" data-bs-toggle="dropdown">
                                         <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
-                                        <span class="user-role">{{ Auth::user()->role }}</span>
+                                <a class="btn-registration" href="{{ route('register') }}">
+                                    <span>+</span> Đăng ký
+                                </a>
+                            @else
+                                <!-- Nếu đã đăng nhập -->
+                                <div class="user-info dropdown">
+                                    <a href="#" class="user-info-toggle d-flex align-items-center"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="user-avatar me-2">
+                                            <i class="icofont-user-alt-3"></i>
+                                        </span>
                                         <i class="icofont-caret-down ms-1"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 180px;">
-                                        @if (Auth::user()->role === 'admin')
                                             <li>
                                                 <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
                                                     <i class="icofont-ui-settings me-1"></i> Trang quản trị
@@ -86,6 +121,21 @@
                                             </li>
                                         @endif
 
+                                        @if (Auth::check())
+                                            @if (Auth::user()->role === 'admin')
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                        <i class="icofont-ui-settings me-1"></i> rang quản trị
+                                                    </a>
+                                                </li>
+                                            @elseif (Auth::user()->role === 'employer')
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ route('employer.details') }}">
+                                                        <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        @endif
                                         <li>
                                             <a class="dropdown-item" href="{{ url('profile.edit') }}">
                                                 <i class="icofont-edit me-1"></i> Thay đổi thông tin
@@ -94,6 +144,9 @@
 
                                         <li><hr class="dropdown-divider"></li>
 
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
                                         <li>
                                             <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                                 <i class="icofont-logout me-1"></i> Đăng xuất
@@ -104,10 +157,17 @@
                             @endguest
 
                             <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu">
+
+                            @endguest
+
+
+                            <button class="btn-menu" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
                                 <i class="icofont-navigation-menu"></i>
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -119,3 +179,21 @@
         </script>
     @endif
 </header>
+<div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Employers Details</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Employers</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

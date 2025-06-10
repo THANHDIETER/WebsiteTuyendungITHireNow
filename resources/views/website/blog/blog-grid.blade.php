@@ -2,11 +2,12 @@
 
 @section('content')
     <main class="main-content">
-        <!--== Start Page Header Area Wrapper ==-->
+        <!--== Bắt đầu header trang ==-->
         <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
             <div class="container pt--0 pb--0">
                 <div class="row">
                     <div class="col-12">
+
                         <div class="col-12">
                             <div class="job-search-wrap">
                                 <div class="job-search-form">
@@ -52,21 +53,33 @@
                                     </form>
                                 </div>
                             </div>
+
+                        <div class="page-header-content">
+                            <h2 class="title">Bài viết Blog</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="index.html">Trang chủ</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Bài viết Blog</li>
+                                </ul>
+                            </nav>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--== End Page Header Area Wrapper ==-->
+        <!--== Kết thúc header ==-->
 
-        <!--== Start Blog Area Wrapper ==-->
+        <!--== Bắt đầu khu vực Blog ==-->
         <section class="blog-area blog-grid-area">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6 col-lg-4">
-                        <!--== Start Blog Post Item ==-->
+                        <!--== Bắt đầu Blog Post Item ==-->
                         <div class="post-item">
                             <div class="thumb">
+
                                 <a href="blog-details.html"><img src="../client/assets/img/blog/2.webp" alt="Image"
                                         width="370" height="270"></a>
                             </div>
@@ -78,17 +91,27 @@
                                     rất lâu.</p>
                                 <div class="meta">
                                     <span class="post-date">03 tháng 4, 2022</span>
+
+                                <a href="blog-details.html"><img src="../client/assets/img/blog/2.webp" alt="Ảnh bài viết" width="370" height="270"></a>
+                            </div>
+                            <div class="content">
+                                <div class="author">Bởi <a href="blog.html">Walter Houston</a></div>
+                                <h4 class="title"><a href="blog-details.html">Tất cả những tính năng tuyệt vời<br>với giá hợp lý!</a></h4>
+                                <p>Lorem Ipsum chỉ là văn bản mẫu được sử dụng trong ngành in ấn và thiết kế. Nội dung này dùng để trình bày bố cục.</p>
+                                <div class="meta">
+                                    <span class="post-date">03 Tháng 4, 2022</span>
+
                                     <span class="dots"></span>
                                     <span class="post-time">10 phút đọc</span>
                                 </div>
                             </div>
                         </div>
-                        <!--== End Blog Post Item ==-->
+                        <!--== Kết thúc Blog Post Item ==-->
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <!--== Start Blog Post Item ==-->
                         <div class="post-item">
                             <div class="thumb">
+
                                 <a href="blog-details.html"><img src="../client/assets/img/blog/3.webp" alt="Image"
                                         width="370" height="270"></a>
                             </div>
@@ -100,17 +123,26 @@
                                     rất lâu.</p>
                                 <div class="meta">
                                     <span class="post-date">03 tháng 4, 2022</span>
+
+                                <a href="blog-details.html"><img src="../client/assets/img/blog/3.webp" alt="Ảnh bài viết" width="370" height="270"></a>
+                            </div>
+                            <div class="content">
+                                <div class="author">Bởi <a href="blog.html">Walter Houston</a></div>
+                                <h4 class="title"><a href="blog-details.html">Thiết kế kéo-thả với WooLentor...</a></h4>
+                                <p>Lorem Ipsum chỉ là văn bản mẫu được sử dụng trong ngành in ấn và thiết kế. Nội dung này dùng để trình bày bố cục.</p>
+                                <div class="meta">
+                                    <span class="post-date">03 Tháng 4, 2022</span>
+
                                     <span class="dots"></span>
                                     <span class="post-time">10 phút đọc</span>
                                 </div>
                             </div>
                         </div>
-                        <!--== End Blog Post Item ==-->
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <!--== Start Blog Post Item ==-->
                         <div class="post-item">
                             <div class="thumb">
+
                                 <a href="blog-details.html"><img src="../client/assets/img/blog/4.webp" alt="Image"
                                         width="370" height="270"></a>
                             </div>
@@ -122,17 +154,26 @@
                                     rất lâu.</p>
                                 <div class="meta">
                                     <span class="post-date">03 tháng 4, 2022</span>
+
+                                <a href="blog-details.html"><img src="../client/assets/img/blog/4.webp" alt="Ảnh bài viết" width="370" height="270"></a>
+                            </div>
+                            <div class="content">
+                                <div class="author">Bởi <a href="blog.html">Walter Houston</a></div>
+                                <h4 class="title"><a href="blog-details.html">Thiết kế kéo-thả với WooLentor...</a></h4>
+                                <p>Lorem Ipsum chỉ là văn bản mẫu được sử dụng trong ngành in ấn và thiết kế. Nội dung này dùng để trình bày bố cục.</p>
+                                <div class="meta">
+                                    <span class="post-date">03 Tháng 4, 2022</span>
+
                                     <span class="dots"></span>
                                     <span class="post-time">10 phút đọc</span>
                                 </div>
                             </div>
                         </div>
-                        <!--== End Blog Post Item ==-->
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <!--== Start Blog Post Item ==-->
                         <div class="post-item">
                             <div class="thumb">
+
                                 <a href="blog-details.html"><img src="../client/assets/img/blog/5.webp" alt="Image"
                                         width="370" height="270"></a>
                             </div>
@@ -144,17 +185,26 @@
                                     rất lâu.</p>
                                 <div class="meta">
                                     <span class="post-date">03 tháng 4, 2022</span>
+
+                                <a href="blog-details.html"><img src="../client/assets/img/blog/5.webp" alt="Ảnh bài viết" width="370" height="270"></a>
+                            </div>
+                            <div class="content">
+                                <div class="author">Bởi <a href="blog.html">Walter Houston</a></div>
+                                <h4 class="title"><a href="blog-details.html">Giúp cửa hàng của bạn nổi bật<br>so với đối thủ</a></h4>
+                                <p>Lorem Ipsum chỉ là văn bản mẫu được sử dụng trong ngành in ấn và thiết kế. Nội dung này dùng để trình bày bố cục.</p>
+                                <div class="meta">
+                                    <span class="post-date">03 Tháng 4, 2022</span>
+
                                     <span class="dots"></span>
                                     <span class="post-time">10 phút đọc</span>
                                 </div>
                             </div>
                         </div>
-                        <!--== End Blog Post Item ==-->
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <!--== Start Blog Post Item ==-->
                         <div class="post-item">
                             <div class="thumb">
+
                                 <a href="blog-details.html"><img src="../client/assets/img/blog/6.webp" alt="Image"
                                         width="370" height="270"></a>
                             </div>
@@ -166,34 +216,47 @@
                                     rất lâu.</p>
                                 <div class="meta">
                                     <span class="post-date">03 tháng 4, 2022</span>
+
+                                <a href="blog-details.html"><img src="../client/assets/img/blog/6.webp" alt="Ảnh bài viết" width="370" height="270"></a>
+                            </div>
+                            <div class="content">
+                                <div class="author">Bởi <a href="blog.html">Walter Houston</a></div>
+                                <h4 class="title"><a href="blog-details.html">Tất cả những tính năng tuyệt vời<br>với giá hợp lý!</a></h4>
+                                <p>Lorem Ipsum chỉ là văn bản mẫu được sử dụng trong ngành in ấn và thiết kế. Nội dung này dùng để trình bày bố cục.</p>
+                                <div class="meta">
+                                    <span class="post-date">03 Tháng 4, 2022</span>
+
                                     <span class="dots"></span>
                                     <span class="post-time">10 phút đọc</span>
                                 </div>
                             </div>
                         </div>
-                        <!--== End Blog Post Item ==-->
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <!--== Start Blog Post Item ==-->
                         <div class="post-item">
                             <div class="thumb">
-                                <a href="blog-details.html"><img src="../client/assets/img/blog/7.webp" alt="Image"
-                                        width="370" height="270"></a>
+                                <a href="blog-details.html"><img src="../client/assets/img/blog/7.webp" alt="Ảnh bài viết" width="370" height="270"></a>
                             </div>
                             <div class="content">
                                 <div class="author">Bởi <a href="blog.html">Walter Houston</a></div>
+
                                 <h4 class="title"><a href="blog-details.html">Với giao diện kéo &amp; thả của
                                         WooLentor<br>để tạo nội dung…</a></h4>
                                 <p>Lorem Ipsum chỉ là văn bản giả dùng trong ngành in ấn và dàn trang, đã được sử dụng từ
                                     rất lâu.</p>
                                 <div class="meta">
                                     <span class="post-date">03 tháng 4, 2022</span>
+
+                                <h4 class="title"><a href="blog-details.html">Thiết kế kéo-thả với WooLentor...</a></h4>
+                                <p>Lorem Ipsum chỉ là văn bản mẫu được sử dụng trong ngành in ấn và thiết kế. Nội dung này dùng để trình bày bố cục.</p>
+                                <div class="meta">
+                                    <span class="post-date">03 Tháng 4, 2022</span>
+
                                     <span class="dots"></span>
                                     <span class="post-time">10 phút đọc</span>
                                 </div>
                             </div>
                         </div>
-                        <!--== End Blog Post Item ==-->
                     </div>
                 </div>
                 <div class="row">
@@ -218,6 +281,8 @@
             </div>
         </section>
 
+
         <!--== End Blog Area Wrapper ==-->
+
     </main>
 @endsection

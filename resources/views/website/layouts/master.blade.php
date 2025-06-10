@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="vi">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Finate - Job Portal Website Template Using Bootstrap 5" />
-    <meta name="keywords" content="accessories, digital products, electronic html, modern, products, responsive" />
+    <meta name="description" content="Finate - Nền tảng việc làm & tuyển dụng sử dụng Bootstrap 5" />
+    <meta name="keywords" content="việc làm, tuyển dụng, website việc làm, hiện đại, responsive, tìm việc" />
     <meta name="author" content="hastech" />
 
+
     <title>HireNow</title>
+
+    <title>Finate - Nền tảng việc làm, tuyển dụng, Bootstrap 5</title>
+
 
     @include('website.layouts.particals.css')
 
@@ -20,22 +24,22 @@
     <!--wrapper start-->
     <div class="wrapper">
 
-        <!--== Start Header Wrapper ==-->
+        <!--== Bắt đầu Header ==-->
         @include('website.layouts.particals.header')
-        <!--== End Header Wrapper ==-->
+        <!--== Kết thúc Header ==-->
 
         @yield('content')
 
-        <!--== Start Footer Area Wrapper ==-->
+        <!--== Bắt đầu Footer ==-->
         @include('website.layouts.particals.footer')
-        <!--== End Footer Area Wrapper ==-->
+        <!--== Kết thúc Footer ==-->
 
-        <!--== Scroll Top Button ==-->
+        <!--== Nút cuộn lên đầu trang ==-->
         <div id="scroll-to-top" class="scroll-to-top"><span class="icofont-rounded-up"></span></div>
 
-        <!--== Start Aside Menu ==-->
+        <!--== Bắt đầu Menu bên ==-->
         @include('website.layouts.particals.aside-menu')
-        <!--== End Aside Menu ==-->
+        <!--== Kết thúc Menu bên ==-->
     </div>
 
     <!--=======================Javascript============================-->

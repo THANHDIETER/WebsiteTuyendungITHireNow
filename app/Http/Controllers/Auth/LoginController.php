@@ -49,16 +49,7 @@ class LoginController extends Controller
             $token = $user->createToken('access_token')->plainTextToken;
             session()->flash('access_token', $token);
 
-            // Điều hướng theo vai trò
-            if ($user->role === 'employer' || (method_exists($user, 'hasRole') && $user->hasRole('employer'))) {
-                return redirect()->route('employer.details');
-            }
-
-            if( $user->role === 'job_seeker' || (method_exists($user, 'hasRole') && $user->hasRole('job_seeker'))) {
-                return redirect()->route('home');
-            }
-
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('home');
         }
 
         session()->flash('error', 'Mật khẩu không đúng.');
@@ -132,28 +123,27 @@ class LoginController extends Controller
 
         Auth::login($user);
 
-        // Tạo token (giả định dùng Laravel Sanctum)
         $accessToken = $user->createToken('access_token')->plainTextToken;
 
         session(['access_token' => $accessToken]);
 
-        switch ($user->role) {
-            case 'admin':
-                return redirect()->route('admin.dashboard');
-            case 'employer':
-                return redirect()->route('employer.details'); // bạn cần định nghĩa route này
-            case 'job_seeker':
-            default:
-                return redirect()->route('home'); // bạn cần định nghĩa route này
-        }
-
+        return redirect()->route('home');
     }
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        // Đăng xuất khỏi session
+        Auth::logout();
 
-        return redirect('/showLoginForm');
+        // Hủy session hiện tại
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        if ($request->user() && method_exists($request->user(), 'tokens')) {
+            $request->user()->tokens()->delete();
+        }
+
+        return redirect('/');
     }
 
     public function employerDetails()
@@ -164,6 +154,6 @@ class LoginController extends Controller
             abort(403, 'Bạn không có quyền truy cập trang này.');
         }
 
-        return view('website.employers.employe-details', compact('user'));
+        return view('employer.index', compact('user'));
     }
 }

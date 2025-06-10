@@ -27,7 +27,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
 
-Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+Route::get('employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 // Giao diện người dùng (Website)
 Route::get('/', function () {
@@ -56,6 +56,8 @@ Route::get('/chi-tiet-ung-vien', function () {
 
 Route::get('/blog', function () {
     return view('website.blog.blog');
+        return view('website.blog.blog-grid');
+
 })->name('blog');
 
 Route::get('/blog-details', function () {
@@ -64,6 +66,8 @@ Route::get('/blog-details', function () {
 
 Route::get('/blog-grid', function () {
     return view('website.blog.blog-grid');
+        return view('website.blog.blog');
+
 })->name('blog-grid');
 
 Route::get('/blog-right-sidebar', function () {
@@ -77,6 +81,7 @@ Route::get('/contact', function () {
 Route::get('/404', function () {
     return view('website.pages.404');
 })->name('404');
+})->name("404");
 
 Route::get('/about-us', function () {
     return view('website.pages.about-us');
@@ -89,3 +94,5 @@ Route::get('/login', function () {
 Route::get('/registration', function () {
     return view('website.login-register.registration');
 })->name('registration');
+});
+

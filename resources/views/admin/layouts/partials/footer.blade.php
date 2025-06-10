@@ -1,13 +1,7 @@
-
-</style>
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 footer-copyright ">
-                <p class="mb-0">Copyright 2024 © by ITHireNow.</p>
-            </div>
-        </div>
-    </div>
+<footer class="footer bg-light border-top py-3 mt-auto">
+  <div class="container-fluid text-center text-muted small">
+    Copyright 2024 © by ITHireNow.
+  </div>
 </footer>
 
 <!-- jquery-->

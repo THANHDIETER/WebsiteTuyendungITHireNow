@@ -3,8 +3,7 @@
 <aside class="page-sidebar" data-sidebar-layout="stroke-svg">
     <div class="left-arrow" id="left-arrow">
         <!-- Icon mũi tên trái -->
-        <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
+        <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <polyline points="15 18 9 12 15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round" />
         </svg>
@@ -108,8 +107,8 @@
                     <!-- Icon mũi tên phải -->
                     <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" />
+                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </a>
                 <ul class="sidebar-submenu">
@@ -150,8 +149,8 @@
                     <!-- Icon mũi tên phải -->
                     <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" />
+                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </a>
                 <ul class="sidebar-submenu">
@@ -197,16 +196,16 @@
                     <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                        <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" />
+                        <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
                         <circle cx="12" cy="8" r="1" fill="currentColor" />
                     </svg>
                     <span>Dự án</span>
                     <!-- Icon mũi tên phải -->
                     <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" />
+                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </a>
                 <ul class="sidebar-submenu">
@@ -259,18 +258,37 @@
                     <!-- Icon Wallet -->
                     <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"
-                            stroke="currentColor" stroke-width="2" />
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" />
                         <path d="M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
-                        <path d="M22 11h-6a2 2 0 00-2 2v4" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M22 11h-6a2 2 0 00-2 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                     <span>Duyệt tin tuyển dụng</span>
                 </a>
             </li>
 
             <!-- Duyệt CV ứng viên -->
+
+            <li class="sidebar-list">
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <circle cx="12" cy="7" r="4"></circle>
+                    <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                </svg>
+                <a class="sidebar-link" href="{{ route('admin.seekerprofile.index') }}">
+                    <!-- Icon mới ở đây -->
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                    </svg>
+                    <span>Duyệt CV ứng viên</span>
+                </a>
+            </li>
+
             <li class="sidebar-list">
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
@@ -278,7 +296,7 @@
                     <circle cx="12" cy="7" r="4"></circle>
                     <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
                 </svg>
-                <a class="sidebar-link" href="{{ route('admin.resumes.index') }}">
+                <a class="sidebar-link" href="{{ route('admin.payment.index') }}">
                     <!-- Icon mới ở đây -->
                     <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor"
                         stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
@@ -286,7 +304,7 @@
                         <circle cx="12" cy="7" r="4"></circle>
                         <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
                     </svg>
-                    <span>Duyệt CV ứng viên</span>
+                    <span>Payments</span>
                 </a>
             </li>
             <li class="sidebar-list">
@@ -324,18 +342,30 @@
                 </a>
             </li>
             <li class="sidebar-list">
+
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+
                     <path
                         d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z" />
                     <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
                     <line x1="12" y1="22.08" x2="12" y2="12" />
                 </svg>
                 <a class="sidebar-link" href="{{ route('admin.service-packages.index') }}">
+
                     <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor"
                         stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+
                         <path
                             d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z" />
                         <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
@@ -363,9 +393,15 @@
                 </a>
             </li>
             <li class="sidebar-list">
+
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+
                     <circle cx="12" cy="7" r="4"></circle>
                     <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
                 </svg>
@@ -396,16 +432,16 @@
                     <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                        <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" />
+                        <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
                         <circle cx="12" cy="8" r="1" fill="currentColor" />
                     </svg>
                     <span>Hệ Thống Thông Báo</span>
                     <!-- Icon mũi tên phải -->
                     <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" />
+                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </a>
                 <ul class="sidebar-submenu">
@@ -432,8 +468,7 @@
     </div>
     <div class="right-arrow" id="right-arrow">
         <!-- Icon mũi tên phải -->
-        <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
+        <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round" />
         </svg>
