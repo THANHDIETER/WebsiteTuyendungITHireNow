@@ -1,16 +1,19 @@
 <header class="header-area transparent">
+    
     <div class="container">
+        
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
                 <div class="header-align">
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="index.html">
-                                <img class="logo-main" src="../client/assets/img/logo-light.webp" alt="Logo" />
-                                <img class="logo-light" src="../client/assets/img/logo-light.webp" alt="Logo" />
+                                <img class="logo-main" src="{{ asset('client/assets/img/logo-light.webp') }}" alt="Logo" />
+                                <img class="logo-light" src="{{ asset('client/assets/img/logo-light.webp')}}" alt="Logo" />
                             </a>
                         </div>
                     </div>
+                    
                     <div class="header-align-center">
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
@@ -61,4 +64,23 @@
             </div>
         </div>
     </div>
+    
 </header>
+<div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Employers Details</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Employers</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
