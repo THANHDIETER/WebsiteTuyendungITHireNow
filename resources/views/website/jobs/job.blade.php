@@ -332,12 +332,56 @@
         <section class="recent-job-area recent-job-inner-area">
             <div class="container">
                 <div class="row">
+                    @foreach($jobs as $job)
                     {{-- Job 1 --}}
                     <div class="col-md-6 col-lg-4">
                         <div class="recent-job-item recent-job-style2-item">
                             <div class="company-info">
                                 <div class="logo">
 
+                                    <a href="#">
+                                        <img src="{{ $job->company->logo_url ?? '../client/assets/img/companies/w1.webp' }}"
+                                             width="75" height="75" alt="Logo công ty">
+                                    </a>
+                                </div>
+                                <div class="content">
+                                    <h4 class="name">
+                                        <a href="#">{{ $job->company->name }}</a>
+                                    </h4>
+                                    <p class="address">{{ $job->location }}</p>
+                                </div>
+                            </div>
+                            <div class="main-content">
+                                <h3 class="title">
+                                    <a href="{{ route('jobs.show', $job->slug) }}">{{ $job->title }}</a>
+                                </h3>
+                                <h5 class="work-type">
+                                    @switch($job->job_type)
+                                        @case('full-time')
+                                            Toàn thời gian
+                                            @break
+                                        @case('part-time')
+                                            Bán thời gian
+                                            @break
+                                        @case('remote')
+                                            Làm từ xa
+                                            @break
+                                        @default
+                                            {{ $job->job_type }}
+                                    @endswitch
+                                </h5>
+                                <p class="desc">{{ Str::limit($job->description, 100) }}</p>
+                            </div>
+                            <div class="recent-job-info">
+                                <div class="salary">
+                                    <h4>{{ number_format($job->salary_min) }}đ</h4>
+                                    <p>/tháng</p>
+                                </div>
+                                <a class="btn-theme btn-sm" href="{{ route('jobs.show', $job->slug) }}">Ứng tuyển ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
                                     <a href="company-details.html"><img src="../client/assets/img/companies/w1.webp"
                                             width="75" height="75" alt="Logo Công ty"></a>
                                 </div>
@@ -624,11 +668,13 @@
 
                     </div>
                     <!-- Các job khác dịch như trên... -->
+
                 </div>
 
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <div class="pagination-area">
+                            {{ $jobs->links() }}
                             <nav>
                                 <ul class="page-numbers d-inline-flex">
                                     <li><a class="page-number active" href="job.html">1</a></li>

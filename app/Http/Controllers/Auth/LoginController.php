@@ -145,7 +145,7 @@ class LoginController extends Controller
         }
 
 
-        return redirect('/'); 
+        return redirect('/');
 
 
     }

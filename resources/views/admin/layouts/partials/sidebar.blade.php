@@ -306,11 +306,30 @@
                     <span>Duyệt CV ứng viên</span>
                 </a>
             </li>
+              <li class="sidebar-list">
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <circle cx="12" cy="7" r="4"></circle>
+                    <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                </svg>
 
+                <a class="sidebar-link" href="{{ route('admin.seekerprofile.index') }}">
+
+                    <!-- Icon mới ở đây -->
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
+                    </svg>
+                    <span>Payments</span>
+                </a>
+            </li>
             <li class="sidebar-list">
-                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
                     <circle cx="12" cy="7" r="4"></circle>
                     <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
                 </svg>
@@ -337,9 +356,9 @@
                 <a class="sidebar-link" href="{{ route('admin.payment.index') }}">
 
                     <!-- Icon mới ở đây -->
-                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
                         <circle cx="12" cy="7" r="4"></circle>
                         <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
                     </svg>

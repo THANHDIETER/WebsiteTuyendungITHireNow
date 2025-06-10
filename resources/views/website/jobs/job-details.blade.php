@@ -66,7 +66,9 @@
                             <h2 class="title">Chi tiết việc làm</h2>
                             <nav class="breadcrumb-area">
                                 <ul class="breadcrumb justify-content-center">
-                                    <li><a href="index.html">Trang chủ</a></li>
+                                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li><a href="{{ route('jobs.index') }}">Việc làm</a></li>
                                     <li class="breadcrumb-sep">//</li>
                                     <li>Chi tiết việc làm</li>
 
@@ -81,8 +83,6 @@
 
 
         <!--== Bắt đầu chi tiết công việc ==-->
-
-        <!--== Bắt đầu khu vực chi tiết việc làm ==-->
 
         <section class="job-details-area">
             <div class="container">
@@ -506,8 +506,6 @@
         </section>
 
         <!--== Kết thúc chi tiết công việc ==-->
-
-        <!--== Kết thúc khu vực chi tiết việc làm ==-->
 
     </main>
 @endsection

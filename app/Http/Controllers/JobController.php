@@ -10,6 +10,14 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    public function index()
+    {
+        $jobs = Job::with('company')
+            ->where('status', 'published')
+            ->orderBy('created_at', 'desc')
+            ->paginate(9);
+
+        return view('website.jobs.job', compact('jobs'));
     public function index(Request $request)
     {
         $query = Job::with(['company', 'category', 'skills'])

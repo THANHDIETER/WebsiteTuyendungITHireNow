@@ -43,6 +43,7 @@ Route::get('/cong-viec', function () {
     return view('website.jobs.job');
 })->name('cong-viec');
 
+
 Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
 })->name('chi-tiet-cong-viec');
