@@ -5,12 +5,14 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobController;
 
+// Nhúng route riêng
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
 
+// Auth Routes
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 Route::get('/showLoginForm', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
@@ -22,10 +24,13 @@ Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.r
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/docs', fn() => view('docs.index'));
+
+// Static Pages
+Route::get('/docs', fn() => view('docs.index'))->name('docs');
 
 Route::get('employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
+// Giao diện người dùng (Website)
 Route::get('/', function () {
     return view('website.index');
 })->name('home');
@@ -56,6 +61,10 @@ Route::get('/chi-tiet-ung-vien', function () {
 })->name('chi-tiet-ung-vien');
 
 Route::get('/blog', function () {
+
+    return view('website.blog.blog-grid');
+
+    return view('website.blog.blog');
         return view('website.blog.blog-grid');
 
 })->name('blog');
@@ -65,8 +74,9 @@ Route::get('/blog-details', function () {
 })->name('blog-details');
 
 Route::get('/blog-grid', function () {
+    return view('website.blog.blog');
+    return view('website.blog.blog-grid');
         return view('website.blog.blog');
-
 })->name('blog-grid');
 
 Route::get('/blog-right-sidebar', function () {
@@ -79,6 +89,7 @@ Route::get('/contact', function () {
 
 Route::get('/404', function () {
     return view('website.pages.404');
+})->name('404');
 })->name("404");
 
 Route::get('/about-us', function () {
@@ -87,9 +98,9 @@ Route::get('/about-us', function () {
 
 Route::get('/login', function () {
     return view('website.login-register.login');
-});
+})->name('login');
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
+})->name('registration');
 });
-

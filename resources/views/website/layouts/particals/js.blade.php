@@ -29,6 +29,7 @@
         white-space: nowrap;           
     }
 
+
   </style>
 
   <script src="{{ asset('client/assets/js/custom.js')}}"></script>

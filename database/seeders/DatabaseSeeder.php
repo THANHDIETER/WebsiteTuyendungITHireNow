@@ -23,10 +23,10 @@ use Database\Seeders\NotificationsSeeder;
 use Database\Seeders\CompanyReviewsSeeder;
 use Database\Seeders\SeekerProfilesSeeder;
 use Database\Seeders\EmployerPackagesSeeder;
-
 use Database\Seeders\ServicePackagesSeeder;
 // use Database\Seeders\job_applicationsSeeder;
 
+d
 
 
 class DatabaseSeeder extends Seeder
