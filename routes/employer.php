@@ -17,6 +17,14 @@ Route::prefix('employer')
 
 
 // 🔐 Route dành riêng cho EMPLOYER
+
+Route::middleware(['auth:sanctum', 'employer'])->group(function () {
+    Route::get('/cong-viec', function () {
+        return view('website.jobs.job');
+    });
+    
+});
+
 Route::middleware(['auth:sanctum', 'employer'])->prefix('employer')->name('employer.')->group(function () {
 
     // Danh sách việc làm của nhà tuyển dụng
@@ -37,4 +45,5 @@ Route::middleware(['auth:sanctum', 'employer'])->prefix('employer')->name('emplo
     Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
 
 });
+
 

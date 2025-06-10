@@ -3,14 +3,14 @@ composer install
 composer require laravel/sanctum
 composer dump-autoload
 php artisan key:generate
-php artisan migrate:fresh --seed
+php artisan migrate
 -->
 <!-- cài gg auth2 --
 composer require league/oauth2-client
 composer require league/oauth2-google -->
 
 
-<!-- 
+<!--
  bootstrap
 npm install bootstrap @popperjs/core
 
@@ -25,8 +25,3 @@ chạy tailwindcs
 
 
 php artisan migrate:fresh --seed
-
-1. Cài React
-
-npm install react react-dom
-npm install --save-dev @vitejs/plugin-react

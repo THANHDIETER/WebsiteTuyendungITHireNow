@@ -308,6 +308,7 @@ table p {
 }
 .btn-theme.btn-white {
   background-color: #fff;
+  border: 1px solid rgba(3, 168, 78, 0.18);
   border: 1px solid rgba(0, 195, 188, 0.18);
   color: #0da1f0;
 }
@@ -6604,6 +6605,9 @@ table p {
 .footer-main {
   padding: 80px 0 40px;
 }
+.footer-area .social-icons a:hover {
+  border-color: #0da1f0;
+  background-color: #0da1f0;
 
 .widget-title {
   font-size: 20px;
@@ -6626,13 +6630,34 @@ table p {
   color: #d8dadf;
   text-decoration: none;
   display: block;
-  transition: all 0.3s ease;
+@media only screen and (max-width: 1199px) {
+  .footer-area .nav-menu li a {
+    font-size: 14px;
+    line-height: 45px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .footer-area .nav-menu li a {
+    line-height: 35px;
+  }
+}
+.footer-area .nav-menu li a:hover {
+  color: #0da1f0;
+}
+
+.footer-top {
+  background-color: #0da1f0;
+  padding: 47px 0 43px;
+}
+@media only screen and (max-width: 991px) {
+  .footer-top {
+    padding: 47px 0 57px;
+  }
 }
 
 .nav-menu li a:hover {
   color: #0da1f0;
   padding-left: 5px;
-}
 
 /* CONTACT LIST */
 /* Đảm bảo icon và chữ luôn cùng hàng, không wrap */
@@ -6697,6 +6722,31 @@ table p {
   color: #fff;
   transition: all 0.3s ease;
   font-size: 16px;
+  border: 2px solid #272a33;
+  width: 201px;
+  height: 62px;
+  border-radius: 5px;
+  top: 50%;
+  -webkit-transform: translate(0%, -50%);
+          transform: translate(0%, -50%);
+}
+@media only screen and (max-width: 1199px) {
+  .footer-newsletter-form form [type=submit] {
+    font-size: 14px;
+    width: 140px;
+    height: 46px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .footer-newsletter-form form [type=submit] {
+    font-size: 13px;
+    width: 110px;
+  }
+}
+.footer-newsletter-form form [type=submit]:hover {
+  background-color: #0da1f0;
+  border-color: #0da1f0;
+  color: #fff;
 }
 
 .social-icons a:hover {
@@ -6764,13 +6814,17 @@ table p {
   box-shadow: 0 0 15px rgba(0,0,0,0.05);
   transition: all 0.3s ease;
 }
-
+  color: #0da1f0;
 /* Đảm bảo các cột có chiều cao đều */
 .job-page .col-md-6 {
   display: flex;
-}
 
 .job-page .col-md-6 > .recent-job-item {
   flex-grow: 1;
   width: 100%;
+}
+  color: #0da1f0;
+  font-size: 16px;
+  vertical-align: 0px;
+  margin: 0;
 }

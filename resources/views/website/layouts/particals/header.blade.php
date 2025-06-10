@@ -11,7 +11,10 @@
                     <div class="header-align-center">
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
-                                    <a href="{{ route('cong-viec') }}"><span>Tìm Việc Làm</span></a>
+                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm việc</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('jobs.index') }}"><span>Danh sách việc làm</span></a></li>
+                                <li class="has-submenu"><a href="{{ route('cong-viec') }}"><span>Tìm việc</span></a>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('cong-viec') }}">Tìm Việc Làm IT</a></li>
                                         <li><a href="{{ route('chi-tiet-cong-viec') }}">Chi Tiết Công Việc</a></li>
@@ -100,6 +103,8 @@
                             @else
                                 <!-- Nếu đã đăng nhập -->
                                 <div class="user-info dropdown">
+                                    <a href="#" class="user-info-toggle d-flex align-items-center" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
                                     <a href="#" class="user-info-toggle d-flex align-items-center"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="user-avatar me-2">
@@ -108,6 +113,7 @@
                                         <i class="icofont-caret-down ms-1"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 180px;">
+                                        @if (Auth::user()->role === 'admin')
                                             <li>
                                                 <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
                                                     <i class="icofont-ui-settings me-1"></i> Trang quản trị
@@ -148,6 +154,7 @@
                                             <hr class="dropdown-divider">
                                         </li>
                                         <li>
+                                            <a class="dropdown-item text-danger" href="{{route('logout')}}">
                                             <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                                 <i class="icofont-logout me-1"></i> Đăng xuất
                                             </a>
@@ -172,6 +179,7 @@
             </div>
         </div>
     </div>
+     @if (session('access_token'))
 
     @if (session('access_token'))
         <script>

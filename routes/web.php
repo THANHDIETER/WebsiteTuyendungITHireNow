@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\JobController;
 
 // Nhúng route riêng
 require __DIR__ . '/admin.php';
@@ -34,6 +35,10 @@ Route::get('/', function () {
     return view('website.index');
 })->name('home');
 
+
+Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
+
 Route::get('/cong-viec', function () {
     return view('website.jobs.job');
 })->name('cong-viec');
@@ -55,6 +60,9 @@ Route::get('/chi-tiet-ung-vien', function () {
 })->name('chi-tiet-ung-vien');
 
 Route::get('/blog', function () {
+
+    return view('website.blog.blog-grid');
+
     return view('website.blog.blog');
         return view('website.blog.blog-grid');
 
@@ -65,9 +73,9 @@ Route::get('/blog-details', function () {
 })->name('blog-details');
 
 Route::get('/blog-grid', function () {
+    return view('website.blog.blog');
     return view('website.blog.blog-grid');
         return view('website.blog.blog');
-
 })->name('blog-grid');
 
 Route::get('/blog-right-sidebar', function () {
@@ -95,4 +103,3 @@ Route::get('/registration', function () {
     return view('website.login-register.registration');
 })->name('registration');
 });
-
