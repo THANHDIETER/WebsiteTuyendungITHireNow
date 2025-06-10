@@ -36,14 +36,17 @@ class DashboardController extends Controller
      * API: Thống kê job theo trạng thái
      */
     public function jobStats()
-    {
-        $data = [
-            'active' => Job::where('status', 'active')->count(),
-            'closed' => Job::where('status', 'closed')->count(),
-        ];
+{
+    $today = now()->toDateString();
 
-        return response()->json($data);
-    }
+    $data = [
+        'active' => Job::whereDate('deadline', '>=', $today)->count(),
+        'closed' => Job::whereDate('deadline', '<', $today)->count(),
+    ];
+
+    return response()->json($data);
+}
+
 
     /**
      * API: Thống kê lượt ứng tuyển theo tuần hoặc tháng

@@ -27,6 +27,8 @@ class SeekerProfile extends Model
         'work_experience',
         'language_skills',
         'is_visible',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [
@@ -36,10 +38,23 @@ class SeekerProfile extends Model
     ];
 
     /**
-     * Mối quan hệ: Hồ sơ này thuộc về người dùng nào.
+     * Mối quan hệ: Hồ sơ này thuộc về người dùng.
      */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Định nghĩa các job types dạng array khi lưu và đọc (ví dụ: ["full-time", "remote"])
+     */
+    public function getJobTypesAttribute($value)
+    {
+        return explode(',', $value);
+    }
+
+    public function setJobTypesAttribute($value)
+    {
+        $this->attributes['job_types'] = is_array($value) ? implode(',', $value) : $value;
     }
 }

@@ -9,7 +9,7 @@ class CreateCompaniesTable extends Migration
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->id('id')->primary();
+            $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('slug')->unique();
