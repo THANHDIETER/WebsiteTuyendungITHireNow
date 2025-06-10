@@ -1,24 +1,25 @@
-  <script src="../client/assets/js/modernizr.js"></script>
+  <script src="{{ asset('client/assets/js/modernizr.js')}}"></script>
   <!--=== jQuery Min Js ===-->
-  <script src="../client/assets/js/jquery-main.js"></script>
+  <script src="{{ asset('client/assets/js/jquery-main.js')}}"></script>
   <!--=== jQuery Migration Min Js ===-->
-  <script src="../client/assets/js/jquery-migrate.js"></script>
+  <script src="{{ asset('client/assets/js/jquery-migrate.js')}}"></script>
   <!--=== jQuery Popper Min Js ===-->
-  <script src="../client/assets/js/popper.min.js"></script>
+  <script src="{{ asset('client/assets/js/popper.min.js')}}"></script>
   <!--=== jQuery Bootstrap Min Js ===-->
-  <script src="../client/assets/js/bootstrap.min.js"></script>
+  <script src="{{ asset('client/assets/js/bootstrap.min.js')}}"></script>
   <!--=== jQuery Swiper Min Js ===-->
-  <script src="../client/assets/js/swiper.min.js"></script>
+  <script src="{{ asset('client/assets/js/swiper.min.js')}}"></script>
   <!--=== jQuery Fancybox Min Js ===-->
-  <script src="../client/assets/js/fancybox.min.js"></script>
+  <script src="{{ asset('client/assets/js/fancybox.min.js')}}"></script>
   <!--=== jQuery Aos Min Js ===-->
-  <script src="../client/assets/js/aos.min.js"></script>
+  <script src="{{ asset('client/assets/js/aos.min.js')}}"></script>
   <!--=== jQuery Counterup Min Js ===-->
-  <script src="../client/assets/js/counterup.js"></script>
+  <script src="{{ asset('client/assets/js/counterup.js')}}"></script>
   <!--=== jQuery Waypoint Js ===-->
-  <script src="../client/assets/js/waypoint.js"></script>
+  <script src="{{ asset('client/assets/js/waypoint.js')}}"></script>
 
   <!--=== jQuery Custom Js ===-->
+
   <script src="../client/assets/js/custom.js"></script>
   <style>
     .widget-title,
@@ -29,3 +30,6 @@
     }
 
   </style>
+
+  <script src="{{ asset('client/assets/js/custom.js')}}"></script>
+

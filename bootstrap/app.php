@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Middleware\AdminMiddleware;
-
 use Illuminate\Foundation\Application;
+
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\EmployerMiddleware;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Auth\AuthenticationException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Đăng ký middleware toàn cục (nếu cần)
         $middleware->alias([
             'admin' => AdminMiddleware::class,
+            'employer' => EmployerMiddleware::class,
 
             'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             

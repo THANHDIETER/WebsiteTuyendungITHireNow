@@ -35,7 +35,8 @@ class DashboardController extends Controller
     /**
      * API: Thống kê job theo trạng thái
      */
-   public function jobStats()
+ 
+    public function jobStats()
 {
     $today = now()->toDateString();
 
@@ -46,6 +47,7 @@ class DashboardController extends Controller
 
     return response()->json($data);
 }
+
 
     /**
      * API: Thống kê lượt ứng tuyển theo tuần hoặc tháng
