@@ -35,6 +35,7 @@ class DashboardController extends Controller
     /**
      * API: Thống kê job theo trạng thái
      */
+ 
     public function jobStats()
 {
     $today = now()->toDateString();

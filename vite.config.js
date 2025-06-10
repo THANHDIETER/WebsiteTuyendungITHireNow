@@ -1,20 +1,25 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin'
-import path from 'path'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+// Chuyển từ ESM URL về đường dẫn file
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default defineConfig({
     resolve: {
         alias: {
-            vue: 'vue/dist/vue.esm-bundler.js', // ✅ FIX lỗi template runtime
-            '@': path.resolve(__dirname, 'resources/js'), // ✅ Optional: dùng @ để import nhanh
+            vue: 'vue/dist/vue.esm-bundler.js',
+            '@': path.resolve(__dirname, 'resources/js'),
         },
     },
     plugins: [
         laravel({
             input: [
                 'resources/js/app.js',
-                'resources/sass/app.scss', // hoặc app.css nếu không dùng SCSS
+                'resources/sass/app.scss',
             ],
             refresh: true,
         }),

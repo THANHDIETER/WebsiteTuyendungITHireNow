@@ -23,7 +23,7 @@ Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.c
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/docs', fn() => view('docs.index'));
 
-Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+Route::get('employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 Route::get('/', function () {
     return view('website.index');
@@ -31,51 +31,53 @@ Route::get('/', function () {
 
 Route::get('/cong-viec', function () {
     return view('website.jobs.job');
-});
+})->name('cong-viec');
 
 Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
-});
+})->name('chi-tiet-cong-viec');
 
 Route::get('/chi-tiet-nhan-vien', function () {
     return view('website.employers.employe-details');
-});
+})->name('chi-tiet-nhan-vien');
 
 Route::get('/ung-vien', function () {
     return view('website.candidate.candidate');
-});
+})->name('ung-vien');
 
 Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
-});
+})->name('chi-tiet-ung-vien');
 
 Route::get('/blog', function () {
-    return view('website.blog.blog');
-});
+        return view('website.blog.blog-grid');
+
+})->name('blog');
 
 Route::get('/blog-details', function () {
     return view('website.blog.blog-details');
-});
+})->name('blog-details');
 
 Route::get('/blog-grid', function () {
-    return view('website.blog.blog-grid');
-});
+        return view('website.blog.blog');
+
+})->name('blog-grid');
 
 Route::get('/blog-right-sidebar', function () {
     return view('website.blog.blog-right-sidebar');
-});
+})->name('blog-right-sidebar');
 
 Route::get('/contact', function () {
     return view('website.pages.contact');
-});
+})->name('contact');
 
 Route::get('/404', function () {
     return view('website.pages.404');
-});
+})->name("404");
 
 Route::get('/about-us', function () {
     return view('website.pages.about-us');
-});
+})->name('about-us');
 
 Route::get('/login', function () {
     return view('website.login-register.login');
@@ -83,6 +85,5 @@ Route::get('/login', function () {
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
-
 });
 

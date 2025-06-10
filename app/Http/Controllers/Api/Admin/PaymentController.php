@@ -15,16 +15,21 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        // $userId = $request->user()->id;
-        $userId = 10;
+        $perPage = $request->input('per_page', 10);
+        $status = $request->input('status');
 
-        $payments = Payment::with('package')
-            ->where('user_id', $userId)
-            ->orderByDesc('created_at')
-            ->get();
+        $query = Payment::with('package', 'user')->orderByDesc('created_at');
 
-        return response()->json($payments);
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return response()->json($query->paginate($perPage));
     }
+
+
+
+
 
     /**
      * Xem chi tiết hóa đơn
