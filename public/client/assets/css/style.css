@@ -60,7 +60,7 @@ a {
 a:hover, a:active, a:focus {
   -webkit-box-shadow: none;
           box-shadow: none;
-  color: #025d2b;
+  color: #00fbff;
   outline: none;
   text-decoration: none;
 }
@@ -309,6 +309,7 @@ table p {
 .btn-theme.btn-white {
   background-color: #fff;
   border: 1px solid rgba(3, 168, 78, 0.18);
+  border: 1px solid rgba(0, 195, 188, 0.18);
   color: #0da1f0;
 }
 .btn-theme.btn-white:hover {
@@ -6532,145 +6533,103 @@ table p {
   Footer CSS
 -----------------------------------------------------------------------
 */
-.footer-area .widget-item {
-  margin-bottom: 30px;
+.logo-main,
+.logo-light {
+  max-height: 70px;
+  /* filter: drop-shadow(0 0 15px #ddfffc); */
 }
-@media only screen and (max-width: 767px) {
-  .footer-area .widget-item.widget-about {
-    margin: 0 40px 30px;
-    text-align: center;
-  }
-}
-@media only screen and (max-width: 479.98px) {
-  .footer-area .widget-item.widget-about {
-    margin: 0 10px 30px;
-  }
-}
-.footer-area .widget-title {
-  font-size: 28px;
-  color: #fff;
-  text-transform: capitalize;
-  margin-bottom: 40px;
-}
-@media only screen and (max-width: 1199px) {
-  .footer-area .widget-title {
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .footer-area .widget-title {
-    display: none;
-  }
-}
-.footer-area .nav-menu-item1 {
-  margin-left: 41px;
-}
-@media only screen and (max-width: 1199px) {
-  .footer-area .nav-menu-item1 {
-    margin-left: 0;
-  }
-}
-.footer-area .nav-menu-item2 {
-  margin-left: 54px;
-}
-@media only screen and (max-width: 1199px) {
-  .footer-area .nav-menu-item2 {
-    margin-left: 0;
-  }
-}
-.footer-area .nav-menu-item3 {
-  margin-left: 67px;
-}
-@media only screen and (max-width: 1199px) {
-  .footer-area .nav-menu-item3 {
-    margin-left: 0;
-  }
-}
-.footer-area .nav-menu-item4 {
-  margin-left: 77px;
-}
-@media only screen and (max-width: 1199px) {
-  .footer-area .nav-menu-item4 {
-    margin-left: 0;
-  }
-}
-.footer-area .widget-logo-area {
-  margin-bottom: 42px;
-  margin-top: -8px;
-}
-@media only screen and (max-width: 1199px) {
-  .footer-area .widget-logo-area {
-    margin-bottom: 18px;
-    margin-top: -3px;
-  }
-}
-.footer-area .desc {
+/* VÙNG CHUNG */
+.footer-area {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #272a33;
   color: #d8dadf;
-  font-size: 18px;
-  line-height: 1.95;
-  margin-bottom: 32px;
+  font-size: 16px;
 }
-@media only screen and (max-width: 1199px) {
-  .footer-area .desc {
-    font-size: 15px;
-    margin-bottom: 20px;
-  }
+
+/* FOOTER TOP */
+.footer-top {
+  background-color: #0da1f0;
+  padding: 50px 0;
 }
-.footer-area .social-icons {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-@media only screen and (max-width: 767px) {
-  .footer-area .social-icons {
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-  }
-}
-.footer-area .social-icons a {
-  border: 2px solid #e3e8f1;
-  border-radius: 50%;
+
+.footer-newsletter-content .title {
   color: #fff;
-  font-size: 14px;
-  display: inline-block;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.footer-newsletter-form {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.footer-newsletter-form form {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+}
+
+.footer-newsletter-form input[type="email"] {
+  width: 100%;
+  height: 60px;
+  border-radius: 5px;
+  border: none;
+  padding: 0 150px 0 20px;
+  font-size: 16px;
+}
+
+.footer-newsletter-form button.btn-newsletter {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
   height: 50px;
-  width: 50px;
-  text-align: center;
-  line-height: 45px;
+  width: 140px;
+  background-color: #272a33;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-@media only screen and (max-width: 1199px) {
-  .footer-area .social-icons a {
-    font-size: 13px;
-    height: 42px;
-    width: 42px;
-    line-height: 38px;
-  }
+
+.footer-newsletter-form button.btn-newsletter:hover {
+  background-color: #0da1f0;
 }
-.footer-area .social-icons a + a {
-  margin-left: 15px;
+
+/* FOOTER MAIN */
+.footer-main {
+  padding: 80px 0 40px;
 }
 .footer-area .social-icons a:hover {
   border-color: #0da1f0;
   background-color: #0da1f0;
+
+.widget-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 20px;
 }
-.footer-area .nav-menu {
-  margin-bottom: 0;
+
+.nav-menu {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
 }
-.footer-area .nav-menu li {
+
+.nav-menu li {
+  margin-bottom: 10px;
+}
+
+.nav-menu li a {
   color: #d8dadf;
+  text-decoration: none;
   display: block;
-  font-size: 18px;
-  line-height: 50px;
-}
-.footer-area .nav-menu li a {
-  color: #d8dadf;
-  font-size: 18px;
-  line-height: 50px;
-  padding: 0 0;
-  display: block;
-}
 @media only screen and (max-width: 1199px) {
   .footer-area .nav-menu li a {
     font-size: 14px;
@@ -6696,104 +6655,72 @@ table p {
   }
 }
 
-@media only screen and (max-width: 991px) {
-  .footer-newsletter-content {
-    text-align: center;
-  }
+.nav-menu li a:hover {
+  color: #0da1f0;
+  padding-left: 5px;
+
+/* CONTACT LIST */
+/* Đảm bảo icon và chữ luôn cùng hàng, không wrap */
+.footer-area .contact-list li a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: normal;
+  text-decoration: none;
+  color: #d8dadf;
+  line-height: 1.8;
+  transition: all 0.3s ease;
 }
-.footer-newsletter-content .title {
-  color: #fefdfc;
-  font-size: 40px;
-  line-height: 1.5;
+
+/* Icon kích thước vừa phải, không chiếm chỗ quá nhiều */
+.footer-area .contact-list li a i {
+  font-size: 18px;
+  color: #0da1f0;
+  flex-shrink: 0;
 }
-@media only screen and (max-width: 1199px) {
-  .footer-newsletter-content .title {
-    font-size: 32px;
-    margin-bottom: 0;
-  }
+
+/* Hover hiệu ứng đồng bộ */
+.footer-area .contact-list li a:hover {
+  color: #0da1f0;
+  padding-left: 5px;
 }
+
+/* Tùy chọn: căn giữa trên mobile */
 @media only screen and (max-width: 767px) {
-  .footer-newsletter-content .title {
-    font-size: 25px;
+  .footer-area .contact-list li a {
+    justify-content: flex-start;
+    font-size: 15px;
   }
 }
 
-.footer-newsletter-form {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: end;
-  margin-top: 28px;
+
+/* LOGO + SOCIAL ICONS */
+.widget-logo-area {
+  margin-bottom: 20px;
 }
-@media only screen and (max-width: 1199px) {
-  .footer-newsletter-form {
-    margin-top: 18px;
-  }
-}
-.footer-newsletter-form form {
-  display: inline-block;
-  position: relative;
-}
-@media only screen and (max-width: 1199px) {
-  .footer-newsletter-form form {
-    width: 100%;
-  }
-}
-.footer-newsletter-form form [type=email] {
-  background-color: #fff;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  width: 600px;
-  border: none;
-  height: 70px;
-  border-radius: 5px;
+
+.widget-about .desc {
   font-size: 16px;
-  color: #272a33;
-  padding: 0 210px 0 32px;
+  color: #d8dadf;
+  margin-bottom: 20px;
 }
-.footer-newsletter-form form [type=email]::-webkit-input-placeholder {
-  /* Chrome/Opera/Safari */
-  color: #272a33;
+
+.social-icons {
+  display: flex;
+  gap: 15px;
 }
-.footer-newsletter-form form [type=email]::-moz-placeholder {
-  /* Firefox 19+ */
-  color: #272a33;
-}
-.footer-newsletter-form form [type=email]:-ms-input-placeholder {
-  /* IE 10+ */
-  color: #272a33;
-}
-.footer-newsletter-form form [type=email]:-moz-placeholder {
-  /* Firefox 18- */
-  color: #272a33;
-}
-@media only screen and (max-width: 1199px) {
-  .footer-newsletter-form form [type=email] {
-    font-size: 14px;
-    height: 55px;
-    padding: 0 210px 0 22px;
-    width: 100%;
-  }
-}
-@media only screen and (max-width: 991px) {
-  .footer-newsletter-form form [type=email] {
-    padding: 1px 148px 0 22px;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .footer-newsletter-form form [type=email] {
-    padding: 1px 118px 0 22px;
-  }
-}
-.footer-newsletter-form form [type=submit] {
-  position: absolute;
-  right: 4px;
-  padding: 0;
-  margin: 0;
-  background-color: #272a33;
+
+.social-icons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: 42px;
+  background: transparent;
+  border: 2px solid #e3e8f1;
+  border-radius: 50%;
   color: #fff;
+  transition: all 0.3s ease;
   font-size: 16px;
   border: 2px solid #272a33;
   width: 201px;
@@ -6822,123 +6749,80 @@ table p {
   color: #fff;
 }
 
-.footer-main {
-  background-color: #272a33;
-  position: relative;
-  padding: 126px 0 86px;
+.social-icons a:hover {
+  background-color: #0da1f0;
+  border-color: #0da1f0;
 }
-@media only screen and (max-width: 1199px) {
-  .footer-main {
-    padding: 75px 0 34px;
-  }
+
+/* COLLAPSE (Responsive) */
+.widget-collapsed-title {
+  display: none;
 }
+
 @media only screen and (max-width: 767px) {
-  .footer-main {
-    padding: 75px 0 44px;
-  }
-}
-.footer-main .widget-collapsed-title {
-  display: block;
-  position: relative;
-  background-color: #333640;
-  border: 1px solid #3d3f48;
-  height: 60px;
-  line-height: 60px;
-  padding: 0 20px;
-  border-radius: 0;
-  cursor: pointer;
-  font-size: 15px;
-  margin-bottom: 0;
-  color: #fff;
-  font-weight: 600;
-  -webkit-touch-callout: none;
-  /* iOS Safari */
-  -webkit-user-select: none;
-  /* Safari */
-  /* Konqueror HTML */
-  -moz-user-select: none;
-  /* Old versions of Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* currently supported by Chrome, Edge, Opera and Firefox */
-}
-@media only screen and (min-width: 768px) {
-  .footer-main .widget-collapsed-title {
+  .widget-title {
     display: none;
   }
-}
-.footer-main .widget-collapsed-title:before {
-  font-family: "IcoFont";
-  font-size: 14px;
-  content: "";
-  position: absolute;
-  right: 0;
-  height: 100%;
-  width: 60px;
-  text-align: center;
-}
-.footer-main .widget-collapsed-title:not(.collapsed):before {
-  content: "";
-  font-family: "IcoFont";
-}
-.footer-main .widget-collapse-body {
-  transition: all 0.3s ease-out;
-  -webkit-transition: all 0.3s ease-out;
-  -moz-transition: all 0.3s ease-out;
-  -ms-transition: all 0.3s ease-out;
-  -o-transition: all 0.3s ease-out;
-}
-@media only screen and (min-width: 768px) {
-  .footer-main .widget-collapse-body {
+
+  .widget-collapsed-title {
     display: block;
+    background-color: #333640;
+    border: 1px solid #3d3f48;
+    color: #fff;
+    padding: 0 20px;
+    height: 50px;
+    line-height: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 0;
   }
-}
-@media only screen and (max-width: 767px) {
-  .footer-main .widget-collapse-body {
+
+  .widget-collapse-body {
     background-color: #333640;
     border: 1px solid #3d3f48;
     border-top: none;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .footer-main .widget-collapse-body .collapse-body {
-    padding: 16px 24px 16px;
+    padding: 16px 24px;
   }
 }
 
+/* FOOTER BOTTOM */
 .footer-bottom {
-  background-color: #272a33;
+  background-color: #1d1f27;
+  padding: 20px 0;
   text-align: center;
 }
-.footer-bottom .footer-bottom-content {
-  border-top: 1px solid rgba(232, 238, 244, 0.08);
-  padding: 23px 0 24px;
+
+.footer-bottom-content .copyright {
+  color: #aaa;
+  font-size: 14px;
 }
-.footer-bottom .copyright {
-  color: #fff;
-  font-size: 16px;
-  margin-bottom: 0;
-  position: relative;
-  top: 1px;
+
+.footer-bottom-content i.icofont-heart {
+  color: red;
+  margin: 0 5px;
 }
-@media only screen and (max-width: 1199px) {
-  .footer-bottom .copyright {
-    font-size: 14px;
-  }
+
+.recent-job-item {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
 }
-@media only screen and (max-width: 767px) {
-  .footer-bottom .copyright {
-    vertical-align: -1px;
-  }
-}
-.footer-bottom .copyright a {
   color: #0da1f0;
+/* Đảm bảo các cột có chiều cao đều */
+.job-page .col-md-6 {
+  display: flex;
+
+.job-page .col-md-6 > .recent-job-item {
+  flex-grow: 1;
+  width: 100%;
 }
-.footer-bottom .copyright a:hover {
-  color: #fff;
-}
-.footer-bottom .copyright i {
   color: #0da1f0;
   font-size: 16px;
   vertical-align: 0px;

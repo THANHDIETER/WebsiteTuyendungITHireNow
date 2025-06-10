@@ -26,6 +26,24 @@
                 stroke-linejoin="round" />
         </svg>
     </div>
+    <style>
+        footer {
+            display: none !important;
+        }
+
+        .sidebar-menu a {
+            text-decoration: none !important;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 6px;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: #f0f8ff;
+            color: #379279 !important;
+        }
+    </style>
     <div id="sidebar-menu">
         <ul class="sidebar-menu" id="simple-bar">
 
@@ -288,6 +306,7 @@
                     <span>Duyệt CV ứng viên</span>
                 </a>
             </li>
+
             <li class="sidebar-list">
                 <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linejoin="round" stroke-linecap="round"

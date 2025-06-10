@@ -17,14 +17,14 @@
             <form method="GET" action="{{ route('admin.notifications.index') }}" class="row g-3 mb-3">
                 <div class="col-md-3">
                     <select name="status" class="form-select" onchange="this.form.submit()">
-                        <option value="">-- Tất cả trạng thái --</option>
+                        <option value="">Tất cả trạng thái</option>
                         <option value="read" {{ request('status') == 'read' ? 'selected' : '' }}>Đã đọc</option>
                         <option value="unread" {{ request('status') == 'unread' ? 'selected' : '' }}>Chưa đọc</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <select name="user_id" class="form-select" onchange="this.form.submit()">
-                        <option value="">-- Tất cả người nhận --</option>
+                        <option value="">Tất cả người nhận</option>
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
                                 {{ $user->email }}

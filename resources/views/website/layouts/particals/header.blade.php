@@ -7,21 +7,51 @@
                 <div class="header-align">
                     <div class="header-align-start">
                         <div class="header-logo-area">
-                            <a href="index.html">
-                                <img class="logo-main" src="{{ asset('client/assets/img/logo-light.webp') }}" alt="Logo" />
-                                <img class="logo-light" src="{{ asset('client/assets/img/logo-light.webp')}}" alt="Logo" />
-                            </a>
-                        </div>
-                    </div>
                     
                     <div class="header-align-center">
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
-                                <li><a href="{{ route('home') }}"><span>Trang chủ</span></a></li>
                                 <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm việc</span></a>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('jobs.index') }}"><span>Danh sách việc làm</span></a></li>
                                 <li class="has-submenu"><a href="{{ route('cong-viec') }}"><span>Tìm việc</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('cong-viec') }}">Tìm Việc Làm IT</a></li>
+                                        <li><a href="{{ route('chi-tiet-cong-viec') }}">Chi Tiết Công Việc</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
+
+                                <li class="has-submenu">
+                                    <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('ung-vien') }}">Ứng Cử Viên</a></li>
+                                        <li><a href="{{ route('chi-tiet-ung-vien') }}">Chi Tiết Ứng Viên</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="has-submenu">
+                                    <a href="{{ route('blog') }}"><span>Blog</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('blog') }}">Blog Grid</a></li>
+                                        <li><a href="{{ route('blog-grid') }}">Blog Left Sidebar</a></li>
+                                        <li><a href="{{ route('blog-right-sidebar') }}">Blog Right Sidebar</a></li>
+                                        <li><a href="{{ route('blog-details') }}">Chi Tiết Bài Viết</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
+
+                                <li class="has-submenu">
+                                    <a href="#"><span>Trang Khác</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('about-us') }}">Thông Tin</a></li>
+                                        <li><a href="{{ route('showLoginForm') }}">Đăng Nhập</a></li>
+                                        <li><a href="{{ route('register') }}">Đăng Ký</a></li>
+                                        <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
+                                    </ul>
+                                </li>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('cong-viec') }}"><span>Danh sách việc làm</span></a></li>
                                         <li><a href="{{ route('chi-tiet-cong-viec') }}"><span>Chi tiết việc
@@ -58,13 +88,15 @@
                                 </li>
 
                                 <li><a href="{{ route('contact') }}"><span>Liên hệ</span></a></li>
-                            </ul>
-                        </div>
                     </div>
                     <div class="header-align-end">
                         <div class="header-action-area">
                             @guest
-                                <!-- Nếu chưa đăng nhập -->
+                                </a>
+                            @else
+                                <div class="user-info dropdown">
+                                    <a href="#" class="user-info-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                                        <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
                                 <a class="btn-registration" href="{{ route('register') }}">
                                     <span>+</span> Đăng ký
                                 </a>
@@ -78,7 +110,6 @@
                                         <span class="user-avatar me-2">
                                             <i class="icofont-user-alt-3"></i>
                                         </span>
-                                        <span class="user-role">{{ Auth::user()->role }}</span>
                                         <i class="icofont-caret-down ms-1"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 180px;">
@@ -88,6 +119,14 @@
                                                     <i class="icofont-ui-settings me-1"></i> Trang quản trị
                                                 </a>
                                             </li>
+                                        @elseif (Auth::user()->role === 'employer')
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('employer.details') }}">
+                                                    <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
+                                                </a>
+                                            </li>
+                                        @endif
+
                                         @if (Auth::check())
                                             @if (Auth::user()->role === 'admin')
                                                 <li>
@@ -108,6 +147,9 @@
                                                 <i class="icofont-edit me-1"></i> Thay đổi thông tin
                                             </a>
                                         </li>
+
+                                        <li><hr class="dropdown-divider"></li>
+
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
@@ -119,6 +161,9 @@
                                         </li>
                                     </ul>
                                 </div>
+                            @endguest
+
+                            <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu">
 
                             @endguest
 
@@ -141,8 +186,6 @@
             localStorage.setItem('access_token', "{{ session('access_token') }}");
         </script>
     @endif
-
-
 </header>
 <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
             <div class="container pt--0 pb--0">
