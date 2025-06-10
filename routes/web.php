@@ -24,14 +24,19 @@ Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.c
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/docs', fn() => view('docs.index'));
 
-Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+Route::get('employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 Route::get('/', function () {
     return view('website.index');
 })->name('home');
 
+
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
+
+Route::get('/cong-viec', function () {
+    return view('website.jobs.job');
+})->name('cong-viec');
 
 Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
@@ -50,7 +55,11 @@ Route::get('/chi-tiet-ung-vien', function () {
 })->name('chi-tiet-ung-vien');
 
 Route::get('/blog', function () {
+
     return view('website.blog.blog-grid');
+
+        return view('website.blog.blog-grid');
+
 })->name('blog');
 
 Route::get('/blog-details', function () {
@@ -59,6 +68,7 @@ Route::get('/blog-details', function () {
 
 Route::get('/blog-grid', function () {
     return view('website.blog.blog');
+        return view('website.blog.blog');
 })->name('blog-grid');
 
 Route::get('/blog-right-sidebar', function () {

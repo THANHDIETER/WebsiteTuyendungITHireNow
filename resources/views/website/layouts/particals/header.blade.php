@@ -1,17 +1,19 @@
 <header class="header-area transparent">
 
     <div class="container">
+        
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
                 <div class="header-align">
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="index.html">
-                                <img class="logo-main" src="../client/assets/img/logo-light.webp" alt="Logo" />
-                                <img class="logo-light" src="../client/assets/img/logo-light.webp" alt="Logo" />
+                                <img class="logo-main" src="{{ asset('client/assets/img/logo-light.webp') }}" alt="Logo" />
+                                <img class="logo-light" src="{{ asset('client/assets/img/logo-light.webp')}}" alt="Logo" />
                             </a>
                         </div>
                     </div>
+                    
                     <div class="header-align-center">
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
@@ -19,6 +21,9 @@
                                 <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm việc</span></a>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('jobs.index') }}"><span>Danh sách việc làm</span></a></li>
+                                <li class="has-submenu"><a href="{{ route('cong-viec') }}"><span>Tìm việc</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('cong-viec') }}"><span>Danh sách việc làm</span></a></li>
                                         <li><a href="{{ route('chi-tiet-cong-viec') }}"><span>Chi tiết việc
                                                     làm</span></a></li>
                                     </ul>
@@ -68,6 +73,8 @@
                                 <div class="user-info dropdown">
                                     <a href="#" class="user-info-toggle d-flex align-items-center" data-bs-toggle="dropdown"
                                         aria-expanded="false">
+                                    <a href="#" class="user-info-toggle d-flex align-items-center"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="user-avatar me-2">
                                             <i class="icofont-user-alt-3"></i>
                                         </span>
@@ -81,6 +88,20 @@
                                                     <i class="icofont-ui-settings me-1"></i> Trang quản trị
                                                 </a>
                                             </li>
+                                        @if (Auth::check())
+                                            @if (Auth::user()->role === 'admin')
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                        <i class="icofont-ui-settings me-1"></i> rang quản trị
+                                                    </a>
+                                                </li>
+                                            @elseif (Auth::user()->role === 'employer')
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ route('employer.details') }}">
+                                                        <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
+                                                    </a>
+                                                </li>
+                                            @endif
                                         @endif
                                         <li>
                                             <a class="dropdown-item" href="{{ url('profile.edit') }}">
@@ -92,6 +113,7 @@
                                         </li>
                                         <li>
                                             <a class="dropdown-item text-danger" href="{{route('logout')}}">
+                                            <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                                 <i class="icofont-logout me-1"></i> Đăng xuất
                                             </a>
                                         </li>
@@ -113,9 +135,30 @@
         </div>
     </div>
      @if (session('access_token'))
+
+    @if (session('access_token'))
         <script>
             localStorage.setItem('access_token', "{{ session('access_token') }}");
         </script>
     @endif
 
+
 </header>
+<div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Employers Details</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Employers</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

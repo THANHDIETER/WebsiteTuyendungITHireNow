@@ -10,15 +10,15 @@
 
 
   <!--== Bootstrap CSS ==-->
-  <link href="../client/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="{{ asset('client/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
   <!--== Icofont Icon CSS ==-->
-  <link href="../client/assets/css/icofont.css" rel="stylesheet" />
+  <link href="{{ asset('client/assets/css/icofont.css')}}" rel="stylesheet" />
   <!--== Swiper CSS ==-->
-  <link href="../client/assets/css/swiper.min.css" rel="stylesheet" />
+  <link href="{{ asset('client/assets/css/swiper.min.css')}}" rel="stylesheet" />
   <!--== Fancybox Min CSS ==-->
-  <link href="../client/assets/css/fancybox.min.css" rel="stylesheet" />
+  <link href="{{ asset('client/assets/css/fancybox.min.css')}}" rel="stylesheet" />
   <!--== Aos Min CSS ==-->
-  <link href="../client/assets/css/aos.min.css" rel="stylesheet" />
+  <link href="{{ asset('client/assets/css/aos.min.css')}}" rel="stylesheet" />
 
   <!--== Main Style CSS ==-->
-  <link href="../client/assets/css/style.css" rel="stylesheet" />
+  <link href="{{ asset('client/assets/css/style.css')}}" rel="stylesheet" />
