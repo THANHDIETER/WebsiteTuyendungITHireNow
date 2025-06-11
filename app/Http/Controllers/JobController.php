@@ -3,29 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use App\Models\Category;
-use App\Models\Company;
-use App\Models\Skill;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-   
-    public function index(Request $request)
+    public function index()
     {
-        $query = Job::with(['company', 'category', 'skills'])
+        $jobs = Job::with('company')
             ->where('status', 'published')
-            ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')
+            ->paginate(9);
 
-        // Tìm kiếm theo từ khóa (title, description, requirements)
-        if ($request->filled('keyword')) {
-            $kw = $request->keyword;
-            $query->where(function ($q) use ($kw) {
-                $q->where('title', 'like', "%$kw%")
-                    ->orWhere('description', 'like', "%$kw%")
-                    ->orWhere('requirements', 'like', "%$kw%");
-            });
-        }
+        return view('website.jobs.job', compact('jobs'));
+
 
         // Địa điểm (radio)
        if ($request->filled('locations')) {
@@ -102,11 +92,12 @@ class JobController extends Controller
 
         // Truyền sang view đầy đủ
         return view('website.jobs.job', compact('jobs', 'categories', 'companies', 'skills', 'topJobs'));
+
     }
 
     public function show($slug)
     {
-        $job = Job::with(['company', 'category', 'skills'])
+        $job = Job::with('company')
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();

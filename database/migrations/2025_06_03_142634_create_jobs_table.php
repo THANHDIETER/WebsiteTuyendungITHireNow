@@ -29,6 +29,7 @@ class CreateJobsTable extends Migration
             $table->enum('status', ['draft', 'published', 'closed', 'pending','rejected'])->default('pending');
             $table->integer('views')->default(0);
             $table->boolean('is_featured')->default(false);
+            $table->boolean('is_paid')->default(false);
 
             // 🔽 Các trường mới bổ sung từ ảnh
             $table->string('apply_url')->nullable();

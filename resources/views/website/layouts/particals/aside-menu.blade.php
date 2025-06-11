@@ -11,10 +11,6 @@
             <ul class="nav-menu">
                 <li><a href="{{ route('home') }}">Trang chủ</a></li>
 
-                <li><a href="{{ route('jobs.index') }}">Tìm việc</a>
-                    <ul class="sub-menu">
-                        <li><a href="{{ route('jobs.index') }}">Danh sách việc làm</a></li>
-
                 <li><a href="{{ route('cong-viec') }}">Tìm việc</a>
                     <ul class="sub-menu">
                         <li><a href="{{ route('cong-viec') }}">Danh sách việc làm</a></li>

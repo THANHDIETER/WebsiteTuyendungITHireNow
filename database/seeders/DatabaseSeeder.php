@@ -26,6 +26,7 @@ use Database\Seeders\EmployerPackagesSeeder;
 use Database\Seeders\ServicePackagesSeeder;
 // use Database\Seeders\job_applicationsSeeder;
 
+
 class DatabaseSeeder extends Seeder
 {
     public function run()

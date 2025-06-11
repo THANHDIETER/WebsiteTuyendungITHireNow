@@ -45,8 +45,10 @@ class DashboardController extends Controller
             'closed' => Job::whereDate('deadline', '<', $today)->count(),
         ];
 
+
         return response()->json($data);
     }
+
 
 
 
