@@ -3,11 +3,17 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class EmployerMiddleware
+class JobSeekerMiddleware
 {
-
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
     public function handle($request, Closure $next)
     {
         // Nếu chưa đăng nhập
@@ -17,8 +23,8 @@ class EmployerMiddleware
 
         $role = Auth::user()->role;
 
-        // Chỉ cho phép employer hoặc admin
-        if ($role === 'employer' || $role === 'admin') {
+        // Chỉ cho phép job_seeker hoặc admin
+        if ($role === 'job_seeker' || $role === 'admin') {
             return $next($request);
         }
 

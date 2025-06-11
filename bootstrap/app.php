@@ -19,7 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Đăng ký middleware toàn cục (nếu cần)
         $middleware->alias([
             'admin' => AdminMiddleware::class,
-            'employer' => EmployerMiddleware::class,
+            'employer' => \App\Http\Middleware\EmployerMiddleware::class,
+            'job_seeker' => \App\Http\Middleware\JobSeekerMiddleware::class,
 
             'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             

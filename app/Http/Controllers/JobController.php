@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use App\Models\Category;
-use App\Models\Company;
-use App\Models\Skill;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -18,7 +15,7 @@ class JobController extends Controller
             ->paginate(9);
 
         return view('website.jobs.job', compact('jobs'));
-   
+
 
         // Địa điểm (radio)
        if ($request->filled('locations')) {
@@ -95,11 +92,12 @@ class JobController extends Controller
 
         // Truyền sang view đầy đủ
         return view('website.jobs.job', compact('jobs', 'categories', 'companies', 'skills', 'topJobs'));
+
     }
 
     public function show($slug)
     {
-        $job = Job::with(['company', 'category', 'skills'])
+        $job = Job::with('company')
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
