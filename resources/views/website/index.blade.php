@@ -1129,7 +1129,7 @@
                 </div>
             </div>
         </section>
-
         <!--== End Blog Area Wrapper ==-->
     </main>
 @endsection
+
