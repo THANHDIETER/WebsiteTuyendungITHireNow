@@ -47,7 +47,9 @@
                             </div>
                             <div class="job-details-price">
                                 <h4 class="title">{{ number_format($job->salary_min) }}đ <span>/tháng</span></h4>
-                                <a href="#" class="btn-theme">Ứng tuyển ngay</a>
+                                <button type="button" class="btn-theme" data-bs-toggle="modal" data-bs-target="#applyModal">
+                                    Ứng tuyển ngay
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -69,11 +71,11 @@
                                     $benefits = is_array($job->benefits) ? $job->benefits : json_decode($job->benefits, true);
                                 @endphp
                                 @if (!empty($benefits))
-                                    <ul class="job-details-list">
+                                <ul class="job-details-list">
                                         @foreach($benefits as $benefit)
                                             <li><i class="icofont-check"></i> {{ $benefit }}</li>
                                         @endforeach
-                                    </ul>
+                                </ul>
                                 @else
                                     <p class="desc">Không có thông tin phúc lợi.</p>
                                 @endif
@@ -173,4 +175,93 @@
         </section>
         <!--== Kết thúc chi tiết công việc ==-->
     </main>
+
+    <!-- Modal Form Nộp CV -->
+    <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="applyModalLabel">Nộp đơn ứng tuyển</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <form action="{{ route('jobs.apply', $job) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Họ và tên(bắt buộc)</label>
+                            <input type="text" class="form-control @error('full_name') is-invalid @enderror"
+                                   id="full_name" name="full_name" value="{{ old('full_name', Auth::user()->name ?? '') }}" required>
+                            @error('full_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email(bắt buộc)</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                   id="email" name="email" value="{{ old('email', Auth::user()->email ?? '') }}" required>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số điện thoại(bắt buộc)</label>
+                            <input type="tel" class="form-control @error('phone') is-invalid @enderror"
+                                   id="phone" name="phone" value="{{ old('phone', Auth::user()->phone_number ?? '') }}" required>
+                            @error('phone')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cv_file" class="form-label">CV của bạn (PDF)</label>
+                            <input type="file" class="form-control @error('cv_file') is-invalid @enderror"
+                                   id="cv_file" name="cv_file" accept=".pdf" required>
+                            @error('cv_file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <small class="text-muted">Tối đa 5MB, định dạng PDF</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cover_letter" class="form-label">Thư giới thiệu (không bắt buộc)</label>
+                            <textarea class="form-control @error('cover_letter') is-invalid @enderror"
+                                      id="cover_letter" name="cover_letter" rows="4">{{ old('cover_letter') }}</textarea>
+                            @error('cover_letter')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Gửi đơn ứng tuyển</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Reset form when modal is closed
+    document.getElementById('applyModal').addEventListener('hidden.bs.modal', function () {
+        this.querySelector('form').reset();
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+@endpush

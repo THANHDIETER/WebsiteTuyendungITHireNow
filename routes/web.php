@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobApplicationController;
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
@@ -85,4 +86,6 @@ Route::get('/login', function () {
 Route::get('/registration', function () {
     return view('website.login-register.registration');
 });
+
+Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 

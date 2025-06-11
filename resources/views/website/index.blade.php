@@ -108,96 +108,26 @@
             </div>
           </div>
           <div class="row row-gutter-20">
-            <div class="col-sm-6 col-lg-3">
-              <!--== Start Job Category Item ==-->
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Kế toán/Tài chính <span>(305)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-              <!--== End Job Category Item ==-->
-            </div>
+            @forelse($categories as $category)
             <div class="col-sm-6 col-lg-3">
               <div class="job-category-item">
                 <div class="content">
-                  <h3 class="title"><a href="job-details.html">Sản xuất/Vận hành <span>(95)</span></a></h3>
+                  <h3 class="title">
+                    <a href="{{ route('jobs.index', ['category' => $category->id]) }}">
+                      {{ $category->name }} <span>({{ $category->jobs_count }})</span>
+                    </a>
+                  </h3>
                 </div>
-                <a class="overlay-link" href="job-details.html"></a>
+                <a class="overlay-link" href="{{ route('jobs.index', ['category' => $category->id]) }}"></a>
               </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Giáo dục/Đào tạo <span>(212)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
+            @empty
+            <div class="col-12">
+              <div class="alert alert-info text-center">
+                Chưa có danh mục ngành nghề nào.
               </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Thiết kế/Sáng tạo <span>(93)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Y tế/Sức khỏe <span>(4)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Nghiên cứu/Tư vấn <span>(34)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Kỹ sư/Kiến trúc <span>(376)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Viễn thông <span>(450)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Nhập liệu/Vận hành <span>(25)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Marketing/Bán hàng <span>(666)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Dịch vụ bảo vệ/Hỗ trợ <span>(62)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
+            @endforelse
           </div>
         </div>
       </section>
@@ -217,48 +147,45 @@
             </div>
           </div>
           <div class="row">
-            @foreach($latestJobs as $job)
+            @forelse($jobs as $job)
             <div class="col-md-6 col-lg-4">
               <div class="recent-job-item">
                 <div class="company-info">
                   <div class="logo">
-                    <a href="#"><img src="{{ $job->company->logo_url ?? '../client/assets/img/companies/1.webp' }}" width="75" height="75" alt="Logo công ty"></a>
+                    <a href="#">
+                      @if($job->company && $job->company->logo_url)
+                        <img src="{{ $job->company->logo_url }}" width="75" height="75" alt="{{ $job->company->name }}">
+                      @else
+                        <img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Company Logo">
+                      @endif
+                    </a>
                   </div>
                   <div class="content">
-                    <h4 class="name"><a href="#">{{ $job->company->name }}</a></h4>
-                    <p class="address">{{ $job->location }}</p>
+                    <h4 class="name"><a href="#">{{ $job->company->name ?? 'N/A' }}</a></h4>
+                    <p class="address">{{ $job->address ?? 'N/A' }}</p>
                   </div>
                 </div>
                 <div class="main-content">
                   <h3 class="title"><a href="{{ route('jobs.show', $job->slug) }}">{{ $job->title }}</a></h3>
-                  <h5 class="work-type">
-                      @switch($job->job_type)
-                          @case('full-time')
-                              Toàn thời gian
-                              @break
-                          @case('part-time')
-                              Bán thời gian
-                              @break
-                          @case('remote')
-                              Làm từ xa
-                              @break
-                          @default
-                              {{ $job->job_type }}
-                      @endswitch
-                  </h5>
+                  <h5 class="work-type">{{ ucfirst($job->job_type) }}</h5>
                   <p class="desc">{{ Str::limit($job->description, 100) }}</p>
                 </div>
                 <div class="recent-job-info">
                   <div class="salary">
-                    <h4>{{ number_format($job->salary_min) }}đ</h4>
-                    <p>/tháng</p>
+                    <h4>{{ number_format($job->salary_min) }} - {{ number_format($job->salary_max) }}</h4>
+                    <p>{{ $job->currency }}/tháng</p>
                   </div>
                   <a class="btn-theme btn-sm" href="{{ route('jobs.show', $job->slug) }}">Ứng tuyển ngay</a>
                 </div>
               </div>
             </div>
-            @endforeach
-            <!-- Các job item tĩnh sẽ được thay thế bằng vòng lặp này -->
+            @empty
+            <div class="col-12">
+              <div class="alert alert-info text-center">
+                Chưa có tin tuyển dụng nào.
+              </div>
+            </div>
+            @endforelse
           </div>
         </div>
       </section>

@@ -144,7 +144,10 @@ class LoginController extends Controller
             $request->user()->tokens()->delete();
         }
 
-        return redirect('/'); 
+
+        return redirect('/');
+
+
     }
 
     public function employerDetails()
@@ -155,6 +158,6 @@ class LoginController extends Controller
             abort(403, 'Bạn không có quyền truy cập trang này.');
         }
 
-        return view('website.employers.employe-details', compact('user'));
+        return view('employer.index', compact('user'));
     }
 }

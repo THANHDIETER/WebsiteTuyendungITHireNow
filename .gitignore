@@ -23,7 +23,7 @@ yarn-error.log
 /.zed
 
 public/assets/
-
+public/clien/
 *.php text eol=lf
 *.js text eol=lf
 *.css text eol=lf
