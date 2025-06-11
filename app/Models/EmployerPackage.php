@@ -24,4 +24,9 @@ class EmployerPackage extends Model
     {
         return $this->hasMany(Payment::class, 'package_id');
     }
+        public function subscriptions()
+    {
+        return $this->hasMany(CompanyPackageSubscription::class);
+    }
+
 }
