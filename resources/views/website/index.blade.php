@@ -217,158 +217,48 @@
             </div>
           </div>
           <div class="row">
-            <!-- Dưới đây là ví dụ, bạn giữ nguyên các job, chỉ dịch phần mô tả và button -->
+            @foreach($latestJobs as $job)
             <div class="col-md-6 col-lg-4">
               <div class="recent-job-item">
                 <div class="company-info">
                   <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
+                    <a href="#"><img src="{{ $job->company->logo_url ?? '../client/assets/img/companies/1.webp' }}" width="75" height="75" alt="Logo công ty"></a>
                   </div>
                   <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
+                    <h4 class="name"><a href="#">{{ $job->company->name }}</a></h4>
+                    <p class="address">{{ $job->location }}</p>
                   </div>
                 </div>
                 <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
+                  <h3 class="title"><a href="{{ route('jobs.show', $job->slug) }}">{{ $job->title }}</a></h3>
+                  <h5 class="work-type">
+                      @switch($job->job_type)
+                          @case('full-time')
+                              Toàn thời gian
+                              @break
+                          @case('part-time')
+                              Bán thời gian
+                              @break
+                          @case('remote')
+                              Làm từ xa
+                              @break
+                          @default
+                              {{ $job->job_type }}
+                      @endswitch
+                  </h5>
+                  <p class="desc">{{ Str::limit($job->description, 100) }}</p>
                 </div>
                 <div class="recent-job-info">
                   <div class="salary">
-                    <h4>25 triệu</h4>
+                    <h4>{{ number_format($job->salary_min) }}đ</h4>
                     <p>/tháng</p>
                   </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
+                  <a class="btn-theme btn-sm" href="{{ route('jobs.show', $job->slug) }}">Ứng tuyển ngay</a>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <!-- Lặp lại các item khác tương tự -->
+            @endforeach
+            <!-- Các job item tĩnh sẽ được thay thế bằng vòng lặp này -->
           </div>
         </div>
       </section>
