@@ -17,7 +17,19 @@
         @include('employer.layouts.partials.sidebar')
 
         <div class="flex-grow-1">
+          @if(session('error'))
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                <i class="bi bi-emoji-frown fs-4 me-3"></i>
+                <div>
+                    {{ session('error') }}
+                    <a href="{{ route('employer.packages.index') }}" class="btn btn-sm btn-warning ms-2">Mua gói dịch vụ</a>
+                </div>
+            </div>
+        @endif
           @yield('content')
+          {{-- Trong layout --}}
+         
+
         </div>
 
         @stack('scripts')

@@ -26,8 +26,6 @@ use Database\Seeders\EmployerPackagesSeeder;
 use Database\Seeders\ServicePackagesSeeder;
 // use Database\Seeders\job_applicationsSeeder;
 
-d
-
 
 class DatabaseSeeder extends Seeder
 {

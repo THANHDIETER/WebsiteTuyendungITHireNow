@@ -18,21 +18,7 @@ class JobController extends Controller
             ->paginate(9);
 
         return view('website.jobs.job', compact('jobs'));
-    public function index(Request $request)
-    {
-        $query = Job::with(['company', 'category', 'skills'])
-            ->where('status', 'published')
-            ->orderBy('created_at', 'desc');
-
-        // Tìm kiếm theo từ khóa (title, description, requirements)
-        if ($request->filled('keyword')) {
-            $kw = $request->keyword;
-            $query->where(function ($q) use ($kw) {
-                $q->where('title', 'like', "%$kw%")
-                    ->orWhere('description', 'like', "%$kw%")
-                    ->orWhere('requirements', 'like', "%$kw%");
-            });
-        }
+   
 
         // Địa điểm (radio)
        if ($request->filled('locations')) {

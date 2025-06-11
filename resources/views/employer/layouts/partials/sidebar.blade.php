@@ -30,12 +30,10 @@
                     </svg>
                 </a>
                 <ul class="sidebar-submenu">
-                    <li><a href="#">
-                            Đăng ký / Đăng nhập
-                        </a></li>
-                    <li><a href="#">
-                            Hồ sơ doanh nghiệp
-                        </a></li>
+                    <li><a href="{{ route('showLoginForm') }}">Đăng ký / Đăng nhập</a></li>
+                          
+                    <li><a href="#">Hồ sơ doanh nghiệp</a></li>
+                    {{-- <li><a href="{{ route('employer.company.profile') }}">Hồ sơ doanh nghiệp</a></li> --}}
                 </ul>
             </li>
 
@@ -55,15 +53,10 @@
                     </svg>
                 </a>
                 <ul class="sidebar-submenu">
-                    <li><a href="#">
-                            Tạo tin tuyển dụng
-                        </a></li>
-                    <li><a href="#">
-                            Danh sách tin đã đăng
-                        </a></li>
-                    <li><a href="#">
-                            Trạng thái tin tuyển dụng
-                        </a></li>
+                    <li><a href="{{ route('employer.jobs.create') }}">Tạo tin tuyển dụng</a></li>
+                    <li><a href="{{ route('employer.jobs.index') }}">Danh sách tin đã đăng</a></li>
+                    <li><a href="#">Trạng thái tin tuyển dụng</a></li>
+                    {{-- <li><a href="{{ route('employer.jobs.status') }}">Trạng thái tin tuyển dụng</a></li> --}}
                 </ul>
             </li>
 
@@ -83,9 +76,7 @@
                     </svg>
                 </a>
                 <ul class="sidebar-submenu">
-                    <li><a href="#">
-                            Mua gói đăng tin
-                        </a></li>
+                    <li><a href="{{ route('employer.packages.index') }}">Mua gói đăng tin</a></li>
                     <li><a href="#">
                             <svg class="svg-menu" width="16" height="16" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -93,9 +84,7 @@
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg> RTL
                         </a></li>
-                    <li><a href="#">
-                            Quản lý gói đã mua
-                        </a></li>
+                    <li><a href="{{ route('employer.subscriptions.index') }}">Quản lý gói đã mua</a></li>
                 </ul>
             </li>
             <li class="sidebar-list">
@@ -117,19 +106,13 @@
                     </svg>
                 </a>
                 <ul class="sidebar-submenu">
-                    <li><a href="#">
-                            Nhận hồ sơ ứng tuyển
-                        </a></li>
-                    <li><a href="#">
-                            Lọc và đánh giá
-                        </a></li>
-                    <li><a href="#">
-                            Liên hệ ứng viên
-                        </a></li>
+                    {{-- <li><a href="{{ route('employer.applications.index') }}">Nhận hồ sơ ứng tuyển</a></li>
+                    <li><a href="{{ route('employer.applications.review') }}">Lọc và đánh giá</a></li>
+                    <li><a href="{{ route('employer.applications.contact') }}">Liên hệ ứng viên</a></li> --}}
                 </ul>
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link" href="#">
+                {{-- <a class="sidebar-link" href="{{ route('employer.inbox') }}"> --}}
                     <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="2" />
@@ -139,7 +122,7 @@
                 </a>
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link" href="#">
+                {{-- <a class="sidebar-link" href="{{ route('employer.reports.index') }}">   --}}
                     <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 3v18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
