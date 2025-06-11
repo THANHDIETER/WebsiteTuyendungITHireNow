@@ -26,7 +26,7 @@ class CreateJobsTable extends Migration
             $table->string('experience')->nullable();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->date('deadline')->nullable();
-            $table->enum('status', ['draft', 'published', 'closed', 'pending'])->default('pending');
+            $table->enum('status', ['draft', 'published', 'closed', 'pending','rejected'])->default('pending');
             $table->integer('views')->default(0);
             $table->boolean('is_featured')->default(false);
 

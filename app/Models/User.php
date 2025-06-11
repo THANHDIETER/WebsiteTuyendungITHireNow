@@ -54,8 +54,46 @@ class User extends Authenticatable
         return $this->hasMany(Resume::class);
     }
     public function company()
-{
-    return $this->hasOne(Company::class);
-}
+    {
+        return $this->hasOne(Company::class);
+    }
+
+    public function getRoleLabelAttribute(): string
+    {
+        return match($this->role) {
+            'job_seeker' => 'Người tìm việc',
+            'employer'   => 'Nhà tuyển dụng',
+            'admin'      => 'Quản trị viên',
+            default      => 'Không xác định',
+        };
+    }
+    public function getRoleBadgeClassAttribute(): string
+    {
+        return match($this->role) {
+            'job_seeker' => 'badge bg-secondary',
+            'employer'   => 'badge bg-info text-dark',
+            'admin'      => 'badge bg-warning text-dark',
+            default      => 'badge bg-light text-muted',
+        };
+    }
+
+     public function getStatusLabelAttribute(): string
+    {
+        return match($this->status) {
+            'active'   => 'Đang hoạt động',
+            'inactive' => 'Chưa kích hoạt',
+            'banned'   => 'Bị chặn',
+            default    => 'Không xác định',
+        };
+    }
+      public function getStatusBadgeClassAttribute(): string
+    {
+        return match($this->status) {
+            'active'   => 'badge bg-success',
+            'inactive' => 'badge bg-secondary',
+            'banned'   => 'badge bg-danger',
+            default    => 'badge bg-light text-muted',
+        };
+    }
 
 }

@@ -31,7 +31,10 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('admin.reports.show', $report->id) }}" class="btn btn-sm btn-primary">Xem</a>
+<button class="btn btn-sm btn-primary btn-view-report" 
+        data-id="{{ $report->id }}">
+    Xem
+</button>
                     </td>
                 </tr>
             @empty
@@ -46,4 +49,47 @@
         {{ $reports->links() }}
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModalLabel">Chi tiết báo cáo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        <div id="report-detail-content">
+          Đang tải...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-view-report').forEach(button => {
+        button.addEventListener('click', function () {
+            const reportId = this.dataset.id;
+            const modal = new bootstrap.Modal(document.getElementById('reportModal'));
+            const contentDiv = document.getElementById('report-detail-content');
+            
+            contentDiv.innerHTML = 'Đang tải...';
+
+            fetch(`/admin/reports/${reportId}`)
+                .then(response => response.text())
+                .then(data => {
+                    contentDiv.innerHTML = data;
+                    modal.show();
+                })
+                .catch(error => {
+                    contentDiv.innerHTML = 'Lỗi khi tải dữ liệu.';
+                    console.error('Error:', error);
+                });
+        });
+    });
+});
+</script>
+@endpush

@@ -10,7 +10,6 @@ import EmployerJobPortal from './components/employers/EmployerJobPortal.vue'
 
 // Khởi tạo Vue app
 const app = createApp({})
-import { createApp } from 'vue'
 // Đăng ký các component
 app.component('seeker-profile-admin', SeekerProfileAdmin)
 app.component('payment-admin', PaymentList)
