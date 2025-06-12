@@ -23,7 +23,7 @@ use App\Http\Middleware\AdminMiddleware;
 
 // Các route dành riêng cho Admin
 Route::prefix('admin')
-    ->middleware(['auth:sanctum', 'admin']) 
+    ->middleware(['auth:sanctum', 'admin'])
     // Đảm bảo người dùng đăng nhập và có quyền admin
     ->name('admin.')
     ->group(function () {
@@ -47,7 +47,7 @@ Route::prefix('admin')
             Route::get('/', 'index')->name('index');                         // Danh sách gói
             Route::get('create', 'create')->name('create');                  // Form tạo mới
             Route::post('/', 'store')->name('store');                        // Xử lý tạo mới
-            Route::get('{service_package}/detail', 'show')->name('show');    // Chi tiết gói
+            Route::get('{service_package}', 'show')->name('show');
             Route::get('{service_package}/edit', 'edit')->name('edit');      // Form sửa
             Route::put('{service_package}', 'update')->name('update');       // Xử lý cập nhật
             Route::delete('{service_package}', 'destroy')->name('destroy');  // Xoá
@@ -56,12 +56,12 @@ Route::prefix('admin')
 
 
         // Quản lý người dùng
-        Route::prefix('users')->controller(UserController::class)->group(function () {
-            Route::get('/', 'index')->name('users.index');
-            Route::get('{id}', 'show')->name('users.show');
-            Route::patch('{id}/update', 'update')->name('users.update');
-            Route::delete('{id}', 'destroy')->name('users.destroy');
-        });
+        // Route::prefix('users')->controller(UserController::class)->group(function () {
+        //     Route::get('/', 'index')->name('users.index');
+        //     Route::get('{id}', 'show')->name('users.show');
+        //     Route::patch('{id}/update', 'update')->name('users.update');
+        //     Route::delete('{id}', 'destroy')->name('users.destroy');
+        // });
         // Route CRUD cho users
         Route::prefix('users')->name('users.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
@@ -74,17 +74,17 @@ Route::prefix('admin')
 
         });
         Route::resource('reports', ReportController::class)
-        ->only(['index', 'show', 'update', 'destroy']);
+            ->only(['index', 'show', 'update', 'destroy']);
 
         // trang sơ yếu lý dịch (cv)
-
-        Route::prefix('seekerprofile')->controller(SeekerProfileController::class)->group(function(){
+    
+        Route::prefix('seekerprofile')->controller(SeekerProfileController::class)->group(function () {
             Route::get('/', 'index')->name('seekerprofile.index');
         });
 
-         Route::prefix('payment')->controller(PaymentController::class)->group(function(){
+        Route::prefix('payment')->controller(PaymentController::class)->group(function () {
             Route::get('/', 'index')->name('payment.index');
-            });
+        });
         Route::prefix('resumes')->controller(ResumeController::class)->group(function () {
             Route::get('/', 'index')->name('resumes.index');
 
@@ -92,7 +92,7 @@ Route::prefix('admin')
 
 
         // Quản lý thống báo
-
+    
         Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
         Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -101,6 +101,5 @@ Route::prefix('admin')
         Route::put('/notifications/{id}', [NotificationController::class, 'update'])->name('notifications.update');
         Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 
-       
 
     });

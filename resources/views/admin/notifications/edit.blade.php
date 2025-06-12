@@ -1,6 +1,4 @@
-@extends('admin.layouts.default')
 
-@section('content')
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -48,9 +46,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
-                            <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-secondary">
-                                ← Quay lại
-                            </a>
+                          
                             <button type="submit" class="btn btn-warning">
                                 Cập nhật
                             </button>
@@ -61,8 +57,4 @@
         </div>
     </div>
 </div>
-@endsection
 
-@push('styles')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-@endpush

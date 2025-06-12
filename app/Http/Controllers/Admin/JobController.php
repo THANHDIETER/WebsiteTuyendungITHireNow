@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Job;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
@@ -23,38 +24,64 @@ class JobController extends Controller
         }
 
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $query->where('id', 'like', '%' . $request->search . '%');
         }
 
-        $jobs = $query->orderByDesc('created_at')->paginate(10);
-        return view('admin.jobs.index', compact('jobs'));
+        $jobs = $query->orderByDesc('id')->paginate(10);
+        $categories = Category::orderBy('name')->get();
+
+        return view('admin.jobs.index', compact('jobs', 'categories'));
     }
 
     public function show(Job $job)
     {
-        $job->load(['company', 'category', 'skills']);
         return view('admin.jobs.show', compact('job'));
     }
 
     public function approve(Request $request, Job $job)
     {
-        $job->update([
-            'is_approved' => true,
-            'status' => 'published',
-        ]);
+        if ($job->status !== 'pending') {
+            $job->refresh(); // Đảm bảo trạng thái là mới nhất từ DB
 
-        return redirect()->route('admin.jobs.index')->with('success', 'Tin tuyển dụng đã được duyệt.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Tin đã được xử lý bởi người khác.',
+                'status_html' => $job->status_badge,
+            ], 409);
+        }
+
+
+        $job->update(['status' => 'published']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Tin đã được duyệt.',
+            'status_html' => $job->status_badge,
+
+        ]);
     }
 
     public function reject(Request $request, Job $job)
     {
-        $job->update([
-            'is_approved' => false,
-            'status' => 'draft',
-        ]);
+        if ($job->status !== 'pending') {
+            $job->refresh();
+            return response()->json([
+                'success' => false,
+                'message' => 'Tin đã được xử lý bởi người khác.',
+                'status_html' => $job->status_badge,
 
-        return redirect()->route('admin.jobs.index')->with('info', 'Tin tuyển dụng đã bị từ chối.');
+            ], 409);
+        }
+
+        $job->update(['status' => 'rejected']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tin đã bị từ chối.',
+            'status_html' => $job->status_badge,
+
+        ]);
     }
+
 
     public function destroy(Job $job)
     {

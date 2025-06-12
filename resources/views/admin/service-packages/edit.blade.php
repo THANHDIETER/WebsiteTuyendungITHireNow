@@ -1,8 +1,6 @@
-@extends('admin.layouts.default')
 
-@section('content')
 <div class="container py-4 max-w-2xl">
-    <h1 class="h4 mb-4">Chỉnh sửa Gói Dịch Vụ</h1>
+    <h1 class="h4 mb-4">Chỉnh sửa Gói Dịch Vụ {{ $service_package->id }}</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -51,7 +49,5 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a href="{{ route('admin.service-packages.index') }}" class="btn btn-secondary">Quay lại danh sách</a>
     </form>
 </div>
-@endsection
