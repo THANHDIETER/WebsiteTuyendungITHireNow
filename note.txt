@@ -30,3 +30,5 @@ php artisan migrate:fresh --seed
 
 npm install react react-dom
 npm install --save-dev @vitejs/plugin-react
+bottrapAdd commentMore actions
+npm install bootstrap

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\Skill;
+use App\Models\Company;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class JobController extends Controller

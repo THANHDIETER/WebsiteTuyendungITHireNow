@@ -15,10 +15,7 @@ class EmployerMiddleware
             return response()->json(['message' => 'Chưa xác thực'], 401);
         }
 
-        $role = Auth::user()->role;
-
-        // Chỉ cho phép employer hoặc admin
-        if ($role === 'employer' || $role === 'admin') {
+              if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin') {
             return $next($request);
         }
 
