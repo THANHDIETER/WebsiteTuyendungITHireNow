@@ -49,7 +49,17 @@ class LoginController extends Controller
             $token = $user->createToken('access_token')->plainTextToken;
             session()->flash('access_token', $token);
 
+           switch ($user->role) {
+        case 'admin':
+            return redirect()->route('admin.dashboard');
+        case 'employer':
+            return redirect()->route('employer');
+        case 'job_seeker':
             return redirect()->route('home');
+        default:
+            Auth::logout(); // Nếu không hợp lệ
+            return redirect()->route('login')->withErrors(['role' => 'Tài khoản không hợp lệ.']);
+    }
         }
 
         session()->flash('error', 'Mật khẩu không đúng.');

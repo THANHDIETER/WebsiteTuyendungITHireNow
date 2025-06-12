@@ -109,13 +109,12 @@
                                 <strong>Meta Description:</strong> {{ $job->meta_description ?? '-' }}
                             </div>
                         </div>
-                        @if($job->apply_url)
-                        <div class="mb-3">
-                            <a href="{{ $job->apply_url }}" target="_blank" class="btn btn-primary">
-                                Ứng tuyển ngay <i class="bi bi-box-arrow-up-right"></i>
+                        <div class="mb-3 text-end">
+                            <a href="{{ route('employer.jobs.edit', $job->id) }}" class="btn btn-warning">
+                                <i class="bi bi-pencil-square"></i> Sửa tin tuyển dụng
                             </a>
                         </div>
-                        @endif
+
                         <div class="text-end">
                             <a href="{{ route('employer.jobs.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left"></i> Quay lại danh sách

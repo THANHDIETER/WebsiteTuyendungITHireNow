@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             <!-- Page sidebar start-->
             <div class="overlay"></div>
             <aside class="page-sidebar" data-sidebar-layout="stroke-svg">
@@ -1387,7 +1388,7 @@
                         <use
                             href="https://admin.pixelstrap.net/edmin/assets/svg/feather-icons/dist/feather-sprite.svg#arrow-right">
                         </use>
-=======
+
 <!-- Bắt đầu sidebar trang -->
 <div class="overlay"></div>
 <aside class="page-sidebar" data-sidebar-layout="stroke-svg">
@@ -1400,7 +1401,8 @@
     </div>
     <div id="sidebar-menu">
         <ul class="sidebar-menu" id="simple-bar">
-=======
+
+
 <style>
     .sidebar-menu a {
         text-decoration: none !important;
@@ -1411,7 +1413,7 @@
         color: #212529;
         font-weight: 500;
     }
->>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
+
 
     .sidebar-menu a:hover {
         background-color: #f0f8ff;
@@ -1428,7 +1430,7 @@
         border-bottom: 1px solid #e9ecef;
     }
 
-<<<<<<< HEAD
+
             <!-- Dashboard -->
             <li class="sidebar-list">
                 <!-- Icon Ghim -->
@@ -1444,7 +1446,7 @@
                         <path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z" stroke="currentColor" stroke-width="2"
                             stroke-linejoin="round" />
                         <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
->>>>>>> 6a595c609a3f34915d7da9f8c32aad10c0d37ddc
+
                     </svg>
                     <span>Bảng điều khiển</span>
                     <div class="badge badge-primary rounded-pill">3</div>
@@ -1479,11 +1481,111 @@
                         </a></li>
                 </ul>
             </li>
-=======
+
     .sidebar-submenu {
         padding-left: 24px;
     }
->>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
+
+
+    .sidebar-submenu li a {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+
+    .badge-primary {
+        background-color: #0d6efd;
+        color: #fff;
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .sidebar-icon {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+</style>
+
+<aside class="page-sidebar">
+    <ul class="sidebar-menu">
+
+        <li class="sidebar-main-title">Chức năng chính</li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
+                <i class="bi bi-speedometer sidebar-icon"></i> Bảng điều khiển
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.jobs.index') }}">
+                <i class="bi bi-briefcase sidebar-icon"></i> Duyệt tin tuyển dụng
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.seekerprofile.index') }}">
+                <i class="bi bi-person-lines-fill sidebar-icon"></i> Duyệt CV ứng viên
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.service-packages.index') }}">
+                <i class="bi bi-box sidebar-icon"></i> Gói dịch vụ
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.notifications.index') }}">
+                <i class="bi bi-bell sidebar-icon"></i> Thông báo hệ thống
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.users.index') }}">
+                <i class="bi bi-people sidebar-icon"></i> Quản lý người dùng
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.payment.index') }}">
+                <i class="bi bi-credit-card sidebar-icon"></i> Quản lý thanh toán
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.reports.index') }}">
+                <i class="bi bi-flag sidebar-icon"></i> Nội dung vi phạm
+            </a>
+        </li>
+
+        <li class="sidebar-main-title">Khác</li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="#">
+                <i class="bi bi-gear sidebar-icon"></i> Cài đặt hệ thống
+            </a>
+        </li>
+
+
+
+    .sidebar-menu a:hover {
+        background-color: #f0f8ff;
+        color: #0d6efd !important;
+    }
+
+    .sidebar-main-title {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 16px;
+        color: #495057;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .sidebar-submenu {
+        padding-left: 24px;
+    }
 
     .sidebar-submenu li a {
         font-size: 13px;

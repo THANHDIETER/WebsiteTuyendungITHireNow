@@ -41,6 +41,7 @@ class JobApplicationController extends Controller
 
             // Upload CV file
             $cvPath = $request->file('cv_file')->storeAs('cvs', $fileName, 'public');
+    
 
             // Create application in job_applications table
             DB::table('job_applications')->insert([
