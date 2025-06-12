@@ -15,10 +15,11 @@
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
                                 <li><a href="index.html"><span>Home</span></a></li>
-                                <li class="has-submenu"><a href="index.html#/"><span>Find Jobs</span></a>
+                                <li class="has-submenu"><a href=""><span>Find Jobs</span></a>
                                     <ul class="submenu-nav">
-                                        <li><a href="job.html"><span>Jobs</span></a></li>
+                                        <li><a href="{{ route('jobs.index') }}"><span>Jobs</span></a></li>
                                         <li><a href="job-details.html"><span>Job Details</span></a></li>
+                                        <li><a href="{{ route('jobs.saved') }}"><span>Job Saved</span></a></li>
                                     </ul>
                                 </li>
                                 <li><a href="employers-details.html"><span>Employers Details</span></a></li>

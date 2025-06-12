@@ -19,7 +19,7 @@ Route::prefix('admin')
 
         // Quản lý việc làm (jobs)
         Route::prefix('jobs')->controller(JobController::class)->group(function () {
-            Route::get('/', 'index')->name('jobs.index');
+            Route::get('/', 'index')->name('admin.jobs.index');
             Route::patch('{id}/approve', 'approve')->name('jobs.approve');
             Route::delete('{id}', 'destroy')->name('jobs.destroy');
         });
