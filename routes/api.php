@@ -45,5 +45,7 @@ Route::prefix('admin/stats')
 
 Route::prefix('employer')->group(function () {
     Route::get('/jobs', [EmployerJobApiController::class, 'index']);
-    
+});
+Route::middleware(['auth:sanctum','employer'])->group(function () {
+   Route::apiResource('job-applications', JobApplicationController::class);
 });
