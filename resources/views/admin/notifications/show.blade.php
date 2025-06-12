@@ -1,6 +1,4 @@
-@extends('admin.layouts.default')
 
-@section('content')
 <style>
     footer {
         display: none !important;
@@ -65,17 +63,10 @@
                         <a href="{{ route('admin.notifications.edit', $notification->id) }}" class="btn btn-warning">
                             <i class="bi bi-pencil-square"></i> Chỉnh sửa
                         </a>
-                        <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-primary">
-                            ← Quay lại danh sách
-                        </a>
+                      
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
-
-@push('styles')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-@endpush

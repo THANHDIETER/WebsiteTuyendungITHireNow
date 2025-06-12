@@ -84,13 +84,7 @@ class Company extends Model
             ->first();
     }
 
-    // Lấy số lượt đăng tin miễn phí còn lại
-    public function getFreeQuotaRemain()
-    {
-        $freeLimit = 3; // Số lượt free mặc định
-        $usedFree = $this->jobs()->where('is_paid', false)->count();
-        return max($freeLimit - $usedFree, 0);
-    }
+
 
     // Lấy package có lượt đăng còn lại (trả phí, còn hạn, còn quota)
     public function activeEmployerPackage()
@@ -111,4 +105,33 @@ class Company extends Model
         $paid = $pkg ? ($pkg->post_limit - $pkg->posts_used) : 0;
         return $free + $paid;
     }
+    // Company.php
+
+public function isFreeQuotaActive()
+{
+    return $this->free_post_quota > 0
+        && $this->free_post_quota_used < $this->free_post_quota
+        && $this->free_post_quota_expired_at
+        && now()->lt($this->free_post_quota_expired_at);
+}
+
+public function startFreeQuotaIfNotYet()
+{
+    if (!$this->free_post_quota_expired_at) {
+        $this->free_post_quota_expired_at = now()->addDays(7);
+        $this->save();
+    }
+}
+
+public function useFreeQuota()
+{
+    $this->increment('free_post_quota_used');
+}
+
+public function getFreeQuotaRemain()
+{
+    if (!$this->isFreeQuotaActive()) return 0;
+    return $this->free_post_quota - $this->free_post_quota_used;
+}
+
 }

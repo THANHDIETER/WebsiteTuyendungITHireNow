@@ -31,22 +31,22 @@ Route::get('website/employer', [LoginController::class, 'employerDetails'])->nam
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
 
-Route::get('employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+Route::get('employer-details', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 // Giao diện người dùng (Website)
-Route::get('/', function () {
+Route::get('/job_seeker', function () {
     return view('employer.index');
-})->name('home');
+})->name('cong-viec');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
 
-
-Route::get('/cong-vieca', function () {
-    return view('website.jobs.job');
-})->name('cong-viec');
+Route::get('/employer', function () {
+    return view('employer.index');
+})->name('employer');
 
 
 Route::get('/chi-tiet-cong-viec', function () {

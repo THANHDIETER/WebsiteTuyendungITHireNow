@@ -17,6 +17,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
 
+            // Thêm thông tin ứng viên
+            $table->string('full_name', 255);
+            $table->string('email', 255);
+            $table->string('phone', 20);
+
             $table->text('cv_url');
             $table->text('cover_letter')->nullable();
             $table->timestamp('applied_at')->useCurrent();
@@ -34,7 +39,6 @@ return new class extends Migration
             $table->softDeletes();
         });
     }
-
 
     /**
      * Reverse the migrations.

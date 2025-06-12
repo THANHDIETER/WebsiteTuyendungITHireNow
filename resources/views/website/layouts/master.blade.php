@@ -23,11 +23,11 @@
 
     <!--wrapper start-->
     <div class="wrapper">
-
+        
         <!--== Bắt đầu Header ==-->
         @include('website.layouts.particals.header')
         <!--== Kết thúc Header ==-->
-
+        
         @yield('content')
 
         <!--== Bắt đầu Footer ==-->
