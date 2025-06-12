@@ -97,6 +97,13 @@
                                                 </a>
                                             </li>
                                         @endif
+                                          @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('employer.dashboard') }}">
+                                                    <i class="icofont-ui-settings me-1"></i> Trang nhà tuyển dụng
+                                                </a>
+                                            </li>
+                                        @endif
                                         <li>
                                             <a class="dropdown-item" href="{{ url('profile.edit') }}">
                                                 <i class="icofont-edit me-1"></i> Thay đổi thông tin

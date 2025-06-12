@@ -36,3 +36,6 @@ npm install --save-dev @vitejs/plugin-react
 php artisan vendor:publish --tag=laravel-pagination
 
 composer require pusher/pusher-php-server
+
+bottrap
+npm install bootstrap
