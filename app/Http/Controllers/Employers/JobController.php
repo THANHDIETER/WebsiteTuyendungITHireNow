@@ -106,4 +106,10 @@ class JobController extends Controller
         return redirect()->route('employer.jobs.index')
             ->with('success', 'Tin đã được gửi và đang chờ phê duyệt.');
     }
+    public function show($id)
+{
+    $job = Job::with(['company', 'category'])->findOrFail($id);
+    return view('employer.jobs.show', compact('job'));
+}
+
 }
