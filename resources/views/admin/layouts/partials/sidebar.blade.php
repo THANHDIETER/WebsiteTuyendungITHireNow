@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
             <!-- Page sidebar start-->
             <div class="overlay"></div>
             <aside class="page-sidebar" data-sidebar-layout="stroke-svg">
@@ -1399,16 +1400,35 @@
     </div>
     <div id="sidebar-menu">
         <ul class="sidebar-menu" id="simple-bar">
+=======
+<style>
+    .sidebar-menu a {
+        text-decoration: none !important;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        padding: 10px 14px;
+        display: block;
+        border-radius: 6px;
+        color: #212529;
+        font-weight: 500;
+    }
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
 
-            <!-- Phần Ghim -->
-            <li class="pin-title sidebar-list p-0">
-                <h5 class="sidebar-main-title">Đã ghim</h5>
-            </li>
-            <li class="line pin-line"></li>
+    .sidebar-menu a:hover {
+        background-color: #f0f8ff;
+        color: #0d6efd !important;
+    }
 
-            <!-- Phần Chung -->
-            <li class="sidebar-main-title">Chung</li>
+    .sidebar-main-title {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 16px;
+        color: #495057;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom: 1px solid #e9ecef;
+    }
 
+<<<<<<< HEAD
             <!-- Dashboard -->
             <li class="sidebar-list">
                 <!-- Icon Ghim -->
@@ -1459,235 +1479,90 @@
                         </a></li>
                 </ul>
             </li>
+=======
+    .sidebar-submenu {
+        padding-left: 24px;
+    }
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
 
-            <!-- Widgets -->
-            <li class="sidebar-list">
-                <!-- Icon Ghim -->
-                <svg class="pinned-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 2l-2 2-4 14-4-14-2-2 2-2 2 2 4 14 4-14 2-2z" stroke="currentColor" stroke-width="2"
-                        stroke-linejoin="round" fill="none" />
-                </svg>
-                <a class="sidebar-link" href="#">
-                    <!-- Icon Pie Chart -->
-                    <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                        <path d="M12 2v10h10" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                    </svg>
-                    <span>Widgets</span>
-                    <!-- Icon mũi tên phải -->
-                    <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li><a href="#">
-                            <svg class="svg-menu" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg> Chung
-                        </a></li>
-                    <li><a href="#">
-                            <svg class="svg-menu" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg> Biểu đồ
-                        </a></li>
-                </ul>
-            </li>
+    .sidebar-submenu li a {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
 
-            <!-- Bố cục trang -->
-            <li class="sidebar-list">
-                <!-- Icon Ghim -->
-                <svg class="pinned-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 2l-2 2-4 14-4-14-2-2 2-2 2 2 4 14 4-14 2-2z" stroke="currentColor" stroke-width="2"
-                        stroke-linejoin="round" fill="none" />
-                </svg>
-                <a class="sidebar-link" href="#">
-                    <!-- Icon Document -->
-                    <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor"
-                            stroke-width="2" stroke-linejoin="round" />
-                        <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                    </svg>
-                    <span>Bố cục trang</span>
-                    <!-- Icon mũi tên phải -->
-                    <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li><a href="#">
-                            <svg class="svg-menu" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg> Bố cục hộp
-                        </a></li>
-                    <li><a href="#">
-                            <svg class="svg-menu" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg> RTL
-                        </a></li>
-                    <li><a href="#">
-                            <svg class="svg-menu" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg> Giao diện tối
-                        </a></li>
-                </ul>
-            </li>
+    .badge-primary {
+        background-color: #0d6efd;
+        color: #fff;
+        font-size: 10px;
+        padding: 2px 6px;
+    }
 
-            <li class="line"></li>
+    .sidebar-icon {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+</style>
 
-            <!-- Phần Ứng dụng -->
-            <li class="sidebar-main-title">Ứng dụng</li>
+<aside class="page-sidebar">
+    <ul class="sidebar-menu">
 
-            <!-- Dự án -->
-            <li class="sidebar-list">
-                <!-- Icon Ghim -->
-                <svg class="pinned-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 2l-2 2-4 14-4-14-2-2 2-2 2 2 4 14 4-14 2-2z" stroke="currentColor" stroke-width="2"
-                        stroke-linejoin="round" fill="none" />
-                </svg>
-                <a class="sidebar-link" href="#">
-                    <!-- Icon Info Circle -->
-                    <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                        <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" />
-                        <circle cx="12" cy="8" r="1" fill="currentColor" />
-                    </svg>
-                    <span>Dự án</span>
-                    <!-- Icon mũi tên phải -->
-                    <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li><a href="#">
-                            <svg class="svg-menu" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg> Danh sách dự án
-                        </a></li>
-                    <li><a href="#">
-                            <svg class="svg-menu" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg> Tạo mới
-                        </a></li>
-                </ul>
-            </li>
+        <li class="sidebar-main-title">Chức năng chính</li>
 
-            <!-- Quản lý file -->
-            <li class="sidebar-list">
-                <!-- Icon Ghim -->
-                <svg class="pinned-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 2l-2 2-4 14-4-14-2-2 2-2 2 2 4 14 4-14 2-2z" stroke="currentColor" stroke-width="2"
-                        stroke-linejoin="round" fill="none" />
-                </svg>
-                <a class="sidebar-link" href="#">
-                    <!-- Icon Paper -->
-                    <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h7l7 7v9a2 2 0 01-2 2z" stroke="currentColor"
-                            stroke-width="2" stroke-linejoin="round" />
-                        <path d="M14 2v7h7" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                    </svg>
-                    <span>Quản lý file</span>
-                </a>
-            </li>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
+                <i class="bi bi-speedometer sidebar-icon"></i> Bảng điều khiển
+            </a>
+        </li>
 
-            <!-- Duyệt tin tuyển dụng -->
-            <li class="sidebar-list">
-                <!-- Icon Ghim -->
-                <svg class="pinned-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 2l-2 2-4 14-4-14-2-2 2-2 2 2 4 14 4-14 2-2z" stroke="currentColor" stroke-width="2"
-                        stroke-linejoin="round" fill="none" />
-                </svg>
-                <a class="sidebar-link" href="{{ route('admin.jobs.index') }}">
-                    <!-- Icon Wallet -->
-                    <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" />
-                        <path d="M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <path d="M22 11h-6a2 2 0 00-2 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                    <span>Duyệt tin tuyển dụng</span>
-                </a>
-            </li>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.jobs.index') }}">
+                <i class="bi bi-briefcase sidebar-icon"></i> Duyệt tin tuyển dụng
+            </a>
+        </li>
 
-            <!-- Duyệt CV ứng viên -->
-            <li class="sidebar-list">
-                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24">
-                    <circle cx="12" cy="7" r="4"></circle>
-                    <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
-                </svg>
-                <a class="sidebar-link" href="{{ route('admin.resumes.index') }}">
-                    <!-- Icon mới ở đây -->
-                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24">
-                        <circle cx="12" cy="7" r="4"></circle>
-                        <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
-                    </svg>
-                    <span>Duyệt CV ứng viên</span>
-                </a>
-            </li>
-            <li class="sidebar-list">
-                <svg class="pinned-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24">
-                    <circle cx="12" cy="7" r="4"></circle>
-                    <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
-                </svg>
-                <a class="sidebar-link" href="{{ route('admin.users.index') }}">
-                    <svg class="stroke-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24">
-                        <circle cx="12" cy="7" r="4"></circle>
-                        <path d="M5.5 21a6.5 6.5 0 0113 0"></path>
-                    </svg>
-                    <span>Quản lý users</span>
-                </a>
-            </li>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.seekerprofile.index') }}">
+                <i class="bi bi-person-lines-fill sidebar-icon"></i> Duyệt CV ứng viên
+            </a>
+        </li>
 
-            
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.service-packages.index') }}">
+                <i class="bi bi-box sidebar-icon"></i> Gói dịch vụ
+            </a>
+        </li>
 
-            <li class="line"></li>
-        </ul>
-    </div>
-    <div class="right-arrow" id="right-arrow">
-        <!-- Icon mũi tên phải -->
-        <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" />
-        </svg>
-    </div>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.notifications.index') }}">
+                <i class="bi bi-bell sidebar-icon"></i> Thông báo hệ thống
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.users.index') }}">
+                <i class="bi bi-people sidebar-icon"></i> Quản lý người dùng
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.payment.index') }}">
+                <i class="bi bi-credit-card sidebar-icon"></i> Quản lý thanh toán
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.reports.index') }}">
+                <i class="bi bi-flag sidebar-icon"></i> Nội dung vi phạm
+            </a>
+        </li>
+
+        <li class="sidebar-main-title">Khác</li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="#">
+                <i class="bi bi-gear sidebar-icon"></i> Cài đặt hệ thống
+            </a>
+        </li>
+
+    </ul>
 </aside>
-<!-- Kết thúc sidebar trang -->

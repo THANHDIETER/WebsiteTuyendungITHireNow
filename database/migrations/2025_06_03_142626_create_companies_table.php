@@ -9,7 +9,7 @@ class CreateCompaniesTable extends Migration
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->id('id')->primary();
+            $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('slug')->unique();
@@ -27,6 +27,8 @@ class CreateCompaniesTable extends Migration
             $table->text('benefits')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->enum('status', ['active', 'inactive', 'banned'])->default('inactive');
+            // Thêm trường này để set số lượt đăng tin miễn phí cho từng công ty
+            $table->unsignedTinyInteger('free_post_quota')->default(3)->comment('Số lượt đăng tin miễn phí');
             $table->timestamps();
         });
     }

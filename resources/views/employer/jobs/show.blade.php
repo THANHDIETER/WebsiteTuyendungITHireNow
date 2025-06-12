@@ -1,0 +1,1 @@
+@extends('employer.layouts.default')

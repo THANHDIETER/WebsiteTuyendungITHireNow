@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use App\Models\Category;
-use App\Models\Company;
 use App\Models\Skill;
+use App\Models\Company;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -105,7 +105,7 @@ class JobController extends Controller
 
     public function show($slug)
     {
-        $job = Job::with(['company', 'category', 'skills'])
+        $job = Job::with('company')
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();

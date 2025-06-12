@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobApplicationController;
 
 // Nhúng route riêng
 require __DIR__ . '/admin.php';
@@ -28,20 +30,26 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
 
+// Static Pages
+Route::get('/docs', fn() => view('docs.index'))->name('docs');
+
 Route::get('employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 // Giao diện người dùng (Website)
 Route::get('/', function () {
-    return view('website.index');
+    return view('employer.index');
 })->name('home');
 
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/cong-viec', [JobController::class, 'index'])->name('website.jobs.job');
+Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
 
-Route::get('/cong-viec', function () {
+
+Route::get('/cong-vieca', function () {
     return view('website.jobs.job');
 })->name('cong-viec');
+
 
 Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
@@ -61,10 +69,7 @@ Route::get('/chi-tiet-ung-vien', function () {
 
 Route::get('/blog', function () {
 
-    return view('website.blog.blog-grid');
-
     return view('website.blog.blog');
-        return view('website.blog.blog-grid');
 
 })->name('blog');
 
@@ -73,9 +78,9 @@ Route::get('/blog-details', function () {
 })->name('blog-details');
 
 Route::get('/blog-grid', function () {
-    return view('website.blog.blog');
+
     return view('website.blog.blog-grid');
-        return view('website.blog.blog');
+
 })->name('blog-grid');
 
 Route::get('/blog-right-sidebar', function () {
@@ -88,8 +93,9 @@ Route::get('/contact', function () {
 
 Route::get('/404', function () {
     return view('website.pages.404');
-})->name('404')
-->name("404");
+
+})->name('404');
+
 
 Route::get('/about-us', function () {
     return view('website.pages.about-us');
@@ -101,4 +107,9 @@ Route::get('/login', function () {
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
-})->name('registration');
+
+});
+
+Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
+

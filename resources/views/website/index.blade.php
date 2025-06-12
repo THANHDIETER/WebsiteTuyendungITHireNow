@@ -541,243 +541,30 @@
             </div>
           </div>
           <div class="row row-gutter-20">
-            <div class="col-sm-6 col-lg-3">
-              <!--== Start Job Category Item ==-->
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Kế toán/Tài chính <span>(305)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-              <!--== End Job Category Item ==-->
-            </div>
+            @forelse($categories as $category)
             <div class="col-sm-6 col-lg-3">
               <div class="job-category-item">
                 <div class="content">
-                  <h3 class="title"><a href="job-details.html">Sản xuất/Vận hành <span>(95)</span></a></h3>
+                  <h3 class="title">
+                    <a href="{{ route('jobs.index', ['category' => $category->id]) }}">
+                      {{ $category->name }} <span>({{ $category->jobs_count }})</span>
+                    </a>
+                  </h3>
                 </div>
-                <a class="overlay-link" href="job-details.html"></a>
+                <a class="overlay-link" href="{{ route('jobs.index', ['category' => $category->id]) }}"></a>
               </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Giáo dục/Đào tạo <span>(212)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
+            @empty
+            <div class="col-12">
+              <div class="alert alert-info text-center">
+                Chưa có danh mục ngành nghề nào.
               </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Thiết kế/Sáng tạo <span>(93)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Y tế/Sức khỏe <span>(4)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Nghiên cứu/Tư vấn <span>(34)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Kỹ sư/Kiến trúc <span>(376)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Viễn thông <span>(450)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Nhập liệu/Vận hành <span>(25)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Marketing/Bán hàng <span>(666)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="job-category-item">
-                <div class="content">
-                  <h3 class="title"><a href="job-details.html">Dịch vụ bảo vệ/Hỗ trợ <span>(62)</span></a></h3>
-                </div>
-                <a class="overlay-link" href="job-details.html"></a>
-              </div>
-
-            </div>
-        </section>
-        <!--== End Hero Area Wrapper ==-->
-
-
-        <!--== Start Job Category Area Wrapper ==-->
-        {{-- <section class="job-category-area">
-            <div class="container" data-aos="fade-down">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title text-center">
-                            <h3 class="title">Popular Category</h3>
-                            <div class="desc">
-                                <p>Many desktop publishing packages and web page editors</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-gutter-20">
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Accounting/Finance <span>(305)</span></a></h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Production/Operation <span>(95)</span></a>
-                                </h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Education/Training <span>(212)</span></a>
-                                </h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Design/Creative <span>(93)</span></a></h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Health & Fitness <span>(4)</span></a></h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Research/Consultancy <span>(34)</span></a>
-                                </h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Engineer/Architects <span>(376)</span></a>
-                                </h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Telecommunication <span>(450)</span></a>
-                                </h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Data Entry/Operator <span>(25)</span></a>
-                                </h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Production/Operation <span>(95)</span></a>
-                                </h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Marketing/Sales <span>(666)</span></a></h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <!--== Start Job Category Item ==-->
-                        <div class="job-category-item">
-                            <div class="content">
-                                <h3 class="title"><a href="job-details.html">Security/Support Service
-                                        <span>(62)</span></a></h3>
-                            </div>
-                            <a class="overlay-link" href="job-details.html"></a>
-                        </div>
-                        <!--== End Job Category Item ==-->
-                    </div>
+            @endforelse
+          </div>
+        </div>
+      </section>
+      <!--== End Job Category Area Wrapper ==-->
 
       <!--== Start Recent Job Area Wrapper ==-->
       <section class="recent-job-area bg-color-gray">
@@ -793,158 +580,45 @@
             </div>
           </div>
           <div class="row">
-            <!-- Dưới đây là ví dụ, bạn giữ nguyên các job, chỉ dịch phần mô tả và button -->
+            @forelse($jobs as $job)
             <div class="col-md-6 col-lg-4">
               <div class="recent-job-item">
                 <div class="company-info">
                   <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
+                    <a href="#">
+                      @if($job->company && $job->company->logo_url)
+                        <img src="{{ $job->company->logo_url }}" width="75" height="75" alt="{{ $job->company->name }}">
+                      @else
+                        <img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Company Logo">
+                      @endif
+                    </a>
                   </div>
                   <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
+                    <h4 class="name"><a href="#">{{ $job->company->name ?? 'N/A' }}</a></h4>
+                    <p class="address">{{ $job->address ?? 'N/A' }}</p>
                   </div>
                 </div>
                 <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
+                  <h3 class="title"><a href="{{ route('jobs.show', $job->slug) }}">{{ $job->title }}</a></h3>
+                  <h5 class="work-type">{{ ucfirst($job->job_type) }}</h5>
+                  <p class="desc">{{ Str::limit($job->description, 100) }}</p>
                 </div>
                 <div class="recent-job-info">
                   <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
+                    <h4>{{ number_format($job->salary_min) }} - {{ number_format($job->salary_max) }}</h4>
+                    <p>{{ $job->currency }}/tháng</p>
                   </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
+                  <a class="btn-theme btn-sm" href="{{ route('jobs.show', $job->slug) }}">Ứng tuyển ngay</a>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
+            @empty
+            <div class="col-12">
+              <div class="alert alert-info text-center">
+                Chưa có tin tuyển dụng nào.
               </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-              <div class="recent-job-item">
-                <div class="company-info">
-                  <div class="logo">
-                    <a href="#"><img src="../client/assets/img/companies/1.webp" width="75" height="75" alt="Hình ảnh - HasTech"></a>
-                  </div>
-                  <div class="content">
-                    <h4 class="name"><a href="#">Darkento Ltd.</a></h4>
-                    <p class="address">Hà Nội, Việt Nam</p>
-                  </div>
-                </div>
-                <div class="main-content">
-                  <h3 class="title"><a href="job-details.html">Lập trình viên Front-end</a></h3>
-                  <h5 class="work-type">Toàn thời gian</h5>
-                  <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                </div>
-                <div class="recent-job-info">
-                  <div class="salary">
-                    <h4>25 triệu</h4>
-                    <p>/tháng</p>
-                  </div>
-                  <a class="btn-theme btn-sm" href="job-details.html">Ứng tuyển ngay</a>
-                </div>
-              </div>
-            </div>
-            <!-- Lặp lại các item khác tương tự -->
+            @endforelse
           </div>
         </div>
       </section>
@@ -1037,7 +711,6 @@
                       <img class="shape-icon-hover" src="../client/assets/img/icons/right-arrow2.webp" alt="Hình ảnh - HasTech">
                     </div>
                   </div>
-
                 </div>
             </div>
         </section> --}}
@@ -1433,7 +1106,6 @@
                 <h3 class="title">Khách hàng hài lòng</h3>
                 <div class="desc">
                   <p>Hàng nghìn khách hàng tin tưởng và lựa chọn</p>
-
                 </div>
             </div>
 
@@ -1480,434 +1152,8 @@
                             <i class="icofont-star"></i><i class="icofont-star"></i><i class="icofont-star"></i><i class="icofont-star"></i><i class="icofont-star"></i>
                           </div>
                           <div class="testi-quote"><img src="../client/assets/img/icons/quote1.webp" alt="Quote"></div>
-
                         </div>
                     </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="working-process-content-wrap">
-                            <div class="working-col">
-                                <div class="working-process-item">
-                                    <div class="icon-box">
-                                        <div class="inner">
-                                            <img class="icon-img" src="../client/assets/img/icons/w1.webp"
-                                                alt="Hình ảnh - HasTech">
-                                            <img class="icon-hover" src="../client/assets/img/icons/w1-hover.webp"
-                                                alt="Hình ảnh - HasTech">
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Tạo tài khoản</h4>
-                                        <p class="desc">Bắt đầu hành trình việc làm với một tài khoản miễn phí.</p>
-                                    </div>
-                                    <div class="shape-arrow-icon">
-                                        <img class="shape-icon" src="../client/assets/img/icons/right-arrow.webp"
-                                            alt="Hình ảnh - HasTech">
-                                        <img class="shape-icon-hover" src="../client/assets/img/icons/right-arrow2.webp"
-                                            alt="Hình ảnh - HasTech">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="working-col">
-                                <div class="working-process-item">
-                                    <div class="icon-box">
-                                        <div class="inner">
-                                            <img class="icon-img" src="../client/assets/img/icons/w2.webp"
-                                                alt="Hình ảnh - HasTech">
-                                            <img class="icon-hover" src="../client/assets/img/icons/w2-hover.webp"
-                                                alt="Hình ảnh - HasTech">
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Tạo CV/Hồ sơ</h4>
-                                        <p class="desc">Hoàn thiện hồ sơ cá nhân để gây ấn tượng với nhà tuyển dụng.</p>
-                                    </div>
-                                    <div class="shape-arrow-icon">
-                                        <img class="shape-icon" src="../client/assets/img/icons/right-arrow.webp"
-                                            alt="Hình ảnh - HasTech">
-                                        <img class="shape-icon-hover" src="../client/assets/img/icons/right-arrow2.webp"
-                                            alt="Hình ảnh - HasTech">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="working-col">
-                                <div class="working-process-item">
-                                    <div class="icon-box">
-                                        <div class="inner">
-                                            <img class="icon-img" src="../client/assets/img/icons/w3.webp"
-                                                alt="Hình ảnh - HasTech">
-                                            <img class="icon-hover" src="../client/assets/img/icons/w3-hover.webp"
-                                                alt="Hình ảnh - HasTech">
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Tìm việc phù hợp</h4>
-                                        <p class="desc">Tìm kiếm và lựa chọn công việc đúng với đam mê và năng lực.</p>
-                                    </div>
-                                    <div class="shape-arrow-icon">
-                                        <img class="shape-icon" src="../client/assets/img/icons/right-arrow.webp"
-                                            alt="Hình ảnh - HasTech">
-                                        <img class="shape-icon-hover" src="../client/assets/img/icons/right-arrow2.webp"
-                                            alt="Hình ảnh - HasTech">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="working-col">
-                                <div class="working-process-item">
-                                    <div class="icon-box">
-                                        <div class="inner">
-                                            <img class="icon-img" src="../client/assets/img/icons/w4.webp"
-                                                alt="Hình ảnh - HasTech">
-                                            <img class="icon-hover" src="../client/assets/img/icons/w4-hover.webp"
-                                                alt="Hình ảnh - HasTech">
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Lưu & Ứng tuyển</h4>
-                                        <p class="desc">Lưu việc yêu thích và ứng tuyển chỉ với một cú nhấp chuột.</p>
-                                    </div>
-                                    <div class="shape-arrow-icon d-none">
-                                        <img class="shape-icon" src="../client/assets/img/icons/right-arrow.webp"
-                                            alt="Hình ảnh - HasTech">
-                                        <img class="shape-icon-hover" src="../client/assets/img/icons/right-arrow2.webp"
-                                            alt="Hình ảnh - HasTech">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--== End Work Process Area Wrapper ==-->
-
-        <!--== Start Divider Area Wrapper ==-->
-        <section class="sec-overlay sec-overlay-theme bg-img" data-bg-img="../client/assets/img/photos/bg1.webp">
-            <div class="container pt--0 pb--0">
-                <div class="row justify-content-center divider-style1">
-                    <div class="col-lg-10 col-xl-7">
-                        <div class="divider-content text-center">
-                            <h4 class="sub-title" data-aos="fade-down">Dùng thử miễn phí</h4>
-                            <h2 class="title" data-aos="fade-down">Tải ứng dụng di động của chúng tôi.<br>Bạn có thể tạo
-                                CV & ứng tuyển mọi lúc mọi nơi.
-                            </h2>
-                            <div class="divider-btn-group">
-                                <a class="btn-divider" data-aos="fade-down" href="page-not-found.html">
-                                    <img src="../client/assets/img/photos/google-play.webp" width="201" height="63"
-                                        class="icon" alt="Google Play">
-                                </a>
-                                <a class="btn-divider btn-divider-app-store" data-aos="fade-down"
-                                    href="page-not-found.html">
-                                    <img src="../client/assets/img/photos/mac-os.webp" width="201" height="63"
-                                        class="icon" alt="App Store">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-layer-style1"></div>
-            <div class="bg-layer-style2"></div>
-        </section>
-        <!--== End Divider Area Wrapper ==-->
-
-        <!--== Start Team Area Wrapper ==-->
-        <section class="team-area">
-            <div class="container" data-aos="fade-down">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title text-center">
-                            <h3 class="title">Ứng viên tiêu biểu</h3>
-                            <div class="desc">
-                                <p>Nhiều ứng viên tiềm năng với kỹ năng đa dạng</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <!-- Giữ nguyên cấu trúc, chỉ dịch nội dung -->
-                    <div class="col-sm-6 col-lg-4 col-xl-3">
-                        <div class="team-item">
-                            <div class="thumb">
-                                <a href="candidate-details.html">
-                                    <img src="../client/assets/img/team/1.webp" width="160" height="160"
-                                        alt="Hình ảnh - HasTech">
-                                </a>
-                            </div>
-                            <div class="content">
-                                <h4 class="title"><a href="candidate-details.html">Lauran Benitez</a></h4>
-                                <h5 class="sub-title">Nhà thiết kế web</h5>
-                                <div class="rating-box">
-                                    <i class="icofont-star"></i><i class="icofont-star"></i><i
-                                        class="icofont-star"></i><i class="icofont-star"></i><i class="icofont-star"></i>
-                                </div>
-                                <p class="desc">CSS3, HTML5, Javascript, Bootstrap, Jquery</p>
-                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">Xem hồ sơ</a>
-                            </div>
-                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
-                                    alt="Bookmark"></div>
-                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
-                                    alt="Bookmark"></div>
-                        </div>
-                    </div>
-                    <!-- Lặp lại các item khác tương tự -->
-                </div>
-
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="working-process-content-wrap">
-                            <div class="working-col">
-                                <!--== Start Work Process ==-->
-                                <div class="working-process-item">
-                                    <div class="icon-box">
-                                        <div class="inner">
-                                            <img class="icon-img" src="../client/assets/img/icons/w1.webp"
-                                                alt="Image-HasTech">
-                                            <img class="icon-hover" src="../client/assets/img/icons/w1-hover.webp"
-                                                alt="Image-HasTech">
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Tạo tài khoản</h4>
-                                        <p class="desc">Nhấp vào nút "Đăng ký", điền đầy đủ thông tin như họ tên, email
-                                            và mật khẩu, sau đó xác minh email của bạn để hoàn tất quá trình tạo tài khoản.
-                                        </p>
-                                    </div>
-                                    <div class="shape-arrow-icon">
-                                        <img class="shape-icon" src="../client/assets/img/icons/right-arrow.webp"
-                                            alt="Image-HasTech">
-                                        <img class="shape-icon-hover" src="../client/assets/img/icons/right-arrow2.webp"
-                                            alt="Image-HasTech">
-                                    </div>
-                                </div>
-                                <!--== End Work Process ==-->
-                            </div>
-                            <div class="working-col">
-                                <!--== Start Work Process ==-->
-                                <div class="working-process-item">
-                                    <div class="icon-box">
-                                        <div class="inner">
-                                            <img class="icon-img" src="../client/assets/img/icons/w3.webp"
-                                                alt="Image-HasTech">
-                                            <img class="icon-hover" src="../client/assets/img/icons/w3-hover.webp"
-                                                alt="Image-HasTech">
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Tìm việc làm</h4>
-                                        <p class="desc">Sau khi đăng nhập, bạn có thể sử dụng thanh tìm kiếm hoặc bộ lọc
-                                            để tìm việc theo ngành nghề, vị trí, mức lương và địa điểm phù hợp.</p>
-                                    </div>
-                                    <div class="shape-arrow-icon">
-                                        <img class="shape-icon" src="../client/assets/img/icons/right-arrow.webp"
-                                            alt="Image-HasTech">
-                                        <img class="shape-icon-hover" src="../client/assets/img/icons/right-arrow2.webp"
-                                            alt="Image-HasTech">
-                                    </div>
-                                </div>
-                                <!--== End Work Process ==-->
-                            </div>
-                            <div class="working-col">
-                                <!--== Start Work Process ==-->
-                                <div class="working-process-item">
-                                    <div class="icon-box">
-                                        <div class="inner">
-                                            <img class="icon-img" src="../client/assets/img/icons/w4.webp"
-                                                alt="Image-HasTech">
-                                            <img class="icon-hover" src="../client/assets/img/icons/w4-hover.webp"
-                                                alt="Image-HasTech">
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Lưu và Ứng tuyển</h4>
-                                        <p class="desc">Khi tìm được công việc phù hợp, bạn có thể nhấn "Lưu" để xem lại
-                                            sau hoặc nhấn "Ứng tuyển" để nộp hồ sơ trực tuyến nhanh chóng.</p>
-                                    </div>
-                                    <div class="shape-arrow-icon d-none">
-                                        <img class="shape-icon" src="../client/assets/img/icons/right-arrow.webp"
-                                            alt="Image-HasTech">
-                                        <img class="shape-icon-hover" src="../client/assets/img/icons/right-arrow2.webp"
-                                            alt="Image-HasTech">
-                                    </div>
-                                </div>
-                                <!--== End Work Process ==-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!--== End Work Process Area Wrapper ==-->
-
-        <!--== Start Divider Area Wrapper ==-->
-        {{-- <section class="sec-overlay sec-overlay-theme bg-img" data-bg-img="../client/assets/img/photos/bg1.webp">
-            <div class="container pt--0 pb--0">
-                <div class="row justify-content-center divider-style1">
-                    <div class="col-lg-10 col-xl-7">
-                        <div class="divider-content text-center">
-                            <h4 class="sub-title" data-aos="fade-down">Trial Version Available</h4>
-                            <h2 class="title" data-aos="fade-down">Download Our Mobile App. <br>You Can Ready Resume &
-                                Apply Job.
-                            </h2>
-                            <div class="divider-btn-group">
-                                <a class="btn-divider" data-aos="fade-down" href="page-not-found.html">
-                                    <img src="../client/assets/img/photos/google-play.webp" width="201" height="63"
-                                        class="icon" alt="Image-HasTech">
-                                </a>
-                                <a class="btn-divider btn-divider-app-store" data-aos="fade-down"
-                                    href="page-not-found.html">
-                                    <img src="../client/assets/img/photos/mac-os.webp" width="201" height="63"
-                                        class="icon" alt="Image-HasTech">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-layer-style1"></div>
-            <div class="bg-layer-style2"></div>
-        </section> --}}
-        <!--== End Divider Area Wrapper ==-->
-
-        <!--== Start Team Area Wrapper ==-->
-        {{-- <section class="team-area">
-            <div class="container" data-aos="fade-down">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title text-center">
-                            <h3 class="title">Best Candidate</h3>
-                            <div class="desc">
-                                <p>Many desktop publishing packages and web page editors</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-lg-4 col-xl-3">
-                        <!--== Start Team Item ==-->
-                        <div class="team-item">
-                            <div class="thumb">
-                                <a href="candidate-details.html">
-                                    <img src="../client/assets/img/team/1.webp" width="160" height="160"
-                                        alt="Image-HasTech">
-                                </a>
-                            </div>
-                            <div class="content">
-                                <h4 class="title"><a href="candidate-details.html">Lauran Benitez</a></h4>
-                                <h5 class="sub-title">Web Designer</h5>
-                                <div class="rating-box">
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                </div>
-                                <p class="desc">CSS3, HTML5, Javascript Bootstrap, Jquery</p>
-                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">View Profile</a>
-                            </div>
-                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
-                                    alt="Image-HasTech"></div>
-                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
-                                    alt="Image-HasTech"></div>
-                        </div>
-                        <!--== End Team Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-4 col-xl-3">
-                        <!--== Start Team Item ==-->
-                        <div class="team-item">
-                            <div class="thumb">
-                                <a href="candidate-details.html">
-                                    <img src="../client/assets/img/team/2.webp" width="160" height="160"
-                                        alt="Image-HasTech">
-                                </a>
-                            </div>
-                            <div class="content">
-                                <h4 class="title"><a href="candidate-details.html">Valentine Anders</a></h4>
-                                <h5 class="sub-title">UI/UX Designer</h5>
-                                <div class="rating-box">
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                </div>
-                                <p class="desc">CSS3, HTML5, Javascript Bootstrap, Jquery</p>
-                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">View Profile</a>
-                            </div>
-                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
-                                    alt="Image-HasTech"></div>
-                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
-                                    alt="Image-HasTech"></div>
-                        </div>
-                        <!--== End Team Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-4 col-xl-3">
-                        <!--== Start Team Item ==-->
-                        <div class="team-item">
-                            <div class="thumb">
-                                <a href="candidate-details.html">
-                                    <img src="../client/assets/img/team/3.webp" width="160" height="160"
-                                        alt="Image-HasTech">
-                                </a>
-                            </div>
-                            <div class="content">
-                                <h4 class="title"><a href="candidate-details.html">Shakia Aguilera</a></h4>
-                                <h5 class="sub-title">Web Designer</h5>
-                                <div class="rating-box">
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                </div>
-                                <p class="desc">CSS3, HTML5, Javascript Bootstrap, Jquery</p>
-                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">View Profile</a>
-                            </div>
-                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
-                                    alt="Image-HasTech"></div>
-                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
-                                    alt="Image-HasTech"></div>
-                        </div>
-                        <!--== End Team Item ==-->
-                    </div>
-                    <div class="col-sm-6 col-lg-4 col-xl-3">
-                        <!--== Start Team Item ==-->
-                        <div class="team-item">
-                            <div class="thumb">
-                                <a href="candidate-details.html">
-                                    <img src="../client/assets/img/team/4.webp" width="160" height="160"
-                                        alt="Image-HasTech">
-                                </a>
-                            </div>
-                            <div class="content">
-                                <h4 class="title"><a href="candidate-details.html">Assunta Manson</a></h4>
-                                <h5 class="sub-title">App. Developer</h5>
-                                <div class="rating-box">
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                </div>
-                                <p class="desc">CSS3, HTML5, Javascript Bootstrap, Jquery</p>
-                                <a class="btn-theme btn-white btn-sm" href="candidate-details.html">View Profile</a>
-                            </div>
-                            <div class="bookmark-icon"><img src="../client/assets/img/icons/bookmark1.webp"
-                                    alt="Image-HasTech"></div>
-                            <div class="bookmark-icon-hover"><img src="../client/assets/img/icons/bookmark2.webp"
-                                    alt="Image-HasTech"></div>
-                        </div>
-                        <!--== End Team Item ==-->
-                    </div>
-                   </div>
-      
                   </div>
                   <!-- Lặp lại các slide khác, chỉ đổi tên và nội dung -->
                 </div>
@@ -1940,7 +1186,7 @@
                             </div>
                         </div>
                     </div>
-        </section> --}}
+        </section> 
         <!--== End Team Area Wrapper ==-->
 
       
@@ -2024,7 +1270,6 @@
                 <h3 class="title">Tin tức mới nhất</h3>
                 <div class="desc">
                   <p>Cập nhật những thông tin thị trường việc làm mới nhất</p>
-
                 </div>
             </div>
 

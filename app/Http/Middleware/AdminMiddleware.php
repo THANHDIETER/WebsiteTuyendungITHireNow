@@ -24,7 +24,6 @@ class AdminMiddleware
             return $next($request);
         }
 
-        logger('Không phải admin');
-        return response()->json(['message' => 'Bị cấm. Chỉ dành cho quản trị viên.'], 403);
+        return response()->json(['message' => 'Bạn không có quyền truy cập trang này!'], 403);
     }
 }
