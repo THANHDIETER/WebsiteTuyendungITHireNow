@@ -113,3 +113,13 @@ Route::get('/registration', function () {
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 
 
+
+// Hiển thị trang Saved Jobs
+Route::get('/jobs/saved', [SavedJobController::class, 'index'])
+     ->name('jobs.saved')
+     ->middleware('auth');
+
+// Lưu / bỏ lưu việc
+Route::post('/jobs/{job}/save', [SavedJobController::class, 'toggle'])
+     ->name('jobs.toggleSave')
+     ->middleware('auth');
