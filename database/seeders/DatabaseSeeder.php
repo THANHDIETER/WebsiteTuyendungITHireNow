@@ -24,7 +24,7 @@ use Database\Seeders\CompanyReviewsSeeder;
 use Database\Seeders\SeekerProfilesSeeder;
 use Database\Seeders\EmployerPackagesSeeder;
 use Database\Seeders\ServicePackagesSeeder;
-// use Database\Seeders\job_applicationsSeeder;
+use Database\Seeders\job_applicationsSeeder;
 
 
 class DatabaseSeeder extends Seeder
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
             ApplicationsSeeder::class,
 
             ServicePackagesSeeder::class,
-            // job_applicationsSeeder::class,
+            job_applicationsSeeder::class,
 
         ]);
     }

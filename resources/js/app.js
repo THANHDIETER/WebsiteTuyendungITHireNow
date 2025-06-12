@@ -2,11 +2,11 @@ import { createApp } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-
 // Import Vue components
 import SeekerProfileAdmin from './components/SeekerProfileAdmin.vue'
 import PaymentList from './components/payments/PaymentList.vue'
 import EmployerJobPortal from './components/employers/EmployerJobPortal.vue'
+import JobApplicationsList from './components/JobApplicationsList.vue'
 
 // Khởi tạo Vue app
 const app = createApp({})
@@ -14,6 +14,8 @@ const app = createApp({})
 app.component('seeker-profile-admin', SeekerProfileAdmin)
 app.component('payment-admin', PaymentList)
 app.component('employer-job-portal', EmployerJobPortal)
+app.component('employer-job-application', JobApplicationsList)
+
 
 // Mount vào #vue-wrapper (Blade layout phải có ID này)
 app.mount('#vue-wrapper')

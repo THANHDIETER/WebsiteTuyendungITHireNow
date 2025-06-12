@@ -55,7 +55,11 @@ class Company extends Model
     {
         return $this->hasMany(Job::class);
     }
-
+    
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
     // Đánh giá công ty
     public function reviews()
     {

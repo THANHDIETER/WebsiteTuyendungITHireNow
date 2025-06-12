@@ -21,10 +21,7 @@ class JobSeekerMiddleware
             return response()->json(['message' => 'Chưa xác thực'], 401);
         }
 
-        $role = Auth::user()->role;
-
-        // Chỉ cho phép job_seeker hoặc admin
-        if ($role === 'job_seeker' || $role === 'admin') {
+         if (Auth::user()->role === 'job_seeker' || Auth::user()->role === 'admin') {
             return $next($request);
         }
 
