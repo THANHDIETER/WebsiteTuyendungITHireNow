@@ -19,9 +19,9 @@ npm install jspdf html2canvas
 composer require barryvdh/laravel-dompdf
 
  -->
- npm install
+ <!-- npm install
 chạy tailwindcs
  npm install -D tailwindcss postcss autoprefixer
 
 
-php artisan migrate:fresh --seed
+php artisan migrate:fresh --seed -->
