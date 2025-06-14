@@ -5,7 +5,6 @@ use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\PackageController;
 use App\Http\Controllers\Employers\SubscriptionController;
 use App\Http\Controllers\Employers\JobApplicationController;
-<<<<<<< HEAD
 
 // Route::prefix('employer')
 //     // ->middleware(['auth:sanctum', 'employer'])
@@ -16,8 +15,6 @@ use App\Http\Controllers\Employers\JobApplicationController;
 //         // Trang dashboard
 //         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 //     });
-=======
->>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
 
 
 
@@ -25,7 +22,6 @@ Route::middleware(['auth:sanctum', 'employer'])->group(function () {
     Route::get('/cong-viec', function () {
         return view('website.jobs.job');
     });
-<<<<<<< HEAD
     
 });
 
@@ -53,40 +49,6 @@ Route::middleware(['auth:sanctum', 'employer'])->prefix('employer')->name('emplo
     
 
  Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
-=======
-
-});
-
-Route::middleware(['auth:sanctum', 'employer'])
-    ->prefix('employer')
-    ->name('employer.')
-    ->group(function () {
-        // Trang chủ của nhà tuyển dụng
-        Route::get('/dashboard', function () {
-            return view('employer.index');
-        })->name('dashboard');
-
-        // Danh sách việc làm của nhà tuyển dụng
-        Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
-
-        // Form tạo mới tin tuyển dụng
-        Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
-
-        // Lưu tin tuyển dụng
-        Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
-
-        // Xem chi tiết tin đã đăng
-        Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
-
-        // (Tuỳ chọn) Cập nhật hoặc xoá tin
-        Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
-        Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
-        Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
-
-        Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
-    });
-Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
->>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
     Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
     Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
     Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');

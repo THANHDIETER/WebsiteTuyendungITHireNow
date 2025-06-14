@@ -131,8 +131,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-<<<<<<< HEAD
 @endif
-=======
-@endif
->>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05

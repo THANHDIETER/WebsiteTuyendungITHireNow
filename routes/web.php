@@ -108,10 +108,6 @@ Route::get('/registration', function () {
 
 });
 
-<<<<<<< HEAD
-Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
-=======
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 
 
->>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
