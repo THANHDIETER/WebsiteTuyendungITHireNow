@@ -30,10 +30,8 @@ php artisan migrate:fresh --seed
 
 npm install react react-dom
 npm install --save-dev @vitejs/plugin-react
-<<<<<<< HEAD
 bottrapAdd commentMore actions
 npm install bootstrap
-=======
 
 
 
@@ -43,4 +41,3 @@ composer require pusher/pusher-php-server
 
 bottrap
 npm install bootstrap
->>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
