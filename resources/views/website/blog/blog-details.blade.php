@@ -2,7 +2,6 @@
 
 @section('content')
     <main class="main-content">
-
         <!--== Start Page Header Area Wrapper ==-->
         <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
             <div class="container pt--0 pb--0">
@@ -54,112 +53,10 @@
                                 </div>
                             </div>
                         </div>
-                        
-      <!--== Bắt đầu khu vực header trang ==-->
-    <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
-      <div class="container pt--0 pb--0">
-        <div class="row">
-          <div class="col-12">
-            <div class="page-header-content">
-              <h2 class="title">Chi tiết bài viết</h2>
-              <nav class="breadcrumb-area">
-                <ul class="breadcrumb justify-content-center">
-                  <li><a href="index.html">Trang chủ</a></li>
-                  <li class="breadcrumb-sep">//</li>
-                  <li>Chi tiết bài viết</li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--== Kết thúc header ==-->
-
-    <!--== Bắt đầu khu vực Blog ==-->
-    <section class="blog-details-area">
-      <div class="post-details-item">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-12">
-              <div class="post-details-info text-center">
-                <div class="meta">
-                  <span class="author">Bởi <a href="blog.html">Harold Leonard</a></span>
-                  <span class="dots"></span>
-                  <span class="post-date">03 Tháng 4, 2021</span>
-                  <span class="dots"></span>
-                  <span class="post-time">10 phút đọc</span>
-                </div>
-                <h4 class="title">Cấu trúc giá linh hoạt giúp bạn phát triển doanh nghiệp hiệu quả.</h4>
-                <div class="widget-tags">
-                  <ul>
-                    <li><a href="blog.html">Đại lý</a></li>
-                    <li><a class="active" href="blog.html">Tuyển dụng</a></li>
-                    <li><a href="blog.html">Kinh doanh</a></li>
-                    <li><a href="blog.html">Doanh nghiệp</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="post-details-thumb">
-                <img class="w-100" src="../client/assets/img/blog/details1.webp" alt="Ảnh chi tiết" width="1170" height="550">
-              </div>
-            </div>
-            <div class="col-lg-10">
-              <div class="post-details-content">
-                <h4 class="desc-title">Giải pháp công nghệ việc làm cho những ai muốn xây dựng và vận hành sàn tuyển dụng riêng.</h4>
-                <p>Lorem Ipsum chỉ là đoạn văn bản giả dùng trong ngành in ấn và thiết kế. Nội dung này giúp trình bày bố cục trang một cách trực quan mà không làm người đọc bị phân tâm.</p>
-                <p>Lorem Ipsum chỉ là đoạn văn bản giả dùng trong ngành in ấn và thiết kế. Được sử dụng rộng rãi từ những năm 1500, khi một thợ in vô danh đã sắp xếp các ký tự tạo thành một quyển sách mẫu. Văn bản này vẫn giữ nguyên giá trị và phong cách trong nhiều thế kỷ.</p>
-                <div class="post-details-content-list">
-                  <h4 class="title">Mục lục:</h4>
-                  <ul class="list-style">
-                    <li>
-                      <a href="blog-details.html"><i class="icofont-double-right"></i>Thịnh hành từ những năm 1960 với sự ra đời của Letraset</a>
-                    </li>
-                    <li>
-                      <a href="blog-details.html"><i class="icofont-double-right"></i> Nhiều phần mềm và trình soạn thảo web hiện đại sử dụng</a>
-                    </li>
-                    <li>
-                      <a href="blog-details.html"><i class="icofont-double-right"></i> Thịnh hành từ những năm 1960 với sự ra đời của Letraset</a>
-                    </li>
-                    <li>
-                      <a href="blog-details.html"><i class="icofont-double-right"></i> Nhiều phần mềm và trình soạn thảo web hiện đại sử dụng</a>
-                    </li>
-                    <li>
-                      <a href="blog-details.html"><i class="icofont-double-right"></i> Thịnh hành từ những năm 1960 với sự ra đời của Letraset</a>
-                    </li>
-                  </ul>
-                </div>
-                <p>Lorem Ipsum chỉ là đoạn văn bản giả dùng trong ngành in ấn và thiết kế. Văn bản này đã vượt qua nhiều thế kỷ để trở thành chuẩn mực cho việc trình bày nội dung và kiểm tra bố cục.</p>
-                <h4 class="desc-title2">Công ty chúng tôi đối mặt với những thử thách thực tế theo nhiều cách khác nhau.</h4>
-                <p>Lorem Ipsum chỉ là đoạn văn bản giả dùng trong ngành in ấn và thiết kế. Nội dung này vẫn giữ nguyên giá trị và phong cách trong nhiều thế kỷ.</p>
-                <p>Lorem Ipsum chỉ là đoạn văn bản giả dùng trong ngành in ấn và thiết kế. Được sử dụng rộng rãi từ những năm 1500, khi một thợ in vô danh đã sắp xếp các ký tự tạo thành một quyển sách mẫu.</p>
-                <div class="content-thumb">
-                  <img class="w-100" src="../client/assets/img/blog/details2.webp" alt="Ảnh chi tiết" width="970" height="450">
-                </div>
-                <h4 class="desc-title3">Không chỉ có vậy, 37Signals còn làm nhiều điều đặc biệt để thành công.</h4>
-                <p>Lorem Ipsum chỉ là đoạn văn bản giả dùng trong ngành in ấn và thiết kế. Văn bản này đã vượt qua nhiều thế kỷ để trở thành chuẩn mực cho việc trình bày nội dung và kiểm tra bố cục.</p>
-                <p>Lorem Ipsum chỉ là đoạn văn bản giả dùng trong ngành in ấn và thiết kế. Được sử dụng rộng rãi từ những năm 1500, khi một thợ in vô danh đã sắp xếp các ký tự tạo thành một quyển sách mẫu.</p>
-                <blockquote class="blockquote-item">
-                  <div class="content">
-                    <p>2,83k người nhận bản tin WordPress của chúng tôi mỗi tuần.</p>
-                  </div>
-                </blockquote>
-                <p>Lorem Ipsum là văn bản chuẩn của ngành in ấn từ thế kỷ 16. Văn bản này vẫn còn được sử dụng rộng rãi cho đến ngày nay, từ in ấn truyền thống cho đến thiết kế web hiện đại.</p>
-                <p>Lorem Ipsum là văn bản chuẩn của ngành in ấn từ thế kỷ 16. Văn bản này vẫn còn được sử dụng rộng rãi cho đến ngày nay, từ in ấn truyền thống cho đến thiết kế web hiện đại.</p>
-                <div class="post-details-footer">
-                  <div class="widget-social-icons">
-                    <span>Chia sẻ bài viết:</span>
-                    <div class="social-icons">
-                      <a href="https://www.facebook.com" target="_blank" rel="noopener"><i class="icofont-facebook"></i></a>
-                      <a href="https://www.skype.com" target="_blank" rel="noopener"><i class="icofont-skype"></i></a>
-                      <a href="https://twitter.com" target="_blank" rel="noopener"><i class="icofont-twitter"></i></a>
-                      <a href="https://www.linkedin.com/signup" target="_blank" rel="noopener"><i class="icofont-linkedin"></i></a>
-
                     </div>
                 </div>
             </div>
         </div>
-
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start Blog Area Wrapper ==-->
@@ -410,108 +307,9 @@
                                 </div>
                             </div>
                         </div>
-
-      </div>
-      <div class="related-posts-area related-post-area bg-color-gray">
-        <div class="container">
-          <div class="row">
-            <div class="col-12">
-              <div class="post-title-wrap">
-                <h4 class="title">Có thể bạn cũng quan tâm</h4>
-                <div class="swiper-btn-wrap">
-                  <div class="related-post-swiper-btn-prev">
-                    <i class="icofont-long-arrow-left"></i>
-                  </div>
-                  <div class="related-post-swiper-btn-next">
-                    <i class="icofont-long-arrow-right"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="related-posts">
-                <div class="swiper related-post-slider-container">
-                  <div class="swiper-wrapper related-post-slider">
-                    <div class="swiper-slide">
-                      <!--== Start Blog Post Item ==-->
-                      <div class="post-item2">
-                        <div class="thumb">
-                          <a href="blog-details.html">
-                            <img src="../client/assets/img/blog/10.webp" alt="Ảnh liên quan" width="350" height="270">
-                          </a>
-                        </div>
-                        <div class="content">
-                          <h5 class="author">Bởi <a href="blog.html">Walter Houston</a></h5>
-                          <h4 class="title"><a href="blog-details.html">Tại sao phúc lợi động vật hoang dã cũng quan trọng như động vật nuôi...</a></h4>
-                          <div class="meta">
-                            <span class="post-date">03 Tháng 4, 2022</span>
-                            <span class="dots"></span>
-                            <span class="post-time">10 phút đọc</span>
-                          </div>
-                        </div>
-                      </div>
-                      <!--== End Blog Post Item ==-->
-                    </div>
-                    <div class="swiper-slide">
-                      <div class="post-item2">
-                        <div class="thumb">
-                          <a href="blog-details.html">
-                            <img src="../client/assets/img/blog/11.webp" alt="Ảnh liên quan" width="350" height="270">
-                          </a>
-                        </div>
-                        <div class="content">
-                          <h5 class="author">Bởi <a href="blog.html">Walter Houston</a></h5>
-                          <h4 class="title"><a href="blog-details.html">Nhiều tổ chức và cá nhân cùng chung tay bảo vệ động vật...</a></h4>
-                          <div class="meta">
-                            <span class="post-date">03 Tháng 4, 2022</span>
-                            <span class="dots"></span>
-                            <span class="post-time">10 phút đọc</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="swiper-slide">
-                      <div class="post-item2">
-                        <div class="thumb">
-                          <a href="blog-details.html">
-                            <img src="../client/assets/img/blog/12.webp" alt="Ảnh liên quan" width="350" height="270">
-                          </a>
-                        </div>
-                        <div class="content">
-                          <h5 class="author">Bởi <a href="blog.html">Walter Houston</a></h5>
-                          <h4 class="title"><a href="blog-details.html">Chúng ta chưa thể có cái nhìn tổng thể về thực trạng này.</a></h4>
-                          <div class="meta">
-                            <span class="post-date">03 Tháng 4, 2022</span>
-                            <span class="dots"></span>
-                            <span class="post-time">10 phút đọc</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="swiper-slide">
-                      <div class="post-item2">
-                        <div class="thumb">
-                          <a href="blog-details.html">
-                            <img src="../client/assets/img/blog/3.webp" alt="Ảnh liên quan" width="350" height="270">
-                          </a>
-                        </div>
-                        <div class="content">
-                          <h5 class="author">Bởi <a href="blog.html">Walter Houston</a></h5>
-                          <h4 class="title"><a href="blog-details.html">Tại sao phúc lợi động vật hoang dã cũng quan trọng như động vật nuôi...</a></h4>
-                          <div class="meta">
-                            <span class="post-date">03 Tháng 4, 2022</span>
-                            <span class="dots"></span>
-                            <span class="post-time">10 phút đọc</span>
-                          </div>
-                        </div>
-                      </div>
-
                     </div>
                 </div>
             </div>
-
 
             <div class="comment-area">
                 <div class="container pt--0 pb--0">
@@ -602,97 +400,4 @@
 
         <!--== End Blog Area Wrapper ==-->
     </main>
-
-          </div>
-        </div>
-      </div>
-      <div class="comment-area">
-        <div class="container pt--0 pb--0">
-          <div class="row justify-content-center">
-            <div class="col-lg-10">
-              <div class="comment-view-area">
-                <h2 class="main-title">Bình luận (03)</h2>
-                <div class="comment-content">
-                  <div class="single-comment">
-                    <div class="author-info">
-                      <div class="thumb">
-                        <img src="../client/assets/img/blog/a1.webp" alt="Ảnh người bình luận" width="72" height="72">
-                      </div>
-                      <div class="author-details">
-                        <h4 class="title">Sara Alexander</h4>
-                        <ul>
-                          <li>Product Designer, USA || <span>35 phút trước</span></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <p class="desc">Đây chỉ là văn bản mẫu dùng để hiển thị nội dung bình luận trên giao diện. Bạn có thể tùy chỉnh theo nhu cầu của mình.</p>
-                    <a class="btn-reply" href="blog-details.html#/"><i class="icofont-reply"></i>Trả lời</a>
-                  </div>
-                  <div class="single-comment comment-reply">
-                    <div class="author-info">
-                      <div class="thumb">
-                        <img src="../client/assets/img/blog/a2.webp" alt="Ảnh người bình luận" width="72" height="72">
-                      </div>
-                      <div class="author-details">
-                        <h4 class="title">Robert Morgan</h4>
-                        <ul>
-                          <li>Product Designer, USA || <span>35 phút trước</span></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <p class="desc">Đây chỉ là văn bản mẫu dùng để hiển thị nội dung bình luận trên giao diện. Bạn có thể tùy chỉnh theo nhu cầu của mình.</p>
-                    <a class="btn-reply" href="blog-details.html#/"><i class="icofont-reply"></i>Trả lời</a>
-                  </div>
-                  <div class="single-comment comment-reply mb--0">
-                    <div class="author-info">
-                      <div class="thumb">
-                        <img src="../client/assets/img/blog/a3.webp" alt="Ảnh người bình luận" width="72" height="72">
-                      </div>
-                      <div class="author-details">
-                        <h4 class="title">Rochelle Hunt</h4>
-                        <ul>
-                          <li>Product Designer, USA || <span>35 phút trước</span></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <p class="desc">Đây chỉ là văn bản mẫu dùng để hiển thị nội dung bình luận trên giao diện. Bạn có thể tùy chỉnh theo nhu cầu của mình.</p>
-                    <a class="btn-reply" href="blog-details.html#/"><i class="icofont-reply"></i>Trả lời</a>
-                  </div>
-                </div>
-              </div>
-              <div class="comment-form-wrap">
-                <h2 class="main-title">Để lại bình luận</h2>
-                <form class="comment-form" action="blog-details.html#">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <input class="form-control" type="text" placeholder="Họ và tên">
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <input class="form-control" type="email" placeholder="Email">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <textarea class="form-control" placeholder="Nội dung bình luận"></textarea>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group text-center mb--0">
-                        <button class="btn btn-theme" type="submit">Gửi bình luận <i class="icofont-long-arrow-right"></i></button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!--== Kết thúc khu vực Blog ==-->
-  </main>
-
 @endsection
