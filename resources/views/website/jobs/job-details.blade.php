@@ -6,7 +6,7 @@
 @section('content')
     <main class="main-content">
         <!--== Bắt đầu header trang ==-->
-       <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
             <div class="container pt--0 pb--0">
                 <div class="row">
                     <div class="col-12">
@@ -55,39 +55,30 @@
                                     </form>
                                 </div>
                             </div>
-                        <div class="page-header-content">
-                            <h2 class="title">Chi tiết công việc</h2>
-                            <nav class="breadcrumb-area">
-                                <ul class="breadcrumb justify-content-center">
-                                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
-                                    <li class="breadcrumb-sep">//</li>
-                                    <li><a href="{{ route('jobs.index') }}">Việc làm</a></li>
-                                    <li class="breadcrumb-sep">//</li>
-                                    <li>Chi tiết</li>
-                                </ul>
-                            </nav>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!--== Kết thúc header trang ==-->
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show" role="alert">
-        <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-        <div>{{ session('success') }}</div>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Đóng"></button>
-    </div>
-@endif
 
-@if (session('error'))
-    <div class="alert alert-danger alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-        <div>{{ session('error') }}</div>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Đóng"></button>
-    </div>
-@endif
+        <!--== Kết thúc header trang ==-->
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show"
+                role="alert">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                <div>{{ session('success') }}</div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Đóng"></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show"
+                role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                <div>{{ session('error') }}</div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Đóng"></button>
+            </div>
+        @endif
 
         <!--== Bắt đầu chi tiết công việc ==-->
         <section class="job-details-area">
@@ -98,7 +89,7 @@
                             <div class="job-details-info">
                                 <div class="thumb">
                                     <img src="{{ $job->company->logo_url ?? '../client/assets/img/companies/10.webp' }}"
-                                         width="130" height="130" alt="Logo công ty">
+                                        width="130" height="130" alt="Logo công ty">
                                 </div>
                                 <div class="content">
                                     <h4 class="title">{{ $job->title }}</h4>
@@ -111,7 +102,8 @@
                             </div>
                             <div class="job-details-price">
                                 <h4 class="title">{{ number_format($job->salary_min) }}đ <span>/tháng</span></h4>
-                                <button type="button" class="btn-theme" data-bs-toggle="modal" data-bs-target="#applyModal">
+                                <button type="button" class="btn-theme" data-bs-toggle="modal"
+                                    data-bs-target="#applyModal">
                                     Ứng tuyển ngay
                                 </button>
                             </div>
@@ -132,14 +124,16 @@
                             <div class="content">
                                 <h4 class="title">Phúc lợi</h4>
                                 @php
-                                    $benefits = is_array($job->benefits) ? $job->benefits : json_decode($job->benefits, true);
+                                    $benefits = is_array($job->benefits)
+                                        ? $job->benefits
+                                        : json_decode($job->benefits, true);
                                 @endphp
                                 @if (!empty($benefits))
-                                <ul class="job-details-list">
-                                        @foreach($benefits as $benefit)
+                                    <ul class="job-details-list">
+                                        @foreach ($benefits as $benefit)
                                             <li><i class="icofont-check"></i> {{ $benefit }}</li>
                                         @endforeach
-                                </ul>
+                                    </ul>
                                 @else
                                     <p class="desc">Không có thông tin phúc lợi.</p>
                                 @endif
@@ -162,13 +156,16 @@
                                                     @switch($job->job_type)
                                                         @case('full-time')
                                                             Toàn thời gian
-                                                            @break
+                                                        @break
+
                                                         @case('part-time')
                                                             Bán thời gian
-                                                            @break
+                                                        @break
+
                                                         @case('remote')
                                                             Làm từ xa
-                                                            @break
+                                                        @break
+
                                                         @default
                                                             {{ $job->job_type }}
                                                     @endswitch
@@ -177,7 +174,8 @@
                                             <tr>
                                                 <td class="table-name">Mức lương</td>
                                                 <td class="dotted">:</td>
-                                                <td>{{ number_format($job->salary_min) }} - {{ number_format($job->salary_max) }} {{ $job->currency }}</td>
+                                                <td>{{ number_format($job->salary_min) }} -
+                                                    {{ number_format($job->salary_max) }} {{ $job->currency }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="table-name">Địa chỉ</td>
@@ -191,13 +189,16 @@
                                                     @switch($job->remote_policy)
                                                         @case('on-site')
                                                             Làm tại văn phòng
-                                                            @break
+                                                        @break
+
                                                         @case('hybrid')
                                                             Hybrid
-                                                            @break
+                                                        @break
+
                                                         @case('remote')
                                                             Làm từ xa
-                                                            @break
+                                                        @break
+
                                                         @default
                                                             {{ $job->remote_policy }}
                                                     @endswitch
@@ -249,13 +250,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @if(session('error'))
+                    @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
                         </div>
                     @endif
 
-                    @if(session('success'))
+                    @if (session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
                         </div>
@@ -266,7 +267,8 @@
                         <div class="mb-3">
                             <label for="full_name" class="form-label">Họ và tên(bắt buộc)</label>
                             <input type="text" class="form-control @error('full_name') is-invalid @enderror"
-                                   id="full_name" name="full_name" value="{{ old('full_name', Auth::user()->name ?? '') }}" required>
+                                id="full_name" name="full_name" value="{{ old('full_name', Auth::user()->name ?? '') }}"
+                                required>
                             @error('full_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -275,7 +277,8 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Email(bắt buộc)</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                   id="email" name="email" value="{{ old('email', Auth::user()->email ?? '') }}" required>
+                                id="email" name="email" value="{{ old('email', Auth::user()->email ?? '') }}"
+                                required>
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -284,7 +287,8 @@
                         <div class="mb-3">
                             <label for="phone" class="form-label">Số điện thoại(bắt buộc)</label>
                             <input type="tel" class="form-control @error('phone') is-invalid @enderror"
-                                   id="phone" name="phone" value="{{ old('phone', Auth::user()->phone_number ?? '') }}" required>
+                                id="phone" name="phone"
+                                value="{{ old('phone', Auth::user()->phone_number ?? '') }}" required>
                             @error('phone')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -293,7 +297,7 @@
                         <div class="mb-3">
                             <label for="cv_file" class="form-label">CV của bạn (PDF)</label>
                             <input type="file" class="form-control @error('cv_file') is-invalid @enderror"
-                                   id="cv_file" name="cv_file" accept=".pdf" required>
+                                id="cv_file" name="cv_file" accept=".pdf" required>
                             @error('cv_file')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -302,8 +306,8 @@
 
                         <div class="mb-3">
                             <label for="cover_letter" class="form-label">Thư giới thiệu (không bắt buộc)</label>
-                            <textarea class="form-control @error('cover_letter') is-invalid @enderror"
-                                      id="cover_letter" name="cover_letter" rows="4">{{ old('cover_letter') }}</textarea>
+                            <textarea class="form-control @error('cover_letter') is-invalid @enderror" id="cover_letter" name="cover_letter"
+                                rows="4">{{ old('cover_letter') }}</textarea>
                             @error('cover_letter')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -321,11 +325,11 @@
 @endsection
 
 @push('scripts')
-<script>
-    // Reset form when modal is closed
-    document.getElementById('applyModal').addEventListener('hidden.bs.modal', function () {
-        this.querySelector('form').reset();
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Reset form when modal is closed
+        document.getElementById('applyModal').addEventListener('hidden.bs.modal', function() {
+            this.querySelector('form').reset();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 @endpush
