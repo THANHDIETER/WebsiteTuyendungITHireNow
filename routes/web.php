@@ -111,3 +111,5 @@ Route::get('/registration', function () {
 });
 
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
+
