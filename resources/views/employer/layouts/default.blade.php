@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   @include('employer.layouts.partials.header')
     @if (session('access_token'))
         <script>
@@ -10,6 +11,7 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+
   @vite(['resources/js/app.js', 'resources/sass/app.scss'])
 
   <!-- Navbar -->
@@ -22,19 +24,7 @@
         @include('employer.layouts.partials.sidebar')
 
         <div class="flex-grow-1">
-          @if(session('error'))
-            <div class="alert alert-warning d-flex align-items-center" role="alert">
-                <i class="bi bi-emoji-frown fs-4 me-3"></i>
-                <div>
-                    {{ session('error') }}
-                    <a href="{{ route('employer.packages.index') }}" class="btn btn-sm btn-warning ms-2">Mua gói dịch vụ</a>
-                </div>
-            </div>
-        @endif
           @yield('content')
-          {{-- Trong layout --}}
-         
-
         </div>
 
         @stack('scripts')
@@ -44,7 +34,12 @@
 
   <!-- Footer luôn ở đáy -->
   @include('employer.layouts.partials.footer')
+<<<<<<< HEAD
  @include('employer.layouts.partials.confirm-modal')
+=======
+  @include('employer.layouts.partials.confirm-modal')
+
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
 
 </body>
 </html>

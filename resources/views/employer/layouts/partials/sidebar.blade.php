@@ -88,7 +88,11 @@
                 </ul>
             </li>
             <li class="sidebar-list">
+<<<<<<< HEAD
                                <a class="sidebar-link" href="{{ route('employer.jobs.applications') }}">
+=======
+                <a class="sidebar-link" href="{{ route('employer.jobs.applications') }}">
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
                     <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2"
@@ -144,22 +148,4 @@
         </svg>
     </div>
 </aside>
-<!-- Kết thúc sidebar trang -->
-<style>
-    footer {
-        display: none !important;
-    }
 
-    .sidebar-menu a {
-        text-decoration: none !important;
-        transition: background-color 0.2s ease, color 0.2s ease;
-        padding: 8px 12px;
-        display: block;
-        border-radius: 6px;
-    }
-
-    .sidebar-menu a:hover {
-        background-color: #f0f8ff;
-        color: #0d6efd !important;
-    }
-</style>

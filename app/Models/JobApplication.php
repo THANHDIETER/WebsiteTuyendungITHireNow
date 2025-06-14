@@ -43,4 +43,8 @@ class JobApplication extends Model
     {
         return $this->belongsTo(Company::class);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05

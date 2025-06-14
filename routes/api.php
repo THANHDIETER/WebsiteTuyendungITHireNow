@@ -29,6 +29,10 @@ Route::middleware(['auth:sanctum','admin'])->group(function () {
     Route::apiResource('payments', PaymentController::class);
 });
 
+Route::middleware(['auth:sanctum','employer'])->group(function () {
+   Route::apiResource('job-applications', JobApplicationController::class);
+});
+
 
 Route::prefix('admin/stats')
 ->middleware([])
@@ -41,7 +45,12 @@ Route::prefix('admin/stats')
 
 Route::prefix('employer')->group(function () {
     Route::get('/jobs', [EmployerJobApiController::class, 'index']);
+<<<<<<< HEAD
 });
 Route::middleware(['auth:sanctum','employer'])->group(function () {
    Route::apiResource('job-applications', JobApplicationController::class);
 });
+=======
+    
+});
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05

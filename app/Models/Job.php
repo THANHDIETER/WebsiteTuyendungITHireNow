@@ -10,10 +10,39 @@ class Job extends Model
     use HasFactory;
 
     protected $fillable = [
+<<<<<<< HEAD
         'company_id', 'title', 'slug', 'description', 'requirements', 'benefits',
         'job_type', 'salary_min', 'salary_max', 'currency', 'location', 'address',
         'level', 'experience', 'category_id', 'deadline', 'status', 'views', 'is_featured',
         'apply_url', 'remote_policy', 'language', 'meta_title', 'meta_description', 'search_index', 'is_paid'
+=======
+        'company_id',
+        'title',
+        'slug',
+        'description',
+        'requirements',
+        'benefits',
+        'job_type_id',
+        'salary_min',
+        'salary_max',
+        'currency',
+        'location_id',
+        'address',
+        'level',
+        'experience_id',
+        'category_id',
+        'deadline',
+        'status',
+        'views',
+        'is_featured',
+        'apply_url',
+        'remote_policy',
+        'language',
+        'meta_title',
+        'meta_description',
+        'search_index',
+        'degree_id'
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
     ];
 
     protected $casts = [
