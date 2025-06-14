@@ -26,9 +26,6 @@ class job_applicationsSeeder extends Seeder
         for ($i = 1; $i <= 20; $i++) {
             $jobId = $faker->randomElement($jobIds);
             $userId = $faker->randomElement($userIds);
-            $companyId = $faker->randomElement($companyIds);
-
-            // Lấy thông tin job để đảm bảo company_id khớp với job
             $job = DB::table('jobs')->where('id', $jobId)->first();
             $companyId = $job->company_id;
 
@@ -40,6 +37,12 @@ class job_applicationsSeeder extends Seeder
                 'job_id' => $jobId,
                 'user_id' => $userId,
                 'company_id' => $companyId,
+
+                // BỔ SUNG TRƯỜNG THIẾT YẾU
+                'full_name' => $faker->name(),
+                'email' => $faker->unique()->safeEmail(),
+                'phone' => $faker->phoneNumber(),
+
                 'cv_url' => 'storage/cvs/sample-cv-' . $faker->numberBetween(1, 5) . '.pdf',
                 'cover_letter' => $faker->paragraph(3),
                 'applied_at' => $appliedAt,
