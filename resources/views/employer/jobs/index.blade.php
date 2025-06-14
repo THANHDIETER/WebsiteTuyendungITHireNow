@@ -75,7 +75,7 @@
                                     </span>
                                 @endif
                                 @if($job->category)
-                                    <span class="badge rounded-pill bg-light border">{{ $job->category->name }}</span>
+                                    <span class="badge rounded-pill  bg-light border text-dark">{{ $job->category->name }}</span>
                                 @endif
                             </div>
                         </div>
