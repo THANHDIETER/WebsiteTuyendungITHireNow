@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Company extends Model
 {
@@ -37,34 +37,82 @@ class Company extends Model
     ];
 
     protected $casts = [
-        'benefits' => 'array',
-        'is_verified' => 'boolean',
+        'benefits'     => 'array',
+        'is_verified'  => 'boolean',
         'search_index' => 'boolean',
-        'latitude' => 'float',
-        'longitude' => 'float',
+        'latitude'     => 'float',
+        'longitude'    => 'float',
     ];
 
-    /**
-     * Mối quan hệ với user (chủ sở hữu công ty)
-     */
+    // Chủ sở hữu công ty
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Mối quan hệ: công ty có nhiều job
-     */
+    // Danh sách việc làm của công ty
     public function jobs()
     {
         return $this->hasMany(Job::class);
     }
-
-    /**
-     * Mối quan hệ: công ty có nhiều đánh giá
-     */
+    
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+    // Đánh giá công ty
     public function reviews()
     {
         return $this->hasMany(CompanyReview::class);
+    }
+
+    // Danh sách các lần mua package của công ty
+    public function employerPackageUsages()
+    {
+        // Giả định bạn có model EmployerPackageUsage (liên kết với bảng employer_package_usages)
+        return $this->hasMany(EmployerPackageUsage::class, 'company_id');
+    }
+
+    // Danh sách subscription package (nếu dùng bảng subscriptions riêng)
+    public function packageSubscriptions()
+    {
+        return $this->hasMany(CompanyPackageSubscription::class, 'company_id');
+    }
+
+    // Lấy package subscription còn hiệu lực mới nhất
+    public function activePackage()
+    {
+        return $this->packageSubscriptions()
+            ->where('is_active', true)
+            ->latest('start_date')
+            ->first();
+    }
+
+    // Lấy số lượt đăng tin miễn phí còn lại
+    public function getFreeQuotaRemain()
+    {
+        $freeLimit = 3; // Số lượt free mặc định
+        $usedFree = $this->jobs()->where('is_paid', false)->count();
+        return max($freeLimit - $usedFree, 0);
+    }
+
+    // Lấy package có lượt đăng còn lại (trả phí, còn hạn, còn quota)
+    public function activeEmployerPackage()
+    {
+        return $this->employerPackageUsages()
+            ->where('is_active', true)
+            ->where('end_date', '>=', now())
+            ->whereColumn('posts_used', '<', 'post_limit')
+            ->orderBy('end_date')
+            ->first();
+    }
+
+    // Tổng số lượt đăng còn lại (free + paid)
+    public function getPostingQuota()
+    {
+        $free = $this->getFreeQuotaRemain();
+        $pkg  = $this->activeEmployerPackage();
+        $paid = $pkg ? ($pkg->post_limit - $pkg->posts_used) : 0;
+        return $free + $paid;
     }
 }

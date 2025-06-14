@@ -27,6 +27,8 @@ class CreateCompaniesTable extends Migration
             $table->text('benefits')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->enum('status', ['active', 'inactive', 'banned'])->default('inactive');
+            // Thêm trường này để set số lượt đăng tin miễn phí cho từng công ty
+            $table->unsignedTinyInteger('free_post_quota')->default(3)->comment('Số lượt đăng tin miễn phí');
             $table->timestamps();
         });
     }

@@ -1,8 +1,6 @@
-@extends('admin.layouts.default')
 
-@section('content')
 <div class="container py-4 max-w-2xl">
-    <h1 class="h4 mb-4">Chi tiết Gói Dịch Vụ</h1>
+    <h1 class="h4 mb-4">Chi tiết Gói Dịch Vụ {{ $service_package->id }}</h1>
 
     <div class="card">
         <div class="card-body">
@@ -46,12 +44,6 @@
                     </tr>
                 </tbody>
             </table>
-
-            <div class="d-flex justify-content-end gap-2 mt-3">
-                <a href="{{ route('admin.service-packages.edit', $service_package) }}" class="btn btn-warning">Chỉnh sửa</a>
-                <a href="{{ route('admin.service-packages.index') }}" class="btn btn-secondary">Quay lại danh sách</a>
-            </div>
         </div>
     </div>
 </div>
-@endsection

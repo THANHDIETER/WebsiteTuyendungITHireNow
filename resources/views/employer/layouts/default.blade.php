@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   @include('employer.layouts.partials.header')
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+
   @vite(['resources/js/app.js', 'resources/sass/app.scss'])
 
   <!-- Navbar -->
@@ -27,6 +29,8 @@
 
   <!-- Footer luôn ở đáy -->
   @include('employer.layouts.partials.footer')
+  @include('employer.layouts.partials.confirm-modal')
+
 
 </body>
 </html>

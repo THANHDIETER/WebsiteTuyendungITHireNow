@@ -28,10 +28,26 @@ Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
+// Static Pages
+Route::get('/docs', fn() => view('docs.index'))->name('docs');
+
+Route::get('employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+
+// Giao diện người dùng (Website)
+Route::get('/', function () {
+    return view('employer.index');
+})->name('home');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
+
+
+Route::get('/cong-vieca', function () {
+    return view('website.jobs.job');
+})->name('cong-viec');
+
 
 Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
@@ -50,7 +66,8 @@ Route::get('/chi-tiet-ung-vien', function () {
 })->name('chi-tiet-ung-vien');
 
 Route::get('/blog', function () {
-        return view('website.blog.blog-grid');
+
+    return view('website.blog.blog');
 
 })->name('blog');
 
@@ -59,7 +76,8 @@ Route::get('/blog-details', function () {
 })->name('blog-details');
 
 Route::get('/blog-grid', function () {
-        return view('website.blog.blog');
+
+    return view('website.blog.blog-grid');
 
 })->name('blog-grid');
 
@@ -73,7 +91,9 @@ Route::get('/contact', function () {
 
 Route::get('/404', function () {
     return view('website.pages.404');
-})->name("404");
+
+})->name('404');
+
 
 Route::get('/about-us', function () {
     return view('website.pages.about-us');
@@ -85,7 +105,9 @@ Route::get('/login', function () {
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
+
 });
 
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
 

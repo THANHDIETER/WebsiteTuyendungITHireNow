@@ -7,16 +7,17 @@
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
 
-<title>{{ $title ?? 'Employer' }}</title>
+<title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Bootstrap JS Bundle (kèm Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+
 <!-- Favicon icon-->
-<link rel="icon" href="{{ asset('assets/images/ITHireNow.png') }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('assets/images/ITHireNow.png') }}" type="image/x-icon">
+<link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
 <!-- Google font-->
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -52,8 +53,8 @@
 
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
-                src="{{ asset('assets/images/ITHireNow.png') }}" style="width: 100px" alt="logo"><img class="for-dark"
-                src="{{ asset('assets/images/ITHireNow.png') }}" style="width: 100px" alt="logo"></a><a class="close-btn"
+                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark"
+                src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
             href="javascript:void(0)">
             <div class="toggle-sidebar">
                 <div class="line"></div>
@@ -63,7 +64,7 @@
         </a></div>
     <div class="page-main-header col">
         <div class="header-left d-lg-block d-none">
-            {{-- <form class="search-form mb-0">
+            <form class="search-form mb-0">
                 <div class="input-group"><span class="input-group-text pe-0">
                         <!-- Icon Search -->
                         <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24"
@@ -76,7 +77,7 @@
                     </span>
                     <input class="form-control" type="text" placeholder="Search anything...">
                 </div>
-            </form> --}}
+            </form>
         </div>
         <div class="nav-right">
             <ul class="header-right">

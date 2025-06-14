@@ -76,19 +76,10 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-2">
-                                        <a href="{{ route('admin.notifications.edit', $noti->id) }}" class="btn btn-sm btn-warning">
-                                            Sửa</i>
-                                        </a>
-                                        <a href="{{ route('admin.notifications.show', $noti->id) }}" class="btn btn-sm btn-info text-white">
-                                            Chi Tiết</i>
-                                        </a>
-                                        <form action="{{ route('admin.notifications.destroy', $noti->id) }}" method="POST" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Xoá thông báo này?')">
-                                                Xóa</i>
-                                            </button>
-                                        </form>
+                                       <button class="btn btn-sm btn-warning btn-edit" data-id="{{ $noti->id }}">Sửa</button>
+<button class="btn btn-sm btn-info text-white btn-view" data-id="{{ $noti->id }}">Chi Tiết</button>
+<button class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $noti->id }}">Xóa</button>
+
                                     </div>
                                 </td>
                             </tr>
@@ -107,8 +98,127 @@
         </div>
     </div>
 </div>
+<!-- Modal hiển thị nội dung hoặc form sửa -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notificationModalLabel">Chi tiết</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body" id="notificationModalBody">Đang tải...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận xoá -->
+<div class="modal fade" id="globalAlertModal" tabindex="-1" aria-modal="true" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4" style="max-width: 440px; margin: auto; border-radius: 16px;">
+      <div class="fs-1 mb-3 modal-icon"><i class="bi bi-info-circle-fill"></i></div>
+      <h5 class="mb-2 fw-bold modal-title">Thông báo</h5>
+      <p class="text-muted mb-4 modal-body-message">Bạn có chắc chắn?</p>
+      <div class="d-flex justify-content-center gap-3">
+        <button type="button" class="btn btn-primary px-4" id="globalAlertModal-confirm-btn">Đồng ý</button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
-@push('styles')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+@push('scripts')
+<script>
+function showAlertModal({ title = 'Thông báo', message = '', type = 'confirm', status = 'info', onConfirm = () => {} }) {
+    const modalEl = document.getElementById('globalAlertModal');
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modalEl.querySelector('.modal-title').textContent = title;
+    modalEl.querySelector('.modal-body-message').textContent = message;
+
+    const iconMap = {
+        success: 'bi-check-circle-fill',
+        error: 'bi-x-circle-fill',
+        warning: 'bi-exclamation-circle-fill',
+        info: 'bi-info-circle-fill'
+    };
+    modalEl.querySelector('.modal-icon i').className = `bi ${iconMap[status] || 'bi-info-circle-fill'}`;
+
+    const confirmBtn = modalEl.querySelector('#globalAlertModal-confirm-btn');
+    const newBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+    newBtn.onclick = function () {
+        modal.hide();
+        if (type === 'confirm') onConfirm();
+    };
+    modal.show();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = new bootstrap.Modal(document.getElementById('notificationModal'));
+    const modalTitle = document.getElementById('notificationModalLabel');
+    const modalBody = document.getElementById('notificationModalBody');
+
+    function loadModalContent(url, title) {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = 'Đang tải...';
+        fetch(url)
+            .then(res => res.text())
+            .then(html => {
+                modalBody.innerHTML = html;
+                modal.show();
+            })
+            .catch(() => {
+                modalBody.innerHTML = '<div class="text-danger">Không thể tải nội dung.</div>';
+            });
+    }
+
+    document.querySelectorAll('.btn-view').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            loadModalContent(`/admin/notifications/${id}`, 'Chi tiết thông báo');
+        });
+    });
+
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            loadModalContent(`/admin/notifications/${id}/edit`, 'Chỉnh sửa thông báo');
+        });
+    });
+
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            showAlertModal({
+                title: 'Xác nhận xoá',
+                message: 'Bạn có chắc chắn muốn xoá thông báo này không?',
+                type: 'confirm',
+                status: 'warning',
+                onConfirm: () => {
+                    fetch(`/admin/notifications/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    }).then(res => {
+                        if (res.ok) {
+                            location.reload();
+                        } else {
+                            showAlertModal({
+                                title: 'Lỗi',
+                                message: 'Không thể xoá!',
+                                type: 'alert',
+                                status: 'error'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
+});
+</script>
 @endpush
+

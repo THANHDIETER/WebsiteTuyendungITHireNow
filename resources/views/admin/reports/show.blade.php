@@ -1,6 +1,4 @@
-@extends('admin.layouts.default')
 
-@section('content')
 <div class="container mt-4">
     <h4>Chi tiết báo cáo #{{ $report->id }}</h4>
 
@@ -55,4 +53,3 @@
         <a href="{{ route('admin.reports.index') }}" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>
-@endsection
