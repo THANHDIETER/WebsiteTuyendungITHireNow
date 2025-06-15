@@ -8,6 +8,7 @@ use App\Models\CompanyPackageSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\ServicePackage;
 
 class PackageController extends Controller
 {
@@ -15,16 +16,17 @@ class PackageController extends Controller
      * Danh sách các gói dịch vụ hiện có & gói đang dùng
      */
     public function index()
-    {
-        $packages = EmployerPackage::where('is_active', 1)
-            ->orderBy('sort_order')
-            ->get();
+{
+    // Lấy tất cả gói do admin tạo, chỉ những gói bật is_active = 1
+    $packages = ServicePackage::where('is_active', 1)
+        ->orderBy('sort_order')
+        ->get();
 
-        $company = Auth::user()->company;
-        $currentSubscription = $company?->activePackage();
+    $company = Auth::user()->company;
+    $currentSubscription = $company?->activePackage(); // vẫn giữ để hiển thị gói dùng
 
-        return view('employer.packages.index', compact('packages', 'currentSubscription'));
-    }
+    return view('employer.packages.index', compact('packages', 'currentSubscription'));
+}
 
     /**
      * Trang xác nhận mua gói
