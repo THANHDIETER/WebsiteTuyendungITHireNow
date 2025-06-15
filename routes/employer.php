@@ -7,17 +7,6 @@ use App\Http\Controllers\Employers\PackageController;
 use App\Http\Controllers\Employers\SubscriptionController;
 use App\Http\Controllers\Employers\JobApplicationController;
 
-// Route::prefix('employer')
-//     // ->middleware(['auth:sanctum', 'employer'])
-//     // Đảm bảo người dùng đăng nhập và có quyền employer
-//     ->name('employer.')
-//     ->group(function () {
-
-//         // Trang dashboard
-//         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-//     });
-
-
 
 Route::middleware(['auth:sanctum', 'employer'])->group(function () {
     Route::get('/cong-viec', function () {
