@@ -81,4 +81,10 @@ class JobApplicationController extends Controller
                 ->withInput();
         }
     }
+
+
+
+    
+
+
 }

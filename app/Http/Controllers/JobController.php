@@ -103,6 +103,11 @@ class JobController extends Controller
         return view('website.jobs.job', compact('jobs', 'categories', 'companies', 'skills', 'topJobs'));
     }
 
+
+
+
+
+    
     public function show($slug)
     {
         $job = Job::with('company')
@@ -112,4 +117,12 @@ class JobController extends Controller
 
         return view('website.jobs.job-details', compact('job'));
     }
+
+
+
+
+
+
+
+
 }
