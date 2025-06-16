@@ -53,7 +53,7 @@
         <svg class="feather">
             <use
                 href="{{ url('https://admin.pixelstrap.net/edmin/assets/svg/feather-icons/dist/feather-sprite.svg#arrow-up') }}">
-                
+
             </use>
         </svg>
     </div>
@@ -84,8 +84,7 @@
                                 @endif
                                 <div class="form-group">
                                     <label class="col-form-label">Email Address</label>
-                                    <input class="form-control" type="email" name="email"
-                                        placeholder="Email Address">
+                                    <input class="form-control" type="email" name="email" placeholder="Email Address">
                                     @error('email')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -118,8 +117,8 @@
                                                     class="fa-brands fa-google"></i></a></li>
                                     </ul>
                                 </div>
-                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn"
-                                    data-theme="dark"></div>
+                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">
+                                </div>
                                 <p class="mt-4 mb-0 text-center">Don't have account?<a class="ms-2"
                                         href="{{ route('register') }}">Create Account</a></p>
                             </form>

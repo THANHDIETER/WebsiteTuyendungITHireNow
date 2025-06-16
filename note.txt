@@ -39,3 +39,8 @@ composer require pusher/pusher-php-server
 
 bottrap
 npm install bootstrap
+
+php artisan bank:sync
+
+
+php artisan storage:link
