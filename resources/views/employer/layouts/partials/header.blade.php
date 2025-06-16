@@ -50,7 +50,11 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-
+    @if (session('access_token'))
+        <script>
+            localStorage.setItem('access_token', "{{ session('access_token') }}");
+        </script>
+    @endif
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
                 src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark"
