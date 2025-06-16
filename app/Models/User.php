@@ -20,7 +20,6 @@ class User extends Authenticatable
         'password',
         'name',
         'phone_number',
-
         'role',
         'status',
         'email_verified_at',
@@ -35,6 +34,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
+        'date_of_birth' => 'date',
     ];
 
     public $timestamps = true;
@@ -58,7 +58,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class);
     }
-   
-    
 
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    public function appliedJobs()
+    {
+        return $this->belongsToMany(Job::class, 'job_applications', 'user_id', 'job_id')
+            ->withTimestamps(); // nếu bạn dùng created_at, updated_at
+    }
 }

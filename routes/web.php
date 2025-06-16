@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -27,6 +28,14 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+
+// profile routes
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+Route::get('profile-dashboard', [ProfileController::class, 'dashboard'])->name('profile.dashboard');
+Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+Route::get('profile/my-jobs', [ProfileController::class, 'myJobs'])->name('profile.my-jobs');
+Route::get('/settings', [ProfileController::class, 'settings'])->name('profile.settings');
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
@@ -68,7 +77,6 @@ Route::get('/chi-tiet-ung-vien', function () {
 Route::get('/blog', function () {
 
     return view('website.blog.blog');
-
 })->name('blog');
 
 Route::get('/blog-details', function () {
@@ -78,7 +86,6 @@ Route::get('/blog-details', function () {
 Route::get('/blog-grid', function () {
 
     return view('website.blog.blog-grid');
-
 })->name('blog-grid');
 
 Route::get('/blog-right-sidebar', function () {
@@ -91,7 +98,6 @@ Route::get('/contact', function () {
 
 Route::get('/404', function () {
     return view('website.pages.404');
-
 })->name('404');
 
 
@@ -105,9 +111,6 @@ Route::get('/login', function () {
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
-
 });
 
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
-
-
