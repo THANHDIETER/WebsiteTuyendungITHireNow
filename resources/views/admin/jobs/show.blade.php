@@ -62,7 +62,11 @@
             <p class="white-space-pre-line">{{ $job->requirements }}</p>
         </div>
         <hr>
+<<<<<<< HEAD
+        {{-- @if (is_array($job->benefits) || is_string($job->benefits))
+=======
         @if (is_array($job->benefits) || is_string($job->benefits))
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
             <div class="mb-3">
                 <h6 class="fw-bold">🎁 Quyền lợi</h6>
                 <ul class="ps-3">
@@ -71,7 +75,11 @@
                     @endforeach
                 </ul>
             </div>
+<<<<<<< HEAD
+        @endif --}}
+=======
         @endif
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
         <hr>
         <div class="mb-2">
             <h6 class="fw-bold">🛠 Kỹ năng</h6>

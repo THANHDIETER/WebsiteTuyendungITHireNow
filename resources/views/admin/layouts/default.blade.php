@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   @include('admin.layouts.partials.header')
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body class="d-flex flex-column min-vh-100">

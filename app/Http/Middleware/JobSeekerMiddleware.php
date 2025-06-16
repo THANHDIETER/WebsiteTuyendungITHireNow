@@ -21,7 +21,7 @@ class JobSeekerMiddleware
             return response()->json(['message' => 'Chưa xác thực'], 401);
         }
 
-         if (Auth::user()->role === 'job_seeker' || Auth::user()->role === 'admin') {
+        if (Auth::user()->role === 'job_seeker' || Auth::user()->role === 'admin') {
             return $next($request);
         }
 

@@ -20,7 +20,5 @@ app.component('employer-job-portal', EmployerJobPortal)
 app.component('employer-job-application', JobApplicationsList)
 app.component('bank-account-admin', bank_account)
 app.component('banklog-account-admin', bank_log)
-
-
 // Mount vào #vue-wrapper (Blade layout phải có ID này)
 app.mount('#vue-wrapper')
