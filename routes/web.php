@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -30,6 +31,14 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
+
+// profile routes
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+Route::get('profile-dashboard', [ProfileController::class, 'dashboard'])->name('profile.dashboard');
+Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+Route::get('profile/my-jobs', [ProfileController::class, 'myJobs'])->name('profile.my-jobs');
+Route::get('/settings', [ProfileController::class, 'settings'])->name('profile.settings');
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
@@ -69,18 +78,15 @@ Route::get('/chi-tiet-ung-vien', function () {
 })->name('chi-tiet-ung-vien');
 
 
-
-//Blog
+    return view('website.blog.blog');
+})->name('blog');
 
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
 Route::get('/blog-details/{id}', [BlogController::class, 'show'])->name('blog-details');
 
-Route::get('/blog-grid', [BlogController::class, 'indexGrid'])->name('blog-grid'); 
-
-Route::get('/blog-right-sidebar', [BlogController::class, 'indexRightSidebar'])->name('blog-right-sidebar');
-//
-
+    return view('website.blog.blog-grid');
+})->name('blog-grid');
 
 
 Route::get('/contact', function () {
