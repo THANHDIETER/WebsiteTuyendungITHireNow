@@ -33,16 +33,22 @@ npm install --save-dev @vitejs/plugin-react
 bottrapAdd commentMore actions
 npm install bootstrap
 
-
-
 php artisan vendor:publish --tag=laravel-pagination
 
 composer require pusher/pusher-php-server
 
 bottrap
 npm install bootstrap
+php artisan storage:link
 
 php artisan bank:sync
+api check đơn hàng
+http://127.0.0.1:8000/api/check-pending-payments?token=ABC123
 
+api check log bank
+http://127.0.0.1:8000/api/sync-bank?token=ABC123
 
-php artisan storage:link
+check ip my 
+https://www.whatismyip.com/
+search -> thêm ip my 
+Remote Database Access

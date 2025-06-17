@@ -33,6 +33,7 @@ Route::prefix('admin')
             Route::post('/{job}/approve', [JobController::class, 'approve'])->name('jobs.approve');
             Route::post('/{job}/reject', [JobController::class, 'reject'])->name('jobs.reject');
             Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
+            Route::post('/{job}/revert', [JobController::class, 'revertToPending'])->name('jobs.revert');
         });
         // Quản lý gói dịch vụ (service packages)
         Route::prefix('service-packages')->name('service-packages.')->controller(ServicePackageController::class)->group(function () {

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmployerPackage extends Model
 {
+    protected $table = 'employer_packages';
     protected $fillable = [
         'name',
         'description',

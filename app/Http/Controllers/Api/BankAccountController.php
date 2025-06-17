@@ -29,12 +29,14 @@ class BankAccountController extends Controller
             $data = $request->validate([
                 'bank' => 'required|string',
                 'account_number' => 'required|string',
+                'account_name' => 'required|string|max:255', 
                 'token' => 'required|string',
                 'password' => 'required|string',
                 'branch' => 'required|string|max:255',
                 'is_active' => 'required|boolean',
                 'image' => 'required|image|mimes:jpeg,png,jpg,webp,gif,svg|max:100000',
             ],[
+                'account_name.required' => 'Tên chủ tài khoản là bắt buộc.',
                 'bank.required' => 'Tên ngân hàng là bắt buộc.',
                 'account_number.required' => 'Số tài khoản là bắt buộc.',
                 'token.required' => 'Token là bắt buộc.',
@@ -82,12 +84,14 @@ class BankAccountController extends Controller
             $data = $request->validate([
                 'bank' => 'required|string',
                 'account_number' => 'required|string',
+                'account_name' => 'required|string|max:255',
                 'token' => 'required|string',
                 'password' => 'required|string',
                 'branch' => 'required|string|max:255',
                 'is_active' => 'required|boolean',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:10000',
             ],[
+                'account_name.required' => 'Tên chủ tài khoản là bắt buộc.',
                 'bank.required' => 'Tên ngân hàng là bắt buộc.',
                 'account_number.required' => 'Số tài khoản là bắt buộc.',
                 'token.required' => 'Token là bắt buộc.',

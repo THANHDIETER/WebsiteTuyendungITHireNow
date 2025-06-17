@@ -58,7 +58,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class);
     }
-   
-    
+
+    public function currentPackage()
+    {
+        return $this->hasOne(Payment::class)
+            ->where('status', 'paid')
+            ->latestOfMany(); // lấy đơn thanh toán hợp lệ gần nhất
+    }
+    public function payments()
+{
+    return $this->hasMany(Payment::class);
+}
+
+
+
 
 }
