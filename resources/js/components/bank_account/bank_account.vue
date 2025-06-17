@@ -27,6 +27,12 @@
                 placeholder="Nhập số tài khoản" />
             </div>
             <div class="col-md-6">
+  <label class="form-label">Chủ tài khoản</label>
+  <input v-model="form.account_name" type="text" class="form-control form-control-lg shadow-sm"
+         placeholder="Nhập tên chủ tài khoản" />
+</div>
+
+            <div class="col-md-6">
               <label class="form-label">Mật khẩu</label>
               <input v-model="form.password" type="password" class="form-control form-control-lg shadow-sm"
                 placeholder="Nhập mật khẩu" autocomplete="new-password" />
@@ -73,6 +79,7 @@
           <tr>
             <th>ID</th>
             <th>Ngân hàng</th>
+            <th>Chủ tài khoản</th>
             <th>Chi nhánh</th>
             <th>Số tài khoản</th>
             <th>Ảnh</th>
@@ -90,6 +97,8 @@
           <tr v-else v-for="account in accounts" :key="account.id" class="fade-list-item">
             <td>{{ account.id }}</td>
             <td class="text-uppercase">{{ account.bank }}</td>
+            <td>{{ account.account_name || '—' }}</td>
+
             <td>{{ account.branch || '—' }}</td>
             <td>{{ account.account_number || '—' }}</td>
             <td>
@@ -119,6 +128,7 @@ import axios from 'axios'
 const getEmptyForm = () => ({
   bank: '',
   account_number: '',
+  account_name: '',
   token: '',
   password: '',
   branch: '',
@@ -182,6 +192,7 @@ const editAccount = (account) => {
     account_number: account.account_number ?? '',
     token: account.token ?? '',
     password: account.password ?? '',
+    account_name: account.account_name ?? '',
     branch: account.branch ?? '',
     is_active: account.is_active === 1 ? 1 : 0,
   }

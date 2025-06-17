@@ -4,10 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\BankLogController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\BankSyncController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Api\BankAccountController;
-use App\Http\Controllers\Api\Admin\PaymentController;
 use App\Http\Controllers\Api\EmployerJobApiController;
 use App\Http\Controllers\Api\admin\SeekerProfileController;
 use App\Http\Controllers\Api\Employer\JobApplicationController;
@@ -47,3 +48,6 @@ Route::prefix('employer')->group(function () {
     Route::get('/jobs', [EmployerJobApiController::class, 'index']);
     
 });
+Route::get('/check-pending-payments', [PaymentController::class, 'handlePending']);
+Route::get('/sync-bank', [BankSyncController::class, 'sync']);
+

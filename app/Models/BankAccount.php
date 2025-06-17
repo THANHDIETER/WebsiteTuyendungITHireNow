@@ -13,8 +13,10 @@ class BankAccount extends Model
     /**
      * Các trường cho phép gán hàng loạt (mass assignable)
      */
+    protected $table = 'bank_accounts';
     protected $fillable = [
         'bank',
+        'account_name',
         'account_number',
         'token',
         'password',
