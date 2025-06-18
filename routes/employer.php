@@ -61,7 +61,6 @@ Route::prefix('employer/subscriptions')->middleware('auth')->group(function () {
     Route::get('/{id}', [SubscriptionController::class, 'show'])->name('employer.subscriptions.show');
     Route::get('/{id}/renew', [SubscriptionController::class, 'renew'])->name('employer.subscriptions.renew');
 
-
 });
 Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(function () {
     Route::get('/', [PackageController::class, 'index'])->name('employer.packages.index');

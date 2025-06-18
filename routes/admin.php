@@ -77,7 +77,7 @@ Route::prefix('admin')
             ->only(['index', 'show', 'update', 'destroy']);
 
         // trang sơ yếu lý dịch (cv)
-    
+
         Route::prefix('seekerprofile')->controller(SeekerProfileController::class)->group(function () {
             Route::get('/', 'index')->name('seekerprofile.index');
         });
@@ -92,7 +92,7 @@ Route::prefix('admin')
 
 
         // Quản lý thống báo
-    
+
         Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
         Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

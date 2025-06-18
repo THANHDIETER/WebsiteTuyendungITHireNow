@@ -3,6 +3,11 @@
 <head>
 
   @include('employer.layouts.partials.header')
+    @if (session('access_token'))
+        <script>
+            localStorage.setItem('access_token', "{{ session('access_token') }}");
+        </script>
+    @endif
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -29,8 +34,12 @@
 
   <!-- Footer luôn ở đáy -->
   @include('employer.layouts.partials.footer')
+<<<<<<< HEAD
+ @include('employer.layouts.partials.confirm-modal')
+=======
   @include('employer.layouts.partials.confirm-modal')
 
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
 
 </body>
 </html>

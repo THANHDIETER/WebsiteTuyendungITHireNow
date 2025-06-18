@@ -18,7 +18,7 @@ class Authenticate
     if ($request->expectsJson()) {
         abort(response()->json(['message' => 'Chưa xác thực'], 401));
     }
-    return route('login');
+    return route('showLoginForm');
 }
 
 }
