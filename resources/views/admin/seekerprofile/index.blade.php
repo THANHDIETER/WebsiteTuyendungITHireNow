@@ -32,7 +32,7 @@
                             <td>{{ $app->job?->title ?? '-' }}</td>
                             <td>
                                 @if($app->cv_url)
-                                    <a href="{{ $app->cv_url }}" target="_blank">Xem CV</a>
+                                    <a href="{{ asset('storage/' . ltrim($app->cv_url, '/admin/')) }}" target="_blank">Xem CV</a>
                                 @else
                                     -
                                 @endif
@@ -43,7 +43,7 @@
                             <td>{!! $app->is_shortlisted ? '<span class="badge bg-success">✔</span>' : '-' !!}</td>
                             <td>{{ $app->note }}</td>
                             <td>
-                                <button type="button" class="btn btn-secondary btn-sm btn-view" data-id="{{ $app->id }}" data-cv="{{ $app->cv_url }}" data-cover="{{ $app->cover_letter }}" data-status="{{ $app->status }}" data-note="{{ $app->note }}" data-user="{{ $app->user?->name }}" data-email="{{ $app->user?->email }}" data-job="{{ $app->job?->title }}" data-company="{{ $app->company?->name }}" data-applied="{{ $app->applied_at?->format('d/m/Y') }}">
+                                <button type="button" class="btn btn-secondary btn-sm btn-view" data-id="{{ $app->id }}" data-cv="{{ asset('storage/' . ltrim($app->cv_url, '/admin/')) }}" data-cover="{{ $app->cover_letter }}" data-status="{{ $app->status }}" data-note="{{ $app->note }}" data-user="{{ $app->user?->name }}" data-email="{{ $app->user?->email }}" data-job="{{ $app->job?->title }}" data-company="{{ $app->company?->name }}" data-applied="{{ $app->applied_at?->format('d/m/Y') }}">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </td>

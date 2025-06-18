@@ -25,3 +25,4 @@ chạy tailwindcs
 
 
 php artisan migrate:fresh --seed -->
+
