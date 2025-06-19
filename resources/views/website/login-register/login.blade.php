@@ -9,7 +9,7 @@
 
   <main class="main-content">
     <!--== Bắt đầu header trang ==-->
-    <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
+    <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
       <div class="container pt--0 pb--0">
         <div class="row">
           <div class="col-12">

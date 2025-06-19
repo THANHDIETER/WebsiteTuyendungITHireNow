@@ -5,71 +5,60 @@
 @extends('website.layouts.master')
 
 @section('content')
-<style>
-    .blog-item {
-        margin-bottom: 30px;
-        padding: 15px;
-        border: 1px solid #eee;
-        border-radius: 8px;
-        background-color: #fff;
-        transition: box-shadow 0.3s ease;
-    }
-
-    .blog-item:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    .blog-item h3 {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-        color: #333;
-    }
-
-    .blog-item img {
-        width: 100%;
-        max-height: 200px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 10px;
-    }
-
-    .blog-item p {
-        font-size: 0.95rem;
-        color: #555;
-    }
-
-    .blog-item a {
-        color: #0c7b93;
-        font-weight: 500;
-        text-decoration: none;
-    }
-
-    .sidebar {
-        padding: 15px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        margin-top: 10px;
-    }
-
-    .sidebar h4 {
-        margin-bottom: 15px;
-        font-size: 1.1rem;
-        font-weight: 600;
-    }
-
-    .pagination {
-        margin-top: 20px;
-    }
-</style>
-
-<div class="row">
-    <div class="col-md-8">
-        @foreach($blogs as $blog)
-            <div class="blog-item">
-                <h3>{{ $blog->title }}</h3>
-                <img src="{{ asset($blog->image ?? 'images/default.jpg') }}" alt="Ảnh blog">
-                <p>{{ Str::limit(strip_tags($blog->content), 120) }}</p>
-                <a href="{{ route('blog-details', ['id' => $blog->id]) }}">Xem thêm →</a>
+    <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <div class="job-search-wrap">
+                                <div class="job-search-form">
+                                    <form action="index.html#">
+                                        <div class="row row-gutter-10">
+                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Tiêu đề việc làm hoặc từ khóa">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                                <div class="form-group">
+                                                    <select class="form-control">
+                                                        <option value="1" selected>Chọn Thành Phố</option>
+                                                        <option value="2">Hà Nội</option>
+                                                        <option value="3">Hồ Chí Minh</option>
+                                                        <option value="4">Đà Nẵng</option>
+                                                        <option value="5">Huế</option>
+                                                        <option value="6">Hà Nam</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                                <div class="form-group">
+                                                    <select class="form-control">
+                                                        <option value="1" selected>Loại Công Việc</option>
+                                                        <option value="2">Web Designer</option>
+                                                        <option value="3">Web Developer</option>
+                                                        <option value="4">Graphic Designer</option>
+                                                        <option value="5">App Developer</option>
+                                                        <option value="6">UI &amp; UX Expert</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn-form-search"><i
+                                                            class="icofont-search-1"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endforeach
 

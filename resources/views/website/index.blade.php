@@ -7,7 +7,7 @@
         <section class="home-slider-area">
             <div class="home-slider-container default-slider-container">
                 <div class="home-slider-wrapper slider-default">
-                    <div class="slider-content-area" data-bg-img="../client/assets/img/slider/slider-bg.webp">
+                    <div class="slider-content-area" data-bg-img="../client/assets/img/banner/17.png">
                         <div class="container pt--0 pb--0">
                             <div class="slider-container">
                                 <div class="row justify-content-center align-items-center">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <div class="home-slider-shape">
+            {{-- <div class="home-slider-shape">
                 <img class="shape1" data-aos="fade-down" data-aos-duration="1500"
                     src="../client/assets/img/slider/vector1.webp" width="270" height="234" alt="Image-HasTech">
                 <img class="shape2" data-aos="fade-left" data-aos-duration="2000"
@@ -90,7 +90,7 @@
                     src="../client/assets/img/slider/vector3.webp" width="276" height="432" alt="Image-HasTech">
                 <img class="shape4" data-aos="flip-left" data-aos-duration="1500"
                     src="../client/assets/img/slider/vector4.webp" width="127" height="121" alt="Image-HasTech">
-            </div>
+            </div> --}}
         </section>
         <!--== End Hero Area Wrapper ==-->
 
