@@ -6,6 +6,7 @@ use App\Models\Job;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\Employer\JobApprovedNotification;
 
 class JobController extends Controller
 {
@@ -50,13 +51,17 @@ class JobController extends Controller
             ], 409);
         }
 
-
+        // Cập nhật trạng thái
         $job->update(['status' => 'published']);
+
+        // Gửi notification cho nhà tuyển dụng
+        $employer = $job->company->user;
+        $employer->notify(new JobApprovedNotification($job));
+
         return response()->json([
             'success' => true,
             'message' => 'Tin đã được duyệt.',
             'status_html' => $job->status_badge,
-
         ]);
     }
 

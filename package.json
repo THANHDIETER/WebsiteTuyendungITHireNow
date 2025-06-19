@@ -24,6 +24,8 @@
         "bootstrap-icons": "^1.13.1",
         "html2canvas": "^1.4.1",
         "jspdf": "^3.0.1",
+        "laravel-echo": "^2.1.6",
+        "pusher-js": "^8.4.0",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
         "vue": "^3.5.15",
