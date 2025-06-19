@@ -17,3 +17,10 @@ app.component('employer-job-application', JobApplicationsList)
 
 // Mount vào #vue-wrapper (Blade layout phải có ID này)
 app.mount('#vue-wrapper')
+
+
+window.Echo.private(`notifications.${window.Laravel.userId}`)
+    .listen('.notification.sent', (e) => {
+        alert(e.message);
+        // hoặc render vào HTML: document.querySelector('#notifications').innerHTML += ...
+    });
