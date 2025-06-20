@@ -43,7 +43,8 @@ Route::middleware(['auth:sanctum', 'employer'])->prefix('employer')->name('emplo
     Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
     Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
     Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
-  
+    Route::patch('/jobs/{id}/close', [JobController::class, 'close'])->name('jobs.close');
+
      Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
     });
     
