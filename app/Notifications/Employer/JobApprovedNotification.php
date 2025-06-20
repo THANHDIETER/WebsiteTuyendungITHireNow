@@ -3,10 +3,11 @@
 namespace App\Notifications\Employer;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class JobApprovedNotification extends Notification
+class JobApprovedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
