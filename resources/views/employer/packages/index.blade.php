@@ -3,63 +3,106 @@
 @section('content')
     <main class="main-content">
         <div class="container py-3">
-            <h2 class="mb-4"><i class="fas fa-boxes"></i> Các gói dịch vụ đăng tin</h2>
+            <h2 class="mb-2 d-flex align-items-center gap-2">
+                <i class="fas fa-boxes text-primary fs-3"></i>
+                <span>Các gói dịch vụ đăng tin</span>
+            </h2>
 
             @if ($packages->isEmpty())
-                <div class="alert alert-info">
+                <div class="alert alert-info shadow-sm rounded-3">
+                    <i class="fas fa-info-circle me-1"></i>
                     Hiện chưa có gói dịch vụ nào. Vui lòng liên hệ quản trị viên để được hỗ trợ.
                 </div>
             @else
-                <div class="row">
-                    @foreach ($packages as $pkg)
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow rounded-4 border-0">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title fw-semibold text-primary">
-                                        <i class="fas fa-cube me-1"></i> {{ $pkg->name }}
+                <div class="position-relative">
+                    <div class="d-flex flex-nowrap overflow-auto gap-4 pb-3 px-1">
+                        @foreach ($packages as $pkg)
+                        
+
+                            <div class="card shadow-sm border border-light-subtle rounded-4 flex-shrink-0 package-card animate__animated animate__fadeInUp"
+                                style="min-width: 360px; max-width: 98%;">
+                                <div class="card-body d-flex flex-column h-100">
+                                    <h5 class="card-title fw-bold text-primary mb-2">
+                                        <i class="fas fa-box-open me-2"></i> {{ $pkg->name }}
                                     </h5>
-                                    <div class="text-success h4 mb-3">
-                                        <i class="fas fa-money-bill-wave me-1"></i>
+
+                                    <div class="mb-3 text-success h4 fw-bold d-flex align-items-center">
+                                        <i class="fas fa-money-bill-wave me-2"></i>
                                         {{ number_format($pkg->price, 0, ',', '.') }} VNĐ
                                     </div>
 
-                                    <ul class="list-unstyled small mb-3">
-                                        <li><i class="fas fa-clock me-1"></i> <strong>Thời hạn:</strong> {{ $pkg->duration_days }}
-                                            ngày</li>
-                                        <li><i class="fas fa-clipboard-list me-1"></i> <strong>Lượt đăng:</strong>
-                                            {{ $pkg->post_limit }}</li>
+                                    <ul class="list-group list-group-flush mb-3 small">
+                                        <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
+                                            <i class="fas fa-clock text-primary mt-1"></i>
+                                            <div>
+                                                <strong>Thời hạn:</strong> {{ $pkg->duration_days }} ngày
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
+                                            <i class="fas fa-clipboard-list text-success mt-1"></i>
+                                            <div>
+                                                <strong>Số lượt đăng:</strong> {{ $pkg->post_limit }} lượt
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
+                                            <i class="fas fa-star text-warning mt-1"></i>
+                                            <div>
+                                                <strong>Nổi bật:</strong> {{ $pkg->highlight_days }} ngày
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
+                                            <i class="fas fa-eye text-info mt-1"></i>
+                                            <div>
+                                                <strong>Lượt xem CV:</strong> {{ $pkg->cv_view_limit }}
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
+                                            <i class="fas fa-headset text-secondary mt-1"></i>
+                                            <div>
+                                                <strong>Hỗ trợ:</strong> {{ $pkg->support_level ?? 'Không có' }}
+                                            </div>
+                                        </li>
                                     </ul>
 
                                     @if ($pkg->description)
-                                        <p class="text-muted flex-grow-1">{{ $pkg->description }}</p>
+                                        <p class="text-muted small flex-grow-1">{{ $pkg->description }}</p>
+                                    @else
+                                        <div class="flex-grow-1"></div>
                                     @endif
 
-                                    @if ($currentSubscription && $currentSubscription->id === $pkg->id)
-                                        <button class="btn btn-success mt-auto w-100" disabled>
-                                            <i class="fas fa-check-circle me-1"></i> Đang sử dụng
-                                        </button>
-                                    @else
-                                        <a href="{{ route('employer.packages.purchase', $pkg->id) }}"
-                                            class="btn btn-outline-primary mt-auto w-100">
-                                            <i class="fas fa-shopping-cart me-1"></i> Mua ngay
-                                        </a>
-                                    @endif
+                                   @if ($currentSubscription && $currentSubscription->id === $pkg->id)
+                                    <button class="btn btn-light border border-success text-success fw-semibold mt-auto w-100 rounded-pill" disabled>
+                                        <i class="fas fa-check-circle me-1"></i> Đang sử dụng
+                                    </button>
+                                @else
+                                    <a href="{{ route('employer.packages.purchase', $pkg->id) }}"
+                                    class="btn btn-gradient-primary mt-auto w-100 rounded-pill fw-bold shadow-sm text-black">
+                                        <i class="fas fa-shopping-cart me-2"></i> Mua ngay
+                                    </a>
+                                @endif
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
+
             @endif
 
-            <hr class="my-4">
+            <hr>
 
-            <h4 class="mb-3"><i class="fas fa-history me-1"></i> Lịch sử đơn mua gói</h4>
+            <h4 class="mb-3 d-flex align-items-center gap-2">
+                <i class="fas fa-history me-1 text-info"></i> Lịch sử đơn mua gói
+            </h4>
 
             @if($payments->isEmpty())
-                <div class="alert alert-warning">Bạn chưa mua gói nào.</div>
+                <div class="alert alert-warning shadow-sm rounded-3">
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    Bạn chưa mua gói nào.
+                </div>
             @else
                 <div class="table-responsive">
-                    <table class="table table-hover table-bordered align-middle">
+                    <table
+                        class="table table-hover table-bordered align-middle rounded-4 overflow-hidden shadow-sm text-center">
                         <thead class="table-light">
                             <tr>
                                 <th>#</th>
@@ -75,64 +118,65 @@
                             @foreach($payments as $payment)
                                 <tr>
                                     <td class="text-muted">{{ $payment->id }}</td>
-                                    <td>{{ $payment->package->name ?? 'Không xác định' }}</td>
-                                    <td>{{ number_format($payment->amount, 0, ',', '.') }} VNĐ</td>
-                                    <td><span class="text-uppercase">{{ $payment->payment_gateway }}</span></td>
+                                    <td>
+                                        <span
+                                            class="fw-semibold text-primary">{{ $payment->package->name ?? 'Không xác định' }}</span>
+                                    </td>
+                                    <td class="fw-bold text-success">
+                                        {{ number_format($payment->amount, 0, ',', '.') }} VNĐ
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-dark text-uppercase">{{ $payment->payment_gateway }}</span>
+                                    </td>
                                     <td>{{ $payment->created_at->format('d/m/Y H:i') }}</td>
                                     <td>{!! $payment->statusLabel() !!}</td>
-                                    <td class="text-nowrap  align-middle" style="width: 200px;">
-                                        <button class="btn btn-sm btn-info mb-1" data-bs-toggle="modal"
-                                            data-bs-target="#paymentModal{{ $payment->id }}">
-                                            <i class="fas fa-eye me-1"></i> Chi tiết
+                                    <td class="text-nowrap align-middle" style="width: 220px;">
+                                        <button class="btn btn-sm btn-info rounded-circle" data-bs-toggle="modal"
+                                            data-bs-target="#paymentModal{{ $payment->id }}" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
                                         </button>
-
                                         @if ($payment->status === 'pending')
                                             <a href="{{ route('employer.payment.show', $payment->id) }}"
-                                                class="btn btn-sm btn-warning mb-1">
-                                                <i class="fas fa-credit-card me-1"></i> Thanh toán
+                                                class="btn btn-sm btn-warning rounded-circle ms-1" title="Thanh toán">
+                                                <i class="fas fa-credit-card"></i>
                                             </a>
-
                                             <form action="{{ route('employer.payments.cancel', $payment->id) }}" method="POST"
                                                 class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Bạn có chắc muốn hủy đơn này?');">
-                                                    <i class="fas fa-times-circle me-1"></i> Hủy
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle ms-1"
+                                                    onclick="return confirm('Bạn có chắc muốn hủy đơn này?');" title="Hủy đơn">
+                                                    <i class="fas fa-times-circle"></i>
                                                 </button>
                                             </form>
                                         @endif
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Các modal chi tiết -->
                 @foreach($payments as $payment)
                     <div class="modal fade" id="paymentModal{{ $payment->id }}" tabindex="-1"
                         aria-labelledby="modalLabel{{ $payment->id }}" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                            <div class="modal-content shadow rounded-4">
+                        <div class="modal-dialog modal-dialog-centered modal-lg animate__animated animate__fadeInDown">
+                            <div class="modal-content shadow-lg rounded-4">
                                 <div class="modal-header bg-primary text-white">
-                                    <div class="d-flex align-items-center #modal-title-container">
+                                    <div class="d-flex align-items-center gap-3">
                                         <h5 class="modal-title mb-0" id="modalLabel{{ $payment->id }}">
                                             <i class="fas fa-receipt me-2"></i> Chi tiết thanh toán #{{ $payment->id }}
                                         </h5>
-                                        <span class="ms-5">{!! $payment->statusLabel() !!}</span>
+                                        <span class="ms-3">{!! $payment->statusLabel() !!}</span>
                                     </div>
-
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Đóng"></button>
                                 </div>
-
                                 <div class="modal-body">
-                                    <div class="row g-3">
-                                        <!-- Cột 1: Thông tin thanh toán -->
+                                    <div class="row g-4">
                                         <div class="col-md-6">
-                                            <h6><i class="fas fa-file-invoice me-1"></i> Thông tin đơn thanh toán</h6>
+                                            <h6 class="fw-bold mb-2"><i class="fas fa-file-invoice me-1"></i> Thông tin đơn thanh
+                                                toán</h6>
                                             <ul class="list-group list-group-flush mb-3">
                                                 <li class="list-group-item"><strong>Tên gói:</strong>
                                                     {{ $payment->package->name ?? 'Đã xóa' }}</li>
@@ -151,10 +195,8 @@
                                                 @endif
                                             </ul>
                                         </div>
-
-                                        <!-- Cột 2: Thông tin gói dịch vụ -->
                                         <div class="col-md-6">
-                                            <h6><i class="fas fa-box-open me-1"></i> Thông tin gói dịch vụ</h6>
+                                            <h6 class="fw-bold mb-2"><i class="fas fa-box-open me-1"></i> Thông tin gói dịch vụ</h6>
                                             @if ($payment->package)
                                                 <ul class="list-group list-group-flush mb-3">
                                                     <li class="list-group-item"><strong><i class="fas fa-cube me-1"></i> Tên
@@ -177,26 +219,20 @@
                                             @endif
                                         </div>
                                     </div>
-
-                                    <!-- Phân cách -->
                                     <hr>
-
-                                    <!-- Mô tả gói dịch vụ -->
                                     @if ($payment->package && $payment->package->description)
                                         <h6 class="text-muted"><i class="fas fa-align-left me-1"></i> Mô tả gói dịch vụ</h6>
-
-                                        <div class="p-3 bg-light rounded border">
+                                        <div class="p-3 bg-light rounded border small">
                                             {{ $payment->package->description }}
                                         </div>
                                     @endif
                                 </div>
-
                                 <div class="modal-footer justify-content-between">
                                     <small class="text-muted">
                                         <i class="fas fa-clock me-1"></i> Cập nhật lúc:
                                         {{ $payment->updated_at->format('d/m/Y H:i') }}
                                     </small>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">
                                         <i class="fas fa-times me-1"></i> Đóng
                                     </button>
                                 </div>
@@ -204,10 +240,53 @@
                         </div>
                     </div>
                 @endforeach
-
-
-
             @endif
         </div>
     </main>
 @endsection
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+        .package-card {
+            background: linear-gradient(145deg, #f8f9fc, #ffffff);
+            border-radius: 1.2rem;
+            border: 1px solid #dee2e6;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+        }
+
+        .package-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+            border-color: #0d6efd40;
+        }
+
+        .btn-gradient-primary {
+            background-image: linear-gradient(to right, #0d6efd, #3b9bfd);
+            color: #fff;
+            border: none;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-gradient-primary:hover {
+            transform: scale(1.05);
+            opacity: 0.95;
+            box-shadow: 0 0.75rem 1.5rem rgba(13, 110, 253, 0.25);
+        }
+
+        .overflow-auto::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .overflow-auto::-webkit-scrollbar-thumb {
+            background: #ced4da;
+            border-radius: 3px;
+        }
+
+        .overflow-auto:hover::-webkit-scrollbar-thumb {
+            background: #6c757d;
+        }
+    </style>
+@endpush

@@ -1661,7 +1661,7 @@
         <li class="sidebar-main-title">Khác</li>
 
         <li class="sidebar-list">
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="{{ route('admin.settings.index') }}">
                 <i class="bi bi-gear sidebar-icon"></i> Cài đặt hệ thống
             </a>
         </li>

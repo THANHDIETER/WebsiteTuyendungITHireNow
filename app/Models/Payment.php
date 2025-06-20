@@ -28,10 +28,19 @@ class Payment extends Model
     ];
 
 
-
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(EmployerPackage::class, 'package_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
 
@@ -68,9 +77,5 @@ class Payment extends Model
         return "<span class=\"{$status['class']} fs-7\">{$status['label']}</span>";
     }
 
-    public function package()
-    {
-        return $this->belongsTo(ServicePackage::class, 'package_id');
-    }
 
 }

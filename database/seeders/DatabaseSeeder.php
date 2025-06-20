@@ -7,6 +7,7 @@ use Database\Seeders\UsersSeeder;
 use Database\Seeders\SkillsSeeder;
 use Database\Seeders\BannersSeeder;
 use Database\Seeders\ReportsSeeder;
+use Database\Seeders\SettingSeeder;
 use Database\Seeders\JobSkillSeeder;
 use Database\Seeders\PaymentsSeeder;
 use Database\Seeders\SalariesSeeder;
@@ -22,8 +23,8 @@ use Database\Seeders\ApplicationsSeeder;
 use Database\Seeders\NotificationsSeeder;
 use Database\Seeders\CompanyReviewsSeeder;
 use Database\Seeders\SeekerProfilesSeeder;
-use Database\Seeders\EmployerPackagesSeeder;
 use Database\Seeders\ServicePackagesSeeder;
+use Database\Seeders\EmployerPackagesSeeder;
 use Database\Seeders\job_applicationsSeeder;
 use Database\Seeders\BlogSeeder;
 
@@ -58,6 +59,7 @@ class DatabaseSeeder extends Seeder
             ApplicationsSeeder::class,
             ServicePackagesSeeder::class,
             job_applicationsSeeder::class,
+            SettingSeeder::class,
 
 
            BlogSeeder::class,

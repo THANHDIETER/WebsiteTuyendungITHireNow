@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\JobApplication;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 
 class Company extends Model
 {
@@ -38,11 +39,11 @@ class Company extends Model
     ];
 
     protected $casts = [
-        'benefits'     => 'array',
-        'is_verified'  => 'boolean',
+        'benefits' => 'array',
+        'is_verified' => 'boolean',
         'search_index' => 'boolean',
-        'latitude'     => 'float',
-        'longitude'    => 'float',
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     // Chủ sở hữu công ty
@@ -56,7 +57,7 @@ class Company extends Model
     {
         return $this->hasMany(Job::class);
     }
-       public function jobApplications()
+    public function jobApplications()
     {
         return $this->hasMany(JobApplication::class);
     }
@@ -81,12 +82,14 @@ class Company extends Model
 
     // Lấy package subscription còn hiệu lực mới nhất
     public function activePackage()
-    {
-        return $this->packageSubscriptions()
-            ->where('is_active', true)
-            ->latest('start_date')
-            ->first();
-    }
+{
+    return $this->hasOne(Payment::class, 'user_id', 'user_id')
+        ->where('status', 'paid')
+        ->whereNotNull('paid_at')
+        ->latest('paid_at')
+        ->first()?->package;
+}
+
 
 
 
@@ -105,37 +108,45 @@ class Company extends Model
     public function getPostingQuota()
     {
         $free = $this->getFreeQuotaRemain();
-        $pkg  = $this->activeEmployerPackage();
+        $pkg = $this->activeEmployerPackage();
         $paid = $pkg ? ($pkg->post_limit - $pkg->posts_used) : 0;
         return $free + $paid;
     }
     // Company.php
 
-public function isFreeQuotaActive()
-{
-    return $this->free_post_quota > 0
-        && $this->free_post_quota_used < $this->free_post_quota
-        && $this->free_post_quota_expired_at
-        && now()->lt($this->free_post_quota_expired_at);
-}
-
-public function startFreeQuotaIfNotYet()
-{
-    if (!$this->free_post_quota_expired_at) {
-        $this->free_post_quota_expired_at = now()->addDays(7);
-        $this->save();
+    public function isFreeQuotaActive()
+    {
+        return $this->free_post_quota > 0
+            && $this->free_post_quota_used < $this->free_post_quota
+            && $this->free_post_quota_expired_at
+            && now()->lt($this->free_post_quota_expired_at);
     }
-}
 
-public function useFreeQuota()
-{
-    $this->increment('free_post_quota_used');
-}
+    public function startFreeQuotaIfNotYet()
+    {
+        if (!$this->free_post_quota_expired_at) {
+            $this->free_post_quota_expired_at = now()->addDays(7);
+            $this->save();
+        }
+    }
 
-public function getFreeQuotaRemain()
-{
-    if (!$this->isFreeQuotaActive()) return 0;
-    return $this->free_post_quota - $this->free_post_quota_used;
-}
+    public function packageOrders()
+    {
+        return $this->hasMany(EmployerPackageOrder::class);
+    }
+
+
+    public function useFreeQuota()
+    {
+        $this->increment('free_post_quota_used');
+    }
+
+    public function getFreeQuotaRemain()
+    {
+        if (!$this->isFreeQuotaActive())
+            return 0;
+        return $this->free_post_quota - $this->free_post_quota_used;
+    }
+   
 
 }
