@@ -56,7 +56,6 @@ class DatabaseSeeder extends Seeder
             UserRolesSeeder::class,  // Gọi đúng tên seeder
             ReportsSeeder::class,
             ApplicationsSeeder::class,
-
             ServicePackagesSeeder::class,
             job_applicationsSeeder::class,
 
