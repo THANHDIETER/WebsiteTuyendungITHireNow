@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Employers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\PackageController;
