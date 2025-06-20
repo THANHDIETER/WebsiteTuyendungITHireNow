@@ -19,26 +19,27 @@ class BankLogController extends Controller
 
         // Tìm theo keyword
         if ($request->filled('keyword')) {
-            $keyword = $request->keyword;
+            $keyword = trim($request->keyword);
 
-            // Nếu keyword toàn số 0 hoặc là số liên tiếp, tìm theo ID
             if (preg_match('/^0+$/', $keyword) || is_numeric($keyword)) {
                 $query->where('id', intval($keyword));
             } else {
-                $kw = '%' . $keyword . '%';
+                // Chuẩn hóa keyword: viết hoa và loại bỏ khoảng trắng
+                $normalizedKeyword = strtoupper(preg_replace('/\s+/', '', $keyword));
 
-                $query->where(function ($q) use ($kw) {
-                    $q->where('trans_id', 'like', $kw)
-                        ->orWhere('description', 'like', $kw)
-                        ->orWhere('type', 'like', $kw)
-                        ->orWhereHas('bankAccount', function ($bq) use ($kw) {
-                            $bq->where('bank', 'like', $kw)
-                                ->orWhere('account_number', 'like', $kw)
-                                ->orWhere('branch', 'like', $kw);
+                $query->where(function ($q) use ($normalizedKeyword) {
+                    $q->whereRaw("REPLACE(UPPER(trans_id), ' ', '') LIKE ?", ["%{$normalizedKeyword}%"])
+                        ->orWhereRaw("REPLACE(UPPER(description), ' ', '') LIKE ?", ["%{$normalizedKeyword}%"])
+                        ->orWhereRaw("REPLACE(UPPER(type), ' ', '') LIKE ?", ["%{$normalizedKeyword}%"])
+                        ->orWhereHas('bankAccount', function ($bq) use ($normalizedKeyword) {
+                            $bq->whereRaw("REPLACE(UPPER(bank), ' ', '') LIKE ?", ["%{$normalizedKeyword}%"])
+                                ->orWhereRaw("REPLACE(UPPER(account_number), ' ', '') LIKE ?", ["%{$normalizedKeyword}%"])
+                                ->orWhereRaw("REPLACE(UPPER(branch), ' ', '') LIKE ?", ["%{$normalizedKeyword}%"]);
                         });
                 });
             }
         }
+
 
         $perPage = $request->input('per_page', 10);
 

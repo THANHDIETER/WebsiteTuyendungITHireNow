@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class EmployerPackage extends Model
 {
     protected $table = 'employer_packages';
+    public $timestamps = true;
+    protected $dateFormat = 'Y-m-d H:i:s';
+    
     protected $fillable = [
         'name',
         'description',
@@ -19,15 +22,10 @@ class EmployerPackage extends Model
         'sort_order',
         'is_active',
     ];
-
-    // Optional: Gói có nhiều giao dịch (payments)
+    
     public function payments()
     {
         return $this->hasMany(Payment::class, 'package_id');
-    }
-        public function subscriptions()
-    {
-        return $this->hasMany(CompanyPackageSubscription::class);
     }
 
 }

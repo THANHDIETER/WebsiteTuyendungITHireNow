@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\BankLogController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BankAccountControlle;
 use App\Http\Controllers\Admin\NotificationController;
@@ -25,6 +26,14 @@ Route::prefix('admin')
         Route::get('/stats/users', [DashboardController::class, 'userStats'])->name('stats.users');
         Route::get('/stats/jobs', [DashboardController::class, 'jobStats'])->name('stats.jobs');
         Route::get('/stats/applications', [DashboardController::class, 'applicationStats'])->name('stats.applications');
+
+        Route::prefix('settings')->middleware(['auth', 'admin'])->group(function () {
+            Route::get('/', [SettingController::class, 'index'])->name('settings.index');
+            Route::post('/', [SettingController::class, 'storeOrUpdate'])->name('settings.save');
+            Route::delete('/{setting}', [SettingController::class, 'destroy'])->name('settings.delete');
+            Route::post('/defaults', [SettingController::class, 'restoreDefaults'])->name('settings.defaults');
+
+        });
 
         // Duyệt tin tuyển dụng việc làm (jobs)
         Route::prefix('jobs')->controller(JobController::class)->group(function () {
@@ -81,7 +90,7 @@ Route::prefix('admin')
         Route::prefix('bank_account')->controller(BankAccountControlle::class)->group(function () {
             Route::get('/', 'index')->name('bank_account.index');
         });
-         Route::prefix('bank_log')->controller(BankLogController::class)->group(function () {
+        Route::prefix('bank_log')->controller(BankLogController::class)->group(function () {
             Route::get('/', 'index')->name('bank_log.index');
         });
 

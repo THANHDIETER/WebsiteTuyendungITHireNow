@@ -61,7 +61,9 @@ function showAlertModal({
         success: 'bi-check-circle-fill',
         error: 'bi-x-circle-fill',
         warning: 'bi-exclamation-circle-fill',
-        info: 'bi-info-circle-fill'
+        info: 'bi-info-circle-fill',
+        question: 'bi-question-circle-fill' 
+
     };
 
     const iconEl = modalEl.querySelector('.modal-icon i');
