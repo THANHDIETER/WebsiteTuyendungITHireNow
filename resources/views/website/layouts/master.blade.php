@@ -10,9 +10,7 @@
     <meta name="author" content="hastech" />
 
 
-    <title>HireNow</title>
-
-    <title>Finate - Nền tảng việc làm, tuyển dụng, Bootstrap 5</title>
+    <title>HireNow - Nền tảng tuyển dụng IT hiện đại</title>
 
 
     @include('website.layouts.particals.css')
