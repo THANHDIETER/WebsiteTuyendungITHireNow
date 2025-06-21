@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Notifications\Employer\JobApprovedNotification;
+use App\Notifications\Employer\JobRejectedNotification;
 
 class JobController extends Controller
 {
@@ -65,27 +66,32 @@ class JobController extends Controller
         ]);
     }
 
-    public function reject(Request $request, Job $job)
-    {
-        if ($job->status !== 'pending') {
-            $job->refresh();
-            return response()->json([
-                'success' => false,
-                'message' => 'Tin đã được xử lý bởi người khác.',
-                'status_html' => $job->status_badge,
-
-            ], 409);
-        }
-
-        $job->update(['status' => 'rejected']);
-
+   public function reject(Request $request, Job $job)
+{
+    if ($job->status !== 'pending') {
+        $job->refresh();
         return response()->json([
-            'success' => true,
-            'message' => 'Tin đã bị từ chối.',
+            'success' => false,
+            'message' => 'Tin đã được xử lý bởi người khác.',
             'status_html' => $job->status_badge,
-
-        ]);
+        ], 409);
     }
+
+    // Cập nhật trạng thái
+    $job->update(['status' => 'rejected']);
+
+    // Gửi thông báo cho nhà tuyển dụng
+    $employer = $job->company->user;
+    
+    $employer->notify(new JobRejectedNotification($job));
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Tin đã bị từ chối và đã gửi thông báo.',
+        'status_html' => $job->status_badge,
+    ]);
+}
+
 
 
     public function destroy(Job $job)
