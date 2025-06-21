@@ -76,6 +76,11 @@ class RegisterController extends Controller
                 'password' => Hash::make($validated['password']),
                 'role' => 'employer', // Mặc định vai trò là employer
             ]);
+            // Gửi thông báo cho admin khi employer đăng ký
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewEmployerRegisteredNotification($user));
+            }
 
             // Gán vai trò cho người dùng
             try {
