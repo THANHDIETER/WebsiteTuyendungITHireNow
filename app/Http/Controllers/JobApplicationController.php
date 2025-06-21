@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use App\Models\User;
+use App\Notifications\Admin\JobseekerAppliedNotification;
 use App\Notifications\Employer\NewApplicationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,6 +69,11 @@ class JobApplicationController extends Controller
 
             if ($employer) {
                 $employer->notify(new NewApplicationNotification($job, $jobseeker));
+            }
+            // GỬI THÔNG BÁO CHO ADMIN
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new JobseekerAppliedNotification($job, $jobseeker));
             }
 
 
