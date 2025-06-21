@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Notifications\Admin\JobEditedNotification;
 use App\Notifications\Admin\NewJobSubmittedNotification;
 use Illuminate\Support\Facades\Auth;
 
@@ -130,7 +132,6 @@ class JobController extends Controller
 
         return redirect()->route('employer.jobs.index')
             ->with('success', 'Tin đã được gửi và đang chờ phê duyệt.');
-
     }
     public function edit($id)
     {
@@ -172,6 +173,12 @@ class JobController extends Controller
         $validated['search_index'] = $request->boolean('search_index', false);
 
         $job->update($validated);
+        // Gửi thông báo cho admin
+        $job->load('company'); // đảm bảo có thông tin company
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new JobEditedNotification($job));
+        }
 
         return redirect()->route('employer.jobs.show', $job->id)
             ->with('success', 'Cập nhật tin tuyển dụng thành công.');
