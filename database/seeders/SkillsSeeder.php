@@ -9,27 +9,27 @@ class SkillsSeeder extends Seeder
 {
     public function run()
     {
-       DB::table('skills')->updateOrInsert(
-            ['slug' => 'php'],
+        $userId = 1; // Hoặc gán từ logic phù hợp
+
+        DB::table('skills')->updateOrInsert(
             [
-                'name' => 'PHP',
-                'description' => 'Ngôn ngữ lập trình PHP',
-                'category_id' => 1,
-                'is_active' => true,
-                'proficiency_level' => 'advanced',
+                'user_id' => $userId,
+                'skill_name' => 'PHP',
+            ],
+            [
+                'group_name' => 'hard_skills',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
         );
 
         DB::table('skills')->updateOrInsert(
-            ['slug' => 'laravel'],
             [
-                'name' => 'Laravel',
-                'description' => 'Framework PHP Laravel',
-                'category_id' => 1,
-                'is_active' => true,
-                'proficiency_level' => 'advanced',
+                'user_id' => $userId,
+                'skill_name' => 'Laravel',
+            ],
+            [
+                'group_name' => 'hard_skills',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
