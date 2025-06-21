@@ -216,7 +216,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <form method="POST" action="" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="modal-header">
@@ -340,7 +340,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('profile.about-me.update') }}">
                     @csrf
 
                     <div class="modal-header">
@@ -373,7 +373,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('profile.education.update') }}">
                     @csrf
 
                     <div class="modal-header">
@@ -384,77 +384,45 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="school" class="form-label">Trường <span class="text-danger">*</span></label>
-                            <input type="text" id="school" name="school" class="form-control" placeholder="">
+                            <input type="text" id="school" name="school" class="form-control"
+                                value="{{ old('school') }}">
                         </div>
 
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="degree" class="form-label">Trình độ <span
-                                        class="text-danger">*</span></label>
+                                <label for="degree" class="form-label">Trình độ</label>
                                 <select id="degree" name="degree" class="form-select">
                                     <option value="">Chọn</option>
                                     <option value="dai-hoc">Đại học</option>
                                     <option value="cao-dang">Cao đẳng</option>
                                     <option value="thac-si">Thạc sĩ</option>
-                                    <!-- Add more options as needed -->
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="field" class="form-label">Ngành học <span
-                                        class="text-danger">*</span></label>
+                                <label for="field" class="form-label">Ngành học</label>
                                 <input type="text" id="field" name="field" class="form-control"
-                                    placeholder="">
+                                    value="{{ old('field') }}">
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="startMonth" class="form-label">Từ <span class="text-danger">*</span></label>
-                                <select id="startMonth" name="start_month" class="form-select">
-                                    <option value="">Tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                <label for="start_date" class="form-label">Từ (tháng/năm)</label>
+                                <input type="month" id="start_date" name="start_date" class="form-control"
+                                    value="{{ old('start_date') }}">
                             </div>
                             <div class="col">
-                                <label for="startYear" class="form-label">Năm</label>
-                                <select id="startYear" name="start_year" class="form-select">
-                                    <option value="">Năm</option>
-                                    @for ($i = date('Y'); $i >= 1900; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="endMonth" class="form-label">Đến <span class="text-danger">*</span></label>
-                                <select id="endMonth" name="end_month" class="form-select">
-                                    <option value="">Tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="endYear" class="form-label">Năm</label>
-                                <select id="endYear" name="end_year" class="form-select">
-                                    <option value="">Năm</option>
-                                    @for ($i = date('Y'); $i >= 1900; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                <label for="end_date" class="form-label">Đến (tháng/năm)</label>
+                                <input type="month" id="end_date" name="end_date" class="form-control"
+                                    value="{{ old('end_date') }}">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="details" class="form-label">Thông tin chi tiết khác</label>
-                            <textarea id="details" name="details" class="form-control" placeholder="...">{{ old('details') }}</textarea>
+                            <textarea id="details" name="details" class="form-control" rows="3">{{ old('details') }}</textarea>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                         <button type="submit" class="btn btn-danger">Lưu</button>
@@ -469,7 +437,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('profile.work_experience.store') }}">
                     @csrf
 
                     <div class="modal-header">
@@ -492,43 +460,14 @@
 
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="startMonth" class="form-label">Từ <span class="text-danger">*</span></label>
-                                <select id="startMonth" name="start_month" class="form-select">
-                                    <option value="">Tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                <label for="start_date" class="form-label">Từ (tháng/năm)</label>
+                                <input type="month" id="start_date" name="start_date" class="form-control"
+                                    value="{{ old('start_date') }}">
                             </div>
                             <div class="col">
-                                <label for="startYear" class="form-label">Năm</label>
-                                <select id="startYear" name="start_year" class="form-select">
-                                    <option value="">Năm</option>
-                                    @for ($i = date('Y'); $i >= 1900; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="endMonth" class="form-label">Đến <span class="text-danger">*</span></label>
-                                <select id="endMonth" name="end_month" class="form-select">
-                                    <option value="">Tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="endYear" class="form-label">Năm</label>
-                                <select id="endYear" name="end_year" class="form-select">
-                                    <option value="">Năm</option>
-                                    @for ($i = date('Y'); $i >= 1900; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                <label for="end_date" class="form-label">Đến (tháng/năm)</label>
+                                <input type="month" id="end_date" name="end_date" class="form-control"
+                                    value="{{ old('end_date') }}">
                             </div>
                         </div>
 
@@ -562,46 +501,37 @@
     <div class="modal fade" id="skillModal" tabindex="-1" aria-labelledby="skillModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('profile.skills.store') }}">
                     @csrf
-
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold" id="skillModalLabel">Kỹ năng</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                     </div>
 
                     <div class="modal-body">
-                        <!-- Tên nhóm -->
                         <div class="mb-3">
                             <label for="groupName" class="form-label">Tên nhóm <span class="text-danger">*</span></label>
-                            <select name="group_name" id="groupName" class="form-select">
+                            <select name="group_name" id="groupName" class="form-select" required>
                                 <option value="" disabled selected>-- Chọn kỹ năng --</option>
                                 <option value="soft_skills">Kỹ năng mềm</option>
                                 <option value="hard_skills">Kỹ năng chuyên môn</option>
                             </select>
                         </div>
 
-                        <!-- Danh sách kỹ năng -->
-                        <label class="form-label fw-bold">Danh sách kỹ năng (0/20)</label>
-                        <div class="input-group mb-3">
+                        <div class="mb-3">
+                            <label for="skillInput" class="form-label">Tên kỹ năng <span
+                                    class="text-danger">*</span></label>
                             <input type="text" id="skillInput" name="skill_input" class="form-control"
-                                placeholder="Nhập kỹ năng">
-                            <button type="button" class="btn btn-danger" id="addSkillBtn">+</button>
-                        </div>
-
-                        <!-- Hiển thị danh sách hoặc trống -->
-                        <div class="text-center text-muted py-5" id="emptySkillList">
-                            <img src="https://itviec.com/assets/everything-empty-62c813bcb84be8a092033e40550b6fdc9f6bda05947d60c619b2a74906144f8b.svg"
-                                alt="empty" width="40" class="mb-2">
-                            <div>Chưa có kỹ năng nào</div>
+                                placeholder="Nhập kỹ năng" required>
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-                        <button type="submit" class="btn btn-danger" id="saveBtn" disabled>Lưu</button>
+                        <button type="submit" class="btn btn-danger" id="saveBtn">Lưu</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -610,7 +540,7 @@
     <div class="modal fade" id="languageModal" tabindex="-1" aria-labelledby="languageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('profile.languages.store') }}">
                     @csrf
 
                     <div class="modal-header">
@@ -619,9 +549,6 @@
                     </div>
 
                     <div class="modal-body">
-                        <!-- Tiêu đề danh sách -->
-                        <label class="form-label fw-bold mb-2">Danh sách ngôn ngữ (0/5)</label>
-
                         <!-- Dòng nhập ngôn ngữ -->
                         <div class="d-flex gap-2 mb-3">
                             <select name="language" id="languageSelect" class="form-select">
@@ -642,17 +569,6 @@
                                 <option value="advanced">Nâng cao</option>
                                 <option value="native">Thành thạo</option>
                             </select>
-
-                            <button type="button" class="btn btn-danger px-3">
-                                +
-                            </button>
-                        </div>
-
-                        <!-- Danh sách ngôn ngữ đã thêm (hiện tại trống) -->
-                        <div class="text-center text-muted py-5">
-                            <img src="https://itviec.com/assets/everything-empty-62c813bcb84be8a092033e40550b6fdc9f6bda05947d60c619b2a74906144f8b.svg"
-                                alt="empty" width="40" class="mb-2">
-                            <div>Chưa có ngôn ngữ nào</div>
                         </div>
                     </div>
 
@@ -671,7 +587,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('profile.project.store') }}">
                     @csrf
 
                     <div class="modal-header">
@@ -687,50 +603,15 @@
 
                         {{-- Ngày bắt đầu / kết thúc --}}
                         <div class="row mb-3">
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Ngày bắt đầu <span
-                                        class="text-danger">*</span></label>
-                                <div class="row g-2">
-                                    <div class="col">
-                                        <select name="start_month" class="form-select">
-                                            <option value="">Tháng</option>
-                                            @for ($i = 1; $i <= 12; $i++)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <select name="start_year" class="form-select">
-                                            <option value="">Năm</option>
-                                            @for ($i = now()->year; $i >= 1950; $i--)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class="col">
+                                <label for="start_date" class="form-label">Ngày bắt đầu</label>
+                                <input type="month" id="start_date" name="start_date" class="form-control"
+                                    value="{{ old('start_date') }}">
                             </div>
-
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Ngày kết thúc <span
-                                        class="text-danger">*</span></label>
-                                <div class="row g-2">
-                                    <div class="col">
-                                        <select name="end_month" class="form-select">
-                                            <option value="">Tháng</option>
-                                            @for ($i = 1; $i <= 12; $i++)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <select name="end_year" class="form-select">
-                                            <option value="">Năm</option>
-                                            @for ($i = now()->year; $i >= 1950; $i--)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class="col">
+                                <label for="end_date" class="form-label">Ngày kết thúc</label>
+                                <input type="month" id="end_date" name="end_date" class="form-control"
+                                    value="{{ old('end_date') }}">
                             </div>
                         </div>
 
@@ -739,7 +620,7 @@
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <label for="projectModal" class="form-label fw-semibold mb-0">Mô tả dự án</label>
                             </div>
-                            <textarea id="projectModal" name="projectModal" class="form-control" placeholder="...">{{ old('projectModal') }}</textarea>
+                            <textarea id="project_description" name="project_description" class="form-control" placeholder="...">{{ old('project_description') }}</textarea>
                         </div>
 
                         {{-- Website --}}
@@ -765,7 +646,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('profile.certificates.store') }}">
                     @csrf
 
                     <div class="modal-header">
@@ -787,23 +668,10 @@
 
                         {{-- Thời gian --}}
                         <div class="row mb-3">
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Tháng <span class="text-danger">*</span></label>
-                                <select name="month" class="form-select">
-                                    <option value="">Tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Năm <span class="text-danger">*</span></label>
-                                <select name="year" class="form-select">
-                                    <option value="">Năm</option>
-                                    @for ($i = now()->year; $i >= 1950; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                            <div class="col">
+                                <label for="start_date" class="form-label">Tháng/năm</label>
+                                <input type="month" id="start_date" name="start_date" class="form-control"
+                                    value="{{ old('start_date') }}">
                             </div>
                         </div>
 
@@ -838,7 +706,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('profile.award.store') }}">
                     @csrf
 
                     <div class="modal-header">
@@ -849,8 +717,7 @@
                     <div class="modal-body">
                         {{-- Tên giải thưởng --}}
                         <div class="mb-3">
-                            <input type="text" name="award_name" class="form-control"
-                                placeholder="Tên giải thưởng*">
+                            <input type="text" name="award_name" class="form-control" placeholder="Tên giải thưởng*">
                         </div>
 
                         {{-- Tổ chức --}}
@@ -860,23 +727,10 @@
 
                         {{-- Thời gian --}}
                         <div class="row mb-3">
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Tháng <span class="text-danger">*</span></label>
-                                <select name="month" class="form-select">
-                                    <option value="">Tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold">Năm <span class="text-danger">*</span></label>
-                                <select name="year" class="form-select">
-                                    <option value="">Năm</option>
-                                    @for ($i = now()->year; $i >= 1950; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                            <div class="col">
+                                <label for="start_date" class="form-label">Tháng/năm</label>
+                                <input type="month" id="start_date" name="start_date" class="form-control"
+                                    value="{{ old('start_date') }}">
                             </div>
                         </div>
 
@@ -885,8 +739,7 @@
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <label for="projectDescription" class="form-label fw-semibold mb-0">Mô tả chi tiết</label>
                             </div>
-                            <textarea id="projectDescription" name="project_description" class="form-control" placeholder="..."
-                                >{{ old('project_description') }}</textarea>
+                            <textarea id="projectDescription" name="project_description" class="form-control" placeholder="...">{{ old('project_description') }}</textarea>
                         </div>
                     </div>
 
@@ -895,8 +748,62 @@
                         <button type="submit" class="btn btn-danger">Lưu</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
 @endsection
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const skills = [];
+        const skillInput = document.getElementById('skillInput');
+        const addSkillBtn = document.getElementById('addSkillBtn');
+        const skillList = document.getElementById('skillList');
+        const skillsJson = document.getElementById('skillsJson');
+        const saveBtn = document.getElementById('saveBtn');
+        const emptySkillList = document.getElementById('emptySkillList');
+
+        function renderSkills() {
+            skillList.innerHTML = '';
+            skills.forEach((skill, index) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.textContent = skill;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-sm btn-outline-danger';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.onclick = () => {
+                    skills.splice(index, 1);
+                    renderSkills();
+                };
+
+                li.appendChild(removeBtn);
+                skillList.appendChild(li);
+            });
+
+            // Cập nhật JSON vào hidden input
+            skillsJson.value = JSON.stringify(skills);
+
+            // Ẩn hiện danh sách
+            if (skills.length > 0) {
+                skillList.classList.remove('d-none');
+                emptySkillList.querySelector('div').style.display = 'none';
+                saveBtn.disabled = false;
+            } else {
+                skillList.classList.add('d-none');
+                emptySkillList.querySelector('div').style.display = 'block';
+                saveBtn.disabled = true;
+            }
+        }
+
+        addSkillBtn.addEventListener('click', () => {
+            const value = skillInput.value.trim();
+            if (value && !skills.includes(value)) {
+                skills.push(value);
+                skillInput.value = '';
+                renderSkills();
+            }
+        });
+    });
+</script> --}}
