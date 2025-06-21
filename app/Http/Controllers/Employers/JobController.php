@@ -125,7 +125,7 @@ class JobController extends Controller
         $job = Job::create($validated);
 
         // Gửi thông báo cho admin khi có job mới
-        $admins = \App\Models\User::where('role', 'admin')->get();
+        $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin) {
             $admin->notify(new NewJobSubmittedNotification($job));
         }
