@@ -44,9 +44,9 @@
         window.Laravel = {
             userId: {{ auth()->id() }},
         };
-    window.APP_NAME = "{{ config('app.name') }}";
+        window.APP_NAME = "{{ config('app.name') }}";
     </script>
-    
+
 
 
 
