@@ -1,4 +1,5 @@
-<header class="header-area transparent">
+<header class="header-area transparent" style="background-color: #656565;">
+
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
@@ -39,7 +40,7 @@
                                         <li><a href="{{ route('blog') }}">Blog Grid</a></li>
                                         <li><a href="{{ route('blog-grid') }}">Blog Left Sidebar</a></li>
                                         <li><a href="{{ route('blog-right-sidebar') }}">Blog Right Sidebar</a></li>
-                                        <li><a href="{{ route('blog-details') }}">Chi Tiết Bài Viết</a></li>
+                                        <li><a href="{{ route('blog-details', ['id' => $blog->id]) }}">Chi Tiết Bài Viết</a></li>
                                     </ul>
                                 </li>
 

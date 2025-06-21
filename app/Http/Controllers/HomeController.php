@@ -37,5 +37,8 @@ class HomeController extends Controller
             ->get();
 
         return view('website.index', compact('jobs', 'categories'));
+
+
+        
     }
 }

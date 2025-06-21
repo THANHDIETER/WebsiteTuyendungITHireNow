@@ -34,7 +34,8 @@
 
   <!-- Footer luôn ở đáy -->
   @include('employer.layouts.partials.footer')
- @include('employer.layouts.partials.confirm-modal')
+  @include('employer.layouts.partials.confirm-modal')
+
 
 </body>
 </html>

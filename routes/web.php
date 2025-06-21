@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
+use App\Http\Controllers\BlogController;
 
 // Nhúng route riêng
 require __DIR__ . '/admin.php';
@@ -67,25 +68,20 @@ Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
 })->name('chi-tiet-ung-vien');
 
-Route::get('/blog', function () {
 
-    return view('website.blog.blog');
 
-})->name('blog');
+//Blog
 
-Route::get('/blog-details', function () {
-    return view('website.blog.blog-details');
-})->name('blog-details');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
-Route::get('/blog-grid', function () {
+Route::get('/blog-details/{id}', [BlogController::class, 'show'])->name('blog-details');
 
-    return view('website.blog.blog-grid');
+Route::get('/blog-grid', [BlogController::class, 'indexGrid'])->name('blog-grid'); 
 
-})->name('blog-grid');
+Route::get('/blog-right-sidebar', [BlogController::class, 'indexRightSidebar'])->name('blog-right-sidebar');
+//
 
-Route::get('/blog-right-sidebar', function () {
-    return view('website.blog.blog-right-sidebar');
-})->name('blog-right-sidebar');
+
 
 Route::get('/contact', function () {
     return view('website.pages.contact');
@@ -93,7 +89,6 @@ Route::get('/contact', function () {
 
 Route::get('/404', function () {
     return view('website.pages.404');
-
 })->name('404');
 
 
@@ -107,9 +102,6 @@ Route::get('/login', function () {
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
-
 });
 
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
-
-
