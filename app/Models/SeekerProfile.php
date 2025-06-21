@@ -13,6 +13,15 @@ class SeekerProfile extends Model
 
     protected $fillable = [
         'user_id',
+        'full_name',
+        'email',
+        'phone',
+        'date_of_birth',
+        'gender',
+        'city',
+        'address',
+        'about_me',
+        'avatar',
         'headline',
         'summary',
         'cv_url',
