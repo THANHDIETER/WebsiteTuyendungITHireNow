@@ -2,37 +2,57 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Seeder;
 
 class SkillsSeeder extends Seeder
 {
     public function run()
     {
-       DB::table('skills')->updateOrInsert(
-            ['slug' => 'php'],
+        // Lấy ID từ slug
+        $categories = DB::table('categories')->pluck('id', 'slug');
+
+        $skills = [
             [
+                'slug' => 'php',
                 'name' => 'PHP',
                 'description' => 'Ngôn ngữ lập trình PHP',
-                'category_id' => 1,
-                'is_active' => true,
-                'proficiency_level' => 'advanced',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        );
-
-        DB::table('skills')->updateOrInsert(
-            ['slug' => 'laravel'],
+                'category_slug' => 'backend-developer',
+            ],
             [
+                'slug' => 'laravel',
                 'name' => 'Laravel',
                 'description' => 'Framework PHP Laravel',
-                'category_id' => 1,
-                'is_active' => true,
-                'proficiency_level' => 'advanced',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        );
+                'category_slug' => 'backend-developer',
+            ],
+            [
+                'slug' => 'mysql',
+                'name' => 'MySQL',
+                'description' => 'Hệ quản trị CSDL MySQL',
+                'category_slug' => 'backend-developer',
+            ],
+        ];
+
+        foreach ($skills as $skill) {
+            $categoryId = $categories[$skill['category_slug']] ?? null;
+
+            if (!$categoryId) {
+                echo "⚠️ Không tìm thấy category slug: {$skill['category_slug']}, bỏ qua...\n";
+                continue;
+            }
+
+            DB::table('skills')->updateOrInsert(
+                ['slug' => $skill['slug']],
+                [
+                    'name' => $skill['name'],
+                    'description' => $skill['description'],
+                    'category_id' => $categoryId,
+                    'is_active' => true,
+                    'proficiency_level' => 'advanced',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+        }
     }
 }

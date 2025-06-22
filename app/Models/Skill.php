@@ -10,17 +10,20 @@ class Skill extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'slug',
-        'description',
-        'category_id',
-        'is_active',
-        'proficiency_level',
+        'user_id',
+        'group_name',
+        'skill_list',
     ];
 
     protected $casts = [
+        'skill_list' => 'array',
         'is_active' => 'boolean',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function category()
     {
@@ -30,6 +33,6 @@ class Skill extends Model
     public function jobs()
     {
         return $this->belongsToMany(Job::class, 'job_skill')
-                    ->withPivot('priority_level', 'required');
+            ->withPivot('priority_level', 'required');
     }
 }

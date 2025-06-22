@@ -1,3 +1,4 @@
+
 <header class="header-area transparent" style="background-color: #656565;">
 
 
@@ -13,6 +14,15 @@
                                 <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
                                     alt="Logo" />
                             </a>
+                        </div>
+                    </div>
+
+
+                                        <img class="logo-main" src="{{ asset('client/assets/img/logo-light.webp') }}"
+                                            alt="Logo" />
+                                        <img class="logo-light" src="{{ asset('client/assets/img/logo-light.webp') }}"
+                                            alt="Logo" />
+                                        </a>
                         </div>
                     </div>
 
@@ -63,8 +73,10 @@
                     <div class="header-align-end">
                         <div class="header-action-area">
                             @guest
+
                                 <a class="btn-registration" href="{{ route('showLoginForm') }}">
                                     Đăng Nhập
+
                                 </a>
                             @else
                                 {{-- 🔔 Chuông thông báo --}}
@@ -117,39 +129,96 @@
                                 {{-- 👤 Menu người dùng --}}
                                 <div class="user-info dropdown">
                                     <a href="#" class="user-info-toggle d-flex align-items-center"
-                                        data-bs-toggle="dropdown">
-                                        <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
+
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="user-avatar me-2">
+                                            <i class="icofont-user-alt-3"></i>
+                                        </span>
+
                                         <span class="user-role">{{ Auth::user()->role }}</span>
                                         <i class="icofont-caret-down ms-1"></i>
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 180px;">
+                                    <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
+                                        {{-- Tổng quan --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active text-primary' : '' }}"
+                                                href="{{ route('profile.dashboard') }}">
+                                                <i class="fa-solid fa-house me-2"></i> Tổng quan
+                                            </a>
+                                        </li>
+
+                                        {{-- Hồ sơ --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/show') ? 'active text-primary' : '' }}"
+                                                href="{{ route('profile.show') }}">
+                                                <i class="fa-solid fa-file-lines me-2"></i> Hồ sơ HireNow
+                                            </a>
+                                        </li>
+
+                                        {{-- Việc làm của tôi --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}
+                                                href="{{ route('profile.my-jobs') }}">
+                                                <i class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi
+                                            </a>
+                                        </li>
+
+                                        {{-- Admin --}}
                                         @if (Auth::user()->role === 'admin')
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                                    <i class="icofont-ui-settings me-1"></i> Trang quản trị
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('admin.dashboard') }}">
+                                                    <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản trị
                                                 </a>
                                             </li>
+
+                                        @endif
+
+                                        {{-- Nhà tuyển dụng --}}
+                                        @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('employer.dashboard') }}">
+                                                    <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà tuyển
+                                                    dụng
+
                                         @elseif (Auth::user()->role === 'employer')
                                             <li>
                                                 <a class="dropdown-item" href="{{ route('employer.details') }}">
                                                     <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
+
                                                 </a>
                                             </li>
                                         @endif
+
+
+
+                                        {{-- Cài đặt --}}
+
+
                                         <li>
-                                            <a class="dropdown-item" href="{{ url('profile.edit') }}">
-                                                <i class="icofont-edit me-1"></i> Thay đổi thông tin
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('profile.settings') }}">
+                                                <i class="fa-solid fa-gear me-2"></i> Cài đặt
                                             </a>
                                         </li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
+
+
+                                        {{-- Đăng xuất --}}
+
+
                                         <li>
                                             <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                                 <i class="icofont-logout me-1"></i> Đăng xuất
+
                                             </a>
                                         </li>
                                     </ul>
+
                                 </div>
                             @endguest
 

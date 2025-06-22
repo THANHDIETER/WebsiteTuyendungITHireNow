@@ -7,6 +7,11 @@
             <h5 class="mb-0">
                 <i class="bi bi-bell-fill me-2"></i>Danh sách thông báo đã gửi
             </h5>
+            <div>
+                <a href="{{ route('admin.notifications.create') }}" class="btn btn-light btn-sm">
+                    <i class="bi bi-plus-circle-fill me-1"></i> Thêm thông báo
+                </a>
+            </div>
         </div>
 
         <div class="card-body">
