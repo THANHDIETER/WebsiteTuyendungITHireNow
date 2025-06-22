@@ -3,7 +3,7 @@
 @section('content')
     <main class="main-content">
         <!--== Bắt đầu header trang ==-->
-        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/photos/bg2.webp">
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
             <div class="container pt--0 pb--0">
                 <div class="row">
                     <div class="col-12">
@@ -236,6 +236,80 @@
             </div>
         </section>
         <!--== Kết thúc chi tiết công việc ==-->
+
+        <!--== Bắt đầu công việc liên quan ==-->
+        <section class="related-jobs-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title">
+                            <h3 class="title">Công việc liên quan</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        @if($relatedJobs->count() > 0)
+                            <div id="relatedJobsCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @foreach($relatedJobs->chunk(2) as $chunk)
+                                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                            <div class="row">
+                                                @foreach($chunk as $relatedJob)
+                                                    <div class="col-md-6">
+                                                        <div class="job-card">
+                                                            <div class="job-card-header">
+                                                                <div class="company-logo">
+                                                                    <img src="{{ $relatedJob->company->logo_url ?? '../client/assets/img/companies/10.webp' }}"
+                                                                         alt="{{ $relatedJob->company->name }}"
+                                                                         width="60" height="60">
+                                                                </div>
+                                                                <div class="job-info">
+                                                                    <h4 class="job-title">
+                                                                        <a href="{{ route('jobs.show', $relatedJob->slug) }}">{{ $relatedJob->title }}</a>
+                                                                    </h4>
+                                                                    <h5 class="company-name">{{ $relatedJob->company->name }}</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="job-card-body">
+                                                                <ul class="job-meta">
+                                                                    <li><i class="icofont-location-pin"></i> {{ $relatedJob->location }}</li>
+                                                                    <li><i class="icofont-money-bag"></i> {{ number_format($relatedJob->salary_min) }} - {{ number_format($relatedJob->salary_max) }}đ</li>
+                                                                    <li><i class="icofont-clock-time"></i> {{ $relatedJob->job_type }}</li>
+                                                                    <li><i class="icofont-calendar"></i> Hạn nộp: {{ $relatedJob->deadline->format('d/m/Y') }}</li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="job-card-footer">
+                                                                <a href="{{ route('jobs.show', $relatedJob->slug) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @if($relatedJobs->count() > 2)
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#relatedJobsCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#relatedJobsCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                @endif
+                            </div>
+                        @else
+                            <div class="alert alert-info">
+                                Không có công việc liên quan nào.
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--== Kết thúc công việc liên quan ==-->
     </main>
 
     <!-- Modal Form Nộp CV -->
@@ -319,6 +393,146 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .related-jobs-area {
+            margin-top: -30px;
+            padding-top: 0;
+            background: #f8f9fa;
+            padding-bottom: 50px;
+        }
+
+        .section-title {
+            margin-bottom: 25px;
+        }
+
+        .section-title .title {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #007bff;
+            display: inline-block;
+        }
+
+        .job-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .job-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .company-logo {
+            margin-right: 15px;
+        }
+
+        .company-logo img {
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .job-info {
+            flex: 1;
+        }
+
+        .job-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .job-title a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .job-title a:hover {
+            color: #007bff;
+        }
+
+        .company-name {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0;
+        }
+
+        .job-card-body {
+            margin-bottom: 15px;
+        }
+
+        .job-meta {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .job-meta li {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .job-meta li i {
+            color: #007bff;
+            margin-right: 8px;
+        }
+
+        .job-card-footer {
+            text-align: right;
+            margin-top: auto;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: #007bff;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.8;
+        }
+
+        .carousel-control-prev {
+            left: -20px;
+        }
+
+        .carousel-control-next {
+            right: -20px;
+        }
+
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            opacity: 1;
+        }
+
+        .carousel-inner {
+            padding: 10px 0;
+        }
+
+        .carousel-item {
+            padding: 10px 0;
+        }
+
+        .row {
+            margin: 0 -10px;
+        }
+
+        .col-md-6 {
+            padding: 0 10px;
+        }
+    </style>
 @endsection
 
 @push('scripts')
