@@ -79,6 +79,54 @@
 
                                 </a>
                             @else
+                                {{-- 🔔 Chuông thông báo --}}
+                                <div class="dropdown me-3">
+                                    <button class="btn btn-icon btn-notification position-relative" type="button"
+                                        id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="icofont-notification fs-5"></i>
+                                        @if (auth()->user()->unreadNotifications->count())
+                                            <span
+                                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                id="noti-count">
+                                                {{ auth()->user()->unreadNotifications->count() }}
+                                            </span>
+                                        @endif
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3"
+                                        aria-labelledby="notificationDropdown"
+                                        style="min-width: 320px; max-height: 400px; overflow-y: auto;" id="noti-list">
+                                        <li
+                                            class="dropdown-header bg-light fw-semibold text-dark px-3 py-2 d-flex justify-content-between align-items-center">
+                                            <span>Thông báo</span>
+                                            <a href="{{ route('job_seeker.notifications.index') }}"
+                                                class="text-primary small">Xem tất cả</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider my-1">
+                                        </li>
+                                        @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
+                                                    href="{{ $noti->data['link_url'] }}">
+                                                    <div class="icon text-primary"><i class="icofont-bell fs-5"></i></div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="fw-semibold">{{ $noti->data['message'] }}</div>
+                                                        <div class="small text-muted">
+                                                            {{ $noti->created_at->diffForHumans() }}</div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        @empty
+                                            <li>
+                                                <div class="text-center text-muted px-3 py-3">
+                                                    Không có thông báo mới
+                                                </div>
+                                            </li>
+                                        @endforelse
+                                    </ul>
+                                </div>
+
+                                {{-- 👤 Menu người dùng --}}
                                 <div class="user-info dropdown">
                                     <a href="#" class="user-info-toggle d-flex align-items-center"
 
@@ -145,7 +193,9 @@
                                         @endif
 
 
+
                                         {{-- Cài đặt --}}
+
 
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center"
@@ -153,13 +203,13 @@
                                                 <i class="fa-solid fa-gear me-2"></i> Cài đặt
                                             </a>
                                         </li>
-
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
 
 
                                         {{-- Đăng xuất --}}
+
 
                                         <li>
                                             <a class="dropdown-item text-danger" href="{{ route('logout') }}">
@@ -177,6 +227,7 @@
                                 <i class="icofont-navigation-menu"></i>
                             </button>
                         </div>
+
                     </div>
                 </div>
             </div>

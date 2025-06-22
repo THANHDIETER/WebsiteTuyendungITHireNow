@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\User;
+use App\Notifications\Admin\JobseekerAppliedNotification;
+use App\Notifications\Employer\NewApplicationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -41,7 +44,7 @@ class JobApplicationController extends Controller
 
             // Upload CV file
             $cvPath = $request->file('cv_file')->storeAs('cvs', $fileName, 'public');
-    
+
 
             // Create application in job_applications table
             DB::table('job_applications')->insert([
@@ -60,6 +63,19 @@ class JobApplicationController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+            // Lấy employer của job
+            $employer = User::find($job->company->user_id ?? null);
+            $jobseeker = Auth::user();
+
+            if ($employer) {
+                $employer->notify(new NewApplicationNotification($job, $jobseeker));
+            }
+            // GỬI THÔNG BÁO CHO ADMIN
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new JobseekerAppliedNotification($job, $jobseeker));
+            }
+
 
             // Cập nhật thông tin người dùng nếu chưa có
             DB::table('users')

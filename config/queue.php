@@ -36,8 +36,8 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'connection' => env('DB_QUEUE_CONNECTION'),
-            'table' => env('DB_QUEUE_TABLE', 'jobs'),
+            'connection' => env('DB_QUEUE_CONNECTION', env('DB_CONNECTION')), // fallback về DB mặc định
+            'table' => 'queued_jobs', // ✅ đổi từ 'jobs' sang 'queued_jobs'
             'queue' => env('DB_QUEUE', 'default'),
             'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
             'after_commit' => false,

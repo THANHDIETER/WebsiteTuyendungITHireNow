@@ -8,6 +8,9 @@ use App\Models\Skill;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Notifications\Admin\JobEditedNotification;
+use App\Notifications\Admin\NewJobSubmittedNotification;
 use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
@@ -40,6 +43,7 @@ class JobController extends Controller
             'categories', 'skills', 'company_addresses', 'levels', 'experiences', 'languages', 'remote_policies'
         ));
     }
+
 
    public function store(Request $request)
 {
