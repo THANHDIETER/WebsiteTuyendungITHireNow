@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\PackageController;
 use App\Http\Controllers\Employers\PaymentController;
 use App\Http\Controllers\Employers\JobApplicationController;
 use App\Http\Controllers\Employers\SubscriptionController;
+
 
 
 
@@ -57,16 +59,20 @@ Route::middleware(['auth:sanctum', 'employer'])
     Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
     Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
 
+
      Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
     });
 
 
- Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
+
+    Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
+});
+
+
+Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
     Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
     Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
     Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
-
-
 });
 
 Route::prefix('employer/subscriptions')->middleware('auth')->group(function () {
@@ -81,9 +87,3 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
     Route::post('/{id}/buy', [PackageController::class, 'subscribe'])->name('employer.packages.subscribe');
     Route::get('/{id}', [PackageController::class, 'show'])->name('employer.packages.show'); // tuỳ chọn
 });
-
-
-
-
-
-
