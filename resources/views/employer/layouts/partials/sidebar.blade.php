@@ -56,7 +56,6 @@
                 <ul class="sidebar-submenu">
                     <li><a href="{{ route('employer.jobs.create') }}">Tạo tin tuyển dụng</a></li>
                     <li><a href="{{ route('employer.jobs.index') }}">Danh sách tin đã đăng</a></li>
-                    <li><a href="#">Trạng thái tin tuyển dụng</a></li>
                 </ul>
             </li>
 

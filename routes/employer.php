@@ -35,6 +35,14 @@ Route::middleware(['auth:sanctum', 'employer'])
         // Xem chi tiết tin đã đăng
         Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
 
+
+    // (Tuỳ chọn) Cập nhật hoặc xoá tin
+    Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
+    Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
+    Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
+    Route::patch('/jobs/{id}/close', [JobController::class, 'close'])->name('jobs.close');
+
+
         // (Tuỳ chọn) Cập nhật hoặc xoá tin
         Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
         Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
@@ -60,10 +68,23 @@ Route::middleware(['auth:sanctum', 'employer'])
     Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
 
 
+
      Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
     });
+    
 
+ Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
+    Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
+    Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
+    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+    
 
+});
+
+Route::prefix('employer/subscriptions')->middleware('auth')->group(function () {
+    Route::get('/', [SubscriptionController::class, 'index'])->name('employer.subscriptions.index');
+    Route::get('/{id}', [SubscriptionController::class, 'show'])->name('employer.subscriptions.show');
+    Route::get('/{id}/renew', [SubscriptionController::class, 'renew'])->name('employer.subscriptions.renew');
 
     Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
 });
@@ -73,6 +94,7 @@ Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->
     Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
     Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
     Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+
 });
 
 Route::prefix('employer/subscriptions')->middleware('auth')->group(function () {
