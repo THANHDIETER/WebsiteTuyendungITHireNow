@@ -105,6 +105,15 @@ class JobController extends Controller
             ->where('status', 'published')
             ->firstOrFail();
 
-        return view('website.jobs.job-details', compact('job'));
+        // Lấy các công việc liên quan cùng category
+        $relatedJobs = Job::with('company')
+            ->where('category_id', $job->category_id)
+            ->where('id', '!=', $job->id)
+            ->where('status', 'published')
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get();
+
+        return view('website.jobs.job-details', compact('job', 'relatedJobs'));
     }
 }
