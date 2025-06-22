@@ -42,6 +42,7 @@ class Job extends Model
     ];
 
     protected $casts = [
+        'salary_negotiable' => 'boolean',
         'benefits' => 'array',
         'is_featured' => 'boolean',
         'is_paid' => 'boolean',

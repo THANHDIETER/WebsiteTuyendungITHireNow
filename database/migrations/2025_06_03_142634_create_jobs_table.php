@@ -46,7 +46,7 @@ class CreateJobsTable extends Migration
             $table->string('apply_url')->nullable();
             $table->string('remote_policy', 100)->nullable();
             $table->string('language', 50)->nullable();
-
+             $table->boolean('salary_negotiable')->default(false);
             // SEO
             $table->string('meta_title', 150)->nullable();
             $table->text('meta_description')->nullable();

@@ -1,15 +1,12 @@
 @extends('admin.layouts.default')
 
 @section('content')
+
     <div class="container py-4">
         <h2 class="h4 mb-4">Danh sách Gói dịch vụ</h2>
 
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         <div class="mb-3">
-            <a href="{{ route('admin.service-packages.create') }}" class="btn btn-primary">+ Thêm gói mới</a>
+            <button class="btn btn-primary btn-create">+ Thêm gói mới</button>
         </div>
 
         <div class="card shadow-sm">
@@ -43,9 +40,12 @@
                                     <div class="d-flex justify-content-center gap-2">
                                         <button class="btn btn-info btn-sm btn-view" data-id="{{ $pkg->id }}">Chi tiết</button>
                                         <button class="btn btn-warning btn-sm btn-edit" data-id="{{ $pkg->id }}">Sửa</button>
-                                        <button class="btn btn-danger btn-sm btn-delete" data-id="{{ $pkg->id }}">Xoá</button>
+                                        <button class="btn btn-danger btn-sm btn-delete"
+                                            data-url="{{ route('admin.service-packages.destroy', $pkg->id) }}"
+                                            data-name="{{ $pkg->name }}">
+                                            Xoá
+                                        </button>
                                     </div>
-
                                 </td>
                             </tr>
                         @endforeach
@@ -58,22 +58,32 @@
             {{ $packages->links() }}
         </div>
     </div>
-    <!-- Modal -->
+
+    {{-- Modal hiển thị nội dung động --}}
     <div class="modal fade" id="packageModal" tabindex="-1" aria-labelledby="packageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="packageModalLabel">Chi tiết</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-                </div>
-                <div class="modal-body" id="packageModalBody">
-                    Đang tải...
-                </div>
+    <div class="modal-dialog modal-dialog-centered  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="packageModalLabel">Modal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+
+            <div class="modal-body" id="packageModalBody" style="max-height: 400px; overflow-y: auto;">
+                Đang tải nội dung...
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fa fa-times-circle me-1"></i> Đóng
+                </button>
             </div>
         </div>
     </div>
+</div>
+
 
 @endsection
+
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -92,57 +102,89 @@
                         modal.show();
                     })
                     .catch(err => {
-                        modalBody.innerHTML = '<div class="text-danger">Lỗi tải nội dung</div>';
+                        showAlertModal({
+                            title: 'Lỗi tải nội dung',
+                            message: 'Không thể tải nội dung từ máy chủ.',
+                            type: 'alert',
+                            status: 'error'
+                        });
                     });
             }
 
+            // Thêm gói mới
+            document.querySelector('.btn-create').addEventListener('click', () => {
+                loadModalContent(`{{ route('admin.service-packages.create') }}`, 'Thêm Gói Dịch Vụ');
+            });
+
+            // Chi tiết
             document.querySelectorAll('.btn-view').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.id;
-                    loadModalContent(`/admin/service-packages/${id}`, 'Chi tiết Gói dịch vụ');
+                    loadModalContent(`/admin/service-packages/${id}`, `Chi tiết Gói Dịch Vụ #${id}`);
                 });
             });
 
+            // Sửa
             document.querySelectorAll('.btn-edit').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.id;
-                    loadModalContent(`/admin/service-packages/${id}/edit`, 'Sửa Gói dịch vụ');
+                    loadModalContent(`/admin/service-packages/${id}/edit`, `Cập nhật Gói Dịch Vụ #${id}`);
                 });
             });
 
-            let deletePackageId = null;
-
+            // Xoá
             document.querySelectorAll('.btn-delete').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    deletePackageId = btn.dataset.id;
+                    const url = btn.dataset.url;
+                    const name = btn.dataset.name;
 
                     showAlertModal({
                         title: 'Xác nhận xoá',
-                        message: 'Bạn có chắc chắn muốn xoá gói dịch vụ này không?',
+                        message: `Bạn có chắc chắn muốn xoá gói "${name}" không?`,
                         type: 'confirm',
                         status: 'warning',
                         onConfirm: () => {
-                            fetch(`/admin/service-packages/${deletePackageId}`, {
+                            fetch(url, {
                                 method: 'DELETE',
                                 headers: {
                                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                                     'Accept': 'application/json'
                                 }
                             })
-                                .then(res => {
-                                    if (res.ok) {
-                                        location.reload();
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // ✅ Hiển thị modal Thành công, sau đó reload
+                                        showAlertModal({
+                                            title: 'Thành công',
+                                            message: data.message || 'Thao tác thành công.',
+                                            type: 'alert',
+                                            status: 'success',
+                                            onConfirm: () => {
+                                                // ✅ Reload trang sau khi đóng thông báo
+                                                location.reload();
+                                            }
+                                        });
                                     } else {
                                         showAlertModal({
                                             title: 'Lỗi',
-                                            message: 'Xoá thất bại!',
+                                            message: data.message || 'Có lỗi xảy ra.',
                                             type: 'alert',
                                             status: 'error'
                                         });
                                     }
+                                })
+                                .catch(err => {
+                                    showAlertModal({
+                                        title: 'Lỗi',
+                                        message: err.message || 'Không thể kết nối đến máy chủ.',
+                                        type: 'alert',
+                                        status: 'error'
+                                    });
                                 });
                         }
                     });
+
                 });
             });
         });

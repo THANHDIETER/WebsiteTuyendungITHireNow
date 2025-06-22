@@ -1,5 +1,6 @@
+@extends('admin.layouts.default')
 
-<div class="container py-4">
+@section('content')<div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
 
@@ -60,3 +61,4 @@
         </div>
     </div>
 </div>
+@endsection

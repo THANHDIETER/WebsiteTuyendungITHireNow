@@ -90,7 +90,7 @@
                                     </span>
                                 @endif
                                 @if($job->category)
-                                    <span class="badge bg-light border">{{ $job->category->name }}</span>
+                                    <span class="badge bg-light text-dark border">{{ $job->category->name }}</span>
                                 @endif
                             </div>
 
