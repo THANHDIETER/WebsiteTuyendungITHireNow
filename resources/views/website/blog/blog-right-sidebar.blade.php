@@ -64,3 +64,38 @@
 
 <div class="row">
     <div class="col-md-8">
+        @foreach($blogs as $blog)
+            <div class="blog-item">
+                <h3>{{ $blog->title }}</h3>
+                <img src="{{ asset($blog->image ?? 'images/default.jpg') }}" alt="Ảnh blog">
+                <p>{{ Str::limit(strip_tags($blog->content), 120) }}</p>
+                <a href="{{ route('blog-details', ['id' => $blog->id]) }}">Xem thêm →</a>
+            </div>
+        @endforeach
+
+        <div class="pagination">
+            {{ $blogs->links() }}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="sidebar">
+            <h4>Bài viết mới</h4>
+            {{-- Có thể truyền thêm biến `$latestBlogs` từ Controller --}}
+            @if(isset($latestBlogs))
+                <ul class="list-unstyled">
+                    @foreach($latestBlogs as $item)
+                        <li>
+                            <a href="{{ route('blog-details', ['id' => $item->id]) }}">
+                                {{ $item->title }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p>Chưa có bài viết mới.</p>
+            @endif
+        </div>
+    </div>
+</div>
+@endsection
