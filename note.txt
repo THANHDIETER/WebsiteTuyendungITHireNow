@@ -52,3 +52,7 @@ check ip my
 https://www.whatismyip.com/
 search -> thêm ip my 
 Remote Database Access
+
+
+Cài vite 
+npm install --save-dev vite
