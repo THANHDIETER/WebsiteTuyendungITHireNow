@@ -88,4 +88,36 @@ class JobController extends Controller
         $job->delete();
         return redirect()->route('admin.jobs.index')->with('success', 'Tin tuyển dụng đã bị xoá.');
     }
+
+    public function revertToPending(Request $request, Job $job)
+    {
+        // Chỉ cho phép revert nếu trạng thái là published hoặc closed
+        if (!in_array($job->status, ['published', 'closed'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Trạng thái hiện tại không thể khôi phục về pending.',
+                'status_html' => $job->status_badge,
+            ], 409);
+        }
+
+        // Kiểm tra nếu đã quá 5 phút kể từ khi cập nhật
+        if ($job->updated_at->diffInMinutes(now()) > 5) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tin đã đăng quá 5 phút nên không thể khôi phục.',
+                'status_html' => $job->status_badge,
+            ]);
+        }
+
+        // Cập nhật lại trạng thái
+        $job->update(['status' => 'pending']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tin đã được khôi phục về trạng thái chờ duyệt.',
+            'status_html' => $job->status_badge,
+        ]);
+    }
+
+
 }

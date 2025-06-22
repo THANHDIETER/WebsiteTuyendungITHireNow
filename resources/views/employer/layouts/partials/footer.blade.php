@@ -24,6 +24,6 @@
 <script src="{{ asset('assets/js/scrollbar/custom.js')}}"></script>
 <!-- scrollable-->
 <!-- customizer-->
-<script src="{{ asset('assets/js/theme-customizer/customizer.js')}}"></script>
+<!-- <script src="{{ asset('assets/js/theme-customizer/customizer.js')}}"></script> -->
 <!-- custom script -->
 <script src="{{ asset('assets/js/script.js')}}"></script>
