@@ -11,8 +11,10 @@ class CreateSkillsTable extends Migration
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('slug')->nullable();
             $table->string('group_name');
             $table->string('skill_name');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

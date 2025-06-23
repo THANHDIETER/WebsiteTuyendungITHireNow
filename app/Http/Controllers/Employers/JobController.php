@@ -138,7 +138,7 @@ class JobController extends Controller
     if ($request->filled('skills_text')) {
         $skillNames = array_filter(array_map('trim', explode(',', $request->input('skills_text'))));
         if (!empty($skillNames)) {
-            $skillIds = Skill::whereIn('name', $skillNames)->pluck('id')->toArray();
+            $skillIds = Skill::whereIn('skill_name', $skillNames)->pluck('id')->toArray();
             $job->skills()->sync($skillIds);
         } else {
             $job->skills()->detach();

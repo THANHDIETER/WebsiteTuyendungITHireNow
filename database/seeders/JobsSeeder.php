@@ -31,7 +31,7 @@ class JobsSeeder extends Seeder
         $categoryIds = DB::table('categories')->pluck('id');
         $skillIds = DB::table('skills')->pluck('id');
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $title = $faker->jobTitle;
             $slug = Str::slug($title) . '-' . $i;
 

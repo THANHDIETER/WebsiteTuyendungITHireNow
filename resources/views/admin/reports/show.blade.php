@@ -50,6 +50,5 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a href="{{ route('admin.reports.index') }}" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>

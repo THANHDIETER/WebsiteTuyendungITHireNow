@@ -21,9 +21,9 @@ class JobController extends Controller
 
 
         // Địa điểm (radio)
-       if ($request->filled('locations')) {
-    $query->whereIn('location', (array) $request->input('locations'));
-}
+        if ($request->filled('locations')) {
+            $query->whereIn('location', (array) $request->input('locations'));
+        }
 
 
 
@@ -83,8 +83,8 @@ class JobController extends Controller
 
         // Danh sách filter cho form (truyền đủ để UX tốt)
         $categories = Category::all();
-        $companies  = Company::all();
-        $skills     = Skill::all();
+        $companies = Company::all();
+        $skills = Skill::all();
 
         // Tìm 3 việc làm nổi bật nhất cho phần gợi ý
         $topJobs = (clone $query)

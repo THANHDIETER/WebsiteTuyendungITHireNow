@@ -40,8 +40,7 @@
 <!-- Animation css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
 <!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
 <!-- Apex Chart css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
 <!-- Data Table css-->
@@ -51,11 +50,6 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-    @if (session('access_token'))
-        <script>
-            localStorage.setItem('access_token', "{{ session('access_token') }}");
-        </script>
-    @endif
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
                 src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark"
@@ -72,12 +66,12 @@
             <form class="search-form mb-0">
                 <div class="input-group"><span class="input-group-text pe-0">
                         <!-- Icon Search -->
-                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
+                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </span>
                     <input class="form-control" type="text" placeholder="Search anything...">
@@ -98,10 +92,10 @@
                         <!-- Icon Search -->
                         <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
+                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
                     <div class="form-group search-form">
@@ -111,10 +105,10 @@
                 <!-- Notification menu-->
                 <li class="custom-dropdown"><a href="javascript:void(0)">
                         <!-- Icon Bell -->
-                        <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
@@ -172,17 +166,15 @@
                             <li>
                                 <form class="mb-3">
                                     <div class="input-group">
-                                        <input class="form-control" type="text"
-                                            placeholder="Search Bookmark..."><span class="input-group-text">
+                                        <input class="form-control" type="text" placeholder="Search Bookmark..."><span
+                                            class="input-group-text">
                                             <!-- Icon Search -->
                                             <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="11" cy="11" r="7" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <line x1="21" y1="21" x2="16.65" y2="16.65"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
+                                                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
                                         </span>
                                     </div>
@@ -191,8 +183,8 @@
                             <li class="d-flex align-items-center bg-light-primary">
                                 <div class="flex-shrink-0 me-2"><a href="">
                                         <!-- Icon Home -->
-                                        <svg class="svg-color stroke-primary" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg class="svg-color stroke-primary" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z"
                                                 stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                             <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2"
@@ -201,8 +193,8 @@
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">Dashboard</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -214,16 +206,15 @@
                                         <!-- Icon Pie -->
                                         <svg class="svg-color stroke-secondary" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                             <path d="M12 2v10h10" stroke="currentColor" stroke-width="2"
                                                 stroke-linejoin="round" />
                                         </svg>
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">To-do</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -243,8 +234,8 @@
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">Chart</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -280,8 +271,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-primary" type="number"
@@ -290,10 +281,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -312,8 +303,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-secondary" type="number"
@@ -322,10 +313,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -344,8 +335,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-tertiary" type="number"
@@ -354,10 +345,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -387,20 +378,18 @@
                                         <h5>Design meeting</h5>
                                     </a>
                                     <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
+                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                             <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" />
                                         </svg><span>Just Now</span>
                                     </h6>
                                 </div>
                                 <div class="badge badge-light-danger">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="2" />
+                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg><span>Open</span>
@@ -411,20 +400,18 @@
                                         <h5>Weekly scurm Meeting</h5>
                                     </a>
                                     <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
+                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                             <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" />
                                         </svg><span>1 Hour Ago</span>
                                     </h6>
                                 </div>
                                 <div class="badge badge-light-danger">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="2" />
+                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg><span>Open</span>
@@ -435,20 +422,18 @@
                                         <h5>Check your login page</h5>
                                     </a>
                                     <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
+                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                             <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" />
                                         </svg><span>2 Hour Ago</span>
                                     </h6>
                                 </div>
                                 <div class="badge badge-light-success">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="2" />
+                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg><span>Closed</span>
@@ -458,8 +443,7 @@
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
-                    <div class="d-flex align-items-center"><img src="{{ asset('assets/images/profile.png') }}"
-                            alt="">
+                    <div class="d-flex align-items-center"><img src="{{ asset('assets/images/profile.png') }}" alt="">
                         <div class="flex-grow-1">
                             <h5>
 
@@ -486,26 +470,25 @@
                         <ul>
                             <li class="d-flex">
                                 <!-- Icon Profile -->
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="7" r="4" stroke="currentColor"
-                                        stroke-width="2" />
+                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
                                     <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor" stroke-width="2"
                                         stroke-linejoin="round" />
                                 </svg><a class="ms-2" href="">Account</a>
                             </li>
                             <li class="d-flex">
                                 <!-- Icon Message -->
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
                                         stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                 </svg><a class="ms-2" href="">Inbox</a>
                             </li>
                             <li class="d-flex">
                                 <!-- Icon Document -->
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
                                         stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                     <path d="M14 2v6h6" stroke="currentColor" stroke-width="2"
@@ -513,8 +496,8 @@
                                 </svg><a class="ms-2" href="">Task</a>
                             </li>
                             <li class="d-flex">
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
                                         stroke-width="2" stroke-linejoin="round" />
                                     <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
@@ -531,3 +514,8 @@
         </div>
     </div>
 </header>
+@if (session('access_token'))
+    <script>
+        localStorage.setItem('access_token', "{{ session('access_token') }}");
+    </script>
+@endif

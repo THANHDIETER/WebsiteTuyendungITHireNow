@@ -2,57 +2,37 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SkillsSeeder extends Seeder
 {
     public function run()
     {
-        // Lấy ID từ slug
-        $categories = DB::table('categories')->pluck('id', 'slug');
+        $userId = 1; // Hoặc gán từ logic phù hợp
 
-        $skills = [
+        DB::table('skills')->updateOrInsert(
             [
-                'slug' => 'php',
-                'name' => 'PHP',
-                'description' => 'Ngôn ngữ lập trình PHP',
-                'category_slug' => 'backend-developer',
+                'user_id' => $userId,
+                'skill_name' => 'PHP',
             ],
             [
-                'slug' => 'laravel',
-                'name' => 'Laravel',
-                'description' => 'Framework PHP Laravel',
-                'category_slug' => 'backend-developer',
+                'group_name' => 'hard_skills',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
+        DB::table('skills')->updateOrInsert(
+            [
+                'user_id' => $userId,
+                'skill_name' => 'Laravel',
             ],
             [
-                'slug' => 'mysql',
-                'name' => 'MySQL',
-                'description' => 'Hệ quản trị CSDL MySQL',
-                'category_slug' => 'backend-developer',
-            ],
-        ];
-
-        foreach ($skills as $skill) {
-            $categoryId = $categories[$skill['category_slug']] ?? null;
-
-            if (!$categoryId) {
-                echo "⚠️ Không tìm thấy category slug: {$skill['category_slug']}, bỏ qua...\n";
-                continue;
-            }
-
-            DB::table('skills')->updateOrInsert(
-                ['slug' => $skill['slug']],
-                [
-                    'name' => $skill['name'],
-                    'description' => $skill['description'],
-                    'category_id' => $categoryId,
-                    'is_active' => true,
-                    'proficiency_level' => 'advanced',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            );
-        }
+                'group_name' => 'hard_skills',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
     }
 }

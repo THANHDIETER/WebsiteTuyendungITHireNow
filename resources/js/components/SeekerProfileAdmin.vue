@@ -113,85 +113,100 @@
 
         <!-- Modal chi tiết -->
         <!-- Modal chi tiết -->
-        <div class="modal fade" tabindex="-1" ref="modalRef">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header bg-light d-flex align-items-center justify-content-between">
-                        <h5 class="modal-title mb-0">
-                            📄 Chi tiết hồ sơ — ID #{{ selected?.id }}
-                        </h5>
-                        <!-- Nút Đóng (X) -->
-                        <button type="button" class="btn-close ms-3" @click="closeModal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <ul v-if="selected" class="list-group list-group-flush">
-                            <li class="list-group-item"> <strong>Ứng viên:</strong> {{ selected.user?.name || 'N/A' }}
-                                (ID: {{
-                                selected.user_id }}) </li>
-                            <li class="list-group-item"><strong>Tiêu đề:</strong> {{ selected.headline }}</li>
-                            <li class="list-group-item"><strong>Tóm tắt:</strong> {{ selected.summary }}</li>
-                            <li class="list-group-item"><strong>CV: </strong>
-                                <a :href="selected.cv_url" target="_blank" v-if="selected.cv_url">Xem CV</a>
-                                <span v-else>Chưa có CV</span>
-                            </li>
-                            <li class="list-group-item"><strong>LinkedIn: </strong>
-                                <a :href="selected.linkedin_url" target="_blank" v-if="selected.linkedin_url">{{
-                                    selected.linkedin_url
-                                    }}</a>
-                                <span v-else>Chưa có</span>
-                            </li>
-                            <li class="list-group-item"><strong>GitHub: </strong>
-                                <a :href="selected.github_url" target="_blank" v-if="selected.github_url">{{
-                                    selected.github_url }}</a>
-                                <span v-else>Chưa có</span>
-                            </li>
-                            <li class="list-group-item"><strong>Portfolio: </strong>
-                                <a :href="selected.portfolio_url" target="_blank" v-if="selected.portfolio_url">{{
-                                    selected.portfolio_url }}</a>
-                                <span v-else>Chưa có</span>
-                            </li>
-                           <li class="list-group-item"><strong>Địa điểm: </strong> {{ selected.location || 'Chưa cập nhật' }}</li>
+       <div class="modal fade" tabindex="-1" ref="modalRef">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-light d-flex align-items-center justify-content-between">
+        <h5 class="modal-title mb-0">📄 Chi tiết hồ sơ — ID #{{ selected?.id }}</h5>
+        <button type="button" class="btn-close" @click="closeModal"></button>
+      </div>
 
-                            <li class="list-group-item"><strong>Mức lương mong muốn: </strong>
-                                {{ selected.salary_expectation ? selected.salary_expectation.toLocaleString() + ' VNĐ' :
-                                'Chưa cập nhật'
-                                }}
-                            </li>
-                            <li class="list-group-item"><strong>Số năm kinh nghiệm:</strong>
-                                {{ selected.years_of_experience ?? 'Chưa cập nhật' }}
-                            </li>
-                            <li class="list-group-item"><strong>Loại công việc:</strong> {{ selected.job_types || 'Chưa cập nhật' }}
-                            </li>
-                            <li class="list-group-item"><strong>Học vấn:</strong> {{ selected.education }}</li>
-                            <li class="list-group-item"><strong>Kinh nghiệm làm việc:</strong> {{
-                                selected.work_experience }}</li>
-                            <li class="list-group-item"><strong>Kỹ năng ngoại ngữ:</strong> {{ selected.language_skills
-                                }}</li>
-                            <li class="list-group-item">
-                                <strong>Trạng thái: </strong>
-                                <span :class="selected.is_visible ? 'badge bg-success' : 'badge bg-danger'">
-                                    {{ selected.is_visible ? 'Đã duyệt' : 'Chưa duyệt' }}
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer d-flex justify-content-between">
-
-                        <div>
-                            <!-- Nút Duyệt nếu chưa duyệt -->
-                            <button v-if="selected && !selected.is_visible" class="btn btn-success me-2"
-                                @click="approveSelected">
-                                <i class="bi bi-check-circle"></i> Duyệt hồ sơ
-                            </button>
-                            <!-- Nút Đóng -->
-                            <button type="button" class="btn btn-outline-secondary" @click="closeModal">
-                                <i class="bi bi-x"></i> Đóng
-                            </button>
-                        </div>
-                    </div>
-                </div>
+      <div class="modal-body">
+        <div v-if="selected">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <strong>Ứng viên:</strong> {{ selected.user?.name || 'N/A' }} (ID: {{ selected.user_id }})
             </div>
+            <div class="col-md-6">
+              <strong>Tiêu đề:</strong> {{ selected.headline }}
+            </div>
+            <div class="col-md-6">
+              <strong>Tóm tắt:</strong> {{ selected.summary || '—' }}
+            </div>
+            <div class="col-md-6">
+              <strong>CV:</strong>
+              <template v-if="selected.cv_url">
+                <a :href="selected.cv_url" target="_blank">Xem CV</a>
+              </template>
+              <span v-else>Chưa có</span>
+            </div>
+            <div class="col-md-6">
+              <strong>LinkedIn:</strong>
+              <template v-if="selected.linkedin_url">
+                <a :href="selected.linkedin_url" target="_blank">{{ selected.linkedin_url }}</a>
+              </template>
+              <span v-else>Chưa có</span>
+            </div>
+            <div class="col-md-6">
+              <strong>GitHub:</strong>
+              <template v-if="selected.github_url">
+                <a :href="selected.github_url" target="_blank">{{ selected.github_url }}</a>
+              </template>
+              <span v-else>Chưa có</span>
+            </div>
+            <div class="col-md-6">
+              <strong>Portfolio:</strong>
+              <template v-if="selected.portfolio_url">
+                <a :href="selected.portfolio_url" target="_blank">{{ selected.portfolio_url }}</a>
+              </template>
+              <span v-else>Chưa có</span>
+            </div>
+            <div class="col-md-6">
+              <strong>Địa điểm:</strong> {{ selected.location || 'Chưa cập nhật' }}
+            </div>
+            <div class="col-md-6">
+              <strong>Mức lương mong muốn:</strong>
+              {{ selected.salary_expectation ? selected.salary_expectation.toLocaleString() + ' VNĐ' : 'Chưa cập nhật' }}
+            </div>
+            <div class="col-md-6">
+              <strong>Số năm kinh nghiệm:</strong> {{ selected.years_of_experience ?? 'Chưa cập nhật' }}
+            </div>
+            <div class="col-md-6">
+              <strong>Loại công việc:</strong> {{ selected.job_types || 'Chưa cập nhật' }}
+            </div>
+            <div class="col-md-6">
+              <strong>Trình độ học vấn:</strong> {{ selected.education || '—' }}
+            </div>
+            <div class="col-md-6">
+              <strong>Kinh nghiệm làm việc:</strong> {{ selected.work_experience || '—' }}
+            </div>
+            <div class="col-md-6">
+              <strong>Kỹ năng ngoại ngữ:</strong> {{ selected.language_skills || '—' }}
+            </div>
+            <div class="col-md-6">
+              <strong>Trạng thái:</strong>
+              <span :class="selected.is_visible ? 'badge bg-success' : 'badge bg-danger'">
+                {{ selected.is_visible ? 'Đã duyệt' : 'Chưa duyệt' }}
+              </span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="modal-footer d-flex justify-content-between">
+        <div>
+          <button v-if="selected && !selected.is_visible" class="btn btn-success me-2" @click="approveSelected">
+            <i class="bi bi-check-circle"></i> Duyệt hồ sơ
+          </button>
+          <button type="button" class="btn btn-outline-secondary" @click="closeModal">
+            <i class="bi bi-x"></i> Đóng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     </div>
 </template>

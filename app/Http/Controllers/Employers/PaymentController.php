@@ -12,8 +12,9 @@ class PaymentController extends Controller
     /**
      * Hiển thị chi tiết thanh toán.
      */
-    public function show($id)
+    public function show( $id)
     {
+
         $payment = Payment::find($id);
 
         if (!$payment) {
