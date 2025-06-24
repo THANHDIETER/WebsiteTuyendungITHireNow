@@ -48,12 +48,6 @@
                     {{ $notification->created_at->timezone(config('app.timezone'))->format('d/m/Y H:i') }}
                 </div>
             </div>
-
-            <div class="d-flex justify-content-between mt-4">
-                <a href="{{ route('admin.notifications.edit', $notification->id) }}" class="btn btn-warning">
-                    <i class="bi bi-pencil-square"></i> Chỉnh sửa
-                </a>
-            </div>
         </div>
     </div>
 </div>

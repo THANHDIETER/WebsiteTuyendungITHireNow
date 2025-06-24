@@ -81,8 +81,8 @@ class NotificationController extends Controller
     {
         $notification = Notification::findOrFail($id);
         $notification->delete();
-
-        return redirect()->route('admin.notifications.index')->with('success', 'Đã xoá thông báo.');
+        
+        return response()->json(['message' => 'Bạn đã xóa thành công.']); 
     }
 
     public function store(Request $request)

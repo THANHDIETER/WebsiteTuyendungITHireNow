@@ -87,7 +87,7 @@
                                             <button class="btn btn-sm btn-warning btn-edit"
                                                 data-id="{{ $noti->id }}">Sửa</button>
                                             <button class="btn btn-sm btn-info text-white btn-view"
-                                                data-id="{{ $noti->id }}">Chi Tiết</button>
+                                                data-id="{{ $noti->id }}">Xem</button>
                                             <button class="btn btn-sm btn-outline-danger btn-delete"
                                                 data-id="{{ $noti->id }}">Xóa</button>
 
