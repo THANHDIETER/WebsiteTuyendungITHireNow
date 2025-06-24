@@ -13,6 +13,9 @@
 
 <!-- Bootstrap JS Bundle (kèm Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Font Awesome 6 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 
 <!-- Favicon icon-->
@@ -47,10 +50,18 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <!-- App css-->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-
+    @if (session('access_token'))
+        <script>
+            localStorage.setItem('access_token', "{{ session('access_token') }}");
+        </script>
+    @endif
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
                 src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark"

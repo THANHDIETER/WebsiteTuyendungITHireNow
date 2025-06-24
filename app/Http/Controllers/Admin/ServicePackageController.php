@@ -1,15 +1,15 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\ServicePackage;
 use Illuminate\Http\Request;
+use App\Models\EmployerPackage;
+use App\Http\Controllers\Controller;
 
 class ServicePackageController extends Controller
 {
     public function index(Request $request)
     {
-        $query = ServicePackage::query();
+        $query = EmployerPackage::query();
         if ($request->has('status') && $request->status !== '') {
             $query->where('is_active', $request->status);
         }
@@ -36,21 +36,21 @@ class ServicePackageController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
         $data['is_active'] = $request->has('is_active');
-        ServicePackage::create($data);
+        EmployerPackage::create($data);
         return redirect()->route('admin.service-packages.index')->with('success', 'Gói dịch vụ đã được tạo.');
     }
 
-    public function show(ServicePackage $service_package)
+    public function show(EmployerPackage $service_package)
     {
         return view('admin.service-packages.show', compact('service_package'));
     }
 
-    public function edit(ServicePackage $service_package)
+    public function edit(EmployerPackage $service_package)
     {
         return view('admin.service-packages.edit', compact('service_package'));
     }
 
-    public function update(Request $request, ServicePackage $service_package)
+    public function update(Request $request, EmployerPackage $service_package)
     {
         $data = $request->validate([
             'name' => 'required|string|max:100',
@@ -68,9 +68,22 @@ class ServicePackageController extends Controller
         return redirect()->route('admin.service-packages.index')->with('success', 'Đã cập nhật gói dịch vụ.');
     }
 
-    public function destroy(ServicePackage $service_package)
+    public function destroy($id)
     {
-        $service_package->delete();
-        return back()->with('success', 'Đã xoá gói dịch vụ.');
+        $EmployerPackage = EmployerPackage::find($id);
+
+        if (!$EmployerPackage) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gói dịch vụ không tồn tại hoặc đã bị xoá.'
+            ], 404);
+        }
+
+        $EmployerPackage->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã xoá gói dịch vụ thành công.'
+        ]);
     }
 }

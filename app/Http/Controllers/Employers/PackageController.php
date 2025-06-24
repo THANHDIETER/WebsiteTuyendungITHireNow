@@ -2,84 +2,128 @@
 
 namespace App\Http\Controllers\Employers;
 
-use App\Http\Controllers\Controller;
-use App\Models\EmployerPackage;
-use App\Models\CompanyPackageSubscription;
+use App\Models\Payment;
+use App\Models\Setting;
+use App\Models\BankAccount;
 use Illuminate\Http\Request;
+use App\Models\EmployerPackage;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class PackageController extends Controller
 {
-    /**
-     * Danh sách các gói dịch vụ hiện có & gói đang dùng
-     */
+
     public function index()
     {
+        // Lấy tất cả gói đang hoạt động (is_active = 1), sắp xếp giảm dần theo độ ưu tiên
         $packages = EmployerPackage::where('is_active', 1)
-            ->orderBy('sort_order')
+            ->orderByDesc('sort_order')
             ->get();
 
+        // Lấy thông tin công ty của người dùng hiện tại
         $company = Auth::user()->company;
-        $currentSubscription = $company?->activePackage();
-
-        return view('employer.packages.index', compact('packages', 'currentSubscription'));
-    }
-
-    /**
-     * Trang xác nhận mua gói
-     */
-    public function purchase($id)
-    {
-        $package = EmployerPackage::findOrFail($id);
-        return view('employer.packages.purchase', compact('package'));
-    }
-
-    /**
-     * Thực hiện mua gói dịch vụ (giả lập thanh toán thành công)
-     */
-    public function subscribe(Request $request, $packageId)
-    {
-        $user = Auth::user();
-        $company = $user->company;
-
-        if (!$company) {
-            return redirect()->back()->withErrors('Bạn chưa có công ty để mua gói.');
+        if(!$company) {
+            return redirect()->route('employer')->with('error', 'Bạn cần tạo công ty trước khi mua gói.');
         }
 
+        // Lấy gói hiện tại đang sử dụng từ quan hệ Company
+        $currentSubscription = $company?->activePackage();
+
+        // Lấy tất cả các đơn thanh toán gói của user hiện tại
+        $payments = Payment::with('package')
+            ->where('user_id', Auth::id())
+            ->orderByDesc('id')
+            ->get();
+
+        // Truyền dữ liệu ra view
+        return view('employer.packages.index', compact(
+            'packages',
+            'currentSubscription',
+            'payments'
+        ));
+    }
+
+
+
+    public function purchase($id)
+    {
+        $package = EmployerPackage::find($id);
+        $bankAccounts = BankAccount::where('is_active', 1)->get();
+        $vat = (float) Setting::getValue('vat_rate', 0);
+        $vatAmount = round($package->price * ($vat / 100));
+        $totalWithVat = $package->price + $vatAmount;
+        return view('employer.packages.purchase', compact('package', 'bankAccounts', 'vat', 'vatAmount', 'totalWithVat'));
+
+    }
+
+    public function history()
+    {
+        $user = auth::user();
+
+        $payments = Payment::with('package')
+            ->where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('employer.packages.history', compact('payments'));
+    }
+
+
+
+
+    public function subscribe(Request $request, $packageId)
+    {
         $package = EmployerPackage::findOrFail($packageId);
+        $bankId = $request->input('bank');
+        $bankAccount = BankAccount::findOrFail($bankId);
 
-        // Hủy kích hoạt các gói hiện tại
-        $company->packageSubscriptions()->where('is_active', true)->update(['is_active' => false]);
+        $vatPercent = (float) Setting::getValue('vat_rate', 0);
+        $vatAmount = $package->price * ($vatPercent / 100);
+        $totalAmount = $package->price + $vatAmount;
 
-        // Đăng ký gói mới
-        $subscription = new CompanyPackageSubscription([
-            'employer_package_id' => $package->id,
-            'start_date'          => Carbon::now(),
-            'end_date'            => Carbon::now()->addDays($package->duration_days),
-            'post_limit'          => $package->post_limit,
-            'remaining_posts'     => $package->post_limit,
-            'highlight_days'      => $package->highlight_days,
-            'cv_view_limit'       => $package->cv_view_limit,
-            'support_level'       => $package->support_level,
-            'price'               => $package->price,
-            'payment_status'      => 'paid', // Nếu không tích hợp thanh toán thật
-            'is_active'           => true,
-            'purchased_by_user_id'=> $user->id,
+        $transactionId = Setting::generateTransactionId();
+
+        $paymentId = Payment::create([
+            'user_id' => auth::id(),
+            'package_id' => $package->id,
+            'amount' => $totalAmount,
+            'currency' => 'VND',
+            'vat_percent' => $vatPercent,
+            'invoice_number' => 'INV-' . now()->format('Ymd-His') . '-' . rand(1000, 9999),
+            'payment_method' => $bankAccount->bank,
+            'payment_gateway' => $bankAccount->bank,
+            'transaction_id' => $transactionId,
+            'status' => 'pending',
         ]);
 
-        $company->packageSubscriptions()->save($subscription);
-
-        return redirect()->route('employer.packages.index')
-            ->with('success', 'Bạn đã mua gói thành công. Bây giờ bạn có thể đăng thêm tin tuyển dụng!');
+        return redirect()->route('employer.payment.show', $paymentId);
     }
 
-    /**
-     * Xem chi tiết một gói (nếu muốn)
-     */
+    public function cancel($id)
+    {
+        $payment = Payment::where('id', $id)
+            ->where('user_id', auth::id())
+            ->where('status', 'pending')
+            ->firstOrFail();
+
+        $payment->status = 'canceled';
+        $payment->save();
+
+        return redirect()->route('employer.packages.history')->with('success', 'Đã hủy đơn thành công.');
+    }
+
     public function show($id)
     {
-        $package = EmployerPackage::findOrFail($id);
-        return view('employer.packages.show', compact('package'));
+        $payment = Payment::with('package')
+            ->where('id', $id)
+            ->where('user_id', auth::id())
+            ->firstOrFail();
+
+        return view('employer.packages.payment_detail', compact('payment'));
     }
+
+
+
+
+
 }

@@ -43,7 +43,7 @@ class job_applicationsSeeder extends Seeder
                 'email' => $faker->unique()->safeEmail(),
                 'phone' => $faker->phoneNumber(),
 
-                'cv_url' => 'storage/cvs/sample-cv-' . $faker->numberBetween(1, 5) . '.pdf',
+                'image' => 'https://dvpro.vn/uploads/23-09-2024/298949d1-5fcc-4c70-a679-b9984f7666b6.gif',
                 'cover_letter' => $faker->paragraph(3),
                 'applied_at' => $appliedAt,
                 'status' => $status,

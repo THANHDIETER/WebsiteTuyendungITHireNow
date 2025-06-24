@@ -3,7 +3,7 @@
 
 <head>
 
-    @include('employer.layouts.partials.header')
+  @include('employer.layouts.partials.header')
     @if (session('access_token'))
         <script>
             localStorage.setItem('access_token', "{{ session('access_token') }}");
@@ -33,22 +33,14 @@
         </main>
     </div>
 
-    <!-- Footer luôn ở đáy -->
-    @include('employer.layouts.partials.footer')
-    @include('employer.layouts.partials.confirm-modal')
+  <!-- Footer luôn ở đáy -->
+  @include('employer.layouts.partials.footer')
+<<<<<<< HEAD
+ @include('employer.layouts.partials.confirm-modal')
+=======
+  @include('employer.layouts.partials.confirm-modal')
 
-    <script>
-        window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
-    </script>
-    <script>
-        window.Laravel = {
-            userId: {{ auth()->id() }},
-        };
-        window.APP_NAME = "{{ config('app.name') }}";
-    </script>
-
-
-
+>>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
 
 </body>
 

@@ -102,10 +102,22 @@
         <li class="sidebar-main-title">Khác</li>
 
         <li class="sidebar-list">
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="{{ route('admin.settings.index') }}">
                 <i class="bi bi-gear sidebar-icon"></i> Cài đặt hệ thống
             </a>
         </li>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.bank_account.index') }}">
+                <i class="bi bi-bank sidebar-icon"></i> Quản lý ngân hàng
+            </a>
+        </li>
+        <li class="sidebar-list">
+    <a class="sidebar-link" href="{{ route('admin.bank_log.index') }}">
+        <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
+    </a>
+</li>
+
+
 
     </ul>
 </aside>

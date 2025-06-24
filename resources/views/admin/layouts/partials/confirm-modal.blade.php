@@ -1,134 +1,146 @@
-<div class="modal fade" id="globalAlertModal" tabindex="-1" aria-modal="true" role="dialog">
+<!-- Modal -->
+<div class="modal fade" id="globalAlertModal" tabindex="-1" role="dialog" aria-modal="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center p-4" style="max-width: 440px; margin: auto; border-radius: 16px;">
-            <div class="fs-1 mb-3 modal-icon">
+        <div class="modal-content text-start p-4 border-0 shadow-lg rounded-4" style="max-width: 480px; margin: auto;">
+            <div class="text-center mb-3 modal-icon">
                 <i class="bi bi-info-circle-fill"></i>
             </div>
-            <h5 class="mb-2 fw-bold modal-title">Thông báo</h5>
-            <p class="text-muted mb-4 modal-body-message">Đây là nội dung thông báo</p>
-            <div class="d-flex justify-content-center gap-3">
+            <h5 class="text-center fw-bold modal-title mb-2">Thông báo</h5>
+            <div class="modal-body-message text-muted"></div>
+            <div class="d-flex justify-content-center gap-3 mt-4">
                 <button type="button" class="btn btn-primary px-4" id="globalAlertModal-confirm-btn">Đồng ý</button>
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Huỷ</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- CSS Cải tiến -->
 <style>
-#globalAlertModal .modal-content {
-    border: none;
-    box-shadow: 0 5px 40px rgba(0, 0, 0, 0.15);
-    animation: fadeIn 0.3s ease-in-out;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.modal-icon i {
-    font-size: 2.5rem;
-}
-.modal-icon.success i {
-    color: #28a745; /* xanh lá */
-}
-.modal-icon.error i {
-    color: #dc3545; /* đỏ */
-}
-.modal-icon.warning i {
-    color: #ffc107; /* vàng */
-}
-.modal-icon.info i {
-    color: #17a2b8; /* xanh dương */
-}
-</style>
-
-<script>
-function showAlertModal({
-    title = 'Thông báo',
-    message = '',
-    type = 'confirm',
-    status = 'info', // success | error | warning | info
-    onConfirm = () => {}
-}) {
-    const modalEl = document.getElementById('globalAlertModal');
-    modalEl.removeAttribute('inert');
-    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-
-    modalEl.querySelector('.modal-title').textContent = title;
-    modalEl.querySelector('.modal-body-message').textContent = message;
-
-    // Handle icon class
-    const iconMap = {
-        success: 'bi-check-circle-fill',
-        error: 'bi-x-circle-fill',
-        warning: 'bi-exclamation-circle-fill',
-        info: 'bi-info-circle-fill'
-    };
-
-    const iconEl = modalEl.querySelector('.modal-icon i');
-    const iconWrapper = modalEl.querySelector('.modal-icon');
-    iconEl.className = `bi ${iconMap[status] || 'bi-info-circle-fill'}`;
-    iconWrapper.className = `fs-1 mb-3 modal-icon ${status}`;
-
-    const confirmBtn = modalEl.querySelector('#globalAlertModal-confirm-btn');
-    const cancelBtn = modalEl.querySelector('[data-bs-dismiss]');
-
-    const newBtn = confirmBtn.cloneNode(true);
-    confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
-
-    if (type === 'alert') {
-        cancelBtn.classList.add('d-none');
-        newBtn.textContent = 'Đóng';
-    } else {
-        cancelBtn.classList.remove('d-none');
-        newBtn.textContent = 'Đồng ý';
+    .modal-body-message {
+        font-size: 1rem;
+        line-height: 1.5;
+        white-space: pre-line;
+        text-align: left;
+        /* Căn lề trái văn bản */
+        max-width: 90%;
+        /* Đảm bảo khối không quá to */
+        margin-left: auto;
+        /* Căn giữa toàn khối */
+        margin-right: auto;
     }
 
-    let lastFocused = document.activeElement;
-    modalEl.addEventListener('hidden.bs.modal', function handler() {
-        modalEl.setAttribute('inert', 'true');
-        if (lastFocused && typeof lastFocused.focus === 'function') {
-            setTimeout(() => lastFocused.focus(), 10);
-        } else {
-            document.body.focus();
+
+    .modal-icon {
+        font-size: 2.75rem;
+        animation: popIn 0.3s ease-in-out;
+    }
+
+    .modal-icon.success i {
+        color: #28a745;
+    }
+
+    .modal-icon.error i {
+        color: #dc3545;
+    }
+
+    .modal-icon.warning i {
+        color: #ffc107;
+    }
+
+    .modal-icon.info i {
+        color: #0dcaf0;
+    }
+
+    #globalAlertModal .modal-content {
+        animation: fadeInUp 0.25s ease-in-out;
+        background-color: #fff;
+        border-radius: 1rem;
+    }
+
+    .modal-title {
+        font-size: 1.25rem;
+    }
+
+    .modal-body-message {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
-        modalEl.removeEventListener('hidden.bs.modal', handler);
-    });
 
-    newBtn.onclick = function () {
-        modal.hide();
-        if (type === 'confirm') onConfirm();
-    };
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-    modal.show();
-    modalEl.removeAttribute('inert');
-}
-</script>
+    @keyframes popIn {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
 
-@if (session('success') || session('info') || session('error') || session('warning'))
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+
+
+<!-- JS showAlertModal cải tiến -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const type = {
-        success: 'success',
-        info: 'info',
-        error: 'error',
-        warning: 'warning'
-    }['{{ session()->has("success") ? "success" : (session()->has("info") ? "info" : (session()->has("warning") ? "warning" : "error")) }}'];
+    function showAlertModal({
+        title = 'Thông báo',
+        message = '',
+        type = 'confirm',
+        status = 'info',
+        onConfirm = () => { }
+    }) {
+        const modalEl = document.getElementById('globalAlertModal');
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
 
-    const title = {
-        success: 'Thành công',
-        info: 'Thông báo',
-        error: 'Lỗi',
-        warning: 'Cảnh báo'
-    }[type];
+        // Tiêu đề và nội dung
+        modalEl.querySelector('.modal-title').textContent = title;
+        modalEl.querySelector('.modal-body-message').innerHTML = message.replace(/\n/g, '<br>');
 
-    const message = `{!! session('success') ?? session('info') ?? session('warning') ?? session('error') !!}`;
+        // Icon
+        const iconMap = {
+            success: 'bi-check-circle-fill',
+            error: 'bi-x-circle-fill',
+            warning: 'bi-exclamation-circle-fill',
+            info: 'bi-info-circle-fill'
+        };
+        const iconEl = modalEl.querySelector('.modal-icon i');
+        const iconWrapper = modalEl.querySelector('.modal-icon');
+        iconEl.className = `bi ${iconMap[status] || 'bi-info-circle-fill'}`;
+        iconWrapper.className = `modal-icon text-center ${status}`;
 
-    showAlertModal({
-        type: 'alert',
-        status: type,
-        title,
-        message
-    });
-});
+        // Xử lý nút xác nhận
+        const confirmBtn = modalEl.querySelector('#globalAlertModal-confirm-btn');
+        const cancelBtn = modalEl.querySelector('[data-bs-dismiss]');
+        const newBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+
+        if (type === 'alert') {
+            cancelBtn.classList.add('d-none');
+            newBtn.textContent = 'Đóng';
+        } else {
+            cancelBtn.classList.remove('d-none');
+            newBtn.textContent = 'Đồng ý';
+        }
+
+        // Gọi callback
+        newBtn.onclick = () => {
+            modal.hide();
+            if (type === 'confirm') onConfirm();
+        };
+
+        modal.show();
+    }
 </script>
-@endif

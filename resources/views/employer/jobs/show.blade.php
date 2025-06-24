@@ -1,129 +1,160 @@
 @extends('employer.layouts.default')
 
+@section('title', $job->meta_title ?? $job->title)
+@section('meta_description', strip_tags($job->meta_description ?? Str::limit($job->description, 150)))
+@section('meta_keywords', $job->keyword ?? '')
+
 @section('content')
 <main class="main-content">
     <div class="container py-5">
-        {{-- THÔNG BÁO --}}
+
+        {{-- FLASH MESSAGE --}}
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
-                <i class="bi bi-check-circle me-2"></i>
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+                <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
         @if(session('error'))
             <div class="alert alert-warning alert-dismissible fade show mb-3" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+                <i class="bi bi-exclamation-triangle me-2"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
-        <div class="row justify-content-center">
-            <div class="col-lg-9">
-                <div class="card shadow">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="{{ $job->company->logo_url ? asset($job->company->logo_url) : asset('assets/img/default-logo.png') }}"
-                                alt="{{ $job->company->name }}" class="rounded border me-3" style="width: 72px; height: 72px; object-fit: cover;">
-                            <div>
-                                <h3 class="mb-0 fw-bold">{{ $job->title }}</h3>
-                                <div class="d-flex gap-2 mt-1">
-                                    <span class="badge bg-info text-dark">{{ ucfirst($job->job_type) }}</span>
-                                    <span class="badge bg-success">{{ $job->company->name }}</span>
-                                    <span class="badge bg-light text-dark border">
-                                        <i class="bi bi-geo-alt"></i> {{ $job->location ?? 'Chưa cập nhật' }}
-                                    </span>
-                                    @if($job->status == 'pending')
-                                        <span class="badge bg-warning text-dark">Chờ duyệt</span>
-                                    @elseif($job->status == 'published')
-                                        <span class="badge bg-success">Đã đăng</span>
-                                    @elseif($job->status == 'closed')
-                                        <span class="badge bg-secondary">Đã đóng</span>
-                                    @else
-                                        <span class="badge bg-secondary">{{ ucfirst($job->status) }}</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        {{-- Thông tin chính --}}
-                        <div class="mb-3">
-                            <strong>Ngành nghề:</strong> {{ $job->category->name ?? 'Chưa có ngành nghề' }}<br>
-                            <strong>Cấp bậc:</strong> {{ $job->level ?? 'Chưa rõ' }}<br>
-                            <strong>Kinh nghiệm:</strong> {{ $job->experience ?? 'Chưa rõ' }}<br>
-                            <strong>Hình thức:</strong> {{ ucfirst($job->job_type) }}<br>
-                            <strong>Địa chỉ làm việc:</strong> {{ $job->address ?? $job->location ?? 'Chưa cập nhật' }}<br>
-                            <strong>Lương:</strong>
-                            <span class="fw-bold text-success">
-                                {{ number_format($job->salary_min) }} - {{ number_format($job->salary_max) }} {{ $job->currency ?? 'VND' }}
-                            </span> /tháng<br>
-                            <strong>Hạn nộp:</strong> {{ $job->deadline ? \Carbon\Carbon::parse($job->deadline)->format('d/m/Y') : 'Không giới hạn' }}<br>
-                            <strong>Lượt xem:</strong> {{ $job->views ?? 0 }}
-                        </div>
-                        <hr>
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-2">Mô tả công việc</h5>
-                            <div>{!! nl2br(e($job->description)) !!}</div>
-                        </div>
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-2">Yêu cầu</h5>
-                            <div>
-                                @if(is_array($job->requirements))
-                                    <ul>
-                                        @foreach($job->requirements as $req)
-                                            <li>{{ $req }}</li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    {!! nl2br(e($job->requirements)) ?: 'Không có yêu cầu cụ thể.' !!}
-                                @endif
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-2">Quyền lợi</h5>
-                            <div>
-                                @if(is_array($job->benefits))
-                                    <ul>
-                                        @foreach($job->benefits as $b)
-                                            <li>{{ $b }}</li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    {!! nl2br(e($job->benefits)) ?: 'Không có thông tin.' !!}
-                                @endif
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-2">Chính sách làm việc</h5>
-                            <div>{{ $job->remote_policy ?? 'Không rõ' }}</div>
-                        </div>
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-2">Ngôn ngữ sử dụng</h5>
-                            <div>{{ $job->language ?? 'Không rõ' }}</div>
-                        </div>
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-2">Meta SEO</h5>
-                            <div>
-                                <strong>Meta Title:</strong> {{ $job->meta_title ?? '-' }}<br>
-                                <strong>Meta Description:</strong> {{ $job->meta_description ?? '-' }}
-                            </div>
-                        </div>
-                        <div class="mb-3 text-end">
-                            <a href="{{ route('employer.jobs.edit', $job->id) }}" class="btn btn-warning">
-                                <i class="bi bi-pencil-square"></i> Sửa tin tuyển dụng
-                            </a>
-                        </div>
+        {{-- Action Buttons --}}
+        <div class="d-flex justify-content-end mb-4 gap-2">
+            <a href="{{ route('employer.jobs.edit', $job->id) }}" class="btn btn-primary">
+                <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+            </a>
+            @if($job->status !== 'closed')
+                <form action="{{ route('employer.jobs.close', $job->id) }}" method="POST" onsubmit="return confirm('Ngừng tuyển dụng tin này?');">
+                    @csrf @method('PATCH')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-x-circle me-1"></i> Ngừng tuyển dụng
+                    </button>
+                </form>
+            @endif
+        </div>
 
-                        <div class="text-end">
-                            <a href="{{ route('employer.jobs.index') }}" class="btn btn-outline-secondary">
-                                <i class="bi bi-arrow-left"></i> Quay lại danh sách
-                            </a>
-                        </div>
+        {{-- Job Header --}}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body d-flex align-items-center">
+                <div class="me-4">
+                    <img src="{{ $job->company->logo_url ? asset($job->company->logo_url) : asset('assets/img/default-logo.png') }}"
+                        alt="{{ $job->company->name }}" class="rounded border" style="width:80px; height:80px; object-fit:cover;">
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-1">{{ $job->title }}</h3>
+                    <div class="small text-muted">
+                        <i class="bi bi-building me-1"></i> {{ $job->company->name }} |
+                        <i class="bi bi-geo-alt me-1"></i> {{ $job->address }}
                     </div>
                 </div>
             </div>
         </div>
+
+        {{-- Job Summary --}}
+        <div class="row mb-4 g-3">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2 text-primary"></i> Thông tin cơ bản</h5>
+                        <p><strong>Ngành nghề:</strong> {{ $job->category->name }}</p>
+                        <p><strong>Cấp bậc:</strong> {{ $job->level }}</p>
+                        <p><strong>Kinh nghiệm:</strong> {{ $job->experience }}</p>
+                        <p><strong>Hình thức:</strong> {{ $job->job_type_label }}</p>
+                        <p><strong>Hạn nộp hồ sơ:</strong> {{ $job->deadline ? $job->deadline->format('d/m/Y') : 'Không giới hạn' }}</p>
+                        <p><strong>Lượt xem:</strong> {{ $job->views }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="fw-semibold mb-3"><i class="bi bi-cash-coin me-2 text-success"></i> Thông tin lương</h5>
+                        <p><strong>Lương:</strong> 
+                        @if ($job->salary_negotiable)
+                            Lương thương lượng
+                        @elseif ($job->salary_min && $job->salary_max)
+                            {{ number_format($job->salary_min) }} - {{ number_format($job->salary_max) }} {{ $job->currency }}
+                        @elseif ($job->salary_min)
+                            Từ {{ number_format($job->salary_min) }} {{ $job->currency }}
+                        @elseif ($job->salary_max)
+                            Up to {{ number_format($job->salary_max) }} {{ $job->currency }}
+                        @else
+                            Thỏa thuận
+                        @endif
+                        </p>
+
+
+                        <p><strong>Loại tiền tệ:</strong> {{ $job->currency ?? 'VND' }}</p>
+                        <p><strong>Remote Policy:</strong> {{ $job->remote_policy ?? '-' }}</p>
+                        <p><strong>Ngôn ngữ:</strong> {{ $job->language ?? '-' }}</p>
+                        <p><strong>Apply URL:</strong> 
+                            @if($job->apply_url)
+                                <a href="{{ $job->apply_url }}" target="_blank">{{ $job->apply_url }}</a>
+                            @else 
+                                <em>Không có</em>
+                            @endif
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Description --}}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="fw-semibold mb-3"><i class="bi bi-file-earmark-text me-2 text-info"></i> Mô tả công việc</h5>
+                <div>{!! $job->description ?: '<em>Không có mô tả.</em>' !!}</div>
+            </div>
+        </div>
+
+        {{-- Requirements --}}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="fw-semibold mb-3"><i class="bi bi-check-all me-2 text-warning"></i> Yêu cầu</h5>
+                <div>{!! $job->requirements ?: '<em>Không có yêu cầu.</em>' !!}</div>
+            </div>
+        </div>
+
+        {{-- Benefits --}}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="fw-semibold mb-3"><i class="bi bi-gift me-2 text-success"></i> Quyền lợi</h5>
+                <div>{!! $job->benefits ?: '<em>Không rõ quyền lợi.</em>' !!}</div>
+            </div>
+        </div>
+
+        {{-- Skills --}}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="fw-semibold mb-3"><i class="bi bi-tools me-2 text-secondary"></i> Kỹ năng yêu cầu</h5>
+                @if($job->skills && $job->skills->count())
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach ($job->skills as $skill)
+                            <span class="badge bg-primary px-3 py-2">{{ $skill->name }}</span>
+                        @endforeach
+                    </div>
+                @else
+                    <em>Không có kỹ năng yêu cầu</em>
+                @endif
+            </div>
+        </div>
+
+        {{-- SEO Section --}}
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="fw-semibold mb-3 text-muted"><i class="bi bi-search me-2"></i> Thông tin SEO</h5>
+                <p><strong>Meta Title:</strong> {{ $job->meta_title ?? '-' }}</p>
+                <p><strong>Meta Description:</strong> {!! $job->meta_description ?? '-' !!}</p>
+                <p><strong>Keyword:</strong> {{ $job->keyword ?? '-' }}</p>
+                <p><strong>Hiển thị tìm kiếm:</strong> {!! $job->search_index ? '<span class="text-success">Có</span>' : '<span class="text-danger">Không</span>' !!}</p>
+            </div>
+        </div>
+
     </div>
 </main>
 @endsection

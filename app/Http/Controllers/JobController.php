@@ -21,9 +21,9 @@ class JobController extends Controller
 
 
         // Địa điểm (radio)
-       if ($request->filled('locations')) {
-    $query->whereIn('location', (array) $request->input('locations'));
-}
+        if ($request->filled('locations')) {
+            $query->whereIn('location', (array) $request->input('locations'));
+        }
 
 
 
@@ -83,8 +83,8 @@ class JobController extends Controller
 
         // Danh sách filter cho form (truyền đủ để UX tốt)
         $categories = Category::all();
-        $companies  = Company::all();
-        $skills     = Skill::all();
+        $companies = Company::all();
+        $skills = Skill::all();
 
         // Tìm 3 việc làm nổi bật nhất cho phần gợi ý
         $topJobs = (clone $query)
@@ -105,6 +105,15 @@ class JobController extends Controller
             ->where('status', 'published')
             ->firstOrFail();
 
-        return view('website.jobs.job-details', compact('job'));
+        // Lấy các công việc liên quan cùng category
+        $relatedJobs = Job::with('company')
+            ->where('category_id', $job->category_id)
+            ->where('id', '!=', $job->id)
+            ->where('status', 'published')
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get();
+
+        return view('website.jobs.job-details', compact('job', 'relatedJobs'));
     }
 }

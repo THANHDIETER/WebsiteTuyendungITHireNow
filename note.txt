@@ -3,6 +3,7 @@ composer install
 composer require laravel/sanctum
 composer dump-autoload
 php artisan key:generate
+
 php artisan migrate:fresh --seed
 -->
 <!-- cài gg auth2 --
@@ -33,11 +34,26 @@ npm install --save-dev @vitejs/plugin-react
 bottrapAdd commentMore actions
 npm install bootstrap
 
-
-
 php artisan vendor:publish --tag=laravel-pagination
 
 composer require pusher/pusher-php-server
 
 bottrap
 npm install bootstrap
+php artisan storage:link
+
+php artisan bank:sync
+api check đơn hàng
+http://127.0.0.1:8000/api/check-pending-payments?token=ABC123
+
+api check log bank
+http://127.0.0.1:8000/api/sync-bank?token=ABC123
+
+check ip my 
+https://www.whatismyip.com/
+search -> thêm ip my 
+Remote Database Access
+
+
+Cài vite 
+npm install --save-dev vite

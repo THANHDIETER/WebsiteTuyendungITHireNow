@@ -13,47 +13,29 @@ class JobsSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('vi_VN');
-        $nd = collect([
-            // Tiêu đề chính
-            '<h3>' . $faker->sentence . '</h3>',
 
-            // 2 đoạn văn mô tả chung
+        $nd = collect([
+            '<h3>' . $faker->sentence . '</h3>',
             '<p>' . $faker->paragraph(5, true) . '</p>',
             '<p>' . $faker->paragraph(4, true) . '</p>',
-
-            // Mục tiêu công việc
             '<h4>' . $faker->sentence(4) . '</h4>',
-            '<ul>' . collect(range(1, 4))
-                ->map(fn() => '<li>' . $faker->sentence(10) . '</li>')
-                ->implode('') . '</ul>',
-
-            // Trách nhiệm chính
+            '<ul>' . collect(range(1, 4))->map(fn () => '<li>' . $faker->sentence(10) . '</li>')->implode('') . '</ul>',
             '<h4>Trách nhiệm</h4>',
-            '<ol>' . collect(range(1, 5))
-                ->map(fn() => '<li>' . $faker->sentence(12) . '</li>')
-                ->implode('') . '</ol>',
-
-            // Kỹ năng cần thiết
+            '<ol>' . collect(range(1, 5))->map(fn () => '<li>' . $faker->sentence(12) . '</li>')->implode('') . '</ol>',
             '<h4>Kỹ năng cần có</h4>',
-            '<ul>' . collect(range(1, 3))
-                ->map(fn() => '<li>' . $faker->sentence(8) . '</li>')
-                ->implode('') . '</ul>',
-
-            // Ghi chú cuối
+            '<ul>' . collect(range(1, 3))->map(fn () => '<li>' . $faker->sentence(8) . '</li>')->implode('') . '</ul>',
             '<p><strong>Ghi chú:</strong> ' . $faker->sentence(15) . '</p>',
         ])->implode("\n");
 
-        // Lấy danh sách company_id có sẵn
         $companyIds = DB::table('companies')->pluck('id');
         $categoryIds = DB::table('categories')->pluck('id');
+        $skillIds = DB::table('skills')->pluck('id');
 
-        
-
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $title = $faker->jobTitle;
             $slug = Str::slug($title) . '-' . $i;
 
-            DB::table('jobs')->insert([
+            $jobId = DB::table('jobs')->insertGetId([
                 'company_id' => $faker->randomElement($companyIds),
                 'title' => $title,
                 'slug' => $slug,
@@ -73,13 +55,31 @@ class JobsSeeder extends Seeder
                 'status' => 'pending',
                 'views' => rand(0, 200),
                 'is_featured' => $faker->boolean(30),
+                'is_paid' => $faker->boolean(50),
                 'remote_policy' => $faker->randomElement(['on-site', 'hybrid', 'remote']),
                 'language' => $faker->randomElement(['Vietnamese', 'English']),
+                'meta_title' => $title,
+                'meta_description' => $faker->paragraph(2),
+                'search_index' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Insert vào bảng phụ job_skill nếu có dữ liệu kỹ năng
+            if ($skillIds->count() > 0) {
+                $maxSkills = min($skillIds->count(), rand(2, 4));
+
+                DB::table('job_skill')->insert(
+                    $skillIds->random($maxSkills)->map(function ($skillId) use ($jobId) {
+                        return [
+                            'job_id' => $jobId,
+                            'skill_id' => $skillId,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    })->toArray()
+                );
+            }
         }
     }
-
-
 }
