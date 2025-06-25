@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -14,59 +15,64 @@ class ProfileController extends Controller
 {
     public function dashboard()
     {
-        $profile = Auth::user()->profile;
+        $profile = User::with('profile')
+            ->where('id', Auth::id())
+            ->first();
         return view('website.profile.dashboard', compact('profile'));
     }
 
     public function show()
     {
-        $profile = Auth::user()->profile;
+        $profile = User::with('profile')
+            ->where('id', Auth::id())
+            ->first();
         return view('website.profile.profile', compact('profile'));
     }
 
     public function settings()
     {
-        $profile = Auth::user()->profile;
+        $profile = User::with('profile')
+            ->where('id', Auth::id())
+            ->first();
         return view('website.profile.settings', compact('profile'));
     }
 
     public function update(Request $request)
     {
         $data = $request->validate([
-            'full_name'      => 'required|string|max:255',
-            'email'          => 'required|email|max:255',
-            'phone'          => 'required|string|max:20',
-            'date_of_birth'  => 'required|date',
-            'gender'         => 'required|in:nam,nữ,khác',
-            'city'           => 'required|string|max:100',
-            'address'        => 'required|string|max:255',
-            'avatar'         => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'name'     => 'required|string|max:255',
+            'email'         => 'required|email|max:255',
+            'phone_number'         => 'required|string|max:20',
+            'date_of_birth' => 'required|date',
+            'gender'        => 'required|in:nam,nữ,khác',
+            'city'          => 'required|string|max:100',
+            'address'       => 'required|string|max:255',
+            'avatar'        => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $userId = Auth::id();
 
-        // Avatar xử lý file
+        // Xử lý avatar nếu có upload mới
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $path = $file->store('avatars', 'public');
             $data['avatar'] = Storage::url($path);
         } else {
-            $existing = DB::table('seeker_profiles')->where('user_id', $userId)->first();
-            $data['avatar'] = $existing->avatar ?? null;
+            // Giữ avatar cũ nếu không có file mới
+            $data['avatar'] = DB::table('seeker_profiles')
+                ->where('user_id', $userId)
+                ->value('avatar');
         }
 
-        // Update hoặc insert
-        $exists = DB::table('seeker_profiles')->where('user_id', $userId)->exists();
-
-        if ($exists) {
-            DB::table('seeker_profiles')->where('user_id', $userId)->update($data);
-        } else {
-            $data['user_id'] = $userId;
-            DB::table('seeker_profiles')->insert($data);
-        }
+        // Cập nhật hoặc chèn mới
+        DB::table('seeker_profiles')->updateOrInsert(
+            ['user_id' => $userId],
+            $data
+        );
 
         return back()->with('success', 'Cập nhật hồ sơ thành công!');
     }
+
 
 
     public function changePassword(Request $request)
@@ -96,7 +102,9 @@ class ProfileController extends Controller
     public function myJobs()
     {
         $user = Auth::user();
-        $profile = $user->profile;
+        $profile = User::with('profile')
+            ->where('id', Auth::id())
+            ->first();
 
         // Query builder: lấy các job đã ứng tuyển kèm thông tin công ty
         $appliedJobs = DB::table('job_applications')
@@ -118,38 +126,24 @@ class ProfileController extends Controller
     }
 
     public function updateAboutMe(Request $request)
-    {
-        $request->validate([
-            'about_me' => 'nullable|string|max:2500',
-        ], [
-            'about_me.max' => 'Giới thiệu bản thân không được vượt quá 2500 ký tự.',
-        ]);
+{
+    $request->validate([
+        'about_me' => 'nullable|string|max:2500',
+    ]);
 
-        $userId = Auth::id();
+    $userId = Auth::id();
 
-        // Kiểm tra xem user đã có profile chưa
-        $exists = DB::table('seeker_profiles')->where('user_id', $userId)->exists();
+    SeekerProfile::updateOrCreate(
+        ['user_id' => $userId],
+        [
+            'about_me' => $request->about_me,
+            'updated_at' => now(),
+        ]
+    );
 
-        if ($exists) {
-            // Cập nhật
-            DB::table('seeker_profiles')
-                ->where('user_id', $userId)
-                ->update([
-                    'about_me' => $request->about_me,
-                    'updated_at' => now(),
-                ]);
-        } else {
-            // Tạo mới
-            DB::table('seeker_profiles')->insert([
-                'user_id'   => $userId,
-                'about_me'  => $request->about_me,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+    return back()->with('success', 'Cập nhật giới thiệu bản thân thành công!');
+}
 
-        return back()->with('success', 'Cập nhật giới thiệu bản thân thành công!');
-    }
 
     public function updateEducation(Request $request)
     {
