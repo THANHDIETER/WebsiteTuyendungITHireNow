@@ -1,4 +1,4 @@
-<header class="header-area transparent" style="background-color: #656565;">
+<header class="header-area transparent">
 
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
