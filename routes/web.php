@@ -9,7 +9,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\BlogController;
 
-// Nhúng route riêng
+use App\Http\Controllers\Website\EmployerResourceController;
+
+
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
@@ -123,3 +125,16 @@ Route::get('/registration', function () {
 });
 
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
+
+Route::prefix('employers')->name('employers.')->group(function() {
+    // Trang chính Employer Dashboard
+    Route::get('/', [EmployerResourceController::class, 'index'])->name('index');
+
+    // Các trang con
+    Route::get('/subscriptions', [EmployerResourceController::class, 'subscriptions'])->name('subscriptions');
+    Route::get('/orders',        [EmployerResourceController::class, 'orders'])->name('orders');
+    Route::get('/logs',          [EmployerResourceController::class, 'logs'])->name('logs');
+    Route::get('/free-postings', [EmployerResourceController::class, 'freePostings'])->name('free-postings');
+    Route::get('/usages',        [EmployerResourceController::class, 'usages'])->name('usages');
+});
