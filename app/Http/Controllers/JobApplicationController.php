@@ -39,12 +39,8 @@ class JobApplicationController extends Controller
         }
 
         try {
-            // Tạo tên file CV duy nhất
-            $fileName = 'cv_' . Auth::id() . '_' . Str::random(10) . '.pdf';
 
-            // Upload file CV (thực ra là input "image")
-            $cvPath = $request->file('image')->storeAs('cvs', $fileName, 'public');
-
+            $cvPath = $request->file('image')->store('cvs', 'public');
             // Tạo bản ghi ứng tuyển
             DB::table('job_applications')->insert([
                 'job_id' => $job->id,
