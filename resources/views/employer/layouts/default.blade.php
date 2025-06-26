@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
+    @include('employer.layouts.partials.header')
 
-  @include('employer.layouts.partials.header')
     @if (session('access_token'))
         <script>
             localStorage.setItem('access_token', "{{ session('access_token') }}");
@@ -26,6 +26,9 @@
 
                 <div class="flex-grow-1">
                     @yield('content')
+
+                    {{-- Vue realtime notification container --}}
+                    <div id="vue-wrapper"></div>
                 </div>
 
                 @stack('scripts')
@@ -33,14 +36,9 @@
         </main>
     </div>
 
-  <!-- Footer luôn ở đáy -->
-  @include('employer.layouts.partials.footer')
-<<<<<<< HEAD
- @include('employer.layouts.partials.confirm-modal')
-=======
-  @include('employer.layouts.partials.confirm-modal')
-
->>>>>>> b9415a3b41f90f6ec4df40f97d47fc6235287f05
+    <!-- Footer luôn ở đáy -->
+    @include('employer.layouts.partials.footer')
+    @include('employer.layouts.partials.confirm-modal')
 
 </body>
 

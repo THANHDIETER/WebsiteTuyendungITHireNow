@@ -3,36 +3,30 @@
 namespace App\Notifications\Admin;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use App\Models\Job;
 
 class NewJobSubmittedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
-    public Job $job;
+    public function __construct(public $job) {}
 
-    public function __construct(Job $job)
-    {
-        $this->job = $job;
-    }
-
-    public function via($notifiable): array
+    public function via($notifiable)
     {
         return ['database', 'broadcast'];
     }
 
-    public function toArray($notifiable): array
+    public function toArray($notifiable)
     {
         return [
-            'message' => "Nhà tuyển dụng <strong>{$this->job->company->name}</strong> vừa đăng tin mới: <strong>{$this->job->title}</strong>.",
-            'link_url' => route('admin.jobs.show', $this->job->id),
+            'message' => "Nhà tuyển dụng '{$this->job->employer->company_name}' đã gửi tin tuyển dụng: '{$this->job->title}'.",
+            'link_url' => route('admin.jobs.show', $this->job->id), // Link tới trang quản trị để duyệt
         ];
     }
 
-    public function toBroadcast($notifiable): BroadcastMessage
+    public function toBroadcast($notifiable)
     {
         return new BroadcastMessage($this->toArray($notifiable));
     }

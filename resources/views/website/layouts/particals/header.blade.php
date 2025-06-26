@@ -78,7 +78,7 @@
                                                 {{ auth()->user()->unreadNotifications->count() }}
                                             </span>
                                         @endif
-                                    </button>
+                                    </button>   
                                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3"
                                         aria-labelledby="notificationDropdown"
                                         style="min-width: 320px; max-height: 400px; overflow-y: auto;" id="noti-list">
