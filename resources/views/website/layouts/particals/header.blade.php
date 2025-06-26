@@ -78,7 +78,7 @@
                                                 {{ auth()->user()->unreadNotifications->count() }}
                                             </span>
                                         @endif
-                                    </button>   
+                                    </button>
                                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3"
                                         aria-labelledby="notificationDropdown"
                                         style="min-width: 320px; max-height: 400px; overflow-y: auto;" id="noti-list">
@@ -92,24 +92,26 @@
                                             <hr class="dropdown-divider my-1">
                                         </li>
                                         @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                            <li>
+                                            <li data-id="{{ $noti->id }}">
                                                 <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
                                                     href="{{ $noti->data['link_url'] }}">
                                                     <div class="icon text-primary"><i class="icofont-bell fs-5"></i></div>
                                                     <div class="flex-grow-1">
                                                         <div class="fw-semibold">{{ $noti->data['message'] }}</div>
                                                         <div class="small text-muted">
-                                                            {{ $noti->created_at->diffForHumans() }}</div>
+                                                            {{ $noti->created_at->diffForHumans() }}
+                                                        </div>
                                                     </div>
                                                 </a>
                                             </li>
                                         @empty
-                                            <li>
+                                            <li id="noti-empty">
                                                 <div class="text-center text-muted px-3 py-3">
                                                     Không có thông báo mới
                                                 </div>
                                             </li>
                                         @endforelse
+
                                     </ul>
                                 </div>
 
@@ -121,7 +123,7 @@
                                         <span class="user-role">{{ Auth::user()->role }}</span>
                                         <i class="icofont-caret-down ms-1"></i>
                                     </a>
-                                     <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
+                                    <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
                                         {{-- Tổng quan --}}
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active text-primary' : '' }}"
@@ -155,7 +157,6 @@
                                                     <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản trị
                                                 </a>
                                             </li>
-
                                         @endif
 
                                         {{-- Nhà tuyển dụng --}}
@@ -165,8 +166,7 @@
                                                     href="{{ route('employer.dashboard') }}">
                                                     <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà tuyển
                                                     dụng
-
-                                        @elseif (Auth::user()->role === 'employer')
+                                                @elseif (Auth::user()->role === 'employer')
                                             <li>
                                                 <a class="dropdown-item" href="{{ route('employer.details') }}">
                                                     <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
@@ -213,6 +213,49 @@
         </script>
     @endif
 
+    <script>
+        setInterval(() => {
+            fetch('/seeker/notifications/latest')
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById("noti-list");
+                    const count = document.getElementById("noti-count");
+
+                    if (!list) return;
+
+                    data.forEach(noti => {
+                        // Kiểm tra nếu thông báo chưa có trong danh sách thì thêm mới
+                        if (!list.querySelector(`li[data-id="${noti.id}"]`)) {
+                            const html = `
+                            <li data-id="${noti.id}">
+                                <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
+                                   href="${noti.link_url}">
+                                    <div class="icon text-primary">
+                                        <i class="icofont-bell fs-5"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold">${noti.message}</div>
+                                        <div class="small text-muted">${noti.time}</div>
+                                    </div>
+                                </a>
+                            </li>`;
+
+                            const empty = document.getElementById("noti-empty");
+                            if (empty) empty.remove(); // xoá nếu có dòng "Không có thông báo"
+
+                            // Thêm vào cuối danh sách
+                            list.insertAdjacentHTML("beforeend", html);
+                        }
+                    });
+
+                    // Cập nhật badge số lượng
+                    if (count) {
+                        count.innerText = data.length;
+                        count.classList.toggle("d-none", data.length === 0);
+                    }
+                });
+        }, 5000);
+    </script>
 
 
 </header>

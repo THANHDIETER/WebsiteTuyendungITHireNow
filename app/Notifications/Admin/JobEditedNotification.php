@@ -33,7 +33,7 @@ class JobEditedNotification extends Notification implements ShouldBroadcast
     {
         return [
             'message' => "Tin tuyển dụng '{$this->job->title}' đã được nhà tuyển dụng chỉnh sửa.",
-            'link_url' => route('admin.jobs.review', $this->job->id), // tuỳ chỉnh route admin
+            'link_url' => route('admin.jobs.show', $this->job->id), // tuỳ chỉnh route admin
         ];
     }
 
