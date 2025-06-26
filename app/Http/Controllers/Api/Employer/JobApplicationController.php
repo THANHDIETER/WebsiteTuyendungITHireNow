@@ -26,7 +26,7 @@ class JobApplicationController extends Controller
         }
 
         $perPage = $request->input('per_page', 10);
-        return $query->latest()->paginate($perPage);
+        return $query->orderByDesc('id')->paginate($perPage);
     }
 
 
@@ -40,6 +40,7 @@ class JobApplicationController extends Controller
     public function show(JobApplication $jobApplication)
     {
         return $jobApplication->load(['job', 'user', 'company']);
+        
     }
 
     public function update(Request $request, JobApplication $jobApplication)
@@ -77,7 +78,7 @@ class JobApplicationController extends Controller
             'job_id' => 'required|exists:jobs,id',
             'user_id' => 'required|exists:users,id',
             'company_id' => 'required|exists:companies,id',
-            'cv_url' => 'required|string',
+            'image' => 'required|string',
             'cover_letter' => 'nullable|string',
             'status' => 'in:pending,approved,rejected',
             'is_shortlisted' => 'boolean',

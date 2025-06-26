@@ -31,6 +31,6 @@
   @include('employer.layouts.partials.footer')
   @include('employer.layouts.partials.confirm-modal')
 
-
+   
 </body>
 </html>

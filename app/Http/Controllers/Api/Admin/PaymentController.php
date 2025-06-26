@@ -29,10 +29,6 @@ class PaymentController extends Controller
         return response()->json($query->paginate($perPage));
     }
 
-
-
-
-
     /**
      * Xem chi tiết hóa đơn
      */

@@ -12,7 +12,7 @@
                 <label class="mb-0 text-nowrap text-secondary fw-semibold">Số dòng/trang:</label>
                 <select v-model="perPage" @change="fetchList(1)" class="form-select form-select-sm"
                     style="width: 80px;">
-                    <option v-for="n in [5, 10, 20, 50]" :key="n" :value="n">{{ n }}</option>
+                    <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">{{ n }}</option>
                 </select>
             </div>
         </div>
@@ -105,30 +105,38 @@
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Vị trí ứng tuyển</label>
                                     <input v-model="form.job_id" type="hidden" />
-                                    <input v-model="form.job_title" type="text" class="form-control"
+                                    <input v-model="form.job_title" type="text" class="form-control bg-light"
                                         placeholder="Tên vị trí" readonly />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ứng viên</label>
                                     <input v-model="form.user_id" type="hidden" />
-                                    <input v-model="form.user_name" type="text" class="form-control"
+                                    <input v-model="form.user_name" type="text" class="form-control bg-light"
                                         placeholder="Họ tên ứng viên" readonly />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Công ty</label>
                                     <input v-model="form.company_id" type="hidden" />
-                                    <input v-model="form.company_name" type="text" class="form-control"
+                                    <input v-model="form.company_name" type="text" class="form-control bg-light"
                                         placeholder="Tên công ty" readonly />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Đường dẫn CV</label>
-                                    <input v-model="form.image" type="text" class="form-control"
-                                        placeholder="https://..." required />
+                                    <div class="input-group">
+                                        <input v-model="form.image" type="text" class="form-control bg-light"
+                                            readonly />
+                                        <a v-if="form.image" :href="image(form.image)" class="btn btn-outline-secondary"
+                                            target="_blank" title="Xem CV">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    </div>
                                 </div>
+
                                 <div class="col-12">
                                     <label class="form-label fw-semibold">Thư xin việc</label>
-                                    <textarea v-model="form.cover_letter" class="form-control" rows="3"
-                                        placeholder="Nhập thư xin việc" readonly></textarea>
+                                    <textarea class="form-control bg-light" rows="3"
+                                        :value="form.cover_letter || 'Không có'" readonly></textarea>
+
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Trạng thái</label>
@@ -148,7 +156,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Nguồn ứng tuyển</label>
-                                    <input v-model="form.source" type="text" class="form-control"
+                                    <input v-model="form.source" type="text" class="form-control bg-light"
                                         placeholder="Ví dụ: Facebook, Website..." readonly />
                                 </div>
                                 <div class="col-md-6">
@@ -200,45 +208,59 @@
                         </h5>
                         <button type="button" class="btn-close btn-close-white" @click="detailApp = null"></button>
                     </div>
+
                     <div class="modal-body px-4 py-4">
                         <div class="row g-4">
+                            <!-- Thông tin cá nhân -->
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary"><i class="bi bi-person-circle me-1"></i>
-                                        Ứng viên:</span>
-                                    <span class="ms-1">{{ detailApp.user?.name }}</span>
-                                </div>
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary"><i class="bi bi-briefcase me-1"></i> Vị
-                                        trí:</span>
-                                    <span class="ms-1">{{ detailApp.job?.title }}</span>
-                                </div>
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary"><i class="bi bi-building me-1"></i> Công
-                                        ty:</span>
-                                    <span class="ms-1">{{ detailApp.company?.name }}</span>
-                                </div>
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary"><i class="bi bi-link-45deg me-1"></i>
-                                        CV:</span>
-                                    <a :href="detailApp.image" target="_blank">{{ detailApp.image }}</a>
-                                </div>
+                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-person-fill me-2"></i>Thông tin
+                                    ứng viên</h6>
+                                <p><i class="bi bi-person me-1 text-secondary"></i> Họ tên: <strong>{{
+                                        detailApp.full_name }}</strong></p>
+                                <p><i class="bi bi-envelope me-1 text-secondary"></i> Email: <strong>{{ detailApp.email
+                                        }}</strong></p>
+                                <p><i class="bi bi-telephone me-1 text-secondary"></i> SĐT: <strong>{{ detailApp.phone
+                                        }}</strong></p>
+                                <p>
+                                    <i class="bi bi-file-earmark-person me-1 text-secondary"></i> CV:
+                                    <a :href="image(detailApp.image)" target="_blank">
+                                        <i class="bi bi-box-arrow-up-right me-1"> </i>
+                                        Xem CV (PDF)
+                                    </a>
+                                </p>
                             </div>
+
+                            <!-- Thông tin công việc -->
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary"><i
-                                            class="bi bi-envelope-paper-heart me-1"></i> Thư xin việc:</span>
-                                    <span class="ms-1">{{ detailApp.cover_letter || '—' }}</span>
-                                </div>
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary"><i class="bi bi-info-circle me-1"></i>
-                                        Trạng thái:</span>
-                                    <span class="ms-1" :class="{
-                                            'badge rounded-pill px-3 py-2 text-uppercase fw-semibold': true,
-                                            'bg-secondary': detailApp.status === 'pending',
-                                            'bg-success': detailApp.status === 'approved',
-                                            'bg-danger': detailApp.status === 'rejected'
-                                        }">
+                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-briefcase-fill me-2"></i>Thông tin
+                                    ứng tuyển</h6>
+                                <p><i class="bi bi-briefcase me-1 text-secondary"></i> Vị trí: <strong>{{
+                                        detailApp.job?.title }}</strong></p>
+                                <p><i class="bi bi-building me-1 text-secondary"></i> Công ty: <strong>{{
+                                        detailApp.company?.name }}</strong></p>
+                                <p><i class="bi bi-calendar-check me-1 text-secondary"></i> Ngày ứng tuyển: <strong>{{
+                                        formatDate(detailApp.applied_at) }}</strong></p>
+                                <p><i class="bi bi-link-45deg me-1 text-secondary"></i> Nguồn: <strong>{{
+                                        detailApp.source || '—' }}</strong></p>
+                                <p><i class="bi bi-stack me-1 text-secondary"></i> Giai đoạn: <strong>{{
+                                        detailApp.application_stage || '—' }}</strong></p>
+                                <p>
+                                    <i class="bi bi-calendar-event me-1 text-secondary"></i> Ngày phỏng vấn:
+                                    <strong>{{ formatDate(detailApp.interview_date) }}</strong>
+                                </p>
+                            </div>
+
+                            <!-- Trạng thái -->
+                            <div class="col-md-12">
+                                <div class="p-3 bg-light rounded border">
+                                    <h6 class="fw-bold text-primary mb-2"><i
+                                            class="bi bi-info-circle-fill me-2"></i>Trạng thái</h6>
+                                    <span :class="{
+                'badge rounded-pill px-3 py-2 text-uppercase fw-semibold': true,
+                'bg-secondary': detailApp.status === 'pending',
+                'bg-success': detailApp.status === 'approved',
+                'bg-danger': detailApp.status === 'rejected'
+              }">
                                         {{
                                         detailApp.status === 'pending' ? 'Đang chờ' :
                                         detailApp.status === 'approved' ? 'Đã duyệt' :
@@ -246,41 +268,52 @@
                                         detailApp.status
                                         }}
                                     </span>
-                                    <span v-if="detailApp.is_shortlisted" class="badge bg-primary ms-2"><i
-                                            class="bi bi-star-fill"></i> Đã lọt DS</span>
-                                </div>
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary"><i class="bi bi-share me-1"></i>
-                                        Nguồn:</span>
-                                    <span class="ms-1">{{ detailApp.source || '—' }}</span>
-                                </div>
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary"><i class="bi bi-stack me-1"></i> Giai
-                                        đoạn:</span>
-                                    <span class="ms-1">{{ detailApp.application_stage || '—' }}</span>
-                                </div>
-                                <div class="mb-3">
-                                    <span class="fw-semibold text-secondary">
-                                        <i class="bi bi-calendar-event me-1"></i> Ngày PV:
+                                    <span v-if="detailApp.is_shortlisted" class="badge bg-primary ms-2">
+                                        <i class="bi bi-star-fill me-1"></i> Đã lọt DS
                                     </span>
-                                    <span class="ms-1">{{ formatDate(detailApp.interview_date) }}</span>
                                 </div>
                             </div>
+
+                            <!-- Thư xin việc -->
                             <div class="col-12">
-                                <div class="bg-light border rounded-3 p-3">
-                                    <i class="bi bi-journal-text me-2 text-secondary"></i>
-                                    <span class="fw-semibold text-secondary">Ghi chú:</span>
-                                    <span class="ms-1">{{ detailApp.note || 'Không có ghi chú.' }}</span>
+                                <div class="p-3 bg-white border rounded shadow-sm">
+                                    <h6 class="fw-bold text-primary mb-2"><i
+                                            class="bi bi-envelope-paper-heart me-2"></i>Thư xin việc</h6>
+                                    <p class="mb-0">{{ detailApp.cover_letter || 'Không có' }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Ghi chú -->
+                            <div class="col-12">
+                                <div class="p-3 bg-white border rounded shadow-sm">
+                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-journal-text me-2"></i>Ghi chú
+                                    </h6>
+                                    <p class="mb-0">{{ detailApp.note || 'Không có ghi chú.' }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Thông tin hệ thống -->
+                            <div class="col-12">
+                                <div class="p-3 bg-light rounded border">
+                                    <h6 class="fw-bold text-secondary mb-2"><i
+                                            class="bi bi-clock-history me-2"></i>Thông tin hệ thống</h6>
+                                    <p class="mb-1">Tạo lúc: <strong>{{ formatDate(detailApp.created_at) }}</strong></p>
+                                    <p class="mb-1">Cập nhật: <strong>{{ formatDate(detailApp.updated_at) }}</strong>
+                                    </p>
+                                    <p v-if="detailApp.deleted_at">Đã xoá: <strong class="text-danger">{{
+                                            formatDate(detailApp.deleted_at) }}</strong></p>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="modal-footer bg-light rounded-bottom-4">
                         <button type="button" class="btn btn-outline-secondary" @click="detailApp = null">Đóng</button>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -303,6 +336,10 @@
     const editApp = ref(null)
     const search = ref('')
     const perPage = ref(10)
+    const image = (filePath) => {
+        if (!filePath) return '#'
+        return `/storage/${filePath}`
+    }
 
     // Form ứng tuyển
     const form = ref({

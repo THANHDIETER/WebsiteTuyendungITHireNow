@@ -51,8 +51,8 @@
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
 <header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
-                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark"
+    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
+                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
                 src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
             href="javascript:void(0)">
             <div class="toggle-sidebar">
@@ -123,7 +123,7 @@
                                     </a>
                                     <h6>Rick Novak</h6>
                                 </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40"
+                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
                                         src="{{ asset('assets/images/avatar/10.jpg') }}" alt=""></div>
                             </li>
                             <li class="d-flex align-items-center b-l-secondary">
@@ -132,7 +132,7 @@
                                     </a>
                                     <h6>Susan Connor</h6>
                                 </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40"
+                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
                                         src="{{ asset('assets/images/avatar/4.jpg') }}" alt=""></div>
                             </li>
                             <li class="d-flex align-items-center b-l-tertiary">
@@ -141,7 +141,7 @@
                                     </a>
                                     <h6>Roger Lum</h6>
                                 </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40"
+                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
                                         src="{{ asset('assets/images/avatar/1.jpg') }}" alt=""></div>
                             </li>
                             <li class="mt-3 d-flex justify-content-center">
@@ -260,7 +260,7 @@
                                     class="font-primary">4350.9</span></span></h5>
                         <ul>
                             <li class="cartbox d-flex bg-light-primary">
-                                <div class="flex-shrink-0 border-primary"><img
+                                <div class="flex-shrink-0 border-primary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/1.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -292,7 +292,7 @@
                                 </div>
                             </li>
                             <li class="cartbox d-flex bg-light-secondary">
-                                <div class="flex-shrink-0 border-secondary"><img
+                                <div class="flex-shrink-0 border-secondary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/2.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -324,7 +324,7 @@
                                 </div>
                             </li>
                             <li class="cartbox d-flex bg-light-tertiary">
-                                <div class="flex-shrink-0 border-tertiary"><img
+                                <div class="flex-shrink-0 border-tertiary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/3.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -443,7 +443,7 @@
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
-                    <div class="d-flex align-items-center"><img src="{{ asset('assets/images/profile.png') }}" alt="">
+                    <div class="d-flex align-items-center"><img loading="lazy" src="{{ asset('assets/images/profile.png') }}" alt="">
                         <div class="flex-grow-1">
                             <h5>
 
