@@ -1,11 +1,15 @@
 <?php
 
+
+use App\Http\Controllers\Employers\NotificationController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\PackageController;
 use App\Http\Controllers\Employers\PaymentController;
 use App\Http\Controllers\Employers\JobApplicationController;
 use App\Http\Controllers\Employers\SubscriptionController;
+
 
 
 
@@ -33,6 +37,14 @@ Route::middleware(['auth:sanctum', 'employer'])
         // Xem chi tiết tin đã đăng
         Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
 
+
+    // (Tuỳ chọn) Cập nhật hoặc xoá tin
+    Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
+    Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
+    Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
+    Route::patch('/jobs/{id}/close', [JobController::class, 'close'])->name('jobs.close');
+
+
         // (Tuỳ chọn) Cập nhật hoặc xoá tin
         Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
         Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
@@ -57,15 +69,33 @@ Route::middleware(['auth:sanctum', 'employer'])
     Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
     Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
 
+
+
      Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
     });
-
+    
 
  Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
     Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
     Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
     Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+    
 
+});
+
+Route::prefix('employer/subscriptions')->middleware('auth')->group(function () {
+    Route::get('/', [SubscriptionController::class, 'index'])->name('employer.subscriptions.index');
+    Route::get('/{id}', [SubscriptionController::class, 'show'])->name('employer.subscriptions.show');
+    Route::get('/{id}/renew', [SubscriptionController::class, 'renew'])->name('employer.subscriptions.renew');
+
+    Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
+});
+
+
+Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
+    Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
+    Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
+    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
 
 });
 
@@ -84,6 +114,15 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
 
 
 
-
+Route::middleware(['auth:sanctum', 'employer'])
+    ->prefix('employer')
+    ->name('employer.')
+    ->group(function () {
+        // 📌 Notifications
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        // Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        // Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+        // Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    });
 
 
