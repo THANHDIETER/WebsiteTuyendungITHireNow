@@ -150,7 +150,7 @@
                 <div class="row g-4">
                     @forelse($jobs as $job)
                         <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="job-card rounded-3 p-3 h-100 position-relative animate__animated animate__fadeInUp"
+                            <div class="job-card rounded-3 p-3 h-100 position-relative animate__animated animate__fadeInUp {{ $job->is_featured ? 'featured-job' : '' }}"
                                 style="min-height: 350px; background: linear-gradient(135deg, #e3f2fd 0%, #f1f8e9 100%); border: 1px solid #dee2e6; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease; overflow: hidden;">
                                 <div class="company-logo mb-3 position-absolute top-0 start-0 p-2">
                                     <a href="{{ route('jobs.show', $job->slug) }}">
@@ -220,8 +220,20 @@
                     .job-card {
                         position: relative;
                         overflow: hidden;
+                        border: 1px solid #dee2e6;
+                        transition: box-shadow 0.3s, border-color 0.3s;
                     }
-
+                    .job-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+                    }
+                    .featured-job {
+                        border: 2px solid #e53935 !important;
+                    }
+                    .featured-job:hover {
+                        box-shadow: 0 6px 20px rgba(229, 57, 53, 0.15);
+                        border-color: #e53935 !important;
+                    }
                     .job-card::before {
                         content: '';
                         position: absolute;
@@ -233,61 +245,35 @@
                         animation: gradientFlow 8s ease infinite;
                         z-index: 0;
                     }
-
-                    .job-card:hover {
-                        transform: translateY(-5px);
-                        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-                    }
-
-                    .job-card:hover::after {
-                        content: '';
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        border: 2px solid #007bff;
-                        border-radius: 0.75rem;
-                        animation: glow 1.5s ease-in-out infinite alternate;
-                        z-index: 1;
-                    }
-
                     .job-card .job-details,
                     .job-card .job-footer {
                         position: relative;
                         z-index: 2;
                     }
-
                     .hover-scale:hover {
                         transform: scale(1.05);
                     }
-
                     @keyframes gradientFlow {
                         0% {
                             transform: translate(0, 0);
                         }
-
                         100% {
                             transform: translate(50%, 50%);
                         }
                     }
-
                     @keyframes glow {
                         0% {
                             box-shadow: 0 0 5px #007bff;
                         }
-
                         100% {
                             box-shadow: 0 0 20px #007bff, 0 0 30px #007bff;
                         }
                     }
-
                     @media (max-width: 768px) {
                         .job-card {
                             min-height: 300px;
                             margin-bottom: 1.5rem;
                         }
-
                         .salary-info h5 {
                             font-size: 1.1rem;
                         }
