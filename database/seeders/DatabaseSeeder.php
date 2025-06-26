@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\JobsSeeder;
+use Database\Seeders\LevelSeeder;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
 use Database\Seeders\SkillsSeeder;
@@ -20,6 +21,7 @@ use Database\Seeders\CategoriesSeeder;
 use Database\Seeders\EducationsSeeder;
 use Database\Seeders\ExperiencesSeeder;
 use Database\Seeders\ApplicationsSeeder;
+use Database\Seeders\RemotePolicySeeder;
 use Database\Seeders\NotificationsSeeder;
 use Database\Seeders\CompanyReviewsSeeder;
 use Database\Seeders\SeekerProfilesSeeder;
@@ -58,7 +60,8 @@ class DatabaseSeeder extends Seeder
             ServicePackagesSeeder::class,
             job_applicationsSeeder::class,
             SettingSeeder::class,
-
+            LevelSeeder::class,
+            RemotePolicySeeder::class,
         ]);
     }
 }

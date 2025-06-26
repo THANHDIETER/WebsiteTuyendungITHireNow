@@ -92,7 +92,6 @@
                         <p><strong>Loại tiền tệ:</strong> {{ $job->currency ?? 'VND' }}</p>
                         <p><strong>Remote Policy:</strong> {{ $job->remote_policy ?? '-' }}</p>
                         <p><strong>Ngôn ngữ:</strong> {{ $job->language ?? '-' }}</p>
-                        <p><strong>Apply URL:</strong> 
                             @if($job->apply_url)
                                 <a href="{{ $job->apply_url }}" target="_blank">{{ $job->apply_url }}</a>
                             @else 
