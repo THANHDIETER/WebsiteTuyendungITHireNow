@@ -21,7 +21,7 @@ class NewJobSubmittedNotification extends Notification implements ShouldBroadcas
     public function toArray($notifiable)
     {
         return [
-            'message' => "Nhà tuyển dụng '{$this->job->employer->company_name}' đã gửi tin tuyển dụng: '{$this->job->title}'.",
+            'message' => "Nhà tuyển dụng '{$this->job->company->name}' đã gửi tin tuyển dụng: '{$this->job->title}'.",
             'link_url' => route('admin.jobs.show', $this->job->id), // Link tới trang quản trị để duyệt
         ];
     }
