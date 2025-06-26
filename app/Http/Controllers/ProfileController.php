@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
+use App\Models\JobApplication;
+use App\Models\SeekerProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,26 +18,20 @@ class ProfileController extends Controller
 {
     public function dashboard()
     {
-        $profile = User::with('profile')
-            ->where('id', Auth::id())
-            ->first();
-        return view('website.profile.dashboard', compact('profile'));
+        $user = User::with('profile')->find(Auth::id());
+        return view('website.profile.dashboard', ['profile' => $user->profile]);
     }
 
     public function show()
     {
-        $profile = User::with('profile')
-            ->where('id', Auth::id())
-            ->first();
-        return view('website.profile.profile', compact('profile'));
+        $user = User::with('profile')->find(Auth::id());
+        return view('website.profile.profile', ['profile' => $user->profile]);
     }
 
     public function settings()
     {
-        $profile = User::with('profile')
-            ->where('id', Auth::id())
-            ->first();
-        return view('website.profile.settings', compact('profile'));
+        $user = User::with('profile')->find(Auth::id());
+        return view('website.profile.settings', ['profile' => $user->profile]);
     }
 
     public function update(Request $request)
@@ -73,8 +70,6 @@ class ProfileController extends Controller
         return back()->with('success', 'Cập nhật hồ sơ thành công!');
     }
 
-
-
     public function changePassword(Request $request)
     {
         $request->validate([
@@ -102,9 +97,7 @@ class ProfileController extends Controller
     public function myJobs()
     {
         $user = Auth::user();
-        $profile = User::with('profile')
-            ->where('id', Auth::id())
-            ->first();
+        $user = User::with('profile')->find(Auth::id());
 
         // Query builder: lấy các job đã ứng tuyển kèm thông tin công ty
         $appliedJobs = DB::table('job_applications')
@@ -113,6 +106,7 @@ class ProfileController extends Controller
             ->where('job_applications.user_id', $user->id)
             ->select(
                 'jobs.id as job_id',
+                'jobs.slug as job_slug',
                 'jobs.title as job_title',
                 'jobs.location',
                 'companies.name as company_name',
@@ -122,27 +116,48 @@ class ProfileController extends Controller
             ->orderByDesc('applied_at')
             ->get();
 
-        return view('website.profile.myJobs', compact('profile', 'appliedJobs'));
+        return view('website.profile.myJobs', compact('user', 'appliedJobs'), ['profile' => $user->profile]);
     }
 
+    public function viewJob($slug)
+    {
+        $user = User::with('profile')->findOrFail(Auth::id());
+
+        $application = JobApplication::with(['job.company', 'job.skills'])
+            ->whereHas('job', fn($q) => $q->where('slug', $slug))
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$application) {
+            abort(404);
+        }
+
+        return view('website.profile.appliedJob', [
+            'user' => $user,
+            'profile' => $user->profile,
+            'appliedJob' => $application->job, // dùng job làm đối tượng hiển thị chính
+        ]);
+    }
+
+
     public function updateAboutMe(Request $request)
-{
-    $request->validate([
-        'about_me' => 'nullable|string|max:2500',
-    ]);
+    {
+        $request->validate([
+            'about_me' => 'nullable|string|max:2500',
+        ]);
 
-    $userId = Auth::id();
+        $userId = Auth::id();
 
-    SeekerProfile::updateOrCreate(
-        ['user_id' => $userId],
-        [
-            'about_me' => $request->about_me,
-            'updated_at' => now(),
-        ]
-    );
+        SeekerProfile::updateOrCreate(
+            ['user_id' => $userId],
+            [
+                'about_me' => $request->about_me,
+                'updated_at' => now(),
+            ]
+        );
 
-    return back()->with('success', 'Cập nhật giới thiệu bản thân thành công!');
-}
+        return back()->with('success', 'Cập nhật giới thiệu bản thân thành công!');
+    }
 
 
     public function updateEducation(Request $request)

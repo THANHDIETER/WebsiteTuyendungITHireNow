@@ -6,7 +6,8 @@
             {{-- Sidebar trái --}}
             <div class="col-md-3">
                 <div class="bg-white shadow-sm rounded p-4">
-                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile->profile->name ?? 'Chưa cập nhật' }}</h6>
+                    <h6 class="fw-semibold text-center mb-3">👋 Xin
+                        chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
                     <hr>
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item mb-2">
@@ -49,21 +50,39 @@
 
                     @forelse ($appliedJobs as $job)
                         <div class="d-flex justify-content-between align-items-start border-bottom py-3">
-                            <div>
-                                <h6 class="mb-1 text-dark fw-semibold">{{ $job->job_title }}</h6>
-                                <p class="mb-1 text-muted">
-                                    <i class="fa-solid fa-building me-1"></i>
-                                    {{ $job->company->name ?? 'Không rõ công ty' }}
-                                </p>
-                                <p class="mb-0 text-muted">
-                                    <i class="fa-solid fa-location-dot me-1"></i>
-                                    {{ $job->location ?? 'Địa điểm không rõ' }}
-                                </p>
+                            <div class="d-flex align-items-start">
+                                {{-- Ảnh công ty --}}
+                                @if (!empty($job->company_logo))
+                                    <img src="{{ asset('storage/' . $job->company_logo) }}" alt="Logo công ty"
+                                        class="me-3 rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                @else
+                                    <img src="{{ asset('images/default-logo.png') }}" alt="Logo mặc định"
+                                        class="me-3 rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                @endif
+
+                                {{-- Thông tin công việc --}}
+                                <div>
+                                    <h6 class="mb-1 text-dark fw-semibold">{{ $job->job_title }}</h6>
+                                    <p class="mb-1 text-muted">
+                                        <i class="fa-solid fa-building me-1"></i>
+                                        {{ $job->company_name ?? 'Không rõ công ty' }}
+                                    </p>
+                                    <p class="mb-0 text-muted">
+                                        <i class="fa-solid fa-location-dot me-1"></i>
+                                        {{ $job->location ?? 'Địa điểm không rõ' }}
+                                    </p>
+                                </div>
                             </div>
+
                             <div>
-                                <a href="{{ route('jobs.show', $job->job_id) }}" class="btn btn-sm btn-outline-primary">
-                                    Xem chi tiết
-                                </a>
+                                @if (!empty($job->job_slug))
+                                    <a href="{{ route('profile.view-job', $job->job_slug) }}"
+                                        class="btn btn-sm btn-outline-primary">
+                                        Xem chi tiết
+                                    </a>
+                                @else
+                                    <span class="text-muted small">Không có đường dẫn</span>
+                                @endif
                             </div>
                         </div>
                     @empty
@@ -74,7 +93,6 @@
                     @endforelse
                 </div>
             </div>
-
         </div>
     </div>
 @endsection

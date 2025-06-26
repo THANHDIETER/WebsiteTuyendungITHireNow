@@ -6,7 +6,7 @@
             <!-- Sidebar -->
             <div class="col-md-3">
                 <div class="bg-white shadow-sm rounded p-4">
-                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile->profile->name ?? 'Chưa cập nhật' }}</h6>
+                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
                     <hr>
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item mb-2">
@@ -60,8 +60,8 @@
                         {{-- Avatar --}}
 
                         <div class="flex-shrink-0">
-                            @if ($profile && $profile->profile->avatar)
-                                <img src="{{ asset($profile->profile->avatar) }}" alt="Avatar" class="rounded-circle border"
+                            @if ($profile && $profile->avatar)
+                                <img src="{{ asset($profile->avatar) }}" alt="Avatar" class="rounded-circle border"
                                     style="width: 100px; height: 100px; object-fit: cover;">
                             @else
                                 <div class="bg-light border rounded-circle d-flex align-items-center justify-content-center text-muted"
@@ -72,11 +72,14 @@
                         </div>
 
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">{{ $profile->profile->name ?? 'Chưa cập nhật' }}</h5>
+                            <h5 class="mb-1">
+                                {{ $profile && $profile->name ? $profile->name : Auth::user()->name }}
+                            </h5>
                             <p class="text-decoration-none mt-2 d-inline-block">
                                 Cập nhật tiêu đề của bạn
                             </p>
                         </div>
+
                         {{-- User Info --}}
 
                         <div class="flex-grow-1">
@@ -87,19 +90,19 @@
                                 </div>
                                 <div class="col d-flex align-items-center gap-2">
                                     <i class="fa-solid fa-phone text-secondary"></i>
-                                    <span>{{ $profile->profile->phone_number ?? 'Chưa cập nhật' }}</span>
+                                    <span>{{ $profile->phone_number ?? 'Chưa cập nhật' }}</span>
                                 </div>
                                 <div class="col d-flex align-items-center gap-2">
                                     <i class="fa-solid fa-gift text-secondary"></i>
-                                    <span>{{ $profile->profile->date_of_birth ?? '' ? \Carbon\Carbon::parse($profile->date_of_birth)->format('d/m/Y') : 'Chưa cập nhật' }}</span>
+                                    <span>{{ $profile->date_of_birth ?? '' ? \Carbon\Carbon::parse($profile->date_of_birth)->format('d/m/Y') : 'Chưa cập nhật' }}</span>
                                 </div>
                                 <div class="col d-flex align-items-center gap-2">
                                     <i class="fa-solid fa-user text-secondary"></i>
-                                    <span>{{ ucfirst($profile->profile->gender ?? 'Chưa cập nhật') }}</span>
+                                    <span>{{ ucfirst($profile->gender ?? 'Chưa cập nhật') }}</span>
                                 </div>
                                 <div class="col d-flex align-items-center gap-2">
                                     <i class="fa-solid fa-location-dot text-secondary"></i>
-                                    <span>{{ $profile->profile->address ?? 'Chưa cập nhật' }}</span>
+                                    <span>{{ $profile->address ?? 'Chưa cập nhật' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -244,9 +247,9 @@
                                     <div class="text-danger small">{{ $message }}</div>
                                 @enderror
 
-                                @if (!empty($profile->profile->avatar))
+                                @if (!empty($profile->avatar))
                                     <p class="mb-1">Ảnh hiện tại:</p>
-                                    <img src="{{ asset($profile->profile->avatar) }}" alt="Avatar" class="rounded border"
+                                    <img src="{{ asset($profile->avatar) }}" alt="Avatar" class="rounded border"
                                         width="120">
                                 @endif
                             </div>
@@ -256,7 +259,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Họ và tên</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ old('name', $profile->profile->name ?? '') }}">
+                                        value="{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}">
                                     @error('name')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
@@ -271,7 +274,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Số điện thoại</label>
                                     <input type="text" name="phone_number" class="form-control"
-                                        value="{{ old('phone_number', $profile->profile->phone_number ?? '') }}">
+                                        value="{{ old('phone_number', $profile->phone_number ?? '') }}">
                                     @error('phone_number')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
@@ -280,7 +283,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Ngày sinh</label>
                                     <input type="date" name="date_of_birth" class="form-control"
-                                        value="{{ old('date_of_birth', $profile->profile->date_of_birth ?? '') }}">
+                                        value="{{ old('date_of_birth', $profile->date_of_birth ?? '') }}">
                                     @error('date_of_birth')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
@@ -294,13 +297,13 @@
                                     <select name="gender" class="form-select">
                                         <option value="">-- Chọn giới tính --</option>
                                         <option value="nam"
-                                            {{ old('gender', $profile->profile->gender ?? '') === 'nam' ? 'selected' : '' }}>Nam
+                                            {{ old('gender', $profile->gender ?? '') === 'nam' ? 'selected' : '' }}>Nam
                                         </option>
                                         <option value="nữ"
-                                            {{ old('gender', $profile->profile->gender ?? '') === 'nữ' ? 'selected' : '' }}>Nữ
+                                            {{ old('gender', $profile->gender ?? '') === 'nữ' ? 'selected' : '' }}>Nữ
                                         </option>
                                         <option value="khác"
-                                            {{ old('gender', $profile->profile->gender ?? '') === 'khác' ? 'selected' : '' }}>Khác
+                                            {{ old('gender', $profile->gender ?? '') === 'khác' ? 'selected' : '' }}>Khác
                                         </option>
                                     </select>
                                     @error('gender')
@@ -314,7 +317,7 @@
                                         <option value="">-- Chọn thành phố --</option>
                                         @foreach (['Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng', 'Khác'] as $city)
                                             <option value="{{ $city }}"
-                                                {{ old('city', $profile->profile->city ?? '') === $city ? 'selected' : '' }}>
+                                                {{ old('city', $profile->city ?? '') === $city ? 'selected' : '' }}>
                                                 {{ $city }}
                                             </option>
                                         @endforeach
@@ -327,7 +330,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Địa chỉ</label>
                                     <input type="text" name="address" class="form-control"
-                                        value="{{ old('address', $profile->profile->address ?? '') }}">
+                                        value="{{ old('address', $profile->address ?? '') }}">
                                     @error('address')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
@@ -400,7 +403,8 @@
 
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="degree" class="form-label">Trình độ <span class="text-danger">*</span></label>
+                                <label for="degree" class="form-label">Trình độ <span
+                                        class="text-danger">*</span></label>
                                 <select id="degree" name="degree" class="form-select">
                                     <option value="">Chọn trình độ</option>
                                     <option value="dai-hoc">Đại học</option>
@@ -409,7 +413,8 @@
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="field" class="form-label">Ngành học <span class="text-danger">*</span></label>
+                                <label for="field" class="form-label">Ngành học <span
+                                        class="text-danger">*</span></label>
                                 <input type="text" id="field" name="field" class="form-control"
                                     value="{{ old('field') }}" placeholder="Nhập ngành học">
                             </div>
@@ -458,8 +463,8 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="position" class="form-label">Chức danh <span class="text-danger">*</span></label>
-                            <input type="text" id="position" name="position" class="form-control" placeholder="Nhập chức danh"
-                                value="{{ old('position') }}">
+                            <input type="text" id="position" name="position" class="form-control"
+                                placeholder="Nhập chức danh" value="{{ old('position') }}">
                         </div>
 
                         <div class="form-group mb-3">
@@ -609,7 +614,8 @@
                     <div class="modal-body">
                         {{-- Tên dự án --}}
                         <div class="mb-3">
-                            <label for="projectName" class="form-label">Tên dự án <span class="text-danger">*</span></label>
+                            <label for="projectName" class="form-label">Tên dự án <span
+                                    class="text-danger">*</span></label>
                             <input type="text" name="project_name" class="form-control" placeholder="Nhập tên dự án">
                         </div>
 
@@ -677,7 +683,8 @@
 
                         {{-- Tổ chức --}}
                         <div class="mb-3">
-                            <label for="organization" class="form-label">Tổ chức <span class="text-danger">*</span></label>
+                            <label for="organization" class="form-label">Tổ chức <span
+                                    class="text-danger">*</span></label>
                             <input type="text" name="organization" class="form-control" placeholder="Nhập tổ chức">
                         </div>
 
@@ -734,13 +741,16 @@
                         <div class="mb-3">
                             <label for="awardName" class="form-label">Tên giải thưởng <span
                                     class="text-danger">*</span></label>
-                            <input type="text" name="award_name" class="form-control" placeholder="Nhập tên giải thưởng">
+                            <input type="text" name="award_name" class="form-control"
+                                placeholder="Nhập tên giải thưởng">
                         </div>
 
                         {{-- Tổ chức --}}
                         <div class="mb-3">
-                            <label for="organization" class="form-label">Tổ chức <span class="text-danger">*</span></label>
-                            <input type="text" name="organization" class="form-control" placeholder="Nhập tên tổ chức">
+                            <label for="organization" class="form-label">Tổ chức <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" name="organization" class="form-control"
+                                placeholder="Nhập tên tổ chức">
                         </div>
 
                         {{-- Thời gian --}}
