@@ -10,7 +10,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $settings = Setting::orderBy('key')->get();
+        $settings = Setting::orderByDesc('id')->get();
         return view('admin.settings.index', compact('settings'));
     }
 
