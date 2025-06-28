@@ -19,4 +19,9 @@ class Location extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+    public function jobs()
+{
+    return $this->hasMany(Job::class);
+}
+
 }

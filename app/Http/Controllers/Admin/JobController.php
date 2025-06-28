@@ -14,7 +14,7 @@ class JobController extends Controller
     public function index(Request $request)
     {
         $title = 'Danh sách tin tuyển dụng';
-        $query = Job::with(['company', 'category', 'skills']);
+        $query = Job::with(['company', 'categories', 'skills']);
 
         if ($request->has('is_approved')) {
             $query->where('is_approved', $request->is_approved);
@@ -37,18 +37,31 @@ class JobController extends Controller
     }
 
     public function show($id)
-    {
-        $job = Job::find($id);
+{
+    $job = Job::with([
+        'company',
+        'categories',
+        'skills',
+        'jobType',
+        'level',
+        'experience',
+        'language',
+        'remotePolicy',
+        'location',
+        
+        
+    ])->find($id);
 
-        if (!$job) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tin tuyển dụng không tồn tại.',
-            ], 404);
-        }
-
-        return view('admin.jobs.show', compact('job'));
+    if (!$job) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Tin tuyển dụng không tồn tại.',
+        ], 404);
     }
+
+    return view('admin.jobs.show', compact('job'));
+}
+
 
     public function approve(Request $request, $id)
     {
