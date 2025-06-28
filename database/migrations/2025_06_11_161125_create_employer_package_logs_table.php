@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('employer_package_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('employer_package_orders')->onDelete('cascade');
+            $table->foreignId('order_id')->nullable()->constrained('employer_package_orders')->onDelete('cascade');
             $table->foreignId('job_id')->nullable()->constrained('jobs')->onDelete('cascade');
             $table->timestamp('used_at')->useCurrent();
             $table->string('action')->default('post_job'); // Các action: post_job, highlight, cv_view...

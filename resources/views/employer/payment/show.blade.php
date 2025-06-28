@@ -112,10 +112,10 @@
                 el.classList.remove('text-warning');
                 el.classList.add('text-danger');
                 expiredNotified = true;
-
+                const messages = `Hóa đơn của bạn đã hết hạn sau ${expiresAt} phút. Vui lòng tạo hóa đơn mới.`;
                 showAlertModal({
                     title: 'Hết thời gian thanh toán',
-                    message: 'Hóa đơn của bạn đã hết hạn sau 60 phút. Vui lòng tạo hóa đơn mới.',
+                    message: messages,
                     status: 'warning',
                     type: 'alert',
                 });
