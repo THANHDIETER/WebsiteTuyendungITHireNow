@@ -65,8 +65,9 @@
                 <div class="row g-4">
                     @forelse($jobs as $job)
                         <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="job-card rounded-3 p-4 h-100 position-relative animate__animated animate__fadeInUp"
-                                style="min-height: 350px; background: linear-gradient(135deg, #e6f0fa 0%, #f0f7f4 100%); border: 1px solid #e0e7ed; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                            <div class="job-card rounded-3 p-3 h-100 position-relative animate__animated animate__fadeInUp
+                                {{ $job->is_featured ? 'job-featured-border' : '' }}"
+                                style="min-height: 350px; background: linear-gradient(135deg, #e3f2fd 0%, #f1f8e9 100%); border: 1px solid {{ $job->is_featured ? '#ff0000' : '#dee2e6' }}; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease; overflow: hidden;">
                                 <div class="company-logo position-absolute top-0 start-0 p-2">
                                     <a href="{{ route('jobs.show', $job->slug) }}">
                                         @if ($job->company && $job->company->logo_url)
@@ -163,6 +164,10 @@
                         .btn-primary {
                             padding: 0.5rem 1rem;
                         }
+                    }
+
+                    .job-featured-border {
+                        border: 2px solid #ff0000 !important;
                     }
                 </style>
             </div>

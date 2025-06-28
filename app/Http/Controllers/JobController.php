@@ -14,8 +14,10 @@ class JobController extends Controller
     {
         $jobs = Job::with('company')
             ->where('status', 'published')
-            ->orderBy('created_at', 'desc')
+             ->orderByDesc('is_featured')
+            ->orderByDesc('views')
             ->paginate(9);
+
 
         return view('website.jobs.job', compact('jobs'));
 

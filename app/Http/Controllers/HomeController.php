@@ -22,7 +22,8 @@ class HomeController extends Controller
                 $query->where('status', 'published')
                     ->orWhereNull('status');
             })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('is_featured')
+            ->orderByDesc('views')
             ->take(6)
             ->get();
 
