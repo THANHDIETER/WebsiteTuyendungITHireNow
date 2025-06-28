@@ -10,6 +10,7 @@ use Database\Seeders\BannersSeeder;
 use Database\Seeders\ReportsSeeder;
 use Database\Seeders\SettingSeeder;
 use Database\Seeders\JobSkillSeeder;
+use Database\Seeders\JobTypesSeeder;
 use Database\Seeders\PaymentsSeeder;
 use Database\Seeders\SalariesSeeder;
 use Database\Seeders\AdminLogsSeeder;
@@ -20,8 +21,10 @@ use Database\Seeders\UserRolesSeeder;
 use Database\Seeders\CategoriesSeeder;
 use Database\Seeders\EducationsSeeder;
 use Database\Seeders\ExperiencesSeeder;
+use Database\Seeders\JobLanguageSeeder;
 use Database\Seeders\ApplicationsSeeder;
 use Database\Seeders\RemotePolicySeeder;
+use Database\Seeders\JobExperienceSeeder;
 use Database\Seeders\NotificationsSeeder;
 use Database\Seeders\CompanyReviewsSeeder;
 use Database\Seeders\SeekerProfilesSeeder;
@@ -41,7 +44,11 @@ class DatabaseSeeder extends Seeder
             SkillsSeeder::class,
             LocationsSeeder::class,
             SalariesSeeder::class,
-            CompaniesSeeder::class,  // CompaniesSeeder trước
+            CompaniesSeeder::class, 
+            LevelSeeder::class,
+            RemotePolicySeeder::class,
+            JobExperienceSeeder::class,
+            JobLanguageSeeder::class,
             JobsSeeder::class,       // JobsSeeder sau
             JobSkillSeeder::class,
             SeekerProfilesSeeder::class,
@@ -60,8 +67,7 @@ class DatabaseSeeder extends Seeder
             ServicePackagesSeeder::class,
             job_applicationsSeeder::class,
             SettingSeeder::class,
-            LevelSeeder::class,
-            RemotePolicySeeder::class,
+            JobTypesSeeder::class,
         ]);
     }
 }
