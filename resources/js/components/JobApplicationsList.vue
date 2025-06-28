@@ -122,7 +122,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Đường dẫn CV</label>
-                                    <input v-model="form.cv_url" type="url" class="form-control"
+                                    <input v-model="form.image" type="text" class="form-control"
                                         placeholder="https://..." required />
                                 </div>
                                 <div class="col-12">
@@ -221,7 +221,7 @@
                                 <div class="mb-3">
                                     <span class="fw-semibold text-secondary"><i class="bi bi-link-45deg me-1"></i>
                                         CV:</span>
-                                    <a :href="detailApp.cv_url" target="_blank">{{ detailApp.cv_url }}</a>
+                                    <a :href="detailApp.image" target="_blank">{{ detailApp.image }}</a>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -309,7 +309,7 @@
         job_id: '',
         user_id: '',
         company_id: '',
-        cv_url: '',
+        image: '',
         cover_letter: '',
         status: 'pending',
         is_shortlisted: false,
@@ -359,7 +359,7 @@
                 company_name: app.company?.name,
                 user_name: app.user?.name,
                 job_title: app.job?.title,
-                cv_url: app.cv_url,
+                image: app.image,
                 cover_letter: app.cover_letter,
                 status: app.status,
                 is_shortlisted: app.is_shortlisted,
@@ -374,7 +374,7 @@
                 job_id: '',
                 user_id: '',
                 company_id: '',
-                cv_url: '',
+                image: '',
                 cover_letter: '',
                 status: 'pending',
                 is_shortlisted: false,

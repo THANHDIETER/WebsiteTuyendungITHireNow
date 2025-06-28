@@ -367,9 +367,9 @@
 
                         <div class="mb-3">
                             <label for="cv_file" class="form-label">CV của bạn (PDF)</label>
-                            <input type="file" class="form-control @error('cv_file') is-invalid @enderror"
-                                id="cv_file" name="cv_file" accept=".pdf" required>
-                            @error('cv_file')
+                            <input type="file" class="form-control @error('image') is-invalid @enderror"
+                                id="image" name="image" accept=".pdf" required>
+                            @error('image')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                             <small class="text-muted">Tối đa 5MB, định dạng PDF</small>

@@ -1,6 +1,4 @@
-
 <header class="header-area transparent" style="background-color: #656565;">
-
 
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
@@ -14,15 +12,6 @@
                                 <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
                                     alt="Logo" />
                             </a>
-                        </div>
-                    </div>
-
-
-                                        <img class="logo-main" src="{{ asset('client/assets/img/logo-light.webp') }}"
-                                            alt="Logo" />
-                                        <img class="logo-light" src="{{ asset('client/assets/img/logo-light.webp') }}"
-                                            alt="Logo" />
-                                        </a>
                         </div>
                     </div>
 
@@ -73,10 +62,8 @@
                     <div class="header-align-end">
                         <div class="header-action-area">
                             @guest
-
                                 <a class="btn-registration" href="{{ route('showLoginForm') }}">
                                     Đăng Nhập
-
                                 </a>
                             @else
                                 {{-- 🔔 Chuông thông báo --}}
@@ -129,16 +116,12 @@
                                 {{-- 👤 Menu người dùng --}}
                                 <div class="user-info dropdown">
                                     <a href="#" class="user-info-toggle d-flex align-items-center"
-
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span class="user-avatar me-2">
-                                            <i class="icofont-user-alt-3"></i>
-                                        </span>
-
+                                        data-bs-toggle="dropdown">
+                                        <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
                                         <span class="user-role">{{ Auth::user()->role }}</span>
                                         <i class="icofont-caret-down ms-1"></i>
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
+                                     <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
                                         {{-- Tổng quan --}}
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active text-primary' : '' }}"
@@ -218,7 +201,6 @@
                                             </a>
                                         </li>
                                     </ul>
-
                                 </div>
                             @endguest
 

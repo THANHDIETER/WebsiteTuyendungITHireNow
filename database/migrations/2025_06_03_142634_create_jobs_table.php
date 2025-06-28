@@ -10,6 +10,8 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
+
+            // Liên kết công ty
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
 
             $table->string('title');
@@ -22,40 +24,44 @@ class CreateJobsTable extends Migration
             $table->text('requirements')->nullable();
             $table->text('benefits')->nullable();
 
-            $table->enum('job_type', ['full-time', 'part-time', 'internship', 'remote', 'contract'])->default('full-time');
+            // Loại công việc
+            $table->foreignId('job_type_id')->nullable()->constrained('job_types')->nullOnDelete();
+
+
+            // Mức lương
             $table->integer('salary_min')->nullable();
             $table->integer('salary_max')->nullable();
             $table->string('currency', 10)->default('VND');
+            $table->boolean('salary_negotiable')->default(false);
 
-            $table->string('location')->nullable();
+            // Vị trí làm việc
+            $table->foreignId('location_id')->nullable()->constrained('locations')->nullOnDelete();
             $table->string('address')->nullable();
 
-            $table->string('level')->nullable();
-            $table->string('experience')->nullable();
+            // Các khóa ngoại mới
+            $table->foreignId('level_id')->nullable()->constrained('levels')->nullOnDelete();
+            $table->foreignId('experience_id')->nullable()->constrained('job_experiences')->nullOnDelete();
+            $table->foreignId('language_id')->nullable()->constrained('job_languages')->nullOnDelete();
+            $table->foreignId('remote_policy_id')->nullable()->constrained('remote_policies')->nullOnDelete();
 
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->string('salary_display')->nullable();
+
             $table->date('deadline')->nullable();
 
+            // Trạng thái & hiển thị
             $table->enum('status', ['draft', 'published', 'closed', 'pending', 'rejected'])->default('pending');
-
             $table->integer('views')->default(0);
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_paid')->default(false);
 
-            // Trường bổ sung
-            $table->string('apply_url')->nullable();
-            $table->string('remote_policy', 100)->nullable();
-            $table->string('language', 50)->nullable();
-             $table->boolean('salary_negotiable')->default(false);
             // SEO
             $table->string('meta_title', 150)->nullable();
             $table->text('meta_description')->nullable();
             $table->string('keyword')->nullable();
-
             $table->boolean('search_index')->default(true);
 
             $table->timestamps();
-            $table->softDeletes(); // deleted_at
+            $table->softDeletes();
         });
     }
 

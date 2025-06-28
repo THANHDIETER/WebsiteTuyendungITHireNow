@@ -20,7 +20,7 @@ class JobApplicationController extends Controller
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'cv_file' => 'required|file|mimes:pdf|max:5120', // Max 5MB
+            'image' => 'required|file|mimes:pdf|max:5120',
             'cover_letter' => 'nullable|string|max:1000',
         ]);
 
@@ -28,7 +28,7 @@ class JobApplicationController extends Controller
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để nộp đơn ứng tuyển.');
         }
 
-        // Kiểm tra xem người dùng đã ứng tuyển cho job này chưa
+        // Kiểm tra ứng tuyển trước đó
         $existingApplication = DB::table('job_applications')
             ->where('job_id', $job->id)
             ->where('user_id', Auth::id())
@@ -39,14 +39,15 @@ class JobApplicationController extends Controller
         }
 
         try {
-            // Tạo tên file duy nhất
+            // Tạo tên file CV duy nhất
             $fileName = 'cv_' . Auth::id() . '_' . Str::random(10) . '.pdf';
 
-            // Upload CV file
-            $cvPath = $request->file('cv_file')->storeAs('cvs', $fileName, 'public');
+
+            // Upload file CV (thực ra là input "image")
+            $cvPath = $request->file('image')->storeAs('cvs', $fileName, 'public');
 
 
-            // Create application in job_applications table
+            // Tạo bản ghi ứng tuyển
             DB::table('job_applications')->insert([
                 'job_id' => $job->id,
                 'user_id' => Auth::id(),
@@ -54,7 +55,7 @@ class JobApplicationController extends Controller
                 'full_name' => $request->full_name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'cv_url' => $cvPath,
+                'image' => $cvPath, 
                 'cover_letter' => $request->cover_letter,
                 'status' => 'pending',
                 'applied_at' => now(),
@@ -77,7 +78,6 @@ class JobApplicationController extends Controller
             }
 
 
-            // Cập nhật thông tin người dùng nếu chưa có
             DB::table('users')
                 ->where('id', Auth::id())
                 ->update([
@@ -88,7 +88,6 @@ class JobApplicationController extends Controller
 
             return redirect()->back()->with('success', 'Đơn ứng tuyển của bạn đã được gửi thành công!');
         } catch (\Exception $e) {
-            // Nếu có lỗi, xóa file đã upload (nếu có)
             if (isset($cvPath) && Storage::disk('public')->exists($cvPath)) {
                 Storage::disk('public')->delete($cvPath);
             }

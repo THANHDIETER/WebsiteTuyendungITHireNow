@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email', 255);
             $table->string('phone', 20);
 
-            $table->text('cv_url');
+            $table->text('image')->nullable();
             $table->text('cover_letter')->nullable();
             $table->timestamp('applied_at')->useCurrent();
 

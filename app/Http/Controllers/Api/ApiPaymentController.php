@@ -12,7 +12,7 @@ use App\Models\EmployerPackageLog;
 use App\Http\Controllers\Controller;
 use App\Models\EmployerPackageOrder;
 
-class PaymentController extends Controller
+class ApiPaymentController extends Controller
 {
     public function handlePending(Request $request)
     {
