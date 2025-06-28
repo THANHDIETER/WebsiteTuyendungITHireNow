@@ -1,5 +1,9 @@
 <?php
 
+
+
+use App\Http\Controllers\Employers\NotificationController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\PackageController;
@@ -94,3 +98,18 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
     Route::post('/{id}/buy', [PackageController::class, 'subscribe'])->name('employer.packages.subscribe');
     Route::get('/{id}', [PackageController::class, 'show'])->name('employer.packages.show'); // tuỳ chọn
 });
+
+
+
+Route::middleware(['auth:sanctum', 'employer'])
+    ->prefix('employer')
+    ->name('employer.')
+    ->group(function () {
+        // 📌 Notifications
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        // Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        // Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+        // Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    });
+
+
