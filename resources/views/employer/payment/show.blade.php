@@ -3,7 +3,10 @@
 @section('content')
     @php
         use Carbon\Carbon;
-        $expiresAt = Carbon::parse($payment->created_at)->addMinutes(60);
+        use App\Models\Setting;
+
+        $timeoutMinutes = (int) Setting::getValue('payment_timeout_minutes', 60);
+        $expiresAt = Carbon::parse($payment->created_at)->addMinutes($timeoutMinutes);
     @endphp
 
     <div class="container py-4">

@@ -40,7 +40,9 @@ class JobApplicationController extends Controller
 
         try {
 
+
             $cvPath = $request->file('image')->store('cvs', 'public');
+
             // Tạo bản ghi ứng tuyển
             DB::table('job_applications')->insert([
                 'job_id' => $job->id,

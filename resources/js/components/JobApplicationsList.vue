@@ -44,7 +44,7 @@
                         }">
                             {{
                             app.status === 'pending' ? 'Đang chờ' :
-                            app.status === 'approved' ? 'Đã duyệt' :
+                            app.status === 'approved' ? 'duyệt' :
                             app.status === 'rejected' ? 'Từ chối' :
                             app.status
                             }}
@@ -134,7 +134,7 @@
                                     <label class="form-label fw-semibold">Trạng thái</label>
                                     <select v-model="form.status" class="form-select">
                                         <option value="pending">Chờ xử lý</option>
-                                        <option value="approved">Đã duyệt</option>
+                                        <option value="approved">Duyệt</option>
                                         <option value="rejected">Từ chối</option>
                                     </select>
                                 </div>

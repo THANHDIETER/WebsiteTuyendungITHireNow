@@ -26,8 +26,10 @@ class NotificationSent implements ShouldBroadcast
         return 'notification.sent';
     }
 
+
     public function broadcastWith(): array
     {
         return $this->notification;
     }
+
 }

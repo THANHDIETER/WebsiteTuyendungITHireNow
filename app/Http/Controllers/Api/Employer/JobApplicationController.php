@@ -59,8 +59,8 @@ class JobApplicationController extends Controller
         }
 
         // 2. Đã approved chỉ cho phép chuyển sang rejected hoặc giữ nguyên
-        if ($currentStatus === 'approved' && !in_array($newStatus, ['approved', 'rejected'])) {
-            return response()->json(['message' => 'Đơn đã duyệt không thể quay lại trạng thái chờ duyệt.'], 403);
+        if ($currentStatus === 'approved' && !in_array($newStatus, ['approved'])) {
+            return response()->json(['message' => 'Đơn đã duyệt không thể thay đổi.'], 403);
         }
 
         $jobApplication->update($data);

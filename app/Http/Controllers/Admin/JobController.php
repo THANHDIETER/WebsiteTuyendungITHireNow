@@ -85,24 +85,19 @@ class JobController extends Controller
         ]);
     }
 
-    public function reject(Request $request, Job $job)
-    {
-        if (!$job) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tin tuyển dụng không tồn tại.',
-            ], 404);
-        }
 
-        if ($job->status !== 'pending') {
-            $job->refresh();
-            return response()->json([
-                'success' => false,
-                'message' => 'Tin đã được xử lý bởi người khác.',
-                'status_html' => $job->status_badge,
+   public function reject(Request $request, Job $job)
+{
+    if ($job->status !== 'pending') {
+        $job->refresh();
+        return response()->json([
+            'success' => false,
+            'message' => 'Tin đã được xử lý bởi người khác.',
+            'status_html' => $job->status_badge,
+        ], 409);
+    }
 
-            ], 409);
-        }
+
 
         $job->update(['status' => 'rejected']);
         // Gửi thông báo cho nhà tuyển dụng
@@ -116,6 +111,7 @@ class JobController extends Controller
             'status_html' => $job->status_badge,
         ], 409);
     }
+
 
 
 

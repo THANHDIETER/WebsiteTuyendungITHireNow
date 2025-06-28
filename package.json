@@ -33,6 +33,7 @@
         "pusher-js": "^8.4.0",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
+        "select2": "^4.1.0-rc.0",
         "simple-datatables": "^10.0.0",
         "themify-icons": "^1.0.0",
         "vue": "^3.5.15",
