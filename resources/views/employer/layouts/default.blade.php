@@ -2,11 +2,13 @@
 <html lang="en">
 
 <head>
-
-
     @include('employer.layouts.partials.header')
-    
 
+    @if (session('access_token'))
+        <script>
+            localStorage.setItem('access_token', "{{ session('access_token') }}");
+        </script>
+    @endif
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -24,6 +26,9 @@
 
                 <div class="flex-grow-1">
                     @yield('content')
+
+                    {{-- Vue realtime notification container --}}
+                    <div id="vue-wrapper"></div>
                 </div>
 
                 @stack('scripts')

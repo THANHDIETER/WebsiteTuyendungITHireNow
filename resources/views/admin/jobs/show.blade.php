@@ -74,6 +74,16 @@
             <p class="white-space-pre-line">{{ $job->requirements }}</p>
         </div>
         <hr>
+        @if (is_array($job->benefits) || is_string($job->benefits))
+            <div class="mb-3">
+                <h6 class="fw-bold">🎁 Quyền lợi</h6>
+                <ul class="ps-3">
+                    @foreach (is_array($job->benefits) ? $job->benefits : json_decode($job->benefits, true) as $benefit)
+                        <li>{{ $benefit }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         @if (!empty($job->benefits))
     <div class="mb-3">
         <h6 class="fw-bold"><i class="fa-solid fa-gift me-1"></i>Quyền lợi</h6>

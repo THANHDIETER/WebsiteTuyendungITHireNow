@@ -98,20 +98,22 @@ class JobController extends Controller
     }
 
 
-    // Cập nhật trạng thái
-    $job->update(['status' => 'rejected']);
 
-    // Gửi thông báo cho nhà tuyển dụng
-    $employer = $job->company->user;
-    
-    $employer->notify(new JobRejectedNotification($job));
+        $job->update(['status' => 'rejected']);
+        // Gửi thông báo cho nhà tuyển dụng
+        $employer = $job->company->user;
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Tin đã bị từ chối và đã gửi thông báo.',
-        'status_html' => $job->status_badge,
-    ]);
-}
+        $employer->notify(new JobRejectedNotification($job));
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Tin đã được xử lý bởi người khác.',
+            'status_html' => $job->status_badge,
+        ], 409);
+    }
+
+
+
 
 
 
@@ -174,6 +176,4 @@ class JobController extends Controller
             'status_html' => $job->status_badge,
         ]);
     }
-
-
 }
