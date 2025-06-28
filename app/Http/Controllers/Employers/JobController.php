@@ -121,9 +121,8 @@ class JobController extends Controller
         'keyword' => 'nullable|string|max:150',
         'search_index' => 'nullable|boolean',
         'currency' => 'nullable|string|max:10',
-        'job_type' => 'nullable|in:full-time,part-time,internship,remote,freelance',
+        'job_type_id' => 'required|exists:job_types,id',
     ]);
-
     if ($request->hasFile('thumbnail')) {
         $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
     }
@@ -319,20 +318,20 @@ class JobController extends Controller
     }
 
     public function show($id)
-{
-    $job = Job::with([
-        'company',
-        'categories',
-        'skills',
-        'level',
-        'experience',
-        'remotePolicy',
-        'language',
-        'jobType' ,
-    ])->findOrFail($id);
+    {
+        $job = Job::with([
+            'company',
+            'categories',
+            'skills',
+            'level',
+            'experience',
+            'remotePolicy',
+            'language',
+            'jobType' ,
+        ])->findOrFail($id);
 
-    return view('employer.jobs.show', compact('job'));
-}
+        return view('employer.jobs.show', compact('job'));
+    }
 
 
 }

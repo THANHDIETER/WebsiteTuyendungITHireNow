@@ -3,7 +3,6 @@
 
 
 use App\Http\Controllers\Employers\NotificationController;
-use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\PackageController;
@@ -80,12 +79,6 @@ Route::middleware(['auth:sanctum', 'employer'])
     });
 
 
-Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
-    Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
-    Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
-
-
-});
 
 Route::prefix('employer/subscriptions')->middleware('auth')->group(function () {
     Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');

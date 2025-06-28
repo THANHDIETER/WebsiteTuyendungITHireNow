@@ -5,11 +5,7 @@
 
 
     @include('employer.layouts.partials.header')
-    @if (session('access_token'))
-        <script>
-            localStorage.setItem('access_token', "{{ session('access_token') }}");
-        </script>
-    @endif
+    
 
 </head>
 
@@ -38,22 +34,6 @@
     <!-- Footer luôn ở đáy -->
     @include('employer.layouts.partials.footer')
     @include('employer.layouts.partials.confirm-modal')
-
-    <script>
-        window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
-    </script>
-    <script>
-        window.Laravel = {
-            userId: {{ auth()->id() }},
-        };
-        window.APP_NAME = "{{ config('app.name') }}";
-    </script>
-
-
-
-  <!-- Footer luôn ở đáy -->
-  @include('employer.layouts.partials.footer')
-  @include('employer.layouts.partials.confirm-modal')
 
 </body>
 
