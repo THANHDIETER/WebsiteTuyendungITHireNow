@@ -3,7 +3,6 @@
 
 
 use App\Http\Controllers\Employers\NotificationController;
-use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\PackageController;
