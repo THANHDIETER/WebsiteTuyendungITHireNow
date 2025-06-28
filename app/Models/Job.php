@@ -112,6 +112,11 @@ public function remotePolicy()
 {
     return $this->belongsTo(RemotePolicy::class);
 }
+// locations
+public function location()
+{
+    return $this->belongsTo(Location::class);
+}
 
 
 }
