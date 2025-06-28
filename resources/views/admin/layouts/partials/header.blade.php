@@ -17,7 +17,6 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-
 <!-- Favicon icon-->
 <link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
 <link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
@@ -64,8 +63,8 @@
     @endif
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
-                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
+                src="{{ asset('assets/images/logo/logo.png') }}" loading="lazy" alt="logo"><img class="for-dark"
+                src="{{ asset('assets/images/logo/dark-logo.png') }}" loading="lazy" alt="logo"></a><a class="close-btn"
             href="javascript:void(0)">
             <div class="toggle-sidebar">
                 <div class="line"></div>
@@ -131,32 +130,37 @@
                     </span>
 
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">
-                            Notifications
-                            <a href="{{ route('admin.notifications.index') }}">
-                                <span class="font-primary">View</span>
-                            </a>
-                        </h5>
-                        <ul class="activity-update" id="noti-list">
-                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                <li class="d-flex align-items-center b-l-primary">
-                                    <div class="flex-grow-1">
-                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
-                                        <a href="{{ $noti->data['link_url'] }}">
-                                            <h5>{{ $noti->data['message'] }}</h5>
-                                        </a>
-                                        <h6>{{ config('app.name') }}</h6>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <img class="b-r-15 img-40"
-                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
-                                    </div>
-                                </li>
-                            @empty
-                                <li class="d-flex justify-content-center p-2 text-muted">
-                                    Không có thông báo mới
-                                </li>
-                            @endforelse
+
+                        <h5 class="title bg-primary-light">Notifications <a href=""><span
+                                    class="font-primary">View</span></a></h5>
+                        <ul class="activity-update">
+                            <li class="d-flex align-items-center b-l-primary">
+                                <div class="flex-grow-1"> <span>Just Now</span><a href="">
+                                        <h5>What`s the project report update?</h5>
+                                    </a>
+                                    <h6>Rick Novak</h6>
+                                </div>
+                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
+                                        src="{{ asset('assets/images/avatar/10.jpg') }}" alt=""></div>
+                            </li>
+                            <li class="d-flex align-items-center b-l-secondary">
+                                <div class="flex-grow-1"> <span>12:47 am</span><a href="">
+                                        <h5>James created changelog page</h5>
+                                    </a>
+                                    <h6>Susan Connor</h6>
+                                </div>
+                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
+                                        src="{{ asset('assets/images/avatar/4.jpg') }}" alt=""></div>
+                            </li>
+                            <li class="d-flex align-items-center b-l-tertiary">
+                                <div class="flex-grow-1"> <span>06:10 pm</span><a href="">
+                                        <h5>Polly edited Contact page</h5>
+                                    </a>
+                                    <h6>Roger Lum</h6>
+                                </div>
+                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
+                                        src="{{ asset('assets/images/avatar/1.jpg') }}" alt=""></div>
+                            </li>
 
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
@@ -279,7 +283,7 @@
                                     class="font-primary">4350.9</span></span></h5>
                         <ul>
                             <li class="cartbox d-flex bg-light-primary">
-                                <div class="flex-shrink-0 border-primary"><img
+                                <div class="flex-shrink-0 border-primary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/1.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -311,7 +315,7 @@
                                 </div>
                             </li>
                             <li class="cartbox d-flex bg-light-secondary">
-                                <div class="flex-shrink-0 border-secondary"><img
+                                <div class="flex-shrink-0 border-secondary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/2.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -343,7 +347,7 @@
                                 </div>
                             </li>
                             <li class="cartbox d-flex bg-light-tertiary">
-                                <div class="flex-shrink-0 border-tertiary"><img
+                                <div class="flex-shrink-0 border-tertiary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/3.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -468,7 +472,7 @@
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
-                    <div class="d-flex align-items-center"><img src="{{ asset('assets/images/profile.png') }}"
+                    <div class="d-flex align-items-center"><img loading="lazy" src="{{ asset('assets/images/profile.png') }}"
                             alt="">
                         <div class="flex-grow-1">
                             <h5>

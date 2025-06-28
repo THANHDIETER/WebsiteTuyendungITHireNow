@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use Carbon\Carbon;
 use App\Models\BankLog;
 use App\Models\Payment;
+use App\Models\Setting;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Models\EmployerPackageLog;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\EmployerPackageOrder;
+use App\Models\EmployerPackageUsage;
 
 class ApiPaymentController extends Controller
 {
@@ -69,11 +71,25 @@ class ApiPaymentController extends Controller
                             'status' => 'active',
                         ]);
 
+                        $company->increment('free_post_quota', $package->post_limit);
+
                         EmployerPackageLog::create([
                             'order_id' => $order->id,
                             'job_id' => null,
                             'used_at' => now(),
                             'action' => 'Mua gói thành công',
+                        ]);
+
+                        EmployerPackageUsage::create([
+                            'company_id' => $company->id,
+                            'employer_package_id' => $package->id,
+                            'post_limit' => $package->post_limit,
+                            'posts_used' => 0,
+                            'start_date' => $startDate,
+                            'end_date' => $endDate,
+                            'is_active' => true,
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ]);
 
                         Log::info("Đã tạo order ID {$order->id} cho công ty ID {$company->id}");
@@ -134,7 +150,8 @@ class ApiPaymentController extends Controller
                 }
 
                 // Hết hạn
-                if ($payment->created_at <= $now->copy()->subMinutes(60)) {
+                $timeoutMinutes = (int) Setting::getValue('payment_timeout_minutes',6);
+                if ($payment->created_at <= $now->copy()->subMinutes($timeoutMinutes)) {
                     $payment->status = 'expired';
                     $payment->paid_at = $now;
                     $payment->save();
