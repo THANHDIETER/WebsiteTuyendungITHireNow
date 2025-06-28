@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use App\Http\Requests\RegisterEmployerRequest;
+use App\Notifications\Admin\NewJobseekerRegisteredNotification;
 
 class RegisterController extends Controller
 {
@@ -30,6 +31,11 @@ class RegisterController extends Controller
                 'password' => Hash::make($validated['password']),
                 'role' => $role,
             ]);
+            // Gửi thông báo cho admin khi jobseeker đăng ký
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewJobseekerRegisteredNotification($user));
+            }
 
             // Gán role bằng Spatie (nếu có)
             try {
@@ -70,6 +76,11 @@ class RegisterController extends Controller
                 'password' => Hash::make($validated['password']),
                 'role' => 'employer', // Mặc định vai trò là employer
             ]);
+            // Gửi thông báo cho admin khi employer đăng ký
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewEmployerRegisteredNotification($user));
+            }
 
             // Gán vai trò cho người dùng
             try {

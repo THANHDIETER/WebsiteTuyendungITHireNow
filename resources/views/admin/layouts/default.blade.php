@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  @include('admin.layouts.partials.header')
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    @include('admin.layouts.partials.header')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-  @vite(['resources/js/app.js', 'resources/sass/app.scss'])
+    @vite(['resources/js/app.js', 'resources/sass/app.scss'])
 
-  <!-- Navbar -->
-  @include('admin.layouts.partials.navbar')
+    <!-- Navbar -->
+    @include('admin.layouts.partials.navbar')
 
-  <!-- Main wrapper: fill height -->
-  <div class="flex-grow-1 d-flex flex-column">
-    <main class="page-wrapper compact-wrapper flex-grow-1">
-      <div class="page-body-wrapper d-flex flex-column flex-grow-1">
-        @include('admin.layouts.partials.sidebar')
+    <!-- Main wrapper: fill height -->
+    <div class="flex-grow-1 d-flex flex-column">
+        <main class="page-wrapper compact-wrapper flex-grow-1">
+            <div class="page-body-wrapper d-flex flex-column flex-grow-1">
+                @include('admin.layouts.partials.sidebar')
 
-        <div class="flex-grow-1">
-          @yield('content')
-        </div>
+                <div class="flex-grow-1">
+                    @yield('content')
+                </div>
 
-        @stack('scripts')
-      </div>
-    </main>
-  </div>
+                @stack('scripts')
+            </div>
+        </main>
+    </div>
 
-  <!-- Footer luôn ở đáy -->
-  @include('admin.layouts.partials.footer')
-  @include('admin.layouts.partials.confirm-modal')
+    <!-- Footer luôn ở đáy -->
+    @include('admin.layouts.partials.footer')
+    @include('admin.layouts.partials.confirm-modal')
 
-
+    <script>
+        window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
+    </script>
+    <script>
+        window.Laravel = {
+            userId: {{ auth()->id() }},
+        };
+        window.APP_NAME = "{{ config('app.name') }}";
+    </script>
 </body>
+
 </html>
