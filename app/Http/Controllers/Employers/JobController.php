@@ -285,7 +285,10 @@ class JobController extends Controller
     }
 
     $job->update($validated);
-
+    // Gửi thông báo cho tất cả admin
+        User::where('role', 'admin')->get()->each(function ($admin) use ($job) {
+            $admin->notify(new JobEditedNotification($job));
+        });
     // Cập nhật kỹ năng
     if ($request->filled('skills_text')) {
         $skillNames = array_filter(array_map('trim', explode(',', $request->input('skills_text'))));
