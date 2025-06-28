@@ -113,8 +113,9 @@
                         <input type="text" placeholder="Search here...">
                     </div>
                 </li>
-                <!-- Notification menu-->
-                <li class="custom-dropdown"><a href="javascript:void(0)">
+                <!-- Notification menu -->
+                <li class="custom-dropdown">
+                    <a href="javascript:void(0)" id="notification-toggle">
                         <!-- Icon Bell -->
                         <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -123,8 +124,13 @@
                             <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                    </a><span class="badge rounded-pill badge-secondary">3</span>
+                    </a>
+                    <span class="badge rounded-pill badge-secondary" id="noti-count">
+                        {{ auth()->user()->unreadNotifications->count() }}
+                    </span>
+
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
+
                         <h5 class="title bg-primary-light">Notifications <a href=""><span
                                     class="font-primary">View</span></a></h5>
                         <ul class="activity-update">
@@ -155,9 +161,12 @@
                                 <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
                                         src="{{ asset('assets/images/avatar/1.jpg') }}" alt=""></div>
                             </li>
+
                             <li class="mt-3 d-flex justify-content-center">
-                                <div class="button-group"><a class="btn btn-secondary" href="">All
-                                        Notification</a></div>
+                                <div class="button-group">
+                                    <a class="btn btn-secondary"
+                                        href="{{ route('admin.notifications.index') }}">All Notification</a>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -468,7 +477,7 @@
                         <div class="flex-grow-1">
                             <h5>
 
-                                @if(auth()->check())
+                                @if (auth()->check())
                                     {{ auth()->user()->role }}
                                     <sup style="font-size: 0.7em; color: red;">{{ auth()->user()->id }}</sup>
                                 @else
@@ -478,7 +487,7 @@
 
 
                             </h5>
-                            @if(auth()->check())
+                            @if (auth()->check())
                                 <span>{{ auth()->user()->email }}</span>
                             @else
                                 <span class="text-muted">Chưa đăng nhập</span>
@@ -540,4 +549,6 @@
     <script>
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
+
 @endif
+

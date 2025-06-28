@@ -24,8 +24,11 @@ class Category extends Model
 
     public function jobs()
     {
-        return $this->hasMany(Job::class);
+        return $this->belongsToMany(Job::class, 'job_category', 'category_id', 'job_id')
+            ->withTimestamps()
+            ->withTrashed(); // nếu có dùng softDeletes
     }
+
 
     public function skills()
     {

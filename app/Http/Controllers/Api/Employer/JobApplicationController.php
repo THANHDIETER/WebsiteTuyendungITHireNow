@@ -6,6 +6,9 @@ use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Models\JobApplication;
 use App\Http\Controllers\Controller;
+use App\Notifications\Jobseeker\ApplicationApprovedNotification;
+use App\Notifications\Jobseeker\ApplicationRejectedNotification;
+use App\Notifications\Jobseeker\InterviewInvitationNotification;
 
 class JobApplicationController extends Controller
 {
@@ -14,15 +17,15 @@ class JobApplicationController extends Controller
         $query = JobApplication::with(['job', 'user', 'company']);
 
         if ($request->search) {
-            $query->whereHas('user', function($q) use ($request) {
-                $q->where('name', 'like', '%'.$request->search.'%');
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
             })
-            ->orWhereHas('job', function($q) use ($request) {
-                $q->where('title', 'like', '%'.$request->search.'%');
-            })
-            ->orWhereHas('company', function($q) use ($request) {
-                $q->where('name', 'like', '%'.$request->search.'%');
-            });
+                ->orWhereHas('job', function ($q) use ($request) {
+                    $q->where('title', 'like', '%' . $request->search . '%');
+                })
+                ->orWhereHas('company', function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->search . '%');
+                });
         }
 
         $perPage = $request->input('per_page', 10);
@@ -61,6 +64,27 @@ class JobApplicationController extends Controller
         }
 
         $jobApplication->update($data);
+        // 4. Gửi thông báo nếu trạng thái thay đổi
+        $jobseeker = $jobApplication->user;
+        $job = $jobApplication->job;
+
+        if ($jobseeker && $job) {
+            if ($currentStatus !== 'approved' && $newStatus === 'approved') {
+                $jobseeker->notify(new ApplicationApprovedNotification($job));
+            }
+
+            if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
+                $jobseeker->notify(new ApplicationRejectedNotification($job));
+            }
+        }
+        // Gửi thông báo mời phỏng vấn nếu có ngày mới
+        if (
+            !empty($data['interview_date']) &&
+            $jobApplication->getOriginal('interview_date') !== $data['interview_date']
+        ) {
+
+            $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+        }
 
         return response()->json(['message' => 'Cập nhật thành công', 'data' => $jobApplication]);
     }

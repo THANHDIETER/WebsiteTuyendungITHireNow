@@ -21,11 +21,11 @@
 
     <!--wrapper start-->
     <div class="wrapper">
-        
+
         <!--== Bắt đầu Header ==-->
         @include('website.layouts.particals.header')
         <!--== Kết thúc Header ==-->
-        
+
         @yield('content')
 
         <!--== Bắt đầu Footer ==-->
@@ -44,6 +44,16 @@
 
     <!--=== jQuery Modernizr Min Js ===-->
     @include('website.layouts.particals.js')
+
+    <script>
+        window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
+    </script>
+    <script>
+        window.Laravel = {
+            userId: {{ auth()->id() }},
+        };
+        window.APP_NAME = "{{ config('app.name') }}";
+    </script>
 
 </body>
 
