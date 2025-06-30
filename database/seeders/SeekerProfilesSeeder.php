@@ -22,9 +22,9 @@ class SeekerProfilesSeeder extends Seeder
         DB::table('seeker_profiles')->insert([
             [
                 'user_id' => $userId,
-                'full_name' => 'Nguyễn Văn A',
+                'name' => 'Nguyễn Văn A',
                 'email' => 'V5GdG@example.com',
-                'phone' => '0123456789',
+                'phone_number' => '0123456789',
                 'date_of_birth' => '1990-01-01',
                 'gender' => 'nam',
                 'city' => 'Hà Nội',

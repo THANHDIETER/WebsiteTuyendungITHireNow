@@ -6,7 +6,7 @@
             {{-- Sidebar trái --}}
             <div class="col-md-3">
                 <div class="bg-white shadow-sm rounded p-4">
-                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile->full_name ?? 'Chưa cập nhật' }}</h6>
+                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
                     <hr>
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item mb-2">
@@ -53,7 +53,7 @@
 
                         {{-- Thông tin + nút --}}
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">{{ $profile->full_name ?? 'Người dùng' }}</h5>
+                            <h5 class="mb-1">{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h5>
                             <p class="mb-1 text-muted">{{ Auth::user()->email }}</p>
                             <a href="{{ route('profile.show') }}"
                                 class="text-primary text-decoration-none mt-2 d-inline-block">

@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
     Route::get('profile/my-jobs', [ProfileController::class, 'myJobs'])->name('profile.my-jobs');
+    Route::get('profile/my-jobs/{job_slug}', [ProfileController::class, 'viewJob'])->name('profile.view-job');
     Route::get('/settings', [ProfileController::class, 'settings'])->name('profile.settings');
     Route::post('/profile/about-me/update', [ProfileController::class, 'updateAboutMe'])
         ->name('profile.about-me.update');
