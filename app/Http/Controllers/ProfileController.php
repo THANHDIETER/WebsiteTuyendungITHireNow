@@ -94,28 +94,32 @@ class ProfileController extends Controller
     }
 
     public function myJobs()
-    {
-        $user = Auth::user();
-        $profile = $user->profile;
+{
+    $user = Auth::user();
+    $profile = $user->profile;
 
-        // Query builder: lấy các job đã ứng tuyển kèm thông tin công ty
-        $appliedJobs = DB::table('job_applications')
-            ->join('jobs', 'job_applications.job_id', '=', 'jobs.id')
-            ->leftJoin('companies', 'jobs.company_id', '=', 'companies.id')
-            ->where('job_applications.user_id', $user->id)
-            ->select(
-                'jobs.id as job_id',
-                'jobs.title as job_title',
-                'jobs.location',
-                'companies.name as company_name',
-                'companies.logo_url as company_logo',
-                'job_applications.created_at as applied_at'
-            )
-            ->orderByDesc('applied_at')
-            ->get();
+    // Query builder: lấy các job đã ứng tuyển kèm thông tin công ty và địa điểm
+    $appliedJobs = DB::table('job_applications')
+        ->join('jobs', 'job_applications.job_id', '=', 'jobs.id')
+        ->leftJoin('companies', 'jobs.company_id', '=', 'companies.id')
+        ->leftJoin('locations', 'jobs.location_id', '=', 'locations.id') // thêm join location
+        ->where('job_applications.user_id', $user->id)
+        ->select(
+            'jobs.id as job_id',
+            'jobs.title as job_title',
+            'jobs.slug as slug',
+            'jobs.thumbnail as job_thumbnail',
+            'locations.name as location_name', // thay thế cho jobs.location
+            'companies.name as company_name',
+            'companies.logo_url as company_logo',
+            'job_applications.created_at as applied_at'
+        )
+        ->orderByDesc('applied_at')
+        ->get();
 
-        return view('website.profile.myJobs', compact('profile', 'appliedJobs'));
-    }
+    return view('website.profile.myJobs', compact('profile', 'appliedJobs'));
+}
+
 
     public function updateAboutMe(Request $request)
     {
