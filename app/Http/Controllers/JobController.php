@@ -14,6 +14,7 @@ class JobController extends Controller
 {
     public function index(Request $request)
     {
+
         $query = Job::with(['company', 'skills', 'jobType', 'location'])
             ->where('status', 'published');
 
@@ -23,6 +24,7 @@ class JobController extends Controller
                 $q->where('title', 'like', '%' . $request->q . '%')
                   ->orWhere('description', 'like', '%' . $request->q . '%');
             });
+
         }
 
         // Địa điểm
