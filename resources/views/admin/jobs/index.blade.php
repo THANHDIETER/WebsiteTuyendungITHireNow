@@ -53,70 +53,65 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($jobs as $job)
-                            <tr data-id="{{ $job->id }}">
-                                <td>{{ $job->id }}</td>
-                                <td>{{ Str::limit($job->title, 10) }}</td>
-                                <td>{{ Str::limit($job->company->name, 10) }}</td>
-                                <td>{{ Str::limit($job->category->name, 10) }}</td>
-                                <td>{{ $job->job_type_label }}</td>
-                                <td>{{ $job->salary_range }}</td>
-                                <td>{{ optional($job->deadline)?->format('d/m/Y') ?? '-' }}</td>
-                                <td>{!! $job->featured_badge !!}</td>
-                                <td class="job-status">{!! $job->status_badge !!}</td>
-                                <td>{{ $job->created_at->format('d/m/Y') }}</td>
-                                <td class="text-center align-middle action-cell">
-                                    <div class="d-flex justify-content-center align-items-center gap-1 flex-nowrap">
-                                        {{-- Xem chi tiết --}}
-                                        <button type="button" class="btn btn-secondary btn-sm btn-view" data-id="{{ $job->id }}"
-                                            title="Xem chi tiết">
-                                            <i class="bi bi-eye-fill"></i>
-                                        </button>
-                                        {{-- Duyệt / Từ chối --}}
-                                        @if ($job->status === 'pending')
-                                            <button type="button" class="btn btn-success btn-sm btn-approve"
-                                                data-id="{{ $job->id }}" title="Duyệt">
-                                                <i class="bi bi-check-circle-fill"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-sm btn-reject" data-id="{{ $job->id }}"
-                                                title="Từ chối">
-                                                <i class="bi bi-x-circle-fill"></i>
-                                            </button>
-                                        @endif
+                       @forelse ($jobs as $job)
+    <tr data-id="{{ $job->id }}">
+        <td>{{ $job->id }}</td>
+        <td>{{ Str::limit($job->title, 10) }}</td>
+        <td>{{ Str::limit($job->company->name ?? 'N/A', 10) }}</td>
+        <td>
+            {{ Str::limit($job->categories->pluck('name')->join(', '), 10) }}
+        </td>
+        <td>{{ $job->jobType?->name ?? 'N/A' }}</td>
+        <td>{{ $job->salary_range }}</td>
+        <td>{{ optional($job->deadline)?->format('d/m/Y') ?? '-' }}</td>
+        <td>{!! $job->featured_badge !!}</td>
+        <td class="job-status">{!! $job->status_badge !!}</td>
+        <td>{{ $job->created_at->format('d/m/Y') }}</td>
+        <td class="text-center align-middle action-cell">
+            <div class="d-flex justify-content-center align-items-center gap-1 flex-nowrap">
+                {{-- Xem chi tiết --}}
+                <button type="button" class="btn btn-secondary btn-sm btn-view" data-id="{{ $job->id }}" title="Xem chi tiết">
+                    <i class="bi bi-eye-fill"></i>
+                </button>
 
+                {{-- Duyệt / Từ chối --}}
+                @if ($job->status === 'pending')
+                    <button type="button" class="btn btn-success btn-sm btn-approve" data-id="{{ $job->id }}" title="Duyệt">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm btn-reject" data-id="{{ $job->id }}" title="Từ chối">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                @endif
 
+                {{-- Xoá nếu chưa đóng hoặc đã đăng --}}
+                @if (!in_array($job->status, ['closed', 'published']))
+                    <form action="{{ route('admin.jobs.destroy', $job) }}" method="POST" class="d-inline delete-form" data-id="{{ $job->id }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-dark btn-sm btn-delete" title="Xoá">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </form>
+                @endif
 
-                                        {{-- Xoá nếu chưa đóng hoặc đã đăng --}}
-                                        @if (!in_array($job->status, ['closed', 'published']))
-                                            <form action="{{ route('admin.jobs.destroy', $job) }}" method="POST"
-                                                class="d-inline delete-form" data-id="{{ $job->id }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-dark btn-sm btn-delete" title="Xoá">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </button>
-                                            </form>
-                                        @endif
-                                        @if (in_array($job->status, ['published', 'closed']) && $job->updated_at->diffInMinutes(now()) <= 5)
-                                            <button type="button" class="btn btn-warning btn-sm revert-job"
-                                                data-url="{{ route('admin.jobs.revert', $job->id) }}"
-                                                title="Khôi phục về chờ duyệt">
-                                                <i class="bi bi-arrow-counterclockwise"></i>
-                                            </button>
-                                        @endif
-
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="11" class="text-muted py-4">Không có tin tuyển dụng nào phù hợp.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                {{-- Khôi phục nếu vừa cập nhật gần đây --}}
+                @if (in_array($job->status, ['published', 'closed']) && $job->updated_at->diffInMinutes(now()) <= 5)
+                    <button type="button" class="btn btn-warning btn-sm revert-job"
+                        data-url="{{ route('admin.jobs.revert', $job->id) }}"
+                        title="Khôi phục về chờ duyệt">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                @endif
             </div>
-        </div>
+        </td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="11" class="text-muted py-4">Không có tin tuyển dụng nào phù hợp.</td>
+    </tr>
+@endforelse
+
 
         {{-- Pagination --}}
         @if ($jobs->hasPages())

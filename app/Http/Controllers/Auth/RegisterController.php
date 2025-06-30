@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use App\Http\Requests\RegisterEmployerRequest;
+use App\Notifications\Admin\NewEmployerRegisteredNotification;
+
 use App\Notifications\Admin\NewJobseekerRegisteredNotification;
 
 class RegisterController extends Controller

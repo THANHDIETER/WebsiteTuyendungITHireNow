@@ -17,7 +17,7 @@ class Job extends Model
     'search_index', 'currency', 'remote_policy_id', 'language_id',
     'deadline', 'company_id', 'slug', 'status', 'is_approved', 'views',
     'is_featured', 'salary_display', 'is_paid',
-    'level_id' // Thêm dòng này
+    'level_id' ,'job_type_id', 'location_id',
 ];
 
 
@@ -102,6 +102,10 @@ public function experience()
 {
     return $this->belongsTo(JobExperience::class);
 }
+public function category()
+{
+    return $this->belongsTo(Category::class);
+}
 
 public function language()
 {
@@ -111,6 +115,11 @@ public function language()
 public function remotePolicy()
 {
     return $this->belongsTo(RemotePolicy::class);
+}
+// locations
+public function location()
+{
+    return $this->belongsTo(Location::class);
 }
 
 

@@ -18,7 +18,9 @@ use App\Models\EmployerFreePosting;
 use App\Http\Controllers\Controller;
 use App\Models\EmployerPackageUsage;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
+use App\Notifications\Admin\JobEditedNotification;
+use App\Notifications\Admin\NewJobSubmittedNotification;
 class JobController extends Controller
 {
     public function index()
@@ -121,9 +123,8 @@ class JobController extends Controller
         'keyword' => 'nullable|string|max:150',
         'search_index' => 'nullable|boolean',
         'currency' => 'nullable|string|max:10',
-        'job_type' => 'nullable|in:full-time,part-time,internship,remote,freelance',
+        'job_type_id' => 'required|exists:job_types,id',
     ]);
-
     if ($request->hasFile('thumbnail')) {
         $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
     }
@@ -168,7 +169,11 @@ class JobController extends Controller
             'action' => 'create',
         ]);
     }
-
+    // Gửi thông báo cho tất cả admin
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewJobSubmittedNotification($job));
+        }
     // Gắn skills
     if ($request->filled('skills_text')) {
         $skillNames = array_filter(array_map('trim', explode(',', $request->input('skills_text'))));
@@ -280,7 +285,10 @@ class JobController extends Controller
     }
 
     $job->update($validated);
-
+    // Gửi thông báo cho tất cả admin
+        User::where('role', 'admin')->get()->each(function ($admin) use ($job) {
+            $admin->notify(new JobEditedNotification($job));
+        });
     // Cập nhật kỹ năng
     if ($request->filled('skills_text')) {
         $skillNames = array_filter(array_map('trim', explode(',', $request->input('skills_text'))));
@@ -319,20 +327,20 @@ class JobController extends Controller
     }
 
     public function show($id)
-{
-    $job = Job::with([
-        'company',
-        'categories',
-        'skills',
-        'level',
-        'experience',
-        'remotePolicy',
-        'language',
-        'jobType' ,
-    ])->findOrFail($id);
+    {
+        $job = Job::with([
+            'company',
+            'categories',
+            'skills',
+            'level',
+            'experience',
+            'remotePolicy',
+            'language',
+            'jobType' ,
+        ])->findOrFail($id);
 
-    return view('employer.jobs.show', compact('job'));
-}
+        return view('employer.jobs.show', compact('job'));
+    }
 
 
 }

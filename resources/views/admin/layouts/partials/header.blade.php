@@ -49,23 +49,23 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <!-- App css-->
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-    @if (session('access_token'))
-        <script>
-            localStorage.setItem('access_token', "{{ session('access_token') }}");
-        </script>
-    @endif
+@if (session('access_token'))
+    <script>
+        localStorage.setItem('access_token', "{{ session('access_token') }}");
+    </script>
+@endif
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
                 src="{{ asset('assets/images/logo/logo.png') }}" loading="lazy" alt="logo"><img class="for-dark"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" loading="lazy" alt="logo"></a><a class="close-btn"
-            href="javascript:void(0)">
+                src="{{ asset('assets/images/logo/dark-logo.png') }}" loading="lazy" alt="logo"></a><a
+            class="close-btn" href="javascript:void(0)">
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
@@ -130,44 +130,78 @@
                     </span>
 
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
+                        <h5 class="title bg-primary-light">
+                            Notifications
+                            <a href="{{ route('admin.notifications.index') }}">
+                                <span class="font-primary">View</span>
+                            </a>
+                        </h5>
+                        <ul class="activity-update" id="noti-list">
 
-                        <h5 class="title bg-primary-light">Notifications <a href=""><span
-                                    class="font-primary">View</span></a></h5>
-                        <ul class="activity-update">
-                            <li class="d-flex align-items-center b-l-primary">
-                                <div class="flex-grow-1"> <span>Just Now</span><a href="">
-                                        <h5>What`s the project report update?</h5>
-                                    </a>
-                                    <h6>Rick Novak</h6>
-                                </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
-                                        src="{{ asset('assets/images/avatar/10.jpg') }}" alt=""></div>
-                            </li>
-                            <li class="d-flex align-items-center b-l-secondary">
-                                <div class="flex-grow-1"> <span>12:47 am</span><a href="">
-                                        <h5>James created changelog page</h5>
-                                    </a>
-                                    <h6>Susan Connor</h6>
-                                </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
-                                        src="{{ asset('assets/images/avatar/4.jpg') }}" alt=""></div>
-                            </li>
-                            <li class="d-flex align-items-center b-l-tertiary">
-                                <div class="flex-grow-1"> <span>06:10 pm</span><a href="">
-                                        <h5>Polly edited Contact page</h5>
-                                    </a>
-                                    <h6>Roger Lum</h6>
-                                </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40" loading="lazy"
-                                        src="{{ asset('assets/images/avatar/1.jpg') }}" alt=""></div>
-                            </li>
+
+                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
+                                <li class="d-flex align-items-center b-l-primary">
+                                    <div class="flex-grow-1">
+                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
+                                        <a href="{{ $noti->data['link_url'] }}">
+                                            <h5>{{ $noti->data['message'] }}</h5>
+                                        </a>
+                                        <h6>{{ config('app.name') }}</h6>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <img class="b-r-15 img-40"
+                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
+                                    </div>
+                                </li>
+                            @empty
+                                <li class="d-flex justify-content-center p-2 text-muted">
+                                    Không có thông báo mới
+                                </li>
+                            @endforelse
 
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary"
-                                        href="{{ route('admin.notifications.index') }}">All Notification</a>
+                                    <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">All
+                                        Notification</a>
                                 </div>
                             </li>
+                            <script>
+                                setInterval(() => {
+                                    fetch('{{ route('admin.notifications.latest') }}')
+                                        .then(res => res.json())
+                                        .then(notis => {
+                                            const list = document.getElementById('noti-list');
+
+                                            notis.forEach(noti => {
+                                                if (!list.querySelector(`[data-id="${noti.id}"]`)) {
+                                                    const item = `
+                            <li class="d-flex align-items-center b-l-primary" data-id="${noti.id}">
+                                <div class="flex-grow-1">
+                                    <span>${noti.time}</span>
+                                    <a href="${noti.link_url}">
+                                        <h5>${noti.message}</h5>
+                                    </a>
+                                    <h6>{{ config('app.name') }}</h6>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
+                                </div>
+                            </li>
+                        `;
+                                                    list.insertAdjacentHTML('afterbegin', item);
+                                                }
+                                            });
+
+                                            // Cập nhật badge
+                                            const badge = document.getElementById('noti-count');
+                                            if (badge) {
+                                                badge.innerText = notis.length;
+                                                badge.classList.toggle('d-none', notis.length === 0);
+                                            }
+                                        });
+                                }, 5000);
+                            </script>
+
                         </ul>
                     </div>
                 </li>
@@ -472,8 +506,8 @@
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
-                    <div class="d-flex align-items-center"><img loading="lazy" src="{{ asset('assets/images/profile.png') }}"
-                            alt="">
+                    <div class="d-flex align-items-center"><img loading="lazy"
+                            src="{{ asset('assets/images/profile.png') }}" alt="">
                         <div class="flex-grow-1">
                             <h5>
 
@@ -545,10 +579,10 @@
         </div>
     </div>
 </header>
+
+
 @if (session('access_token'))
     <script>
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
-
 @endif
-

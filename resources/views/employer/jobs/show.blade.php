@@ -61,12 +61,11 @@
                     <div class="card-body">
                         <h5 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2 text-primary"></i> Thông tin cơ bản</h5>
                         <p><strong>Ngành nghề:</strong>
-                            {{ $job->categories->pluck('name')->implode(', ') ?: 'Không xác định' }}
+                            {{ $job->category?->name ?? 'Không xác định' }}
                         </p>
-                        <p><strong>Cấp bậc:</strong> {{ $job->level->name ?? '-' }}</p>
-                        <p><strong>Kinh nghiệm:</strong> {{ $job->experience->name ?? '-' }}</p>
-                       <p><strong>Hình thức:</strong> {{ $job->jobType->name ?? '-' }}</p>
-
+                        <p><strong>Cấp bậc:</strong> {{ $job->level?->name ?? '-' }}</p>
+                        <p><strong>Kinh nghiệm:</strong> {{ $job->experience?->name ?? '-' }}</p>
+                        <p><strong>Hình thức:</strong> {{ $job->jobType?->name ?? '-' }}</p>
                         <p><strong>Hạn nộp hồ sơ:</strong> {{ $job->deadline ? $job->deadline->format('d/m/Y') : 'Không giới hạn' }}</p>
                         <p><strong>Lượt xem:</strong> {{ $job->views }}</p>
                     </div>
@@ -91,8 +90,8 @@
                             @endif
                         </p>
                         <p><strong>Loại tiền tệ:</strong> {{ $job->currency ?? 'VND' }}</p>
-                        <p><strong>Chính sách làm việc:</strong> {{ optional($job->remotePolicy)->name ?? '-' }}</p>
-                        <p><strong>Ngôn ngữ sử dụng:</strong> {{ optional($job->language)->name ?? '-' }}</p>
+                        <p><strong>Chính sách làm việc:</strong> {{ $job->remotePolicy?->name ?? '-' }}</p>
+                        <p><strong>Ngôn ngữ sử dụng:</strong> {{ $job->language?->name ?? '-' }}</p>
                     </div>
                 </div>
             </div>
