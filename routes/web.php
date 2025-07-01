@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
     Route::get('profile/my-jobs', [ProfileController::class, 'myJobs'])->name('profile.my-jobs');
+    Route::get('profile/my-jobs/{job_slug}', [ProfileController::class, 'viewJob'])->name('profile.view-job');
     Route::get('/settings', [ProfileController::class, 'settings'])->name('profile.settings');
     Route::post('/profile/about-me/update', [ProfileController::class, 'updateAboutMe'])
         ->name('profile.about-me.update');
@@ -126,3 +127,43 @@ Route::get('/registration', function () {
 });
 
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
+
+
+Route::get('/admin/noti/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans()
+        ];
+    }));
+})->name('admin.notifications.latest');
+Route::get('/employer/noti/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans()
+        ];
+    }));
+})->name('employer.notifications.latest');
+
+Route::get('/seeker/notifications/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans(),
+        ];
+    }));
+})->middleware('auth');

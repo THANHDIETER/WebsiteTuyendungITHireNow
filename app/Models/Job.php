@@ -10,36 +10,16 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'company_id',
-        'title',
-        'slug',
-        'description',
-        'requirements',         // ⬅️ mô tả ngắn gọn
-        'benefits',
-        'job_type',
-        'salary_min',
-        'salary_max',
-        'currency',
-        'location',
-        'address',
-        'level',
-        'experience',
-        'category_id',
-        'deadline',
-        'status',
-        'views',
-        'is_featured',
-        'is_paid',
-        'apply_url',
-        'remote_policy',
-        'language',
-        'meta_title',
-        'meta_description',
-        'search_index',
-        'keyword',
-        'thumbnail'            // ⬅️ ảnh đại diện
-    ];
+   protected $fillable = [
+    'title', 'description', 'requirements', 'thumbnail', 'benefits',
+    'salary_min', 'salary_max', 'salary_negotiable','salary_display', 'address',
+    'experience_id', 'meta_title', 'meta_description', 'keyword',
+    'search_index', 'currency', 'remote_policy_id', 'language_id',
+    'deadline', 'company_id', 'slug', 'status', 'is_approved', 'views',
+    'is_featured', 'salary_display', 'is_paid',
+    'level_id' ,'job_type_id', 'location_id',
+];
+
 
     protected $casts = [
         'salary_negotiable' => 'boolean',
@@ -57,15 +37,21 @@ class Job extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function category()
+     public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'job_category', 'job_id', 'category_id');
     }
-
     public function skills()
-    {
-        return $this->belongsToMany(Skill::class, 'job_skill')->withPivot('priority_level', 'required');
-    }
+{
+    return $this->belongsToMany(Skill::class, 'job_skill')
+                ->withPivot('priority_level', 'required')
+                ->withTimestamps();
+}
+    public function jobType()
+{
+    return $this->belongsTo(JobType::class, 'job_type_id');
+}
+
 
     // 🔘 Accessors
     public function getStatusBadgeAttribute()
@@ -107,4 +93,34 @@ class Job extends Model
 
         return 'Thương lượng';
     }
+    public function level()
+{
+    return $this->belongsTo(Level::class);
+}
+
+public function experience()
+{
+    return $this->belongsTo(JobExperience::class);
+}
+public function category()
+{
+    return $this->belongsTo(Category::class);
+}
+
+public function language()
+{
+    return $this->belongsTo(JobLanguage::class);
+}
+
+public function remotePolicy()
+{
+    return $this->belongsTo(RemotePolicy::class);
+}
+// locations
+public function location()
+{
+    return $this->belongsTo(Location::class);
+}
+
+
 }

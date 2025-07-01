@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Employers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\PackageController;
@@ -93,11 +94,17 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
     Route::get('/{id}', [PackageController::class, 'show'])->name('employer.packages.show'); // tuỳ chọn
 });
 
-// thêm công ty
-Route::middleware('auth')
+
+
+
+Route::middleware(['auth:sanctum', 'employer'])
     ->prefix('employer')
     ->name('employer.')
     ->group(function () {
-        Route::resource('companies', CompanyController::class)
-            ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+        // 📌 Notifications
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+       
     });
+
+
+

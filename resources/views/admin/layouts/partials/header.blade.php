@@ -25,7 +25,36 @@
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
     rel="stylesheet">
-<!-- App css -->
+
+<!-- Font awesome icon css -->
+<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/brands.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/solid.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/regular.css') }}">
+<!-- Ico Icon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}">
+<!-- Flag Icon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css') }}">
+<!-- Themify Icon css -->
+<link rel="stylesheet" type="text/css"
+    href="{{ asset('assets/css/vendors/themify-icons/themify-icons/css/themify.css') }}">
+<!-- Animation css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
+<!-- Whether Icon css-->
+<link rel="stylesheet" type="text/css"
+    href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
+<!-- Apex Chart css-->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
+<!-- Data Table css-->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
+<!-- App css-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -37,6 +66,7 @@
     </script>
 @endif
 
+
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto">
         <a href="">
@@ -44,6 +74,7 @@
             <img class="for-dark" src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo">
         </a>
         <a class="close-btn" href="javascript:void(0)">
+
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
@@ -79,8 +110,10 @@
                         </svg>
                     </a>
                 </li>
+
                 <li class="custom-dropdown">
                     <a href="javascript:void(0)">
+
                         <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor"
@@ -89,48 +122,337 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <span class="badge rounded-pill badge-secondary">3</span>
+
+                    <span class="badge rounded-pill badge-secondary" id="noti-count">
+                        {{ auth()->user()->unreadNotifications->count() }}
+                    </span>
+
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Notifications <a href=""><span
-                                    class="font-primary">View</span></a></h5>
-                        <ul class="activity-update">
-                            <li class="d-flex align-items-center b-l-primary">
-                                <div class="flex-grow-1">
-                                    <span>Just Now</span>
-                                    <a href="">
-                                        <h5>What`s the project report update?</h5>
-                                    </a>
-                                    <h6>Rick Novak</h6>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <img class="b-r-15 img-40" src="{{ asset('assets/images/avatar/10.jpg') }}"
-                                        alt="">
+                        <h5 class="title bg-primary-light">
+                            Notifications
+                            <a href="{{ route('admin.notifications.index') }}">
+                                <span class="font-primary">View</span>
+                            </a>
+                        </h5>
+                        <ul class="activity-update" id="noti-list">
+
+
+                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
+                                <li class="d-flex align-items-center b-l-primary">
+                                    <div class="flex-grow-1">
+                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
+                                        <a href="{{ $noti->data['link_url'] }}">
+                                            <h5>{{ $noti->data['message'] }}</h5>
+                                        </a>
+                                        <h6>{{ config('app.name') }}</h6>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <img class="b-r-15 img-40"
+                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
+                                    </div>
+                                </li>
+                            @empty
+                                <li class="d-flex justify-content-center p-2 text-muted">
+                                    Không có thông báo mới
+                                </li>
+                            @endforelse
+
+                            <li class="mt-3 d-flex justify-content-center">
+                                <div class="button-group">
+                                    <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">All
+                                        Notification</a>
                                 </div>
                             </li>
-                            <li class="d-flex align-items-center b-l-secondary">
+                            <script>
+                                setInterval(() => {
+                                    fetch('{{ route('admin.notifications.latest') }}')
+                                        .then(res => res.json())
+                                        .then(notis => {
+                                            const list = document.getElementById('noti-list');
+
+                                            notis.forEach(noti => {
+                                                if (!list.querySelector(`[data-id="${noti.id}"]`)) {
+                                                    const item = `
+                            <li class="d-flex align-items-center b-l-primary" data-id="${noti.id}">
                                 <div class="flex-grow-1">
-                                    <span>12:47 am</span>
-                                    <a href="">
-                                        <h5>James created changelog page</h5>
+                                    <span>${noti.time}</span>
+                                    <a href="${noti.link_url}">
+                                        <h5>${noti.message}</h5>
+
                                     </a>
-                                    <h6>Susan Connor</h6>
+                                    <h6>{{ config('app.name') }}</h6>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <img class="b-r-15 img-40" src="{{ asset('assets/images/avatar/4.jpg') }}"
-                                        alt="">
+
+                                    <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
                                 </div>
                             </li>
-                            <li class="d-flex align-items-center b-l-tertiary">
-                                <div class="flex-grow-1">
-                                    <span>06:10 pm</span>
-                                    <a href="">
-                                        <h5>Polly edited Contact page</h5>
-                                    </a>
-                                    <h6>Roger Lum</h6>
+                        `;
+                                                    list.insertAdjacentHTML('afterbegin', item);
+                                                }
+                                            });
+
+                                            // Cập nhật badge
+                                            const badge = document.getElementById('noti-count');
+                                            if (badge) {
+                                                badge.innerText = notis.length;
+                                                badge.classList.toggle('d-none', notis.length === 0);
+                                            }
+                                        });
+                                }, 5000);
+                            </script>
+
+                        </ul>
+                    </div>
+                </li>
+                <!-- Bookmark menu-->
+                <li class="custom-dropdown"><a href="javascript:void(0)">
+                        <!-- Icon Star -->
+                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9" stroke="currentColor"
+                                stroke-width="2" stroke-linejoin="round" fill="none" />
+                        </svg>
+                    </a>
+                    <div class="custom-menu bookmark-dropdown py-0 overflow-hidden">
+                        <h5 class="title bg-primary-light">Bookmark</h5>
+                        <ul>
+                            <li>
+                                <form class="mb-3">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text"
+                                            placeholder="Search Bookmark..."><span class="input-group-text">
+                                            <!-- Icon Search -->
+                                            <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="11" cy="11" r="7" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <line x1="21" y1="21" x2="16.65" y2="16.65"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </form>
+                            </li>
+                            <li class="d-flex align-items-center bg-light-primary">
+                                <div class="flex-shrink-0 me-2"><a href="">
+                                        <!-- Icon Home -->
+                                        <svg class="svg-color stroke-primary" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z"
+                                                stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                                            <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </a></div>
+                                <div class="d-flex justify-content-between align-items-center w-100"><a
+                                        href="">Dashboard</a>
+                                    <svg class="svg-color icon-star" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
+                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                                            fill="none" />
+                                    </svg>
                                 </div>
-                                <div class="flex-shrink-0">
-                                    <img class="b-r-15 img-40" src="{{ asset('assets/images/avatar/1.jpg') }}"
-                                        alt="">
+                            </li>
+                            <li class="d-flex align-items-center bg-light-secondary">
+                                <div class="flex-shrink-0 me-2"><a href="">
+                                        <!-- Icon Pie -->
+                                        <svg class="svg-color stroke-secondary" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="2" />
+                                            <path d="M12 2v10h10" stroke="currentColor" stroke-width="2"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </a></div>
+                                <div class="d-flex justify-content-between align-items-center w-100"><a
+                                        href="">To-do</a>
+                                    <svg class="svg-color icon-star" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
+                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                                            fill="none" />
+                                    </svg>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-center bg-light-tertiary">
+                                <div class="flex-shrink-0 me-2"><a href="">
+                                        <!-- Icon Chart -->
+                                        <svg class="svg-color stroke-tertiary" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 3v18h18" stroke="currentColor" stroke-width="2"
+                                                stroke-linejoin="round" />
+                                            <path d="M18 15l-5-5-4 4-3-3" stroke="currentColor" stroke-width="2"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </a></div>
+                                <div class="d-flex justify-content-between align-items-center w-100"><a
+                                        href="">Chart</a>
+                                    <svg class="svg-color icon-star" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
+                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                                            fill="none" />
+                                    </svg>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!-- Cart menu-->
+                <li class="custom-dropdown"><a href="javascript:void(0)">
+                        <!-- Icon Bag -->
+                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 2l3 0a3 3 0 016 0l3 0a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"
+                                stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none" />
+                            <path d="M6 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </a>
+                    <div class="custom-menu cart-dropdown py-0 overflow-hidden">
+                        <h5 class="title bg-primary-light">Cart<span>Total : <span
+                                    class="font-primary">4350.9</span></span></h5>
+                        <ul>
+                            <li class="cartbox d-flex bg-light-primary">
+                                <div class="flex-shrink-0 border-primary"><img loading="lazy"
+                                        src="{{ asset('assets/images/dashboard2/product/1.png') }}" alt="">
+                                </div>
+                                <div class="touchpin-details"><a href="">
+                                        <h5>Apple Computers</h5>
+                                    </a><span>$2600.00</span>
+                                    <div class="touchspin-wrapper">
+                                        <button class="decrement-touchspin btn-touchspin">
+                                            <!-- Icon Minus -->
+                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                            </svg>
+                                        </button>
+                                        <input class="form-control input-touchspin bg-light-primary" type="number"
+                                            value="5">
+                                        <button class="increment-touchspin btn-touchspin">
+                                            <!-- Icon Plus -->
+                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="12" y1="5" x2="12" y2="19"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-close"></button>
+                                </div>
+                            </li>
+                            <li class="cartbox d-flex bg-light-secondary">
+                                <div class="flex-shrink-0 border-secondary"><img loading="lazy"
+                                        src="{{ asset('assets/images/dashboard2/product/2.png') }}" alt="">
+                                </div>
+                                <div class="touchpin-details"><a href="">
+                                        <h5>Microwave</h5>
+                                    </a><span>$1450.45</span>
+                                    <div class="touchspin-wrapper">
+                                        <button class="decrement-touchspin btn-touchspin">
+                                            <!-- Icon Minus -->
+                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                            </svg>
+                                        </button>
+                                        <input class="form-control input-touchspin bg-light-secondary" type="number"
+                                            value="5">
+                                        <button class="increment-touchspin btn-touchspin">
+                                            <!-- Icon Plus -->
+                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="12" y1="5" x2="12" y2="19"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-close"></button>
+                                </div>
+                            </li>
+                            <li class="cartbox d-flex bg-light-tertiary">
+                                <div class="flex-shrink-0 border-tertiary"><img loading="lazy"
+                                        src="{{ asset('assets/images/dashboard2/product/3.png') }}" alt="">
+                                </div>
+                                <div class="touchpin-details"><a href="">
+                                        <h5>Mackup Kit</h5>
+                                    </a><span>$300.45</span>
+                                    <div class="touchspin-wrapper">
+                                        <button class="decrement-touchspin btn-touchspin">
+                                            <!-- Icon Minus -->
+                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                            </svg>
+                                        </button>
+                                        <input class="form-control input-touchspin bg-light-tertiary" type="number"
+                                            value="5">
+                                        <button class="increment-touchspin btn-touchspin">
+                                            <!-- Icon Plus -->
+                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="12" y1="5" x2="12" y2="19"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-close"></button>
+                                </div>
+                            </li>
+                            <li class="mt-3 p-0 d-flex justify-content-center">
+                                <div><a class="btn btn-secondary" href="">Checkout</a></div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!-- Bookmark menu-->
+                <li class="custom-dropdown"><a href="javascript:void(0)">
+                        <!-- Icon Message -->
+                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z" stroke="currentColor"
+                                stroke-width="2" stroke-linejoin="round" />
+                        </svg>
+                    </a><span class="badge rounded-pill badge-tertiary">3</span>
+                    <div class="custom-menu message-dropdown py-0 overflow-hidden">
+                        <h5 class="title bg-primary-light">Messages</h5>
+                        <ul>
+                            <li class="d-flex b-t-primary">
+                                <div class="d-block"><a href="">
+                                        <h5>Design meeting</h5>
+                                    </a>
+                                    <h6>
+                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="2" />
+                                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg><span>Just Now</span>
+                                    </h6>
+                                </div>
+                                <div class="badge badge-light-danger">
+                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="2" />
+                                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg><span>Open</span>
+
                                 </div>
                             </li>
                             <li class="mt-3 d-flex justify-content-center">
@@ -142,10 +464,12 @@
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
-                    <div class="d-flex align-items-center">
-                        <img src="{{ asset('assets/images/profile.png') }}" alt="">
+
+                    <div class="d-flex align-items-center"><img loading="lazy"
+                            src="{{ asset('assets/images/profile.png') }}" alt="">
                         <div class="flex-grow-1">
                             <h5>
+
                                 @if (auth()->check())
                                     {{ auth()->user()->role }}
                                     <sup style="font-size: 0.7em; color: red;">{{ auth()->user()->id }}</sup>
@@ -228,6 +552,7 @@
     </div>
 </header>
 
+
 <style>
     .custom-menu a {
         text-decoration: none;
@@ -254,3 +579,11 @@
         /* Màu icon khi hover */
     }
 </style>
+
+
+@if (session('access_token'))
+    <script>
+        localStorage.setItem('access_token', "{{ session('access_token') }}");
+    </script>
+@endif
+
