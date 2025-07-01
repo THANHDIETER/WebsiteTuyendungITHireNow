@@ -8,6 +8,7 @@ use App\Http\Controllers\Employers\PaymentController;
 use App\Http\Controllers\Employers\DashboardController;
 use App\Http\Controllers\Employers\SubscriptionController;
 use App\Http\Controllers\Employers\JobApplicationController;
+use App\Http\Controllers\Employers\CompanyController;
 
 
 
@@ -16,7 +17,6 @@ Route::middleware(['auth:sanctum', 'employer'])->group(function () {
     Route::get('/cong-viec', function () {
         return view('website.jobs.job');
     });
-
 });
 
 Route::middleware(['auth:sanctum', 'employer'])
@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum', 'employer'])
     ->group(function () {
 
         // Danh sách việc làm của nhà tuyển dụng
-    
+
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
@@ -80,8 +80,6 @@ Route::middleware(['auth:sanctum', 'employer'])
 Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
     Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
     Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
-
-
 });
 
 Route::prefix('employer/subscriptions')->middleware('auth')->group(function () {
@@ -95,6 +93,8 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
     Route::post('/{id}/buy', [PackageController::class, 'subscribe'])->name('employer.packages.subscribe');
     Route::get('/{id}', [PackageController::class, 'show'])->name('employer.packages.show'); // tuỳ chọn
 });
+
+
 
 
 Route::middleware(['auth:sanctum', 'employer'])

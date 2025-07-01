@@ -33,6 +33,13 @@
                     <span>Mua gói dịch vụ</span>
                 </a>
             </li>
+
+            <li class="sidebar-list">
+                <a class="sidebar-link" href="{{ route('employer.companies.index') }}">
+                    <i class="bi bi-people"></i>
+                    <span>Quản lý công ty</span>
+                </a>
+            </li>
         </ul>
     </div>
 
