@@ -44,22 +44,30 @@ class JobController extends Controller
 {
     $user = Auth::user();
     $company = $user->company;
-    $jobTypes = JobType::where('is_active', true)->get();
 
+    $jobTypes = JobType::where('is_active', true)->get();
     $company_addresses = is_array($company->address) ? $company->address : ($company->address ? [$company->address] : []);
     $locations = Location::where('is_active', true)->orderBy('name')->get();
     $categories = Category::all();
-    $skills = Skill::where('is_active', true)->pluck('skill_name');
     $skills = Skill::where('is_active', true)->get();
     $levels = Level::where('is_active', true)->get();
     $experiences = JobExperience::where('is_active', true)->get();
     $languages = JobLanguage::where('is_active', true)->get();
     $remote_policies = RemotePolicy::where('is_active', true)->get();
 
+    // ✅ Lấy các gói dịch vụ còn lượt đăng và đang active
+    $activePackages = \App\Models\EmployerPackageUsage::with('package')
+        ->where('company_id', $company->id)
+        ->where('is_active', true)
+        ->whereColumn('posts_used', '<', 'post_limit')
+        ->get();
+
     return view('employer.jobs.create', compact(
-        'categories', 'jobTypes', 'skills', 'company_addresses','locations', 'levels', 'experiences', 'languages', 'remote_policies'
+        'categories', 'jobTypes', 'skills', 'company_addresses', 'locations', 'levels',
+        'experiences', 'languages', 'remote_policies', 'activePackages'
     ));
 }
+
 
   public function store(Request $request)
 {
@@ -89,13 +97,21 @@ class JobController extends Controller
 
     $freeRemain = $freePosting->post_limit - $freePosting->post_used;
 
-    // Kiểm tra lượt đăng theo gói
-    $packageUsage = EmployerPackageUsage::where('company_id', $company->id)
+    // Kiểm tra các gói dịch vụ đang active và còn lượt
+    $activePackages = EmployerPackageUsage::where('company_id', $company->id)
         ->where('is_active', true)
-        ->first();
-    $packageRemain = $packageUsage ? ($packageUsage->post_limit - $packageUsage->posts_used) : 0;
+        ->whereColumn('posts_used', '<', 'post_limit')
+        ->orderBy('end_date')
+        ->get();
 
-    if ($freeRemain + $packageRemain <= 0) {
+    $selectedPackage = null;
+    if ($request->filled('selected_package_id')) {
+        $selectedPackage = $activePackages->firstWhere('id', $request->input('selected_package_id'));
+    } else {
+        $selectedPackage = $activePackages->first();
+    }
+
+    if (!$selectedPackage && $freeRemain <= 0) {
         return redirect()->route('employer.packages.index')->with('error', 'Bạn đã hết lượt đăng tin. Vui lòng mua gói.');
     }
 
@@ -125,6 +141,7 @@ class JobController extends Controller
         'currency' => 'nullable|string|max:10',
         'job_type_id' => 'required|exists:job_types,id',
     ]);
+
     if ($request->hasFile('thumbnail')) {
         $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
     }
@@ -152,28 +169,30 @@ class JobController extends Controller
     $validated['views'] = 0;
     $validated['is_featured'] = false;
     $validated['search_index'] = $request->boolean('search_index', false);
-    $validated['is_paid'] = $freeRemain <= 0;
+    $validated['is_paid'] = $selectedPackage !== null;
     $validated['category_id'] = $validated['categories'][0];
     $validated['job_type'] = $request->input('job_type') ?? 'full-time';
 
     $job = Job::create($validated);
 
-    if ($freeRemain > 0) {
-        $freePosting->increment('post_used');
-    } elseif ($packageRemain > 0 && $packageUsage) {
-        $packageUsage->increment('posts_used');
+    if ($selectedPackage) {
+        $selectedPackage->increment('posts_used');
         EmployerPackageLog::create([
-            'order_id' => $packageUsage->order_id,
+            'order_id' => $selectedPackage->order_id,
             'job_id' => $job->id,
             'used_at' => now(),
             'action' => 'create',
         ]);
+    } else {
+        $freePosting->increment('post_used');
     }
+
     // Gửi thông báo cho tất cả admin
-        $admins = User::where('role', 'admin')->get();
-        foreach ($admins as $admin) {
-            $admin->notify(new NewJobSubmittedNotification($job));
-        }
+    $admins = User::where('role', 'admin')->get();
+    foreach ($admins as $admin) {
+        $admin->notify(new NewJobSubmittedNotification($job));
+    }
+
     // Gắn skills
     if ($request->filled('skills_text')) {
         $skillNames = array_filter(array_map('trim', explode(',', $request->input('skills_text'))));
@@ -199,6 +218,7 @@ class JobController extends Controller
 
     return redirect()->route('employer.jobs.index')->with('success', 'Tin đã được gửi và đang chờ duyệt.');
 }
+
 
     public function edit($id)
 {
