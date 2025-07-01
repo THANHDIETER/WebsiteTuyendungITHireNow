@@ -95,49 +95,31 @@ class ProfileController extends Controller
     }
 
     public function myJobs()
-    {
-        $user = Auth::user();
-        $user = User::with('profile')->find(Auth::id());
+{
+    $user = Auth::user();
+    $profile = $user->profile;
 
-        // Query builder: lấy các job đã ứng tuyển kèm thông tin công ty
-        $appliedJobs = DB::table('job_applications')
-            ->join('jobs', 'job_applications.job_id', '=', 'jobs.id')
-            ->leftJoin('companies', 'jobs.company_id', '=', 'companies.id')
-            ->where('job_applications.user_id', $user->id)
-            ->select(
-                'jobs.id as job_id',
-                'jobs.slug as job_slug',
-                'jobs.title as job_title',
-                'jobs.location',
-                'companies.name as company_name',
-                'companies.logo_url as company_logo',
-                'job_applications.created_at as applied_at'
-            )
-            ->orderByDesc('applied_at')
-            ->get();
+    // Query builder: lấy các job đã ứng tuyển kèm thông tin công ty và địa điểm
+    $appliedJobs = DB::table('job_applications')
+        ->join('jobs', 'job_applications.job_id', '=', 'jobs.id')
+        ->leftJoin('companies', 'jobs.company_id', '=', 'companies.id')
+        ->leftJoin('locations', 'jobs.location_id', '=', 'locations.id') // thêm join location
+        ->where('job_applications.user_id', $user->id)
+        ->select(
+            'jobs.id as job_id',
+            'jobs.title as job_title',
+            'jobs.slug as slug',
+            'jobs.thumbnail as job_thumbnail',
+            'locations.name as location_name', // thay thế cho jobs.location
+            'companies.name as company_name',
+            'companies.logo_url as company_logo',
+            'job_applications.created_at as applied_at'
+        )
+        ->orderByDesc('applied_at')
+        ->get();
 
-        return view('website.profile.myJobs', compact('user', 'appliedJobs'), ['profile' => $user->profile]);
-    }
-
-    public function viewJob($slug)
-    {
-        $user = User::with('profile')->findOrFail(Auth::id());
-
-        $application = JobApplication::with(['job.company', 'job.skills'])
-            ->whereHas('job', fn($q) => $q->where('slug', $slug))
-            ->where('user_id', $user->id)
-            ->first();
-
-        if (!$application) {
-            abort(404);
-        }
-
-        return view('website.profile.appliedJob', [
-            'user' => $user,
-            'profile' => $user->profile,
-            'appliedJob' => $application->job, // dùng job làm đối tượng hiển thị chính
-        ]);
-    }
+    return view('website.profile.myJobs', compact('profile', 'appliedJobs'));
+}
 
 
     public function updateAboutMe(Request $request)

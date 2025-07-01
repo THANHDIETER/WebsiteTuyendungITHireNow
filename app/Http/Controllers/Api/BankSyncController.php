@@ -17,7 +17,7 @@ class BankSyncController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $accounts = BankAccount::all();
+        $accounts = BankAccount::where('is_active', true)->get();
         $results = [];
 
         foreach ($accounts as $account) {

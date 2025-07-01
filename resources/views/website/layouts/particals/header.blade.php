@@ -66,11 +66,13 @@
                                     Đăng Nhập
                                 </a>
                             @else
-                                {{-- 🔔 Chuông thông báo --}}
+                            <div class="row">
+                                <div class="col">
+                                    {{-- 🔔 Chuông thông báo --}}
                                 <div class="dropdown me-3">
-                                    <button class="btn btn-icon btn-notification position-relative" type="button"
+                                    <button class="btn btn-icon btn-notification position-relative " type="button"
                                         id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="icofont-notification fs-5"></i>
+                                        <i class="icofont-notification fs-5 text-white"></i>
                                         @if (auth()->user()->unreadNotifications->count())
                                             <span
                                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
@@ -114,8 +116,9 @@
 
                                     </ul>
                                 </div>
-
-                                {{-- 👤 Menu người dùng --}}
+                                </div>
+                                <div class="col">
+                                     {{-- 👤 Menu người dùng --}}
                                 <div class="user-info dropdown">
                                     <a href="#" class="user-info-toggle d-flex align-items-center"
                                         data-bs-toggle="dropdown">
@@ -193,6 +196,10 @@
                                         </li>
                                     </ul>
                                 </div>
+                                </div>
+                               
+                            </div>
+                                
                             @endguest
 
                             <button class="btn-menu" type="button" data-bs-toggle="offcanvas"
