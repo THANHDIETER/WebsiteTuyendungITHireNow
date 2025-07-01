@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h4 class="mb-4 text-primary fw-bold">📒 Giao dịch theo từng tài khoản</h4>
+  <div class="ms-2">
+    <h4 class="mb-4  text-primary fw-bold"> Giao dịch theo từng tài khoản</h4>
 
     <div
       v-for="account in bankAccounts"

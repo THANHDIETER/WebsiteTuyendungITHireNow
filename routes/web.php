@@ -31,28 +31,6 @@ Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.c
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Static Pages
-Route::get('/docs', fn() => view('docs.index'))->name('docs');
-
-// profile routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('profile-dashboard', [ProfileController::class, 'dashboard'])->name('profile.dashboard');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
-    Route::get('profile/my-jobs', [ProfileController::class, 'myJobs'])->name('profile.my-jobs');
-    Route::get('/settings', [ProfileController::class, 'settings'])->name('profile.settings');
-    Route::post('/profile/about-me/update', [ProfileController::class, 'updateAboutMe'])
-        ->name('profile.about-me.update');
-    Route::post('/profile/education', [ProfileController::class, 'updateEducation'])->name('profile.education.update');
-    Route::post('/profile/work-experience', [ProfileController::class, 'storeWorkExperience'])->name('profile.work_experience.store');
-    Route::get('/profile/skills', [ProfileController::class, 'showSkillsModal'])->name('profile.skills.modal');
-    Route::post('/profile/skills', [ProfileController::class, 'storeSkills'])->name('profile.skills.store');
-    Route::post('/profile/project', [ProfileController::class, 'storeProject'])->name('profile.project.store');
-    Route::post('/profile/certificates', [ProfileController::class, 'storeCertificate'])->name('profile.certificates.store');
-    Route::post('/profile/award', [ProfileController::class, 'storeAward'])->name('profile.award.store');
-    Route::post('/profile/languages', [ProfileController::class, 'storeLanguage'])->name('profile.languages.store');
-});
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
@@ -127,14 +105,41 @@ Route::get('/registration', function () {
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 
 
-Route::prefix('employers')->name('employers.')->group(function() {
-    // Trang chính Employer Dashboard
-    Route::get('/', [EmployerResourceController::class, 'index'])->name('index');
 
-    // Các trang con
-    Route::get('/subscriptions', [EmployerResourceController::class, 'subscriptions'])->name('subscriptions');
-    Route::get('/orders',        [EmployerResourceController::class, 'orders'])->name('orders');
-    Route::get('/logs',          [EmployerResourceController::class, 'logs'])->name('logs');
-    Route::get('/free-postings', [EmployerResourceController::class, 'freePostings'])->name('free-postings');
-    Route::get('/usages',        [EmployerResourceController::class, 'usages'])->name('usages');
-});
+Route::get('/admin/noti/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans()
+        ];
+    }));
+})->name('admin.notifications.latest');
+Route::get('/employer/noti/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans()
+        ];
+    }));
+})->name('employer.notifications.latest');
+
+Route::get('/seeker/notifications/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans(),
+        ];
+    }));
+})->middleware('auth');

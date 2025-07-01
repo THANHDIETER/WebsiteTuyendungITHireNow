@@ -29,7 +29,7 @@ class JobApplicationController extends Controller
         }
 
         $perPage = $request->input('per_page', 10);
-        return $query->latest()->paginate($perPage);
+        return $query->orderByDesc('id')->paginate($perPage);
     }
 
 
@@ -43,6 +43,7 @@ class JobApplicationController extends Controller
     public function show(JobApplication $jobApplication)
     {
         return $jobApplication->load(['job', 'user', 'company']);
+        
     }
 
     public function update(Request $request, JobApplication $jobApplication)
@@ -58,8 +59,8 @@ class JobApplicationController extends Controller
         }
 
         // 2. Đã approved chỉ cho phép chuyển sang rejected hoặc giữ nguyên
-        if ($currentStatus === 'approved' && !in_array($newStatus, ['approved', 'rejected'])) {
-            return response()->json(['message' => 'Đơn đã duyệt không thể quay lại trạng thái chờ duyệt.'], 403);
+        if ($currentStatus === 'approved' && !in_array($newStatus, ['approved'])) {
+            return response()->json(['message' => 'Đơn đã duyệt không thể thay đổi.'], 403);
         }
 
         $jobApplication->update($data);
@@ -101,7 +102,7 @@ class JobApplicationController extends Controller
             'job_id' => 'required|exists:jobs,id',
             'user_id' => 'required|exists:users,id',
             'company_id' => 'required|exists:companies,id',
-            'cv_url' => 'required|string',
+            'image' => 'required|string',
             'cover_letter' => 'nullable|string',
             'status' => 'in:pending,approved,rejected',
             'is_shortlisted' => 'boolean',

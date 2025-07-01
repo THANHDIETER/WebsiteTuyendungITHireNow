@@ -69,4 +69,51 @@ class User extends Authenticatable
         return $this->belongsToMany(Job::class, 'job_applications', 'user_id', 'job_id')
             ->withTimestamps(); // nếu bạn dùng created_at, updated_at
     }
+    public static function roleOptions(): array
+    {
+        return [
+            'job_seeker' => ['label' => 'Ứng viên', 'color' => 'primary'],     // màu xanh
+            'employer' => ['label' => 'Nhà tuyển dụng', 'color' => 'success'], // màu xanh lá
+            'admin' => ['label' => 'Quản trị viên', 'color' => 'danger'],   // màu đỏ
+        ];
+    }
+
+
+    public function getRoleBadgeAttribute(): string
+    {
+        $options = self::roleOptions();
+        $role = $this->role;
+
+        if (!isset($options[$role])) {
+            return '<span class="badge bg-secondary">Không xác định</span>';
+        }
+
+        $label = $options[$role]['label'];
+        $color = $options[$role]['color'];
+
+        return "<span class=\"badge bg-{$color}\">{$label}</span>";
+    }
+
+    public static function statusOptions(): array
+    {
+        return [
+            'active' => ['label' => 'Hoạt động', 'color' => 'success'],  // Xanh lá
+            'inactive' => ['label' => 'Không hoạt động', 'color' => 'secondary'], // Xám
+            'banned' => ['label' => 'Đã bị cấm', 'color' => 'danger'],   // Đỏ
+        ];
+    }
+    public function getStatusBadgeAttribute(): string
+    {
+        $options = self::statusOptions();
+        $status = $this->status;
+
+        if (!isset($options[$status])) {
+            return '<span class="badge bg-secondary">Không xác định</span>';
+        }
+
+        $label = $options[$status]['label'];
+        $color = $options[$status]['color'];
+
+        return "<span class=\"badge bg-{$color}\">{$label}</span>";
+    }
 }

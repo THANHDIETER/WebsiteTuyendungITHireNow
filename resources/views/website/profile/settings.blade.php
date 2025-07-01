@@ -1,7 +1,15 @@
 @extends('website.layouts.master')
 
 @section('content')
-    <div class="container mt-4">
+    <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
+        data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
+        <div class="col-12 col-lg-8">
+            <div class="slider-content">
+                <h1 class="title text-white">👋 Xin chào: {{ $profile->full_name ?? 'Người dùng' }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                 {{ session('success') }}
@@ -23,7 +31,7 @@
             <!-- Sidebar -->
             <div class="col-md-3">
                 <div class="bg-white shadow-sm rounded p-4">
-                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile->full_name ?? '' }}</h6>
+                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
                     <hr>
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item mb-2">
@@ -72,7 +80,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <strong>Họ và tên đầy đủ: </strong><span>{{ $profile->full_name ?? '' }}</span>
+                        <strong>Họ và tên đầy đủ: </strong><span>{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</span>
                         <div class="text-muted small mt-1">
                             <i class="fa-solid fa-circle-info me-1"></i>
                             Tên tài khoản của bạn được đồng bộ với thông tin hồ sơ.

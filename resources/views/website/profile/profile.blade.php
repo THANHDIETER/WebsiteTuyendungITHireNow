@@ -1,12 +1,20 @@
 @extends('website.layouts.master')
 
 @section('content')
-    <div class="container mt-5">
+    <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
+        data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
+        <div class="col-12 col-lg-8">
+            <div class="slider-content">
+                <h1 class="title text-white">👋 Xin chào: {{ $profile->full_name ?? 'Người dùng' }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3">
                 <div class="bg-white shadow-sm rounded p-4">
-                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile->full_name ?? 'Chưa cập nhật' }}</h6>
+                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
                     <hr>
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item mb-2">
@@ -66,13 +74,15 @@
                             @else
                                 <div class="bg-light border rounded-circle d-flex align-items-center justify-content-center text-muted"
                                     style="width: 100px; height: 100px; font-size: 36px;">
-                                    {{ strtoupper(substr(Auth::user()->full_name ?? 'U', 0, 1)) }}
+                                    {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                                 </div>
                             @endif
                         </div>
 
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">{{ $profile->full_name ?? 'Chưa cập nhật' }}</h5>
+                            <h5 class="mb-1">
+                                {{ $profile && $profile->name ? $profile->name : Auth::user()->name }}
+                            </h5>
                             <p class="text-decoration-none mt-2 d-inline-block">
                                 Cập nhật tiêu đề của bạn
                             </p>
@@ -87,7 +97,7 @@
                                 </div>
                                 <div class="col d-flex align-items-center gap-2">
                                     <i class="fa-solid fa-phone text-secondary"></i>
-                                    <span>{{ $profile->phone ?? 'Chưa cập nhật' }}</span>
+                                    <span>{{ $profile->phone_number ?? 'Chưa cập nhật' }}</span>
                                 </div>
                                 <div class="col d-flex align-items-center gap-2">
                                     <i class="fa-solid fa-gift text-secondary"></i>
@@ -146,6 +156,8 @@
                             </button>
                         </div>
                     </div>
+
+                    {{-- Skills Section --}}
                     <div class="mt-5">
                         <h4 class="fw-bold mb-2">Kỹ năng</h4>
                         <div class="d-flex justify-content-between align-items-center">
@@ -158,6 +170,8 @@
                             </button>
                         </div>
                     </div>
+
+                    {{-- Languages Section --}}
                     <div class="mt-5">
                         <h4 class="fw-bold mb-2">Ngoại ngữ</h4>
                         <div class="d-flex justify-content-between align-items-center">
@@ -170,6 +184,8 @@
                             </button>
                         </div>
                     </div>
+
+                    {{-- Projects Section --}}
                     <div class="mt-5">
                         <h4 class="fw-bold mb-2">Dự án nổi bật</h4>
                         <div class="d-flex justify-content-between align-items-center">
@@ -182,6 +198,8 @@
                             </button>
                         </div>
                     </div>
+
+                    {{-- Certificates and Awards Section --}}
                     <div class="mt-5">
                         <h4 class="fw-bold mb-2">Chứng chỉ</h4>
                         <div class="d-flex justify-content-between align-items-center">
@@ -194,6 +212,8 @@
                             </button>
                         </div>
                     </div>
+
+                    {{-- Achievements Section --}}
                     <div class="mt-5">
                         <h4 class="fw-bold mb-2">Giải thưởng</h4>
                         <div class="d-flex justify-content-between align-items-center">
@@ -245,9 +265,9 @@
                             <div class="col-md-4 border-end">
                                 <div class="mb-3">
                                     <label class="form-label">Họ và tên</label>
-                                    <input type="text" name="full_name" class="form-control"
-                                        value="{{ old('full_name', $profile->full_name ?? '') }}">
-                                    @error('full_name')
+                                    <input type="text" name="name" class="form-control"
+                                        value="{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}">
+                                    @error('name')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -260,9 +280,9 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Số điện thoại</label>
-                                    <input type="text" name="phone" class="form-control"
-                                        value="{{ old('phone', $profile->phone ?? '') }}">
-                                    @error('phone')
+                                    <input type="text" name="phone_number" class="form-control"
+                                        value="{{ old('phone_number', $profile->phone_number ?? '') }}">
+                                    @error('phone_number')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -385,23 +405,25 @@
                         <div class="form-group mb-3">
                             <label for="school" class="form-label">Trường <span class="text-danger">*</span></label>
                             <input type="text" id="school" name="school" class="form-control"
-                                value="{{ old('school') }}">
+                                value="{{ old('school') }}" placeholder="Nhập tên trường học">
                         </div>
 
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="degree" class="form-label">Trình độ</label>
+                                <label for="degree" class="form-label">Trình độ <span
+                                        class="text-danger">*</span></label>
                                 <select id="degree" name="degree" class="form-select">
-                                    <option value="">Chọn</option>
+                                    <option value="">Chọn trình độ</option>
                                     <option value="dai-hoc">Đại học</option>
                                     <option value="cao-dang">Cao đẳng</option>
                                     <option value="thac-si">Thạc sĩ</option>
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="field" class="form-label">Ngành học</label>
+                                <label for="field" class="form-label">Ngành học <span
+                                        class="text-danger">*</span></label>
                                 <input type="text" id="field" name="field" class="form-control"
-                                    value="{{ old('field') }}">
+                                    value="{{ old('field') }}" placeholder="Nhập ngành học">
                             </div>
                         </div>
 
@@ -448,14 +470,15 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="position" class="form-label">Chức danh <span class="text-danger">*</span></label>
-                            <input type="text" id="position" name="position" class="form-control" placeholder="">
+                            <input type="text" id="position" name="position" class="form-control"
+                                placeholder="Nhập chức danh" value="{{ old('position') }}">
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="companyName" class="form-label">Tên công ty <span
                                     class="text-danger">*</span></label>
                             <input type="text" id="companyName" name="company_name" class="form-control"
-                                placeholder="">
+                                placeholder="Nhập tên công ty" value="{{ old('company_name') }}">
                         </div>
 
                         <div class="row mb-3">
@@ -552,7 +575,7 @@
                         <!-- Dòng nhập ngôn ngữ -->
                         <div class="d-flex gap-2 mb-3">
                             <select name="language" id="languageSelect" class="form-select">
-                                <option value="" disabled selected>Tìm ngôn ngữ</option>
+                                <option value="" disabled selected>Chọn ngôn ngữ</option>
                                 <option value="english">Tiếng Anh</option>
                                 <option value="french">Tiếng Pháp</option>
                                 <option value="german">Tiếng Đức</option>
@@ -598,7 +621,9 @@
                     <div class="modal-body">
                         {{-- Tên dự án --}}
                         <div class="mb-3">
-                            <input type="text" name="project_name" class="form-control" placeholder="Tên dự án *">
+                            <label for="projectName" class="form-label">Tên dự án <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" name="project_name" class="form-control" placeholder="Nhập tên dự án">
                         </div>
 
                         {{-- Ngày bắt đầu / kết thúc --}}
@@ -657,13 +682,17 @@
                     <div class="modal-body">
                         {{-- Tên chứng chỉ --}}
                         <div class="mb-3">
+                            <label for="certificateName" class="form-label">Tên chứng chỉ <span
+                                    class="text-danger">*</span></label>
                             <input type="text" name="certificate_name" class="form-control"
-                                placeholder="Tên chứng chỉ *">
+                                placeholder="Nhập tên chứng chỉ">
                         </div>
 
                         {{-- Tổ chức --}}
                         <div class="mb-3">
-                            <input type="text" name="organization" class="form-control" placeholder="Tổ chức *">
+                            <label for="organization" class="form-label">Tổ chức <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" name="organization" class="form-control" placeholder="Nhập tổ chức">
                         </div>
 
                         {{-- Thời gian --}}
@@ -717,12 +746,18 @@
                     <div class="modal-body">
                         {{-- Tên giải thưởng --}}
                         <div class="mb-3">
-                            <input type="text" name="award_name" class="form-control" placeholder="Tên giải thưởng*">
+                            <label for="awardName" class="form-label">Tên giải thưởng <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" name="award_name" class="form-control"
+                                placeholder="Nhập tên giải thưởng">
                         </div>
 
                         {{-- Tổ chức --}}
                         <div class="mb-3">
-                            <input type="text" name="organization" class="form-control" placeholder="Tổ chức *">
+                            <label for="organization" class="form-label">Tổ chức <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" name="organization" class="form-control"
+                                placeholder="Nhập tên tổ chức">
                         </div>
 
                         {{-- Thời gian --}}

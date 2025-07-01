@@ -1,4 +1,4 @@
-<header class="header-area transparent" style="background-color: #656565;">
+<header class="header-area transparent">
 
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
@@ -20,23 +20,8 @@
                             <ul class="main-menu nav">
                                 <li><a href="{{ route('home') }}"><span>Trang Chủ</span></a></li>
 
-                                        <img class="logo-main" src="{{ asset('client/assets/img/logo-light.webp') }}"
-                                            alt="Logo" />
-                                        <img class="logo-light" src="{{ asset('client/assets/img/logo-light.webp') }}"
-                                            alt="Logo" />
-                                        </a>
-                        </div>
-                    </div>
-
-                    <div class="header-align-center">
-                        <div class="header-navigation-area position-relative">
-                            <ul class="main-menu nav">
-                                <li><a href="index.html"><span>Home</span></a></li>
-                                <li class="has-submenu"><a href="index.html#/"><span>Find Jobs</span></a>
-                                    <ul class="submenu-nav">
-                                        <li><a href="job.html"><span>Jobs</span></a></li>
-                                        <li><a href="job-details.html"><span>Job Details</span></a></li>
-                                    </ul>
+                                <li class="has-submenu">
+                                    <a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a>
                                 </li>
 
                                 <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
@@ -55,7 +40,7 @@
                                         <li><a href="{{ route('blog') }}">Blog Grid</a></li>
                                         <li><a href="{{ route('blog-grid') }}">Blog Left Sidebar</a></li>
                                         <li><a href="{{ route('blog-right-sidebar') }}">Blog Right Sidebar</a></li>
-                                        <li><a href="{{ route('blog-details', ['id' => $blog->id]) }}">Chi Tiết Bài Viết</a></li>
+                                        <li><a href="{{ route('blog-details') }}">Chi Tiết Bài Viết</a></li>
                                     </ul>
                                 </li>
 
@@ -77,16 +62,17 @@
                     <div class="header-align-end">
                         <div class="header-action-area">
                             @guest
-                                <!-- Nếu chưa đăng nhập -->
                                 <a class="btn-registration" href="{{ route('showLoginForm') }}">
-                                    <span>+</span> Đăng nhập
+                                    Đăng Nhập
                                 </a>
                             @else
-                                {{-- 🔔 Chuông thông báo --}}
+                            <div class="row">
+                                <div class="col">
+                                    {{-- 🔔 Chuông thông báo --}}
                                 <div class="dropdown me-3">
-                                    <button class="btn btn-icon btn-notification position-relative" type="button"
+                                    <button class="btn btn-icon btn-notification position-relative " type="button"
                                         id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="icofont-notification fs-5"></i>
+                                        <i class="icofont-notification fs-5 text-white"></i>
                                         @if (auth()->user()->unreadNotifications->count())
                                             <span
                                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
@@ -108,34 +94,35 @@
                                             <hr class="dropdown-divider my-1">
                                         </li>
                                         @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                            <li>
+                                            <li data-id="{{ $noti->id }}">
                                                 <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
                                                     href="{{ $noti->data['link_url'] }}">
                                                     <div class="icon text-primary"><i class="icofont-bell fs-5"></i></div>
                                                     <div class="flex-grow-1">
                                                         <div class="fw-semibold">{{ $noti->data['message'] }}</div>
                                                         <div class="small text-muted">
-                                                            {{ $noti->created_at->diffForHumans() }}</div>
+                                                            {{ $noti->created_at->diffForHumans() }}
+                                                        </div>
                                                     </div>
                                                 </a>
                                             </li>
                                         @empty
-                                            <li>
+                                            <li id="noti-empty">
                                                 <div class="text-center text-muted px-3 py-3">
                                                     Không có thông báo mới
                                                 </div>
                                             </li>
                                         @endforelse
+
                                     </ul>
                                 </div>
-
-                                {{-- 👤 Menu người dùng --}}
+                                </div>
+                                <div class="col">
+                                     {{-- 👤 Menu người dùng --}}
                                 <div class="user-info dropdown">
                                     <a href="#" class="user-info-toggle d-flex align-items-center"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span class="user-avatar me-2">
-                                            <i class="icofont-user-alt-3"></i>
-                                        </span>
+                                        data-bs-toggle="dropdown">
+                                        <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
                                         <span class="user-role">{{ Auth::user()->role }}</span>
                                         <i class="icofont-caret-down ms-1"></i>
                                     </a>
@@ -145,6 +132,56 @@
                                             <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active text-primary' : '' }}"
                                                 href="{{ route('profile.dashboard') }}">
                                                 <i class="fa-solid fa-house me-2"></i> Tổng quan
+                                            </a>
+                                        </li>
+
+                                        {{-- Hồ sơ --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/show') ? 'active text-primary' : '' }}"
+                                                href="{{ route('profile.show') }}">
+                                                <i class="fa-solid fa-file-lines me-2"></i> Hồ sơ HireNow
+                                            </a>
+                                        </li>
+
+                                        {{-- Việc làm của tôi --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}
+                                                href="{{ route('profile.my-jobs') }}">
+                                                <i class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi
+                                            </a>
+                                        </li>
+
+                                        {{-- Admin --}}
+                                        @if (Auth::user()->role === 'admin')
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('admin.dashboard') }}">
+                                                    <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản trị
+                                                </a>
+                                            </li>
+                                        @endif
+
+                                        {{-- Nhà tuyển dụng --}}
+                                        @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('employer.dashboard') }}">
+                                                    <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà tuyển
+                                                    dụng
+                                                @elseif (Auth::user()->role === 'employer')
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('employer.details') }}">
+                                                    <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
+
+                                                </a>
+                                            </li>
+                                        @endif
+
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('profile.settings') }}">
+                                                <i class="fa-solid fa-gear me-2"></i> Cài đặt
                                             </a>
                                         </li>
 
@@ -198,16 +235,18 @@
                                             <hr class="dropdown-divider">
                                         </li>
 
-                                        {{-- Đăng xuất --}}
                                         <li>
-                                            <a class="dropdown-item text-danger d-flex align-items-center"
-                                                href="{{ route('logout') }}">
-                                                <i class="fa-solid fa-right-from-bracket me-2"></i> Đăng xuất
+                                            <a class="dropdown-item text-danger" href="{{ route('logout') }}">
+                                                <i class="icofont-logout me-1"></i> Đăng xuất
+
                                             </a>
                                         </li>
                                     </ul>
-
                                 </div>
+                                </div>
+                               
+                            </div>
+                                
                             @endguest
 
                             <button class="btn-menu" type="button" data-bs-toggle="offcanvas"
@@ -228,6 +267,7 @@
     @endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 </header>
 <<<<<<< HEAD
 =======
@@ -246,3 +286,52 @@
 
 </header>
 >>>>>>> a403dbe (profile cá nhân và danh sách đã ứng tuyển)
+=======
+
+    <script>
+        setInterval(() => {
+            fetch('/seeker/notifications/latest')
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById("noti-list");
+                    const count = document.getElementById("noti-count");
+
+                    if (!list) return;
+
+                    data.forEach(noti => {
+                        // Kiểm tra nếu thông báo chưa có trong danh sách thì thêm mới
+                        if (!list.querySelector(`li[data-id="${noti.id}"]`)) {
+                            const html = `
+                            <li data-id="${noti.id}">
+                                <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
+                                   href="${noti.link_url}">
+                                    <div class="icon text-primary">
+                                        <i class="icofont-bell fs-5"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold">${noti.message}</div>
+                                        <div class="small text-muted">${noti.time}</div>
+                                    </div>
+                                </a>
+                            </li>`;
+
+                            const empty = document.getElementById("noti-empty");
+                            if (empty) empty.remove(); // xoá nếu có dòng "Không có thông báo"
+
+                            // Thêm vào cuối danh sách
+                            list.insertAdjacentHTML("beforeend", html);
+                        }
+                    });
+
+                    // Cập nhật badge số lượng
+                    if (count) {
+                        count.innerText = data.length;
+                        count.classList.toggle("d-none", data.length === 0);
+                    }
+                });
+        }, 5000);
+    </script>
+
+
+</header>
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd

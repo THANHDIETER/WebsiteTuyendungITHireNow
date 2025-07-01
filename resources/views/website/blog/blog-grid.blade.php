@@ -59,7 +59,7 @@
             </div>
         </div>
         <!--== End Page Header Area Wrapper ==-->
-
+<style>
     .blog-card {
         background: #fff;
         border-radius: 12px;

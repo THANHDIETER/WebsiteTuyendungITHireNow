@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
+use App\Models\JobApplication;
+use App\Models\SeekerProfile;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -14,60 +18,57 @@ class ProfileController extends Controller
 {
     public function dashboard()
     {
-        $profile = Auth::user()->profile;
-        return view('website.profile.dashboard', compact('profile'));
+        $user = User::with('profile')->find(Auth::id());
+        return view('website.profile.dashboard', ['profile' => $user->profile]);
     }
 
     public function show()
     {
-        $profile = Auth::user()->profile;
-        return view('website.profile.profile', compact('profile'));
+        $user = User::with('profile')->find(Auth::id());
+        return view('website.profile.profile', ['profile' => $user->profile]);
     }
 
     public function settings()
     {
-        $profile = Auth::user()->profile;
-        return view('website.profile.settings', compact('profile'));
+        $user = User::with('profile')->find(Auth::id());
+        return view('website.profile.settings', ['profile' => $user->profile]);
     }
 
     public function update(Request $request)
     {
         $data = $request->validate([
-            'full_name'      => 'required|string|max:255',
-            'email'          => 'required|email|max:255',
-            'phone'          => 'required|string|max:20',
-            'date_of_birth'  => 'required|date',
-            'gender'         => 'required|in:nam,nữ,khác',
-            'city'           => 'required|string|max:100',
-            'address'        => 'required|string|max:255',
-            'avatar'         => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'name'     => 'required|string|max:255',
+            'email'         => 'required|email|max:255',
+            'phone_number'         => 'required|string|max:20',
+            'date_of_birth' => 'required|date',
+            'gender'        => 'required|in:nam,nữ,khác',
+            'city'          => 'required|string|max:100',
+            'address'       => 'required|string|max:255',
+            'avatar'        => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $userId = Auth::id();
 
-        // Avatar xử lý file
+        // Xử lý avatar nếu có upload mới
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $path = $file->store('avatars', 'public');
             $data['avatar'] = Storage::url($path);
         } else {
-            $existing = DB::table('seeker_profiles')->where('user_id', $userId)->first();
-            $data['avatar'] = $existing->avatar ?? null;
+            // Giữ avatar cũ nếu không có file mới
+            $data['avatar'] = DB::table('seeker_profiles')
+                ->where('user_id', $userId)
+                ->value('avatar');
         }
 
-        // Update hoặc insert
-        $exists = DB::table('seeker_profiles')->where('user_id', $userId)->exists();
-
-        if ($exists) {
-            DB::table('seeker_profiles')->where('user_id', $userId)->update($data);
-        } else {
-            $data['user_id'] = $userId;
-            DB::table('seeker_profiles')->insert($data);
-        }
+        // Cập nhật hoặc chèn mới
+        DB::table('seeker_profiles')->updateOrInsert(
+            ['user_id' => $userId],
+            $data
+        );
 
         return back()->with('success', 'Cập nhật hồ sơ thành công!');
     }
-
 
     public function changePassword(Request $request)
     {
@@ -94,59 +95,48 @@ class ProfileController extends Controller
     }
 
     public function myJobs()
-    {
-        $user = Auth::user();
-        $profile = $user->profile;
+{
+    $user = Auth::user();
+    $profile = $user->profile;
 
-        // Query builder: lấy các job đã ứng tuyển kèm thông tin công ty
-        $appliedJobs = DB::table('job_applications')
-            ->join('jobs', 'job_applications.job_id', '=', 'jobs.id')
-            ->leftJoin('companies', 'jobs.company_id', '=', 'companies.id')
-            ->where('job_applications.user_id', $user->id)
-            ->select(
-                'jobs.id as job_id',
-                'jobs.title as job_title',
-                'jobs.location',
-                'companies.name as company_name',
-                'companies.logo_url as company_logo',
-                'job_applications.created_at as applied_at'
-            )
-            ->orderByDesc('applied_at')
-            ->get();
+    // Query builder: lấy các job đã ứng tuyển kèm thông tin công ty và địa điểm
+    $appliedJobs = DB::table('job_applications')
+        ->join('jobs', 'job_applications.job_id', '=', 'jobs.id')
+        ->leftJoin('companies', 'jobs.company_id', '=', 'companies.id')
+        ->leftJoin('locations', 'jobs.location_id', '=', 'locations.id') // thêm join location
+        ->where('job_applications.user_id', $user->id)
+        ->select(
+            'jobs.id as job_id',
+            'jobs.title as job_title',
+            'jobs.slug as slug',
+            'jobs.thumbnail as job_thumbnail',
+            'locations.name as location_name', // thay thế cho jobs.location
+            'companies.name as company_name',
+            'companies.logo_url as company_logo',
+            'job_applications.created_at as applied_at'
+        )
+        ->orderByDesc('applied_at')
+        ->get();
 
-        return view('website.profile.myJobs', compact('profile', 'appliedJobs'));
-    }
+    return view('website.profile.myJobs', compact('profile', 'appliedJobs'));
+}
+
 
     public function updateAboutMe(Request $request)
     {
         $request->validate([
             'about_me' => 'nullable|string|max:2500',
-        ], [
-            'about_me.max' => 'Giới thiệu bản thân không được vượt quá 2500 ký tự.',
         ]);
 
         $userId = Auth::id();
 
-        // Kiểm tra xem user đã có profile chưa
-        $exists = DB::table('seeker_profiles')->where('user_id', $userId)->exists();
-
-        if ($exists) {
-            // Cập nhật
-            DB::table('seeker_profiles')
-                ->where('user_id', $userId)
-                ->update([
-                    'about_me' => $request->about_me,
-                    'updated_at' => now(),
-                ]);
-        } else {
-            // Tạo mới
-            DB::table('seeker_profiles')->insert([
-                'user_id'   => $userId,
-                'about_me'  => $request->about_me,
-                'created_at' => now(),
+        SeekerProfile::updateOrCreate(
+            ['user_id' => $userId],
+            [
+                'about_me' => $request->about_me,
                 'updated_at' => now(),
-            ]);
-        }
+            ]
+        );
 
         return back()->with('success', 'Cập nhật giới thiệu bản thân thành công!');
     }

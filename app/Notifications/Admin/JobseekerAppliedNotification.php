@@ -23,7 +23,7 @@ class JobseekerAppliedNotification extends Notification implements ShouldBroadca
     public function toArray($notifiable): array
     {
         return [
-            'message' => "Ứng viên <strong>{$this->jobseeker->name}</strong> đã ứng tuyển vào vị trí <strong>{$this->job->title}</strong>.",
+            'message' => "Ứng viên {$this->jobseeker->name} đã ứng tuyển vào vị trí {$this->job->title}.",
             'link_url' => route('admin.notifications.index', ['job_id' => $this->job->id]),
         ];
     }

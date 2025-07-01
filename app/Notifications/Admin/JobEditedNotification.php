@@ -12,27 +12,37 @@ class JobEditedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
-    public Job $job;
 
-    public function __construct(Job $job)
+    public $job;
+
+    public function __construct($job)
+
     {
         $this->job = $job;
     }
 
-    public function via($notifiable): array
+    public function via($notifiable)
+
     {
         return ['database', 'broadcast'];
     }
 
-    public function toArray($notifiable): array
+    /**
+     * Store notification in the database.
+     */
+    public function toArray($notifiable)
     {
         return [
-            'message' => "Tin tuyển dụng <strong>{$this->job->title}</strong> vừa được <strong>{$this->job->company->name}</strong> cập nhật. Cần duyệt lại.",
-            'link_url' => route('admin.jobs.show', $this->job->id),
+            'message' => "Tin tuyển dụng '{$this->job->title}' đã được nhà tuyển dụng chỉnh sửa.",
+            'link_url' => route('admin.jobs.show', $this->job->id), // tuỳ chỉnh route admin
         ];
     }
 
-    public function toBroadcast($notifiable): BroadcastMessage
+    /**
+     * Broadcast notification for realtime.
+     */
+    public function toBroadcast($notifiable)
+
     {
         return new BroadcastMessage($this->toArray($notifiable));
     }

@@ -11,8 +11,10 @@ class Skill extends Model
 
     protected $fillable = [
         'user_id',
+        'slug',
         'group_name',
-        'skill_list',
+        'skill_name',
+        'is_active',
     ];
 
     protected $casts = [
@@ -33,6 +35,7 @@ class Skill extends Model
     public function jobs()
     {
         return $this->belongsToMany(Job::class, 'job_skill')
-            ->withPivot('priority_level', 'required');
+                    ->withPivot('priority_level', 'required')
+                    ->withTimestamps();
     }
 }

@@ -4,8 +4,7 @@
     <div class="container mt-2">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="mb-0">Danh sách người dùng</h2>
-            <a href="#" class="btn btn-primary disabled"
-                style="pointer-events: none; opacity: 0.6;">+ Thêm người dùng</a>
+            <a href="#" class="btn btn-primary disabled" style="pointer-events: none; opacity: 0.6;">+ Thêm người dùng</a>
         </div>
 
         <table class="table table-bordered table-hover">
@@ -28,16 +27,10 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone_number }}</td>
                         <td>
-                            <span class="badge bg-info text-dark">{{ ucfirst($user->role) }}</span>
+                            <span>{!! ucfirst($user->role_badge) !!}</span>
                         </td>
                         <td>
-                            @if ($user->status === 'active')
-                                <span class="badge bg-success">Đang hoạt động</span>
-                            @elseif ($user->status === 'inactive')
-                                <span class="badge bg-secondary">Chưa kích hoạt</span>
-                            @else
-                                <span class="badge bg-danger">Đã chặn</span>
-                            @endif
+                            <span>{!! $user->status_badge !!}</span>
                         </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-outline-primary btn-view-user"
@@ -73,7 +66,9 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-light">
-                    <h5 class="modal-title" id="userDetailModalLabel">📄 Chi tiết người dùng</h5>
+                    <h5 class="modal-title" id="userDetailModalLabel">
+                        Chi tiết người dùng <small class="text-muted">#<span id="userDetailId">--</span></small>
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 </div>
                 <div class="modal-body" id="userDetailContent">
@@ -88,7 +83,9 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-light">
-                    <h5 class="modal-title" id="userEditModalLabel">✏️ Sửa người dùng</h5>
+                    <h5 class="modal-title" id="userDetailModalLabel">
+                        Sửa người dùng<small class="text-muted">#<span id="userDetailIds">--</span></small>
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 </div>
                 <div class="modal-body" id="userEditContent">
@@ -155,6 +152,7 @@
                         .then(res => res.text())
                         .then(html => {
                             contentEl.innerHTML = html;
+                            document.getElementById('userDetailId').textContent = userId;
                             modal.show();
                         })
                         .catch(() => {
@@ -179,6 +177,7 @@
                         .then(res => res.text())
                         .then(html => {
                             editContentEl.innerHTML = html;
+                            document.getElementById('userDetailIds').textContent = userId;
                             editModal.show();
                         })
                         .catch(() => {
