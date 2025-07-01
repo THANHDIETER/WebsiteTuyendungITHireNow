@@ -23,6 +23,7 @@ use Database\Seeders\EducationsSeeder;
 use Database\Seeders\ExperiencesSeeder;
 use Database\Seeders\JobLanguageSeeder;
 use Database\Seeders\ApplicationsSeeder;
+use Database\Seeders\BankAccountsSeeder;
 use Database\Seeders\RemotePolicySeeder;
 use Database\Seeders\JobExperienceSeeder;
 use Database\Seeders\NotificationsSeeder;
@@ -68,6 +69,7 @@ class DatabaseSeeder extends Seeder
             job_applicationsSeeder::class,
             SettingSeeder::class,
             JobTypesSeeder::class,
+            BankAccountsSeeder::class,
         ]);
     }
 }

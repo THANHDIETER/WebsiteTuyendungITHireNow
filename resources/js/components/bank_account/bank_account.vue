@@ -12,10 +12,14 @@
             </h5>
 
             <div class="col-md-6">
-              <label class="form-label">Ngân hàng</label>
-              <input v-model="form.bank" type="text" class="form-control form-control-lg shadow-sm"
-                placeholder="Tên ngân hàng VD: Vietcombank" />
-            </div>
+            <label class="form-label">Ngân hàng</label>
+            <select v-model="form.bank" class="form-select form-select-lg shadow-sm">
+              <option disabled value="">Chọn ngân hàng</option>
+              <option value="Momo">Momo</option>
+              <option value="MBbank">MB Bank</option>
+              <option value="ACB">ACB</option>
+            </select>
+          </div>
             <div class="col-md-6">
               <label class="form-label">Chi nhánh</label>
               <input v-model="form.branch" type="text" class="form-control form-control-lg shadow-sm"

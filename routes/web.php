@@ -30,7 +30,6 @@ Route::get('/docs', fn() => view('docs.index'));
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 
-
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
 
