@@ -122,7 +122,6 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-
                     <span class="badge rounded-pill badge-secondary" id="noti-count">
                         {{ auth()->user()->unreadNotifications->count() }}
                     </span>
@@ -586,4 +585,3 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
-

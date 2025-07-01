@@ -112,7 +112,10 @@
     </tr>
 @endforelse
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
         {{-- Pagination --}}
         @if ($jobs->hasPages())
             <div class="row mt-4 align-items-center">

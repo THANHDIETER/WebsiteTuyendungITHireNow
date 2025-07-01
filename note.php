@@ -1,3 +1,71 @@
+<<<<<<< HEAD
+<!--
+composer install
+composer require laravel/sanctum
+composer dump-autoload
+php artisan key:generate
+<<<<<<<< HEAD:note.php
+php artisan migrate
+========
+
+php artisan migrate:fresh --seed
+>>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd:note.txt
+-->
+<!-- cài gg auth2 --
+composer require league/oauth2-client
+composer require league/oauth2-google -->
+
+
+<!-- 
+ bootstrap
+npm install bootstrap @popperjs/core
+
+ntt-07/06/2025
+npm install jspdf html2canvas
+composer require barryvdh/laravel-dompdf
+
+ -->
+ <!-- npm install
+chạy tailwindcs
+ npm install -D tailwindcss postcss autoprefixer
+
+
+php artisan migrate:fresh --seed -->
+
+<<<<<<<< HEAD:note.php
+========
+1. Cài React
+
+npm install react react-dom
+npm install --save-dev @vitejs/plugin-react
+bottrapAdd commentMore actions
+npm install bootstrap
+
+php artisan vendor:publish --tag=laravel-pagination
+
+composer require pusher/pusher-php-server
+
+bottrap
+npm install bootstrap
+php artisan storage:link
+
+php artisan bank:sync
+api check đơn hàng
+http://127.0.0.1:8000/api/check-pending-payments?token=ABC123
+
+api check log bank
+http://127.0.0.1:8000/api/sync-bank?token=ABC123
+
+check ip my 
+https://www.whatismyip.com/
+search -> thêm ip my 
+Remote Database Access
+
+
+Cài vite 
+npm install --save-dev vite
+>>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd:note.txt
+=======
 <template>
     <div class="p-4">
         <h1 class="mb-4 fw-bold fs-2">Quản lý đơn ứng tuyển</h1>
@@ -519,3 +587,4 @@
     // Fetch ban đầu
     onMounted(() => fetchList())
 </script>
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
