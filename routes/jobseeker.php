@@ -5,7 +5,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\JobSeeker\ResumeController;
- use App\Http\Controllers\JobSearchController;
+use App\Http\Controllers\JobSearchController;
 // 🔐 Route dành riêng cho JOB SEEKER
 
 
@@ -19,13 +19,15 @@ Route::middleware(['auth:sanctum', 'job_seeker'])
         // Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
         // Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     });
-    // profile routes
+// profile routes
+// profile routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('profile-dashboard', [ProfileController::class, 'dashboard'])->name('profile.dashboard');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
     Route::get('profile/my-jobs', [ProfileController::class, 'myJobs'])->name('profile.my-jobs');
+    Route::get('profile/my-jobs/{job_slug}', [ProfileController::class, 'viewJob'])->name('profile.view-job');
     Route::get('/settings', [ProfileController::class, 'settings'])->name('profile.settings');
     Route::post('/profile/about-me/update', [ProfileController::class, 'updateAboutMe'])
         ->name('profile.about-me.update');

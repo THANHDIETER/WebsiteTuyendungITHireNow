@@ -1,12 +1,23 @@
 @extends('website.layouts.master')
 
 @section('content')
+    <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
+        data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
+        <div class="col-12 col-lg-8">
+            <div class="slider-content">
+                <h1 class="title text-white">👋 Xin chào:
+                    {{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h1>
+            </div>
+        </div>
+    </div>
+
     <div class="container mt-4">
         <div class="row">
             {{-- Sidebar trái --}}
             <div class="col-md-3 mb-4">
                 <div class="bg-white shadow-sm rounded p-4">
-                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào, {{ $profile->full_name ?? 'Chưa cập nhật' }}</h6>
+                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,
+                        {{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
                     <hr>
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item mb-2">
@@ -51,9 +62,8 @@
 
                                 {{-- Ảnh đại diện công việc --}}
                                 <div class="flex-shrink-0">
-                                    <img src="{{ asset('storage/' . $job->job_thumbnail) }}"
-                                        alt="{{ $job->job_title }}" class="rounded" width="200" height="200"
-                                        style="object-fit: cover;">
+                                    <img src="{{ asset('storage/' . $job->job_thumbnail) }}" alt="{{ $job->job_title }}"
+                                        class="rounded" width="200" height="200" style="object-fit: cover;">
                                 </div>
 
                                 {{-- Thông tin công việc --}}
@@ -71,21 +81,23 @@
 
                                 {{-- Nút chi tiết --}}
                                 <div class="text-md-end w-100 w-md-auto">
-                                   <a href="{{ route('jobs.show', $job->slug) }}" class="btn btn-sm btn-outline-primary">
-                                                    Xem chi tiết
-                                                </a>
+                                    <a href="{{ route('profile.view-job', $job->slug) }}"
+                                        class="btn btn-sm btn-outline-primary">
+                                        Xem chi tiết
+                                    </a>
 
                                 </div>
                             </div>
                         </div>
-
-
                     @empty
                         <div class="text-center text-muted py-5">
                             <i class="fa-solid fa-circle-info fa-2x mb-3"></i>
                             <p>Bạn chưa ứng tuyển công việc nào.</p>
                         </div>
                     @endforelse
+                    <div class="mt-4 d-flex justify-content-center">
+                        {{ $appliedJobs->links('pagination::bootstrap-5') }}
+                    </div>
                 </div>
             </div>
         </div>

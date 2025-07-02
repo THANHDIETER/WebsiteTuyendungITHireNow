@@ -1,6 +1,16 @@
 @extends('website.layouts.master')
 
 @section('content')
+    <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
+        data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
+        <div class="col-12 col-lg-8">
+            <div class="slider-content">
+                <h1 class="title text-white">👋 Xin chào:
+                    {{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h1>
+            </div>
+        </div>
+    </div>
+
     <div class="container my-5">
         <div class="row">
             <div class="col-md-8">
@@ -8,7 +18,8 @@
                     {{-- Ảnh và thông tin công ty --}}
                     <div class="d-flex align-items-center mb-4">
                         <img src="{{ !empty($appliedJob->company?->logo_url) ? asset('storage/' . $appliedJob->company->logo_url) : asset('images/default-logo.png') }}"
-                            alt="Logo công ty" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
+                            alt="Logo công ty" width="80" height="80" class="rounded me-3"
+                            style="object-fit: cover;">
                         <div>
                             <h3 class="mb-1">{{ $appliedJob->title }}</h3>
                             <p class="mb-0 text-muted">{{ $appliedJob->company?->name ?? 'Không rõ công ty' }}</p>
