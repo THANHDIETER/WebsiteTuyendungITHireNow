@@ -22,9 +22,9 @@ Route::get('/user', function (Request $request) {
 
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login',    [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['auth:sanctum','admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('payments/{id}/pdf', [PaymentController::class, 'downloadPdf']);
     Route::apiResource('seeker-profiles', SeekerProfileController::class);
     Route::apiResource('payments', PaymentController::class);
@@ -32,24 +32,24 @@ Route::middleware(['auth:sanctum','admin'])->group(function () {
     Route::get('/bank-logs', [BankLogController::class, 'index']);
 });
 
-Route::middleware(['auth:sanctum','employer'])->group(function () {
-   Route::apiResource('job-applications', JobApplicationController::class);
+Route::middleware(['auth:sanctum', 'employer'])->group(function () {
+    Route::apiResource('job-applications', JobApplicationController::class);
 });
 
 Route::prefix('admin/stats')
-->middleware([])
-->group(function () {
-    Route::get('/users', [DashboardController::class, 'userStats']);
-    Route::get('/jobs', [DashboardController::class, 'jobStats']);
-    Route::get('/applications', [DashboardController::class, 'applicationStats']);
+    ->middleware([])
+    ->group(function () {
+        Route::get('/users', [DashboardController::class, 'userStats']);
+        Route::get('/jobs', [DashboardController::class, 'jobStats']);
+        Route::get('/applications', [DashboardController::class, 'applicationStats']);
 
-});
+    });
 
 Route::prefix('employer')->group(function () {
     Route::get('/jobs', [EmployerJobApiController::class, 'index']);
 });
-Route::middleware(['auth:sanctum','employer'])->group(function () {
-   Route::apiResource('job-applications', JobApplicationController::class);
+Route::middleware(['auth:sanctum', 'employer'])->group(function () {
+    Route::apiResource('job-applications', JobApplicationController::class);
 });
 Route::get('/check-pending-payments', [ApiPaymentController::class, 'handlePending']);
 Route::get('/sync-bank', [BankSyncController::class, 'sync']);

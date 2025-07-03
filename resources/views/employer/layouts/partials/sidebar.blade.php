@@ -55,6 +55,16 @@
         transition: background .2s, color .2s;
     }
 
+     .sidebar-main-title {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 16px;
+        color: #495057;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom: 1px solid #e9ecef;
+    }
+
     .page-sidebar.dark-theme,
     .dark-theme .page-sidebar {
         background: #222831;

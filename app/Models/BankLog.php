@@ -16,6 +16,8 @@ class BankLog extends Model
         'trans_time',
         'type',
         'description',
+        'is_used',
+        'matched_payment_id',
     ];
 
     protected $casts = [

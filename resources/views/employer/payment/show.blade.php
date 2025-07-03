@@ -3,7 +3,10 @@
 @section('content')
     @php
         use Carbon\Carbon;
-        $expiresAt = Carbon::parse($payment->created_at)->addMinutes(60);
+        use App\Models\Setting;
+
+        $timeoutMinutes = (int) Setting::getValue('payment_timeout_minutes', 60);
+        $expiresAt = Carbon::parse($payment->created_at)->addMinutes($timeoutMinutes);
     @endphp
 
     <div class="container py-4">
@@ -109,10 +112,10 @@
                 el.classList.remove('text-warning');
                 el.classList.add('text-danger');
                 expiredNotified = true;
-
+                const messages = `Hóa đơn của bạn đã hết hạn sau ${expiresAt} phút. Vui lòng tạo hóa đơn mới.`;
                 showAlertModal({
                     title: 'Hết thời gian thanh toán',
-                    message: 'Hóa đơn của bạn đã hết hạn sau 60 phút. Vui lòng tạo hóa đơn mới.',
+                    message: messages,
                     status: 'warning',
                     type: 'alert',
                 });

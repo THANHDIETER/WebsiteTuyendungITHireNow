@@ -73,7 +73,7 @@ class User extends Authenticatable
 
     public function profile()
     {
-        return $this->hasOne(SeekerProfile::class);
+        return $this->hasOne(SeekerProfile::class, 'user_id', 'id');
     }
 
     public function appliedJobs()
