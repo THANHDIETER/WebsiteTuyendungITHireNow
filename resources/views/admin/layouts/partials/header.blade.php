@@ -52,8 +52,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
@@ -127,7 +127,7 @@
                         </svg>
                     </a>
                     <span class="badge rounded-pill badge-secondary" id="noti-count">
-                        {{ auth()->user()->unreadNotifications->count() }}
+                        0
                     </span>
 
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
@@ -138,44 +138,38 @@
                             </a>
                         </h5>
                         <ul class="activity-update" id="noti-list">
+                            <li class="d-flex justify-content-center p-2 text-muted" id="noti-loading">
+                                Đang tải thông báo...
+                            </li>
 
-
-                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                <li class="d-flex align-items-center b-l-primary">
-                                    <div class="flex-grow-1">
-                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
-                                        <a href="{{ $noti->data['link_url'] }}">
-                                            <h5>{{ $noti->data['message'] }}</h5>
-                                        </a>
-                                        <h6>{{ config('app.name') }}</h6>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <img class="b-r-15 img-40"
-                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
-                                    </div>
-                                </li>
-                            @empty
-                                <li class="d-flex justify-content-center p-2 text-muted">
-                                    Không có thông báo mới
-                                </li>
-                            @endforelse
-
-                            <li class="mt-3 d-flex justify-content-center">
+                            <li class="mt-3 d-flex justify-content-center" id="noti-footer">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">All
-                                        Notification</a>
+                                    <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">
+                                        All Notification
+                                    </a>
                                 </div>
                             </li>
-                            <script>
-                                setInterval(() => {
-                                    fetch('{{ route("admin.notifications.latest") }}')
-                                        .then(res => res.json())
-                                        .then(notis => {
-                                            const list = document.getElementById('noti-list');
+                        </ul>
+                    </div>
+                </li>
 
-                                            notis.forEach(noti => {
-                                                if (!list.querySelector(`[data-id="${noti.id}"]`)) {
-                                                    const item = `
+                <script>
+                    function loadNotifications() {
+                        fetch('{{ route('admin.notifications.latest') }}')
+                            .then(res => res.json())
+                            .then(notis => {
+                                const list = document.getElementById('noti-list');
+                                const footer = document.getElementById('noti-footer');
+                                list.innerHTML = ''; // Clear hết
+                                if (notis.length === 0) {
+                                    list.insertAdjacentHTML('afterbegin', `
+                        <li class="d-flex justify-content-center p-2 text-muted">
+                            Không có thông báo mới
+                        </li>
+                    `);
+                                } else {
+                                    notis.forEach(noti => {
+                                        const item = `
                             <li class="d-flex align-items-center b-l-primary" data-id="${noti.id}">
                                 <div class="flex-grow-1">
                                     <span>${noti.time}</span>
@@ -189,23 +183,29 @@
                                 </div>
                             </li>
                         `;
-                                                    list.insertAdjacentHTML('afterbegin', item);
-                                                }
-                                            });
+                                        list.insertAdjacentHTML('beforeend', item);
+                                    });
+                                }
 
-                                            // Cập nhật badge
-                                            const badge = document.getElementById('noti-count');
-                                            if (badge) {
-                                                badge.innerText = notis.length;
-                                                badge.classList.toggle('d-none', notis.length === 0);
-                                            }
-                                        });
-                                }, 5000);
-                            </script>
+                                // Thêm lại footer
+                                if (footer) {
+                                    list.appendChild(footer);
+                                }
 
-                        </ul>
-                    </div>
-                </li>
+                                // Cập nhật badge
+                                const badge = document.getElementById('noti-count');
+                                if (badge) {
+                                    badge.innerText = notis.length;
+                                    badge.classList.toggle('d-none', notis.length === 0);
+                                }
+                            });
+                    }
+
+                    // Gọi lần đầu & đặt interval
+                    loadNotifications();
+                    setInterval(loadNotifications, 5000);
+                </script>
+
                 <!-- Bookmark menu-->
                 <li class="custom-dropdown"><a href="javascript:void(0)">
                         <!-- Icon Star -->
