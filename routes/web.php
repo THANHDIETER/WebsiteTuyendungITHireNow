@@ -7,18 +7,13 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
-use App\Http\Controllers\BlogController;
-
-use App\Http\Controllers\Website\EmployerResourceController;
-
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
 
-// Auth Routes
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
 Route::get('/showLoginForm', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
@@ -30,6 +25,9 @@ Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.r
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/docs', fn() => view('docs.index'));
+
+Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 
 // Static Pages
@@ -69,17 +67,23 @@ Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
 })->name('chi-tiet-ung-vien');
 
+Route::get('/blog', function () {
 
     return view('website.blog.blog');
 })->name('blog');
 
-Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+Route::get('/blog-details', function () {
+    return view('website.blog.blog-details');
+})->name('blog-details');
 
-Route::get('/blog-details/{id}', [BlogController::class, 'show'])->name('blog-details');
+Route::get('/blog-grid', function () {
 
     return view('website.blog.blog-grid');
 })->name('blog-grid');
 
+Route::get('/blog-right-sidebar', function () {
+    return view('website.blog.blog-right-sidebar');
+})->name('blog-right-sidebar');
 
 Route::get('/contact', function () {
     return view('website.pages.contact');
@@ -96,7 +100,7 @@ Route::get('/about-us', function () {
 
 Route::get('/login', function () {
     return view('website.login-register.login');
-})->name('login');
+});
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
