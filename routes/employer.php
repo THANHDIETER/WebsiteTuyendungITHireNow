@@ -11,6 +11,16 @@ use App\Http\Controllers\Employers\JobApplicationController;
 use App\Http\Controllers\Employers\CompanyController;
 
 
+// Route::prefix('employer')
+//     // ->middleware(['auth:sanctum', 'employer'])
+//     // Đảm bảo người dùng đăng nhập và có quyền employer
+//     ->name('employer.')
+//     ->group(function () {
+
+//         // Trang dashboard
+//         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+//     });
+
 
 
 Route::middleware(['auth:sanctum', 'employer'])->group(function () {
@@ -30,14 +40,14 @@ Route::middleware(['auth:sanctum', 'employer'])
 
         Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
 
-        // Form tạo mới tin tuyển dụng
-        Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
+    // Form tạo mới tin tuyển dụng
+    Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
 
-        // Lưu tin tuyển dụng
-        Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
+    // Lưu tin tuyển dụng
+    Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
 
-        // Xem chi tiết tin đã đăng
-        Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
+    // Xem chi tiết tin đã đăng
+    Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
 
 
         // (Tuỳ chọn) Cập nhật hoặc xoá tin

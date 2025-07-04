@@ -1,3 +1,6 @@
+
+
+
 <aside class="off-canvas-wrapper offcanvas offcanvas-start" tabindex="-1" id="AsideOffcanvasMenu"
     aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
@@ -30,7 +33,7 @@
                         <li><a href="{{ route('blog') }}">Lưới tin tức</a></li>
                         <li><a href="{{ route('blog-grid') }}">Blog (sidebar trái)</a></li>
                         <li><a href="{{ route('blog-right-sidebar') }}">Blog (sidebar phải)</a></li>
-                        <li><a href="{{ route('blog-details') }}">Chi tiết bài viết</a></li>
+                        <li><a href="{{ route('blog-details', ['id' => $blog->id]) }}">Chi tiết bài viết</a></li>
                     </ul>
                 </li>
                 <li><a href="index.html#">Trang khác</a>

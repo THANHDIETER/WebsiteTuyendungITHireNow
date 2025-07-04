@@ -118,7 +118,10 @@
 
                     </a>
                 </li>
+<<<<<<< HEAD
+=======
 
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
                 <!-- Notification menu -->
                 <li class="custom-dropdown">
                     <a href="javascript:void(0)" id="notification-toggle">
@@ -131,7 +134,6 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-
                     <span class="badge rounded-pill badge-secondary" id="noti-count">
                         {{ auth()->user()->unreadNotifications->count() }}
                     </span>
@@ -647,4 +649,7 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
+<<<<<<< HEAD
+=======
 
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
