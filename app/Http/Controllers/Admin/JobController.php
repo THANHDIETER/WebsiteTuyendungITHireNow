@@ -48,8 +48,8 @@ class JobController extends Controller
         'language',
         'remotePolicy',
         'location',
-        
-        
+
+
     ])->find($id);
 
     if (!$job) {
@@ -65,7 +65,7 @@ class JobController extends Controller
 
     public function approve(Request $request, $id)
     {
-        // kiểm tra xem job có tồn tại không 
+        // kiểm tra xem job có tồn tại không
         $job = Job::find($id);
 
         if (!$job) {

@@ -58,8 +58,10 @@
                 @forelse($jobs as $job)
 <div class="col-md-6 col-lg-4 mb-4">
     <div class="job-card rounded-3 p-3 h-100 position-relative animate__animated animate__fadeInUp {{ $job->is_featured ? 'job-featured-border' : '' }}"
-        style="min-height: 380px; background: linear-gradient(135deg, #e3f2fd 0%, #f1f8e9 100%); border: 1px solid {{ $job->is_featured ? '#ff0000' : '#dee2e6' }}; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease; overflow: hidden;">
-
+        style="min-height: 380px; background: linear-gradient(135deg, #e3f2fd 0%, #f1f8e9 100%); border: 1px solid {{ $job->is_featured ? '#ff0000' : '#dee2e6' }}; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease; overflow: visible;">
+        @if($job->is_featured)
+            <span class="badge-hot-ithirenow position-absolute" style="z-index:10; left: -18px; top: -18px;">HOT</span>
+        @endif
         {{-- Ảnh đại diện của công việc --}}
         <div class="job-thumbnail position-relative mb-3">
             <a href="{{ route('jobs.show', $job->slug) }}">
@@ -146,36 +148,46 @@
     <style>
         .job-card {
             position: relative;
-            overflow: hidden;
+            overflow: visible;
+            transition: transform 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
         }
-
         .job-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
-
         .hover-scale {
             transition: all 0.3s ease;
         }
-
         .hover-scale:hover {
             transform: scale(1.05);
         }
-
-        .job-featured-border {
-            border: 2px solid #ff0000 !important;
+        .badge-hot-ithirenow {
+            background: #ff2d2d;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.05em;
+            padding: 0.55em 1.3em;
+            border-radius: 0.7em 0.7em 0.7em 0.7em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            transform: rotate(-18deg);
+            left: -18px;
+            top: -18px;
+            position: absolute;
+            letter-spacing: 1px;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(.4,2,.6,1);
         }
-
+        .job-card:hover .badge-hot-ithirenow {
+            transform: scale(1.05) rotate(-18deg) translateY(-5px);
+        }
         @media (max-width: 768px) {
             .job-card {
                 min-height: 300px;
                 margin-bottom: 1.5rem;
             }
-
             .salary-info h5 {
                 font-size: 1.1rem;
             }
-
             .btn-primary {
                 padding: 0.5rem 1rem;
             }
