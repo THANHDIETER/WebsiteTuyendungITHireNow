@@ -11,6 +11,8 @@ use App\Http\Controllers\JobApplicationController;
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
+require __DIR__.'/notification.php';
+
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
@@ -110,40 +112,3 @@ Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->na
 
 
 
-Route::get('/admin/noti/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans()
-        ];
-    }));
-})->name('admin.notifications.latest');
-Route::get('/employer/noti/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans()
-        ];
-    }));
-})->name('employer.notifications.latest');
-
-Route::get('/seeker/notifications/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans(),
-        ];
-    }));
-})->middleware('auth');

@@ -73,14 +73,13 @@
                                             <button class="btn btn-icon btn-notification position-relative" type="button"
                                                 id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="icofont-notification fs-5 text-white" id="bell-icon"></i>
-                                                @if (auth()->user()->unreadNotifications->count())
-                                                    <span
-                                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                                        id="noti-count">
-                                                        {{ auth()->user()->unreadNotifications->count() }}
-                                                    </span>
-                                                @endif
+                                                <span
+                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none"
+                                                    id="noti-count">
+                                                    0
+                                                </span>
                                             </button>
+
                                             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3"
                                                 aria-labelledby="notificationDropdown"
                                                 style="min-width: 320px; max-height: 400px; overflow-y: auto;"
@@ -94,30 +93,15 @@
                                                 <li>
                                                     <hr class="dropdown-divider my-1">
                                                 </li>
-
-                                                @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                                    <li data-id="{{ $noti->id }}">
-                                                        <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
-                                                            href="{{ $noti->data['link_url'] }}">
-                                                            <div class="icon text-primary"><i class="icofont-bell fs-5"></i>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <div class="fw-semibold">{{ $noti->data['message'] }}</div>
-                                                                <div class="small text-muted">
-                                                                    {{ $noti->created_at->diffForHumans() }}</div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                @empty
-                                                    <li id="noti-empty">
-                                                        <div class="text-center text-muted px-3 py-3">
-                                                            Không có thông báo mới
-                                                        </div>
-                                                    </li>
-                                                @endforelse
+                                                <li id="noti-empty">
+                                                    <div class="text-center text-muted px-3 py-3">
+                                                        Không có thông báo mới
+                                                    </div>
+                                                </li>
                                             </ul>
                                         </div>
 
+                                        {{-- Polling script --}}
                                         <script>
                                             setInterval(() => {
                                                 fetch('/seeker/notifications/latest')
@@ -127,20 +111,22 @@
                                                         const badge = document.getElementById("noti-count");
                                                         const bell = document.getElementById("bell-icon");
 
+                                                        if (!list || !badge || !bell) return;
+
                                                         let added = 0;
 
                                                         data.forEach(noti => {
                                                             if (!list.querySelector(`li[data-id="${noti.id}"]`)) {
                                                                 const html = `
-                        <li data-id="${noti.id}">
-                            <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2" href="${noti.link_url}">
-                                <div class="icon text-primary"><i class="icofont-bell fs-5"></i></div>
-                                <div class="flex-grow-1">
-                                    <div class="fw-semibold">${noti.message}</div>
-                                    <div class="small text-muted">${noti.time}</div>
-                                </div>
-                            </a>
-                        </li>`;
+                                <li data-id="${noti.id}">
+                                    <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2" href="${noti.link_url}">
+                                        <div class="icon text-primary"><i class="icofont-bell fs-5"></i></div>
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">${noti.message}</div>
+                                            <div class="small text-muted">${noti.time}</div>
+                                        </div>
+                                    </a>
+                                </li>`;
 
                                                                 const empty = document.getElementById("noti-empty");
                                                                 if (empty) empty.remove();
@@ -150,20 +136,22 @@
                                                             }
                                                         });
 
-                                                        if (added > 0 && bell) {
+                                                        // Nếu có thông báo mới, lắc chuông
+                                                        if (added > 0) {
                                                             bell.classList.add("animate__animated", "animate__shakeX");
-                                                            setTimeout(() => bell.classList.remove("animate__animated", "animate__shakeX"), 1000);
+                                                            setTimeout(() => {
+                                                                bell.classList.remove("animate__animated", "animate__shakeX");
+                                                            }, 1000);
                                                         }
 
-                                                        if (badge) {
-                                                            badge.innerText = data.length;
-                                                            badge.classList.toggle("d-none", data.length === 0);
-                                                        }
+                                                        // Cập nhật số lượng
+                                                        badge.innerText = data.length;
+                                                        badge.classList.toggle("d-none", data.length === 0);
                                                     });
                                             }, 5000);
                                         </script>
-                                    
                                     </div>
+
                                     <div class="col">
                                         {{-- 👤 Menu người dùng --}}
                                         <div class="user-info dropdown">

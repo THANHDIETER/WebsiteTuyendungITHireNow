@@ -48,6 +48,8 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <!-- App css-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
@@ -122,7 +124,7 @@
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('admin.notifications.index') }}">
+                            <a href="{{ route('employer.notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
@@ -133,7 +135,7 @@
 
                             <li class="mt-3 d-flex justify-content-center" id="noti-footer">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">
+                                    <a class="btn btn-secondary" href="{{ route('employer.notifications.index') }}">
                                         All Notification
                                     </a>
                                 </div>
@@ -144,7 +146,7 @@
 
                 <script>
                     function loadNotifications() {
-                        fetch('{{ route('admin.notifications.latest') }}')
+                        fetch('{{ route('employer.notifications.latest') }}')
                             .then(res => res.json())
                             .then(notis => {
                                 const list = document.getElementById('noti-list');
