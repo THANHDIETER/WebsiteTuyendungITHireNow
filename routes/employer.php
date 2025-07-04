@@ -94,8 +94,12 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
     Route::get('/{id}', [PackageController::class, 'show'])->name('employer.packages.show'); // tuỳ chọn
 });
 
-
-
+Route::prefix('employer/companies')
+    ->middleware(['auth', 'employer'])
+    ->name('employer.companies.')
+    ->group(function () {
+        Route::resource('/', CompanyController::class)->parameters(['' => 'id']);
+    });
 
 Route::middleware(['auth:sanctum', 'employer'])
     ->prefix('employer')
