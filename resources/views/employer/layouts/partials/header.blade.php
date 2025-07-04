@@ -122,7 +122,7 @@
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('admin.notifications.index') }}">
+                            <a href="{{ route('employer.notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
@@ -130,7 +130,7 @@
 
 
                             @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                <li class="d-flex align-items-center b-l-primary">
+                                <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
                                     <div class="flex-grow-1">
                                         <span>{{ $noti->created_at->diffForHumans() }}</span>
                                         <a href="{{ $noti->data['link_url'] }}">
@@ -149,15 +149,17 @@
                                 </li>
                             @endforelse
 
+
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary" href="{{ route('employer.notifications.index') }}">All
+                                    <a class="btn btn-secondary"
+                                        href="{{ route('employer.notifications.index') }}">All
                                         Notification</a>
                                 </div>
                             </li>
                             <script>
                                 setInterval(() => {
-                                    fetch('{{ route('admin.notifications.latest') }}')
+                                    fetch('{{ route('employer.notifications.latest') }}')
                                         .then(res => res.json())
                                         .then(notis => {
                                             const list = document.getElementById('noti-list');
