@@ -16,19 +16,7 @@ class job_applicationsSeeder extends Seeder
     {
         $faker = Faker::create('vi_VN');
 
-        // Danh sách các giai đoạn hợp lệ
-        $stages = [
-            'new',
-            'cv_screening',
-            'phone_screen',
-            'interview_scheduled',
-            'interviewed',
-            'offer_made',
-            'offer_accepted',
-            'offer_declined',
-            'onboarding',
-            'completed'
-        ];
+       
 
         $jobIds = Job::pluck('id');
         $userIds = User::pluck('id');
@@ -41,7 +29,7 @@ class job_applicationsSeeder extends Seeder
             $job = Job::inRandomOrder()->first();
             $user = User::inRandomOrder()->first();
 
-            $status = $faker->randomElement(['pending', 'approved', 'rejected']);
+            $status = $faker->randomElement(['pending']);
             $isShortlisted = $faker->boolean(30);
             $appliedAt = Carbon::now()->subDays(rand(1, 30));
 
@@ -60,7 +48,6 @@ class job_applicationsSeeder extends Seeder
                 'status' => $status,
                 'is_shortlisted' => $isShortlisted,
                 'source' => $faker->randomElement(['website', 'linkedin', 'email', 'referral']),
-                'application_stage' => $faker->randomElement($stages),
                 'interview_date' => $status === 'approved' ? Carbon::now()->addDays(rand(1, 14)) : null,
                 'note' => $faker->optional()->paragraph(),
 

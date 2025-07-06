@@ -139,7 +139,7 @@
                                         <h6>{{ config('app.name') }}</h6>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <img class="b-r-15 img-40"
+                                        <img class="b-r-15 img-40" loading="lazy"
                                             src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
                                     </div>
                                 </li>
@@ -157,7 +157,7 @@
                             </li>
                             <script>
                                 setInterval(() => {
-                                    fetch('{{ route('admin.notifications.latest') }}')
+                                    fetch('{{ route("admin.notifications.latest") }}')
                                         .then(res => res.json())
                                         .then(notis => {
                                             const list = document.getElementById('noti-list');
@@ -174,7 +174,7 @@
                                     <h6>{{ config('app.name') }}</h6>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
+                                    <img loading="lazy" class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
                                 </div>
                             </li>
                         `;
@@ -573,7 +573,7 @@
 @if (auth()->check())
     <script>
         window.Laravel = {
-            userId: {{ auth()->id() }},
+            userId: "{{ auth()->id() }}",
             APP_NAME: "{{ config('app.name') }}",
         };
     </script>
