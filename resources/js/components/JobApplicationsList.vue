@@ -37,19 +37,27 @@
                     <td>{{ app.company?.name }}</td>
                     <td>
                         <span :class="{
-                            'badge rounded-pill px-3 py-2 text-uppercase fw-semibold': true,
-                            'bg-secondary': app.status === 'pending',
-                            'bg-success': app.status === 'approved',
-                            'bg-danger': app.status === 'rejected'
-                        }">
+    'badge rounded-pill px-3 py-2 text-uppercase fw-semibold': true,
+    'bg-secondary': app.status === 'pending',
+    'bg-success': app.status === 'approved' || app.status === 'hired',
+    'bg-danger': app.status === 'rejected',
+    'bg-warning text-dark': app.status === 'cancelled',
+    'bg-info text-dark': app.status === 'withdrawn',
+    'bg-dark': app.status === 'archived'
+  }">
                             {{
                             app.status === 'pending' ? 'Đang chờ' :
                             app.status === 'approved' ? 'Đã duyệt' :
                             app.status === 'rejected' ? 'Từ chối' :
+                            app.status === 'cancelled' ? 'Đã hủy' :
+                            app.status === 'withdrawn' ? 'Ứng viên rút' :
+                            app.status === 'hired' ? 'Đã tuyển' :
+                            app.status === 'archived' ? 'Lưu trữ' :
                             app.status
                             }}
                         </span>
                     </td>
+
                     <td class="text-nowrap">
                         <div class="d-flex align-items-center gap-2">
                             <button @click="showDetail(app)"
@@ -144,7 +152,12 @@
                                         <option value="pending">Chờ xử lý</option>
                                         <option value="approved">Đã duyệt</option>
                                         <option value="rejected">Từ chối</option>
+                                        <option value="cancelled">Đã hủy</option>
+                                        <option value="withdrawn">Ứng viên rút</option>
+                                        <option value="hired">Đã tuyển</option>
+                                        <option value="archived">Lưu trữ</option>
                                     </select>
+
                                 </div>
                                 <div class="col-md-6 d-flex align-items-end">
                                     <div class="form-check mt-3">
@@ -160,10 +173,20 @@
                                         placeholder="Ví dụ: Facebook, Website..." readonly />
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Giai đoạn hiện tại</label>
-                                    <input v-model="form.application_stage" type="text" class="form-control"
-                                        placeholder="VD: Screening, Interview..." />
+                                    <label class="form-label fw-semibold">
+                                        Giai đoạn hiện tại
+                                        <span v-if="form.application_stage" class="ms-2 badge bg-info text-dark">
+                                            {{ formatStage(form.application_stage) }}
+                                        </span>
+                                    </label>
+                                    <select v-model="form.application_stage" class="form-select"
+                                        :disabled="stageOptions.length === 0">
+                                        <option v-for="stage in stageOptions" :key="stage" :value="stage">
+                                            {{ formatStage(stage) }}
+                                        </option>
+                                    </select>
                                 </div>
+
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ngày phỏng vấn (nếu có)</label>
                                     <div class="input-group">
@@ -180,7 +203,7 @@
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ghi chú</label>
                                     <textarea v-model="form.note" class="form-control" rows="2"
-                                        placeholder="Ghi chú thêm (tuỳ chọn)" ></textarea>
+                                        placeholder="Ghi chú thêm (tuỳ chọn)"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -242,8 +265,12 @@
                                         formatDate(detailApp.applied_at) }}</strong></p>
                                 <p><i class="bi bi-link-45deg me-1 text-secondary"></i> Nguồn: <strong>{{
                                         detailApp.source || '—' }}</strong></p>
-                                <p><i class="bi bi-stack me-1 text-secondary"></i> Giai đoạn: <strong>{{
-                                        detailApp.application_stage || '—' }}</strong></p>
+                                <p>
+                                    <i class="bi bi-stack me-1 text-secondary"></i>
+                                    Giai đoạn:
+                                    <strong>{{ formatStage(detailApp.application_stage) }}</strong>
+                                </p>
+
                                 <p>
                                     <i class="bi bi-calendar-event me-1 text-secondary"></i> Ngày phỏng vấn:
                                     <strong>{{ formatDate(detailApp.interview_date) }}</strong>
@@ -256,18 +283,26 @@
                                     <h6 class="fw-bold text-primary mb-2"><i
                                             class="bi bi-info-circle-fill me-2"></i>Trạng thái</h6>
                                     <span :class="{
-                'badge rounded-pill px-3 py-2 text-uppercase fw-semibold': true,
-                'bg-secondary': detailApp.status === 'pending',
-                'bg-success': detailApp.status === 'approved',
-                'bg-danger': detailApp.status === 'rejected'
-              }">
+  'badge rounded-pill px-3 py-2 text-uppercase fw-semibold': true,
+  'bg-secondary': detailApp.status === 'pending',
+  'bg-success': detailApp.status === 'approved' || detailApp.status === 'hired',
+  'bg-danger': detailApp.status === 'rejected',
+  'bg-warning text-dark': detailApp.status === 'cancelled',
+  'bg-info text-dark': detailApp.status === 'withdrawn',
+  'bg-dark': detailApp.status === 'archived'
+}">
                                         {{
                                         detailApp.status === 'pending' ? 'Đang chờ' :
                                         detailApp.status === 'approved' ? 'Đã duyệt' :
                                         detailApp.status === 'rejected' ? 'Từ chối' :
+                                        detailApp.status === 'cancelled' ? 'Đã hủy' :
+                                        detailApp.status === 'withdrawn' ? 'Ứng viên rút' :
+                                        detailApp.status === 'hired' ? 'Đã tuyển' :
+                                        detailApp.status === 'archived' ? 'Lưu trữ' :
                                         detailApp.status
                                         }}
                                     </span>
+
                                     <span v-if="detailApp.is_shortlisted" class="badge bg-primary ms-2">
                                         <i class="bi bi-star-fill me-1"></i> Đã lọt DS
                                     </span>
@@ -318,7 +353,7 @@
 </template>
 
 <script setup>
-    import { ref, onMounted } from 'vue'
+    import { ref, computed, onMounted, watch } from 'vue'
     import axios from 'axios'
 
     // Thiết lập token mặc định từ localStorage
@@ -327,7 +362,7 @@
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
 
-    // Dữ liệu reactive
+    // Reactive
     const jobApplications = ref([])
     const pagination = ref({})
     const page = ref(1)
@@ -336,10 +371,50 @@
     const editApp = ref(null)
     const search = ref('')
     const perPage = ref(10)
-    const image = (filePath) => {
-        if (!filePath) return '#'
-        return `/storage/${filePath}`
+
+    const image = (filePath) => (!filePath ? '#' : `/storage/${filePath}`)
+
+    // Giai đoạn theo trạng thái
+    const stageOptionsMap = {
+        pending: [
+            'new',
+            'cv_screening',
+            'phone_screen',
+            'interview_scheduled'
+        ],
+        approved: [
+            'interview_scheduled',
+            'interviewed',
+            'offer_made'
+        ],
+        hired: [
+            'offer_accepted',
+            'onboarding',
+            'completed'
+        ],
+        rejected: [
+            'new',
+            'phone_screen',
+            'interviewed',
+            'offer_declined'
+        ],
+        cancelled: [
+            'new'
+        ],
+        withdrawn: [
+            'new'
+        ],
+        archived: [
+            'completed'
+        ]
     }
+
+
+    // Danh sách stage khả dụng dựa vào status hiện tại
+    const stageOptions = computed(() => {
+        const selectedStatus = form.value.status || 'pending'
+        return stageOptionsMap[selectedStatus] || []
+    })
 
     // Form ứng tuyển
     const form = ref({
@@ -351,12 +426,37 @@
         status: 'pending',
         is_shortlisted: false,
         source: '',
-        application_stage: '',
+        application_stage: 'new',
         interview_date: '',
         note: ''
     })
 
-    // Lấy danh sách ứng tuyển
+    // Tự động cập nhật application_stage nếu stage hiện tại không hợp lệ khi status thay đổi
+    watch(() => form.value.status, (newStatus) => {
+        const validStages = stageOptionsMap[newStatus] || []
+        if (!validStages.includes(form.value.application_stage)) {
+            form.value.application_stage = validStages.length > 0 ? validStages[0] : ''
+        }
+    })
+
+    // Định dạng tên stage để hiển thị
+    function formatStage(stage) {
+        const labels = {
+            new: 'Mới',
+            cv_screening: 'Sàng lọc CV',
+            phone_screen: 'Phỏng vấn qua điện thoại',
+            interview_scheduled: 'Đã lên lịch phỏng vấn',
+            interviewed: 'Đã phỏng vấn',
+            offer_made: 'Gửi offer',
+            offer_accepted: 'Chấp nhận offer',
+            offer_declined: 'Từ chối offer',
+            onboarding: 'Onboarding',
+            completed: 'Hoàn tất'
+        }
+        return labels[stage] || stage
+    }
+
+    // Lấy danh sách đơn ứng tuyển
     const fetchList = async (gotoPage = page.value) => {
         try {
             const { data } = await axios.get('/api/job-applications', {
@@ -380,9 +480,7 @@
     }
 
     // Chuyển trang
-    const changePage = (p) => {
-        fetchList(p)
-    }
+    const changePage = (p) => fetchList(p)
 
     // Mở form tạo/sửa
     const openForm = (app = null) => {
@@ -416,7 +514,7 @@
                 status: 'pending',
                 is_shortlisted: false,
                 source: '',
-                application_stage: '',
+                application_stage: stageOptionsMap['pending'][0] || '',
                 interview_date: '',
                 note: ''
             })
@@ -504,6 +602,7 @@
             year: 'numeric'
         })
     }
+
     function formatDateTime(datetime) {
         if (!datetime) return '—'
         const d = new Date(datetime)
@@ -516,6 +615,6 @@
         })
     }
 
-    // Fetch ban đầu
+    // Fetch lần đầu
     onMounted(() => fetchList())
 </script>

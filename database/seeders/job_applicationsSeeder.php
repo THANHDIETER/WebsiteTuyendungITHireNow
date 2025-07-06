@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\JobApplication;
+use App\Models\Job;
+use App\Models\User;
+use App\Models\Company;
 use Faker\Factory as Faker;
 use Carbon\Carbon;
 
@@ -13,32 +16,40 @@ class job_applicationsSeeder extends Seeder
     {
         $faker = Faker::create('vi_VN');
 
-        // Lấy danh sách job_id, user_id và company_id có sẵn
-        $jobIds = DB::table('jobs')->pluck('id');
-        $userIds = DB::table('users')->pluck('id');
-        $companyIds = DB::table('companies')->pluck('id');
+        // Danh sách các giai đoạn hợp lệ
+        $stages = [
+            'new',
+            'cv_screening',
+            'phone_screen',
+            'interview_scheduled',
+            'interviewed',
+            'offer_made',
+            'offer_accepted',
+            'offer_declined',
+            'onboarding',
+            'completed'
+        ];
 
-        if ($jobIds->isEmpty() || $userIds->isEmpty() || $companyIds->isEmpty()) {
-            throw new \Exception('Không đủ dữ liệu để tạo đơn ứng tuyển. Vui lòng chạy các seeder khác trước.');
+        $jobIds = Job::pluck('id');
+        $userIds = User::pluck('id');
+
+        if ($jobIds->isEmpty() || $userIds->isEmpty()) {
+            throw new \Exception('Cần seed bảng jobs và users trước khi seed job_applications.');
         }
 
-        // Tạo 20 đơn ứng tuyển mẫu
         for ($i = 1; $i <= 20; $i++) {
-            $jobId = $faker->randomElement($jobIds);
-            $userId = $faker->randomElement($userIds);
-            $job = DB::table('jobs')->where('id', $jobId)->first();
-            $companyId = $job->company_id;
+            $job = Job::inRandomOrder()->first();
+            $user = User::inRandomOrder()->first();
 
             $status = $faker->randomElement(['pending', 'approved', 'rejected']);
-            $isShortlisted = $faker->boolean(30); // 30% cơ hội được shortlist
-            $appliedAt = Carbon::now()->subDays($faker->numberBetween(1, 30));
+            $isShortlisted = $faker->boolean(30);
+            $appliedAt = Carbon::now()->subDays(rand(1, 30));
 
-            DB::table('job_applications')->insert([
-                'job_id' => $jobId,
-                'user_id' => $userId,
-                'company_id' => $companyId,
+            JobApplication::create([
+                'job_id' => $job->id,
+                'user_id' => $user->id,
+                'company_id' => $job->company_id,
 
-                // BỔ SUNG TRƯỜNG THIẾT YẾU
                 'full_name' => $faker->name(),
                 'email' => $faker->unique()->safeEmail(),
                 'phone' => $faker->phoneNumber(),
@@ -48,10 +59,11 @@ class job_applicationsSeeder extends Seeder
                 'applied_at' => $appliedAt,
                 'status' => $status,
                 'is_shortlisted' => $isShortlisted,
-                'source' => $faker->randomElement(['website', 'linkedin', 'indeed', 'email']),
-                'application_stage' => $faker->randomElement(['screening', 'interview', 'test', 'offer', null]),
-                'interview_date' => $status === 'approved' ? Carbon::now()->addDays($faker->numberBetween(1, 14)) : null,
-                'note' => $faker->optional(0.7)->paragraph(2),
+                'source' => $faker->randomElement(['website', 'linkedin', 'email', 'referral']),
+                'application_stage' => $faker->randomElement($stages),
+                'interview_date' => $status === 'approved' ? Carbon::now()->addDays(rand(1, 14)) : null,
+                'note' => $faker->optional()->paragraph(),
+
                 'created_at' => $appliedAt,
                 'updated_at' => $appliedAt,
             ]);

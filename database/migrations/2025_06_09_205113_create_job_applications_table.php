@@ -26,13 +26,30 @@ return new class extends Migration
             $table->text('cover_letter')->nullable();
             $table->timestamp('applied_at')->useCurrent();
 
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', [
+                'pending',       // Đang chờ xử lý
+                'approved',      // Đã duyệt
+                'rejected',      // Từ chối
+                'cancelled',     // Bị hủy
+                'withdrawn',     // Ứng viên rút đơn
+                'hired',         // Đã tuyển
+                'archived'       // Lưu trữ
+            ])->default('pending');            
             $table->boolean('is_shortlisted')->default(false);
-
             $table->string('source', 100)->default('website');
-            $table->string('application_stage', 50)->nullable();
+            $table->enum('application_stage', [
+                'new',
+                'cv_screening',
+                'phone_screen',
+                'interview_scheduled',
+                'interviewed',
+                'offer_made',
+                'offer_accepted',
+                'offer_declined',
+                'onboarding',
+                'completed'
+            ])->default('new');            
             $table->timestamp('interview_date')->nullable();
-
             $table->text('note')->nullable();
 
             $table->timestamps();

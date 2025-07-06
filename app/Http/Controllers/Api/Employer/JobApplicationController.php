@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Notifications\Jobseeker\ApplicationApprovedNotification;
 use App\Notifications\Jobseeker\ApplicationRejectedNotification;
 use App\Notifications\Jobseeker\InterviewInvitationNotification;
+use Illuminate\Validation\Rule;
 
 class JobApplicationController extends Controller
 {
@@ -43,51 +44,125 @@ class JobApplicationController extends Controller
     public function show(JobApplication $jobApplication)
     {
         return $jobApplication->load(['job', 'user', 'company']);
-        
+
     }
 
     public function update(Request $request, JobApplication $jobApplication)
     {
-        $data = $this->validateData($request);
+        // === VALIDATE ===
+        $data = $request->validate([
+            'status' => [
+                'required',
+                'string',
+                Rule::in([
+                    'pending',
+                    'approved',
+                    'rejected',
+                    'cancelled',
+                    'withdrawn',
+                    'hired',
+                    'archived'
+                ]),
+            ],
+            'application_stage' => [
+                'required',
+                'string',
+                Rule::in([
+                    'new',
+                    'cv_screening',
+                    'phone_screen',
+                    'interview_scheduled',
+                    'interviewed',
+                    'offer_made',
+                    'offer_accepted',
+                    'offer_declined',
+                    'onboarding',
+                    'completed'
+                ]),
+            ],
+            'interview_date' => 'nullable|date',
+            'note' => 'nullable|string',
+            'is_shortlisted' => 'nullable|boolean',
+        ]);
 
         $currentStatus = $jobApplication->status;
-        $newStatus = $data['status'] ?? $currentStatus;
+        $newStatus = $data['status'];
+        $newStage = $data['application_stage'];
 
-        // 1. Không cho thay đổi nếu đã bị từ chối
+        // === MAP TRẠNG THÁI ↔ GIAI ĐOẠN HỢP LỆ ===
+        $validStageMap = [
+            'pending' => ['new', 'cv_screening', 'phone_screen', 'interview_scheduled'],
+            'approved' => ['interview_scheduled', 'interviewed', 'offer_made'],
+            'hired' => ['offer_accepted', 'onboarding', 'completed'],
+            'rejected' => ['new'],
+            'withdrawn' => ['new'],
+            'cancelled' => ['new'],
+            'archived' => ['completed'],
+        ];
+
+        // === RÀNG BUỘC NGHIỆP VỤ ===
+
+        // 1. Đã bị từ chối → không cập nhật nữa
         if ($currentStatus === 'rejected' && $newStatus !== 'rejected') {
             return response()->json(['message' => 'Không thể cập nhật đơn đã bị từ chối.'], 403);
         }
 
-        // 2. Đã approved chỉ cho phép chuyển sang rejected hoặc giữ nguyên
-        if ($currentStatus === 'approved' && !in_array($newStatus, ['approved'])) {
-            return response()->json(['message' => 'Đơn đã duyệt không thể thay đổi.'], 403);
+        // 2. Đã duyệt → không thay đổi trạng thái
+        if ($currentStatus === 'approved' && $newStatus !== 'approved') {
+            return response()->json(['message' => 'Trạng thái đơn đã duyệt không thể thay đổi.'], 403);
         }
 
+        // 3. Ràng buộc stage phù hợp với status
+        if (!in_array($newStage, $validStageMap[$newStatus])) {
+            return response()->json([
+                'message' => "Giai đoạn '{$newStage}' không hợp lệ với trạng thái '{$newStatus}'."
+            ], 422);
+        }
+
+        // 4. Nếu ngày phỏng vấn đã qua → không cho chuyển về pending/cancelled/withdrawn
+        if (
+            !empty($data['interview_date']) &&
+            now()->gt($data['interview_date']) &&
+            in_array($newStatus, ['pending', 'cancelled', 'withdrawn'])
+        ) {
+            return response()->json([
+                'message' => 'Không thể chuyển trạng thái về chờ xử lý sau khi ngày phỏng vấn đã trôi qua.'
+            ], 422);
+        }
+
+        // === CẬP NHẬT ===
         $jobApplication->update($data);
-        // 4. Gửi thông báo nếu trạng thái thay đổi
+
+        // === THÔNG BÁO ===
         $jobseeker = $jobApplication->user;
         $job = $jobApplication->job;
 
         if ($jobseeker && $job) {
+            // Notify duyệt
             if ($currentStatus !== 'approved' && $newStatus === 'approved') {
                 $jobseeker->notify(new ApplicationApprovedNotification($job));
             }
 
+            // Notify từ chối
             if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
                 $jobseeker->notify(new ApplicationRejectedNotification($job));
             }
-        }
-        // Gửi thông báo mời phỏng vấn nếu có ngày mới
-        if (
-            !empty($data['interview_date']) &&
-            $jobApplication->getOriginal('interview_date') !== $data['interview_date']
-        ) {
 
-            $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+            // Notify thay đổi lịch phỏng vấn
+            if (
+                !empty($data['interview_date']) &&
+                $jobApplication->getOriginal('interview_date') !== $data['interview_date']
+            ) {
+                $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+            }
         }
 
-        return response()->json(['message' => 'Cập nhật thành công', 'data' => $jobApplication]);
+        return response()->json([
+            'message' => 'Cập nhật thành công.',
+            'data' => $jobApplication->fresh()
+        ]);
     }
+
 
 
     public function destroy(JobApplication $jobApplication)

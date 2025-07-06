@@ -13,7 +13,7 @@ class EmployerPackagesSeeder extends Seeder
             [
                 'name' => 'Gói Cơ Bản',
                 'description' => 'Gói đăng tuyển cơ bản, phù hợp với doanh nghiệp nhỏ.',
-                'price' => 1000000,
+                'price' => 10000,
                 'duration_days' => 30,
                 'post_limit' => 5,
                 'highlight_days' => 0,
@@ -25,7 +25,7 @@ class EmployerPackagesSeeder extends Seeder
             [
                 'name' => 'Gói Nâng Cao',
                 'description' => 'Gói đăng tuyển nâng cao, dành cho doanh nghiệp đang phát triển.',
-                'price' => 3000000,
+                'price' => 30000,
                 'duration_days' => 60,
                 'post_limit' => 15,
                 'highlight_days' => 5,
@@ -37,7 +37,7 @@ class EmployerPackagesSeeder extends Seeder
             [
                 'name' => 'Gói Chuyên Nghiệp',
                 'description' => 'Gói cao cấp dành cho doanh nghiệp có nhu cầu tuyển dụng lớn.',
-                'price' => 7000000,
+                'price' => 70000,
                 'duration_days' => 90,
                 'post_limit' => 50,
                 'highlight_days' => 15,
