@@ -6,6 +6,10 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
+use App\Http\Controllers\BlogController;
+
+use App\Http\Controllers\Website\EmployerResourceController;
+
 
 // Load các route tách riêng
 require __DIR__ . '/admin.php';
@@ -14,9 +18,8 @@ require __DIR__ . '/jobseeker.php';
 require __DIR__ . '/notification.php';
 
 
-// ================= AUTH =================
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 Route::get('/register/employer', [RegisterController::class, 'showRegisterEmployerForm'])->name('showRegisterEmployerForm');
 Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('registerEmployer');
@@ -28,7 +31,6 @@ Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.r
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-
 
 // ================= HOME =================
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -96,23 +98,20 @@ Route::get('/blog', function () {
     return view('website.blog.blog');
 })->name('blog');
 
-Route::get('/blog-details', function () {
-    return view('website.blog.blog-details');
-})->name('blog-details');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+
 
 Route::get('/blog-grid', function () {
+
     return view('website.blog.blog-grid');
 })->name('blog-grid');
 
-Route::get('/blog-right-sidebar', function () {
-    return view('website.blog.blog-right-sidebar');
-})->name('blog-right-sidebar');
 
 
 // ================= LOGIN / REGISTER UI =================
 Route::get('/login', function () {
     return view('website.login-register.login');
-});
+})->name('login');
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');

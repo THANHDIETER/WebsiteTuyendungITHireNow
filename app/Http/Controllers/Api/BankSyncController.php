@@ -99,6 +99,12 @@ class BankSyncController extends Controller
             $results[] = "✅ Đã xử lý: {$account->bank} - {$account->account_number}";
         }
 
+<<<<<<< HEAD
+        return response()->json([
+            'message' => 'Đã đồng bộ xong',
+            'log' => $results,
+        ]);
+=======
         return response(json_encode([
                  'message' => 'Đã đồng bộ xong',
                  'log' => $results,
@@ -108,5 +114,6 @@ class BankSyncController extends Controller
 
         );
       
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
     }
 }
