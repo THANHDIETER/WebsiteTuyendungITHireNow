@@ -6,10 +6,6 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
-use App\Http\Controllers\BlogController;
-
-use App\Http\Controllers\Website\EmployerResourceController;
-
 
 // Load các route tách riêng
 require __DIR__ . '/admin.php';
@@ -19,7 +15,7 @@ require __DIR__ . '/notification.php';
 
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
 Route::get('/register/employer', [RegisterController::class, 'showRegisterEmployerForm'])->name('showRegisterEmployerForm');
 Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('registerEmployer');
@@ -31,6 +27,9 @@ Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.r
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/docs', fn() => view('docs.index'));
+
+Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 
 // ================= HOME =================
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -92,27 +91,76 @@ Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
 })->name('chi-tiet-ung-vien');
 
+Route::get('/blog', function () {
 
 // ================= BLOG =================
 Route::get('/blog', function () {
     return view('website.blog.blog');
 })->name('blog');
 
-Route::get('/blog', [BlogController::class, 'index'])->name('blog');
-
+Route::get('/blog-details', function () {
+    return view('website.blog.blog-details');
+})->name('blog-details');
 
 Route::get('/blog-grid', function () {
 
     return view('website.blog.blog-grid');
 })->name('blog-grid');
 
+Route::get('/blog-right-sidebar', function () {
+    return view('website.blog.blog-right-sidebar');
+})->name('blog-right-sidebar');
 
 
 // ================= LOGIN / REGISTER UI =================
 Route::get('/login', function () {
     return view('website.login-register.login');
-})->name('login');
+});
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
 });
+
+
+Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
+
+
+Route::get('/admin/noti/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans()
+        ];
+    }));
+})->name('admin.notifications.latest');
+Route::get('/employer/noti/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans()
+        ];
+    }));
+})->name('employer.notifications.latest');
+
+Route::get('/seeker/notifications/latest', function () {
+    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+    return response()->json($notifications->map(function ($noti) {
+        return [
+            'id' => $noti->id,
+            'message' => $noti->data['message'],
+            'link_url' => $noti->data['link_url'],
+            'time' => $noti->created_at->diffForHumans(),
+        ];
+    }));
+})->middleware('auth');
+

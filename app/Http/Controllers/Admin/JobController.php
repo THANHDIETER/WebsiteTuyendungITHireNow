@@ -37,17 +37,28 @@ class JobController extends Controller
     }
 
     public function show($id)
-    {
-        $job = Job::with([
-            'company',
-            'categories',
-            'skills',
-            'jobType',
-            'level',
-            'experience',
-            'language',
-            'remotePolicy',
-            'location',
+
+{
+    $job = Job::with([
+        'company',
+        'categories',
+        'skills',
+        'jobType',
+        'level',
+        'experience',
+        'language',
+        'remotePolicy',
+        'location',
+
+
+    ])->find($id);
+
+    if (!$job) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Tin tuyển dụng không tồn tại.',
+        ], 404);
+    }
 
 
         ])->find($id);
@@ -65,7 +76,7 @@ class JobController extends Controller
 
     public function approve(Request $request, $id)
     {
-        // kiểm tra xem job có tồn tại không 
+        // kiểm tra xem job có tồn tại không
         $job = Job::find($id);
 
         if (!$job) {

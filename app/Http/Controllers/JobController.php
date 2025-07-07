@@ -80,7 +80,11 @@ class JobController extends Controller
         }
 
         // Lấy danh sách việc làm
-        $jobs = $query->latest()->paginate(9)->appends($request->except('page'));
+        $jobs = Job::with('company')
+            ->where('status', 'published')
+            ->orderByDesc('is_featured')
+            ->orderByDesc('views')
+            ->paginate(9);
 
         // Dữ liệu lọc cho form
         $categories = Category::all();
@@ -104,7 +108,7 @@ class JobController extends Controller
    public function show($slug)
 {
     $job = Job::with([
-            'company', 'skills', 'jobType', 'location', 'categories', 'level', 'experience', 'language', 'remotePolicy',     
+            'company', 'skills', 'jobType', 'location', 'categories', 'level', 'experience', 'language', 'remotePolicy',
         ])
         ->where('slug', $slug)
         ->where('status', 'published')
