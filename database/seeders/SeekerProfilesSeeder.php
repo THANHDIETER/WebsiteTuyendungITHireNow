@@ -22,6 +22,15 @@ class SeekerProfilesSeeder extends Seeder
         DB::table('seeker_profiles')->insert([
             [
                 'user_id' => $userId,
+                'name' => 'Nguyễn Văn A',
+                'email' => 'V5GdG@example.com',
+                'phone_number' => '0123456789',
+                'date_of_birth' => '1990-01-01',
+                'gender' => 'nam',
+                'city' => 'Hà Nội',
+                'address' => '123 Main St, Hà Nội',
+                'about_me' => 'I am a passionate backend developer with a strong focus on PHP and Laravel.',
+                'avatar' => 'https://example.com/avatar.jpg',
                 'headline' => 'Backend developer with 3 years experience',
                 'summary' => 'Experienced in PHP and Laravel development.',
                 'cv_url' => 'https://example.com/cv.pdf',

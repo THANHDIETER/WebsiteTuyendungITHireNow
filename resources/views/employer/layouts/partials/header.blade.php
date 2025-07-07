@@ -51,14 +51,9 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-    @if (session('access_token'))
-        <script>
-            localStorage.setItem('access_token', "{{ session('access_token') }}");
-        </script>
-    @endif
 <header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
-                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark"
+    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
+                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
                 src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
             href="javascript:void(0)">
             <div class="toggle-sidebar">
@@ -108,8 +103,9 @@
                         <input type="text" placeholder="Search here...">
                     </div>
                 </li>
-                <!-- Notification menu-->
-                <li class="custom-dropdown"><a href="javascript:void(0)">
+                <!-- Notification menu -->
+                <li class="custom-dropdown">
+                    <a href="javascript:void(0)" id="notification-toggle">
                         <!-- Icon Bell -->
                         <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -118,45 +114,88 @@
                             <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                    </a><span class="badge rounded-pill badge-secondary">3</span>
+                    </a>
+                    <span class="badge rounded-pill badge-secondary" id="noti-count">
+                        {{ auth()->user()->unreadNotifications->count() }}
+                    </span>
+
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Notifications <a href=""><span
-                                    class="font-primary">View</span></a></h5>
-                        <ul class="activity-update">
-                            <li class="d-flex align-items-center b-l-primary">
-                                <div class="flex-grow-1"> <span>Just Now</span><a href="">
-                                        <h5>What`s the project report update?</h5>
-                                    </a>
-                                    <h6>Rick Novak</h6>
-                                </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40"
-                                        src="{{ asset('assets/images/avatar/10.jpg') }}" alt=""></div>
-                            </li>
-                            <li class="d-flex align-items-center b-l-secondary">
-                                <div class="flex-grow-1"> <span>12:47 am</span><a href="">
-                                        <h5>James created changelog page</h5>
-                                    </a>
-                                    <h6>Susan Connor</h6>
-                                </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40"
-                                        src="{{ asset('assets/images/avatar/4.jpg') }}" alt=""></div>
-                            </li>
-                            <li class="d-flex align-items-center b-l-tertiary">
-                                <div class="flex-grow-1"> <span>06:10 pm</span><a href="">
-                                        <h5>Polly edited Contact page</h5>
-                                    </a>
-                                    <h6>Roger Lum</h6>
-                                </div>
-                                <div class="flex-shrink-0"> <img class="b-r-15 img-40"
-                                        src="{{ asset('assets/images/avatar/1.jpg') }}" alt=""></div>
-                            </li>
+                        <h5 class="title bg-primary-light">
+                            Notifications
+                            <a href="{{ route('admin.notifications.index') }}">
+                                <span class="font-primary">View</span>
+                            </a>
+                        </h5>
+                        <ul class="activity-update" id="noti-list">
+
+
+                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
+                                <li class="d-flex align-items-center b-l-primary">
+                                    <div class="flex-grow-1">
+                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
+                                        <a href="{{ $noti->data['link_url'] }}">
+                                            <h5>{{ $noti->data['message'] }}</h5>
+                                        </a>
+                                        <h6>{{ config('app.name') }}</h6>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <img class="b-r-15 img-40"
+                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
+                                    </div>
+                                </li>
+                            @empty
+                                <li class="d-flex justify-content-center p-2 text-muted">
+                                    Không có thông báo mới
+                                </li>
+                            @endforelse
+
                             <li class="mt-3 d-flex justify-content-center">
-                                <div class="button-group"><a class="btn btn-secondary" href="">All
-                                        Notification</a></div>
+                                <div class="button-group">
+                                    <a class="btn btn-secondary" href="{{ route('employer.notifications.index') }}">All
+                                        Notification</a>
+                                </div>
                             </li>
+                            <script>
+                                setInterval(() => {
+                                    fetch('{{ route('admin.notifications.latest') }}')
+                                        .then(res => res.json())
+                                        .then(notis => {
+                                            const list = document.getElementById('noti-list');
+
+                                            notis.forEach(noti => {
+                                                if (!list.querySelector(`[data-id="${noti.id}"]`)) {
+                                                    const item = `
+                            <li class="d-flex align-items-center b-l-primary" data-id="${noti.id}">
+                                <div class="flex-grow-1">
+                                    <span>${noti.time}</span>
+                                    <a href="${noti.link_url}">
+                                        <h5>${noti.message}</h5>
+                                    </a>
+                                    <h6>{{ config('app.name') }}</h6>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
+                                </div>
+                            </li>
+                        `;
+                                                    list.insertAdjacentHTML('afterbegin', item);
+                                                }
+                                            });
+
+                                            // Cập nhật badge
+                                            const badge = document.getElementById('noti-count');
+                                            if (badge) {
+                                                badge.innerText = notis.length;
+                                                badge.classList.toggle('d-none', notis.length === 0);
+                                            }
+                                        });
+                                }, 5000);
+                            </script>
+
                         </ul>
                     </div>
                 </li>
+
                 <!-- Bookmark menu-->
                 <li class="custom-dropdown"><a href="javascript:void(0)">
                         <!-- Icon Star -->
@@ -269,7 +308,7 @@
                                     class="font-primary">4350.9</span></span></h5>
                         <ul>
                             <li class="cartbox d-flex bg-light-primary">
-                                <div class="flex-shrink-0 border-primary"><img
+                                <div class="flex-shrink-0 border-primary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/1.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -301,7 +340,7 @@
                                 </div>
                             </li>
                             <li class="cartbox d-flex bg-light-secondary">
-                                <div class="flex-shrink-0 border-secondary"><img
+                                <div class="flex-shrink-0 border-secondary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/2.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -333,7 +372,7 @@
                                 </div>
                             </li>
                             <li class="cartbox d-flex bg-light-tertiary">
-                                <div class="flex-shrink-0 border-tertiary"><img
+                                <div class="flex-shrink-0 border-tertiary"><img loading="lazy"
                                         src="{{ asset('assets/images/dashboard2/product/3.png') }}" alt="">
                                 </div>
                                 <div class="touchpin-details"><a href="">
@@ -458,12 +497,12 @@
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
-                    <div class="d-flex align-items-center"><img src="{{ asset('assets/images/profile.png') }}"
-                            alt="">
+                    <div class="d-flex align-items-center"><img loading="lazy"
+                            src="{{ asset('assets/images/profile.png') }}" alt="">
                         <div class="flex-grow-1">
                             <h5>
 
-                                @if(auth()->check())
+                                @if (auth()->check())
                                     {{ auth()->user()->role }}
                                     <sup style="font-size: 0.7em; color: red;">{{ auth()->user()->id }}</sup>
                                 @else
@@ -473,7 +512,7 @@
 
 
                             </h5>
-                            @if(auth()->check())
+                            @if (auth()->check())
                                 <span>{{ auth()->user()->email }}</span>
                             @else
                                 <span class="text-muted">Chưa đăng nhập</span>
@@ -531,3 +570,17 @@
         </div>
     </div>
 </header>
+@if (auth()->check())
+    <script>
+        window.Laravel = {
+            userId: {{ auth()->id() }},
+            APP_NAME: "{{ config('app.name') }}",
+        };
+    </script>
+@endif
+
+@if (session('access_token'))
+    <script>
+        localStorage.setItem('access_token', "{{ session('access_token') }}");
+    </script>
+@endif

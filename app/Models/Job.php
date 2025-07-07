@@ -4,40 +4,56 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = [ 'company_id', 'title', 'slug', 'description', 'requirements', 'benefits',
-        'job_type', 'salary_min', 'salary_max', 'currency', 'location', 'address',
-        'level', 'experience', 'category_id', 'deadline', 'status', 'views', 'is_featured',
-        'apply_url', 'remote_policy', 'language', 'meta_title', 'meta_description', 'search_index', 'is_paid'
+   protected $fillable = [
+    'title', 'description', 'requirements', 'thumbnail', 'benefits',
+    'salary_min', 'salary_max', 'salary_negotiable','salary_display', 'address',
+    'experience_id', 'meta_title', 'meta_description', 'keyword',
+    'search_index', 'currency', 'remote_policy_id', 'language_id',
+    'deadline', 'company_id', 'slug', 'status', 'is_approved', 'views',
+    'is_featured', 'salary_display', 'is_paid',
+    'level_id' ,'job_type_id', 'location_id', ''
 ];
 
+
     protected $casts = [
+        'salary_negotiable' => 'boolean',
         'benefits' => 'array',
         'is_featured' => 'boolean',
-        'search_index' => 'boolean',
         'is_paid' => 'boolean',
+        'search_index' => 'boolean',
         'deadline' => 'datetime',
         'deleted_at' => 'datetime',
     ];
 
+    // 🔗 Relations
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function category()
+     public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'job_category', 'job_id', 'category_id');
     }
-
     public function skills()
-    {
-        return $this->belongsToMany(Skill::class, 'job_skill')->withPivot('priority_level', 'required');
-    }
+{
+    return $this->belongsToMany(Skill::class, 'job_skill')
+                ->withPivot('priority_level', 'required')
+                ->withTimestamps();
+}
+    public function jobType()
+{
+    return $this->belongsTo(JobType::class, 'job_type_id');
+}
+
+
+    // 🔘 Accessors
     public function getStatusBadgeAttribute()
     {
         return match ($this->status) {
@@ -49,6 +65,7 @@ class Job extends Model
             default => '<span class="text-muted">Không xác định</span>',
         };
     }
+
     public function getJobTypeLabelAttribute()
     {
         return match ($this->job_type) {
@@ -60,6 +77,7 @@ class Job extends Model
             default => ucfirst($this->job_type)
         };
     }
+
     public function getFeaturedBadgeAttribute()
     {
         return $this->is_featured
@@ -73,8 +91,36 @@ class Job extends Model
             return number_format($this->salary_min) . ' - ' . number_format($this->salary_max) . ' ' . strtoupper($this->currency);
         }
 
-        return '-';
+        return 'Thương lượng';
     }
-
+    public function level()
+{
+    return $this->belongsTo(Level::class);
 }
 
+public function experience()
+{
+    return $this->belongsTo(JobExperience::class);
+}
+public function category()
+{
+    return $this->belongsTo(Category::class);
+}
+
+public function language()
+{
+    return $this->belongsTo(JobLanguage::class);
+}
+
+public function remotePolicy()
+{
+    return $this->belongsTo(RemotePolicy::class);
+}
+// locations
+public function location()
+{
+    return $this->belongsTo(Location::class);
+}
+
+
+}

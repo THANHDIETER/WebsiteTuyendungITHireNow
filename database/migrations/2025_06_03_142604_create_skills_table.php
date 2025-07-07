@@ -10,12 +10,11 @@ class CreateSkillsTable extends Migration
     {
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('slug', 100)->unique();
-            $table->text('description')->nullable();
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('slug')->nullable();
+            $table->string('group_name');
+            $table->string('skill_name');
             $table->boolean('is_active')->default(true);
-            $table->string('proficiency_level', 50)->nullable();
             $table->timestamps();
         });
     }

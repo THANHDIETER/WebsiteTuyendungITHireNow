@@ -3,176 +3,364 @@
 namespace App\Http\Controllers\Employers;
 
 use App\Models\Job;
+use App\Models\Level;
+use App\Models\Skill;
+use App\Models\JobType;
 use App\Models\Category;
+use App\Models\Location;
+use App\Models\JobLanguage;
 use Illuminate\Support\Str;
+use App\Models\RemotePolicy;
 use Illuminate\Http\Request;
+use App\Models\JobExperience;
+use App\Models\EmployerPackageLog;
+use App\Models\EmployerFreePosting;
 use App\Http\Controllers\Controller;
+use App\Models\EmployerPackageUsage;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
+use App\Notifications\Admin\JobEditedNotification;
+use App\Notifications\Admin\NewJobSubmittedNotification;
 class JobController extends Controller
 {
-    // Danh sách job đã đăng
     public function index()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        if (!$user || !$user->company) {
-            return redirect()->route('employer.dashboard')->withErrors('Bạn chưa có thông tin công ty.');
-        }
-
-        $jobs = Job::where('company_id', $user->company->id)
-            ->latest()
-            ->paginate(10);
-
-        return view('employer.jobs.index', compact('jobs'));
+    if (!$user || !$user->company) {
+        return redirect()->route('employer.dashboard')->withErrors('Bạn chưa có thông tin công ty.');
     }
 
-    // Hiển thị form đăng tin
+    $jobs = Job::with(['categories', 'jobType']) // Load thêm jobType
+                ->where('company_id', $user->company->id)
+                ->latest()
+                ->paginate(10);
+
+    return view('employer.jobs.index', compact('jobs'));
+}
+
+
     public function create()
-    {
-        $categories = Category::all();
-        return view('employer.jobs.create', compact('categories'));
-    }
+{
+    $user = Auth::user();
+    $company = $user->company;
 
-    // Xử lý lưu tin tuyển dụng (miễn phí 3, sau đó yêu cầu mua gói)
-    public function store(Request $request)
+    $jobTypes = JobType::where('is_active', true)->get();
+    $company_addresses = is_array($company->address) ? $company->address : ($company->address ? [$company->address] : []);
+    $locations = Location::where('is_active', true)->orderBy('name')->get();
+    $categories = Category::all();
+    $skills = Skill::where('is_active', true)->get();
+    $levels = Level::where('is_active', true)->get();
+    $experiences = JobExperience::where('is_active', true)->get();
+    $languages = JobLanguage::where('is_active', true)->get();
+    $remote_policies = RemotePolicy::where('is_active', true)->get();
+
+    // ✅ Lấy các gói dịch vụ còn lượt đăng và đang active
+    $activePackages = \App\Models\EmployerPackageUsage::with('package')
+        ->where('company_id', $company->id)
+        ->where('is_active', true)
+        ->whereColumn('posts_used', '<', 'post_limit')
+        ->get();
+
+    return view('employer.jobs.create', compact(
+        'categories', 'jobTypes', 'skills', 'company_addresses', 'locations', 'levels',
+        'experiences', 'languages', 'remote_policies', 'activePackages'
+    ));
+}
+
+
+  public function store(Request $request)
 {
     $user = Auth::user();
     $company = $user->company;
 
     if (!$company) {
-        return redirect()->route('employer.dashboard')
-            ->withErrors('Bạn chưa có thông tin công ty.');
+        return redirect()->route('employer.dashboard')->withErrors('Bạn chưa có thông tin công ty.');
     }
 
-    // ------ XỬ LÝ QUOTA FREE BAN ĐẦU ------
-    // Nếu quota chưa từng được set hạn thì bắt đầu 7 ngày từ lần đăng đầu
-    if (!$company->free_post_quota_expired_at) {
-        $company->free_post_quota_expired_at = now()->addDays(7);
-        $company->free_post_quota_used = 0;
-        $company->save();
+    // Kiểm tra lượt đăng miễn phí
+    $freePosting = EmployerFreePosting::firstOrCreate(
+        ['company_id' => $company->id],
+        [
+            'post_limit' => 5,
+            'post_used' => 0,
+            'reset_at' => now()->addDays(7),
+        ]
+    );
+
+    if (now()->greaterThan($freePosting->reset_at)) {
+        $freePosting->update([
+            'post_used' => 0,
+            'reset_at' => now()->addDays(7),
+        ]);
     }
 
-    // Đã hết hạn quota free thì không cho đăng free nữa, phải mua gói mới (1 lần duy nhất)
-    $freeQuotaStillValid = $company->free_post_quota_expired_at && now()->lt($company->free_post_quota_expired_at);
+    $freeRemain = $freePosting->post_limit - $freePosting->post_used;
 
-    $freeRemain = 0;
-    if ($freeQuotaStillValid) {
-        $freeRemain = max($company->free_post_quota - $company->free_post_quota_used, 0);
+    // Kiểm tra các gói dịch vụ đang active và còn lượt
+    $activePackages = EmployerPackageUsage::where('company_id', $company->id)
+        ->where('is_active', true)
+        ->whereColumn('posts_used', '<', 'post_limit')
+        ->orderBy('end_date')
+        ->get();
+
+    $selectedPackage = null;
+    if ($request->filled('selected_package_id')) {
+        $selectedPackage = $activePackages->firstWhere('id', $request->input('selected_package_id'));
+    } else {
+        $selectedPackage = $activePackages->first();
     }
 
-    // Tính tổng quota còn lại (free còn hạn, package nếu có)
-    $package = $company->activeEmployerPackage();
-    $packageRemain = $package ? ($package->post_limit - $package->posts_used) : 0;
-    $totalQuota = $freeRemain + $packageRemain;
-
-    // Nếu hết quota thì chuyển qua trang mua gói và báo lỗi
-    if ($totalQuota <= 0) {
-        return redirect()->route('employer.packages.index')
-            ->with('error', 'Bạn đã hết lượt đăng tin miễn phí hoặc gói dịch vụ. Vui lòng mua gói để tiếp tục đăng tin.');
+    if (!$selectedPackage && $freeRemain <= 0) {
+        return redirect()->route('employer.packages.index')->with('error', 'Bạn đã hết lượt đăng tin. Vui lòng mua gói.');
     }
 
-    // VALIDATE
     $validated = $request->validate([
-        'title'         => 'required|string|max:255',
-        'description'   => 'required|string',
-        'requirements'  => 'nullable|string',
-        'benefits'      => 'nullable|string',
-        'job_type'      => 'required|in:full-time,part-time,internship,remote,contract',
-        'salary_min'    => 'nullable|numeric|min:0',
-        'salary_max'    => 'nullable|numeric|min:0|gte:salary_min',
-        'location'      => 'nullable|string|max:255',
-        'address'       => 'nullable|string|max:255',
-        'level'         => 'nullable|string|max:255',
-        'experience'    => 'nullable|string|max:255',
-        'category_id'   => 'required|integer|exists:categories,id',
-        'deadline'      => 'nullable|date|after_or_equal:today',
-        'apply_url'     => 'nullable|url',
-        'remote_policy' => 'nullable|string|max:100',
-        'language'      => 'nullable|string|max:50',
-        'meta_title'    => 'nullable|string|max:150',
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'requirements' => 'nullable|string',
+        'thumbnail' => 'nullable|image|max:2048',
+        'benefits' => 'nullable|string',
+        'salary_min' => 'nullable|numeric|min:0',
+        'salary_max' => 'nullable|numeric|min:0',
+        'salary_negotiable' => 'nullable',
+        'address' => 'nullable|string|max:255',
+        'language_id' => 'nullable|exists:job_languages,id',
+        'experience_id' => 'nullable|exists:job_experiences,id',
+        'remote_policy_id' => 'nullable|exists:remote_policies,id',
+        'level_id' => 'nullable|exists:levels,id',
+        'location_id' => 'nullable|exists:locations,id',
+        'categories' => 'required|array',
+        'categories.*' => 'integer|exists:categories,id',
+        'skills_text' => 'nullable|string',
+        'application_deadline' => 'nullable|date|after_or_equal:today',
+        'meta_title' => 'nullable|string|max:150',
         'meta_description' => 'nullable|string',
-        'search_index'  => 'nullable|boolean',
+        'keyword' => 'nullable|string|max:150',
+        'search_index' => 'nullable|boolean',
+        'currency' => 'nullable|string|max:10',
+        'job_type_id' => 'required|exists:job_types,id',
     ]);
 
-    // Gán thêm các trường phụ
-    $validated['search_index'] = $request->boolean('search_index', false);
-    $validated['slug']        = Str::slug($validated['title']) . '-' . uniqid();
-    $validated['company_id']  = $company->id;
-    $validated['status']      = 'pending';
-    $validated['is_approved'] = false;
-    $validated['currency']    = 'VND';
-    $validated['views']       = 0;
-    $validated['is_featured'] = false;
-
-    // --- Quyết định sử dụng lượt nào ---
-    if ($freeRemain > 0) {
-        $validated['is_paid'] = false; // Miễn phí
-        $company->free_post_quota_used += 1;
-        $company->save();
-    } else if ($packageRemain > 0 && $package) {
-        $validated['is_paid'] = true;
-        $package->increment('posts_used');
-    } else {
-        // Lý thuyết không xảy ra
-        return redirect()->route('employer.packages.index')
-            ->with('error', 'Có lỗi xảy ra khi kiểm tra lượt đăng tin. Vui lòng thử lại hoặc liên hệ hỗ trợ.');
+    if ($request->hasFile('thumbnail')) {
+        $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
     }
 
-    Job::create($validated);
+    $validated['deadline'] = $request->input('application_deadline') ?? null;
+    $validated['currency'] = $validated['currency'] ?? 'VND';
+    $validated['salary_negotiable'] = $request->boolean('salary_negotiable', false);
 
-    return redirect()->route('employer.jobs.index')
-        ->with('success', 'Tin đã được gửi và đang chờ phê duyệt.');
+    if ($validated['salary_negotiable']) {
+        $validated['salary_display'] = 'Lương thương lượng';
+    } elseif ($validated['salary_min'] && $validated['salary_max']) {
+        $validated['salary_display'] = number_format($validated['salary_min']) . ' - ' . number_format($validated['salary_max']) . ' ' . $validated['currency'];
+    } elseif ($validated['salary_min']) {
+        $validated['salary_display'] = 'Từ ' . number_format($validated['salary_min']) . ' ' . $validated['currency'];
+    } elseif ($validated['salary_max']) {
+        $validated['salary_display'] = 'Up to ' . number_format($validated['salary_max']) . ' ' . $validated['currency'];
+    } else {
+        $validated['salary_display'] = 'Thoả thuận';
+    }
+
+    $validated['company_id'] = $company->id;
+    $validated['slug'] = Str::slug($validated['title']) . '-' . uniqid();
+    $validated['status'] = 'pending';
+    $validated['is_approved'] = false;
+    $validated['views'] = 0;
+    $validated['is_featured'] = false;
+    $validated['search_index'] = $request->boolean('search_index', false);
+    $validated['is_paid'] = $selectedPackage !== null;
+    $validated['category_id'] = $validated['categories'][0];
+    $validated['job_type'] = $request->input('job_type') ?? 'full-time';
+
+    $job = Job::create($validated);
+
+    if ($selectedPackage) {
+        $selectedPackage->increment('posts_used');
+        EmployerPackageLog::create([
+            'order_id' => $selectedPackage->order_id,
+            'job_id' => $job->id,
+            'used_at' => now(),
+            'action' => 'create',
+        ]);
+    } else {
+        $freePosting->increment('post_used');
+    }
+
+    // Gửi thông báo cho tất cả admin
+    $admins = User::where('role', 'admin')->get();
+    foreach ($admins as $admin) {
+        $admin->notify(new NewJobSubmittedNotification($job));
+    }
+
+    // Gắn skills
+    if ($request->filled('skills_text')) {
+        $skillNames = array_filter(array_map('trim', explode(',', $request->input('skills_text'))));
+        $skillIds = [];
+        foreach ($skillNames as $skillName) {
+            $skill = Skill::firstOrCreate(
+                ['skill_name' => $skillName],
+                [
+                    'slug' => Str::slug($skillName),
+                    'group_name' => 'Chưa phân loại',
+                    'is_active' => true,
+                    'user_id' => auth::id(),
+                ]
+            );
+            $skillIds[] = $skill->id;
+        }
+        $job->skills()->sync($skillIds);
+    } else {
+        $job->skills()->detach();
+    }
+
+    $job->categories()->sync($validated['categories']);
+
+    return redirect()->route('employer.jobs.index')->with('success', 'Tin đã được gửi và đang chờ duyệt.');
 }
+
+
     public function edit($id)
 {
     $user = Auth::user();
     $company = $user->company;
-    $job = $company->jobs()->where('id', $id)->firstOrFail();
-    $categories = \App\Models\Category::all();
-    return view('employer.jobs.edit', compact('job', 'categories'));
+
+    $job = $company->jobs()->with(['skills', 'categories'])->findOrFail($id);
+    $jobTypes = JobType::where('is_active', true)->get(); // hoặc tất cả
+
+    $locations = Location::where('is_active', true)->orderBy('name')->get();
+    $categories = Category::all();
+    $skills = Skill::all();
+    $levels = Level::where('is_active', true)->get();
+    $experiences = JobExperience::where('is_active', true)->get();
+    $languages = JobLanguage::where('is_active', true)->get();
+    $remote_policies = RemotePolicy::where('is_active', true)->get();
+
+    // ✅ Thêm địa chỉ từ thông tin công ty
+    $company_addresses = $company->addresses ?? []; // hoặc $company->getAddressList() nếu bạn có hàm hỗ trợ
+
+    // Kỹ năng đã chọn (hiển thị trong input skills_text)
+    $selectedSkills = $job->skills->pluck('skill_name')->implode(', ');
+
+    // Ngành nghề đã chọn
+    $selectedCategories = $job->categories->pluck('id')->toArray();
+
+    return view('employer.jobs.edit', compact(
+        'job',
+        'categories',
+        'skills','levels','experiences','languages','remote_policies', 'locations','company_addresses','selectedSkills','selectedCategories', 'jobTypes'
+    ));
 }
 
-public function update(Request $request, $id)
+
+
+    public function update(Request $request, $id)
 {
     $user = Auth::user();
     $company = $user->company;
-    $job = $company->jobs()->where('id', $id)->firstOrFail();
+    $job = $company->jobs()->findOrFail($id);
 
     $validated = $request->validate([
-        'title'         => 'required|string|max:255',
-        'description'   => 'required|string',
-        'requirements'  => 'nullable|string',
-        'benefits'      => 'nullable|string',
-        'job_type'      => 'required|in:full-time,part-time,internship,remote,contract',
-        'salary_min'    => 'nullable|numeric|min:0',
-        'salary_max'    => 'nullable|numeric|min:0|gte:salary_min',
-        'location'      => 'nullable|string|max:255',
-        'address'       => 'nullable|string|max:255',
-        'level'         => 'nullable|string|max:255',
-        'experience'    => 'nullable|string|max:255',
-        'category_id'   => 'required|integer|exists:categories,id',
-        'deadline'      => 'nullable|date|after_or_equal:today',
-        'apply_url'     => 'nullable|url',
-        'remote_policy' => 'nullable|string|max:100',
-        'language'      => 'nullable|string|max:50',
-        'meta_title'    => 'nullable|string|max:150',
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'requirements' => 'nullable|string',
+        'benefits' => 'nullable|string',
+        'salary_min' => 'nullable|numeric|min:0',
+        'salary_max' => 'nullable|numeric|min:0|gte:salary_min',
+        'address' => 'nullable|string|max:255',
+        'level_id' => 'nullable|exists:levels,id',
+        'experience_id' => 'nullable|exists:job_experiences,id',
+        'language_id' => 'nullable|exists:job_languages,id',
+        'remote_policy_id' => 'nullable|exists:remote_policies,id',
+        'location_id' => 'nullable|exists:locations,id',
+        'categories' => 'required|array',
+        'categories.*' => 'integer|exists:categories,id',
+        'skills_text' => 'nullable|string',
+        'application_deadline' => 'nullable|date|after_or_equal:today',
+        'meta_title' => 'nullable|string|max:150',
         'meta_description' => 'nullable|string',
-        'search_index'  => 'nullable|boolean',
+        'keyword' => 'nullable|string|max:150',
+        'search_index' => 'nullable|boolean',
+        'currency' => 'nullable|string|max:10',
+        'apply_url' => 'nullable|url',
+        'job_type' => 'nullable|in:full-time,part-time,internship,remote,freelance',
     ]);
 
+    $validated['deadline'] = $request->input('application_deadline') ?? null;
     $validated['search_index'] = $request->boolean('search_index', false);
-    
-    $job->update($validated);
+    $validated['salary_negotiable'] = $request->boolean('salary_negotiable', false);
+    $validated['currency'] = $validated['currency'] ?? 'VND';
 
-    return redirect()->route('employer.jobs.show', $job->id)
-        ->with('success', 'Cập nhật tin tuyển dụng thành công.');
+    // Tính salary_display
+    if ($validated['salary_negotiable']) {
+        $validated['salary_display'] = 'Lương thương lượng';
+    } elseif ($validated['salary_min'] && $validated['salary_max']) {
+        $validated['salary_display'] = number_format($validated['salary_min']) . ' - ' . number_format($validated['salary_max']) . ' ' . $validated['currency'];
+    } elseif ($validated['salary_min']) {
+        $validated['salary_display'] = 'Từ ' . number_format($validated['salary_min']) . ' ' . $validated['currency'];
+    } elseif ($validated['salary_max']) {
+        $validated['salary_display'] = 'Up to ' . number_format($validated['salary_max']) . ' ' . $validated['currency'];
+    } else {
+        $validated['salary_display'] = 'Thoả thuận';
+    }
+
+    $job->update($validated);
+    // Gửi thông báo cho tất cả admin
+        User::where('role', 'admin')->get()->each(function ($admin) use ($job) {
+            $admin->notify(new JobEditedNotification($job));
+        });
+    // Cập nhật kỹ năng
+    if ($request->filled('skills_text')) {
+        $skillNames = array_filter(array_map('trim', explode(',', $request->input('skills_text'))));
+        $skillIds = [];
+        foreach ($skillNames as $skillName) {
+            $skill = Skill::firstOrCreate(
+                ['skill_name' => $skillName],
+                [
+                    'slug' => Str::slug($skillName),
+                    'group_name' => 'Chưa phân loại',
+                    'is_active' => true,
+                    'user_id' => auth::id(),
+                ]
+            );
+            $skillIds[] = $skill->id;
+        }
+        $job->skills()->sync($skillIds);
+    } else {
+        $job->skills()->detach();
+    }
+
+    // Cập nhật ngành nghề
+    $job->categories()->sync($validated['categories']);
+
+    return redirect()->route('employer.jobs.show', $job->id)->with('success', 'Cập nhật thành công.');
 }
+
+
+    public function close($id)
+    {
+        $job = Job::where('company_id', Auth::user()->company->id)->findOrFail($id);
+        $job->status = 'closed';
+        $job->save();
+
+        return redirect()->route('employer.jobs.index')->with('success', 'Tin đã được ngừng tuyển.');
+    }
 
     public function show($id)
-{
-    $job = Job::with(['company', 'category'])->findOrFail($id);
-    return view('employer.jobs.show', compact('job'));
-}
+    {
+        $job = Job::with([
+            'company',
+            'categories',
+            'skills',
+            'level',
+            'experience',
+            'remotePolicy',
+            'language',
+            'jobType' ,
+        ])->findOrFail($id);
+
+        return view('employer.jobs.show', compact('job'));
+    }
+
 
 }

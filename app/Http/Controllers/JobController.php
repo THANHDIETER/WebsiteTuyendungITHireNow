@@ -6,66 +6,67 @@ use App\Models\Job;
 use App\Models\Skill;
 use App\Models\Company;
 use App\Models\Category;
+use App\Models\Location;
+use App\Models\JobType;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = Job::with('company')
-            ->where('status', 'published')
-            ->orderBy('created_at', 'desc')
-            ->paginate(9);
 
-        return view('website.jobs.job', compact('jobs'));
+        $query = Job::with(['company', 'skills', 'jobType', 'location'])
+            ->where('status', 'published');
 
+        // Từ khóa
+        if ($request->filled('q')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->q . '%')
+                  ->orWhere('description', 'like', '%' . $request->q . '%');
+            });
 
-        // Địa điểm (radio)
-       if ($request->filled('locations')) {
-    $query->whereIn('location', (array) $request->input('locations'));
-}
+        }
 
+        // Địa điểm
+        if ($request->filled('location_id')) {
+            $query->where('location_id', $request->location_id);
+        }
 
-
-        // Ngành nghề (select)
+        // Ngành nghề
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
 
-        // Công ty (select)
+        // Công ty
         if ($request->filled('company_id')) {
             $query->where('company_id', $request->company_id);
         }
 
-        // Loại hình công việc (checkbox - nhiều lựa chọn)
-        if ($request->filled('job_type')) {
-            $jobTypes = $request->input('job_type');
-            if (is_array($jobTypes)) {
-                $query->whereIn('job_type', $jobTypes);
-            } else {
-                $query->where('job_type', $jobTypes);
-            }
+        // Loại công việc
+        if ($request->filled('job_type_id')) {
+            $query->where('job_type_id', $request->job_type_id);
         }
 
-        // Cấp bậc (select)
+        // Cấp bậc
         if ($request->filled('level')) {
-            $query->where('level', $request->level);
+            $query->where('level_id', $request->level);
         }
 
-        // Kinh nghiệm (text hoặc select tuỳ web)
+        // Kinh nghiệm
         if ($request->filled('experience')) {
-            $query->where('experience', $request->experience);
+            $query->where('experience_id', $request->experience);
         }
 
-        // Lọc theo khoảng lương giao với job
+        // Khoảng lương
         if ($request->filled('min_salary')) {
             $query->where('salary_max', '>=', $request->min_salary);
         }
+
         if ($request->filled('max_salary')) {
             $query->where('salary_min', '<=', $request->max_salary);
         }
 
-        // Kỹ năng (checkbox nhiều)
+        // Kỹ năng
         if ($request->filled('skills')) {
             $skills = $request->input('skills');
             $query->whereHas('skills', function ($q) use ($skills) {
@@ -73,47 +74,58 @@ class JobController extends Controller
             });
         }
 
-        // Chỉ việc nổi bật (toggle)
+        // Việc làm nổi bật
         if ($request->filled('is_featured')) {
             $query->where('is_featured', 1);
         }
 
-        // Phân trang kết quả
-        $jobs = $query->paginate(9)->appends($request->except('page'));
+        // Lấy danh sách việc làm
+        $jobs = $query->latest()->paginate(9)->appends($request->except('page'));
 
-        // Danh sách filter cho form (truyền đủ để UX tốt)
+        // Dữ liệu lọc cho form
         $categories = Category::all();
         $companies  = Company::all();
         $skills     = Skill::all();
+        $locations  = Location::all();
+        $jobTypes   = JobType::all();
 
-        // Tìm 3 việc làm nổi bật nhất cho phần gợi ý
+        // Việc làm nổi bật gợi ý
         $topJobs = (clone $query)
             ->orderByDesc('is_featured')
             ->orderByDesc('salary_min')
             ->limit(3)
             ->get();
 
-        // Truyền sang view đầy đủ
-        return view('website.jobs.job', compact('jobs', 'categories', 'companies', 'skills', 'topJobs'));
-
+        return view('website.jobs.job', compact(
+            'jobs', 'categories', 'companies', 'skills', 'locations', 'jobTypes', 'topJobs'
+        ));
     }
 
-    public function show($slug)
-    {
-        $job = Job::with('company')
-            ->where('slug', $slug)
-            ->where('status', 'published')
-            ->firstOrFail();
+   public function show($slug)
+{
+    $job = Job::with([
+            'company', 'skills', 'jobType', 'location', 'categories', 'level', 'experience', 'language', 'remotePolicy',     
+        ])
+        ->where('slug', $slug)
+        ->where('status', 'published')
+        ->firstOrFail();
 
-        // Lấy các công việc liên quan cùng category
-        $relatedJobs = Job::with('company')
-            ->where('category_id', $job->category_id)
+    // Lấy các công việc liên quan cùng danh mục (nếu có)
+    $relatedJobs = collect();
+
+    if ($job->categories->isNotEmpty()) {
+        $relatedJobs = Job::with(['company'])
             ->where('id', '!=', $job->id)
             ->where('status', 'published')
-            ->orderBy('created_at', 'desc')
-            ->take(4)
+            ->whereHas('categories', function ($query) use ($job) {
+                $query->whereIn('category_id', $job->categories->pluck('id'));
+            })
+            ->latest()
+            ->take(6) // bạn có thể điều chỉnh số lượng
             ->get();
-
-        return view('website.jobs.job-details', compact('job', 'relatedJobs'));
     }
+
+    return view('website.jobs.job-details', compact('job', 'relatedJobs'));
+}
+
 }

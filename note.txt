@@ -3,6 +3,7 @@ composer install
 composer require laravel/sanctum
 composer dump-autoload
 php artisan key:generate
+
 php artisan migrate:fresh --seed
 -->
 <!-- cài gg auth2 --
@@ -52,3 +53,7 @@ check ip my
 https://www.whatismyip.com/
 search -> thêm ip my 
 Remote Database Access
+
+
+Cài vite 
+npm install --save-dev vite

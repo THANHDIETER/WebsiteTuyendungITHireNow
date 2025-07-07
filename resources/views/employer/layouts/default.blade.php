@@ -1,36 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
 
-@include('employer.layouts.partials.header')
+<head>
+    @include('employer.layouts.partials.header')
+
+    @if (session('access_token'))
+        <script>
+            localStorage.setItem('access_token', "{{ session('access_token') }}");
+        </script>
+    @endif
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-  @vite(['resources/js/app.js', 'resources/sass/app.scss'])
+    @vite(['resources/js/app.js', 'resources/sass/app.scss'])
 
-  <!-- Navbar -->
-  @include('employer.layouts.partials.navbar')
+    <!-- Navbar -->
+    @include('employer.layouts.partials.navbar')
 
-  <!-- Main wrapper: fill height -->
-  <div class="flex-grow-1 d-flex flex-column">
-    <main class="page-wrapper compact-wrapper flex-grow-1">
-      <div class="page-body-wrapper d-flex flex-column flex-grow-1">
-        @include('employer.layouts.partials.sidebar')
+    <!-- Main wrapper: fill height -->
+    <div class="flex-grow-1 d-flex flex-column">
+        <main class="page-wrapper compact-wrapper flex-grow-1">
+            <div class="page-body-wrapper d-flex flex-column flex-grow-1">
+                @include('employer.layouts.partials.sidebar')
 
-        <div class="flex-grow-1">
-          @yield('content')
-        </div>
+                <div class="flex-grow-1">
+                    @yield('content')
 
-        @stack('scripts')
-      </div>
-    </main>
-  </div>
+                    {{-- Vue realtime notification container --}}
+                    <div id="vue-wrapper"></div>
+                </div>
 
-  <!-- Footer luôn ở đáy -->
-  @include('employer.layouts.partials.footer')
-  @include('employer.layouts.partials.confirm-modal')
+                @stack('scripts')
+            </div>
+        </main>
+    </div>
 
+    <!-- Footer luôn ở đáy -->
+    @include('employer.layouts.partials.footer')
+    @include('employer.layouts.partials.confirm-modal')
 
 </body>
+
 </html>

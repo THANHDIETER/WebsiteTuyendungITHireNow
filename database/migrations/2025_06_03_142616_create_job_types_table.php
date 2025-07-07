@@ -12,6 +12,8 @@ class CreateJobTypesTable extends Migration
             $table->id();
             $table->string('name', 100);
             $table->string('slug', 100)->unique();
+            $table->string('icon_class')->nullable();       // Thêm cột icon_class
+            $table->text('description')->nullable();         // Thêm cột description
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

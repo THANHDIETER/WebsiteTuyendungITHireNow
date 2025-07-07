@@ -1,7 +1,7 @@
 @extends('admin.layouts.default')
 
 @section('content')
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-4 mb-2">
         <h2 class="h4 mb-4">Tin tuyển dụng chờ duyệt</h2>
 
         {{-- Filter --}}
@@ -10,8 +10,7 @@
                 <form method="GET" class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Tìm theo ID</label>
-                        <input type="text" name="search" value="{{ request('search') }}" class="form-control"
-                            placeholder="Nhập ID tin tuyển dụng">
+                        <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Nhập ID tin tuyển dụng">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Danh mục</label>
@@ -19,7 +18,7 @@
                             <option value="">Tất cả danh mục</option>
                             @foreach ($categories as $cat)
                                 <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
-                                    {{ $cat->name }}
+                                    {{ $cat->name}}
                                 </option>
                             @endforeach
                         </select>
@@ -53,13 +52,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($jobs as $job)
+                       @forelse ($jobs as $job)
                             <tr data-id="{{ $job->id }}">
                                 <td>{{ $job->id }}</td>
                                 <td>{{ Str::limit($job->title, 10) }}</td>
-                                <td>{{ Str::limit($job->company->name, 10) }}</td>
-                                <td>{{ Str::limit($job->category->name, 10) }}</td>
-                                <td>{{ $job->job_type_label }}</td>
+                                <td>{{ Str::limit($job->company->name ?? '-', 10) }}</td>
+                                <td>
+                                    {{ $job->categories->isNotEmpty()
+                                        ? Str::limit($job->categories->pluck('name')->join(', '), 10)
+                                        : '-' }}
+                                </td>
+                                <td>{{ $job->jobType?->name ?? '-' }}</td>
                                 <td>{{ $job->salary_range }}</td>
                                 <td>{{ optional($job->deadline)?->format('d/m/Y') ?? '-' }}</td>
                                 <td>{!! $job->featured_badge !!}</td>
@@ -67,28 +70,24 @@
                                 <td>{{ $job->created_at->format('d/m/Y') }}</td>
                                 <td class="text-center align-middle action-cell">
                                     <div class="d-flex justify-content-center align-items-center gap-1 flex-nowrap">
+                                        {{-- Xem chi tiết --}}
+                                        <button type="button" class="btn btn-secondary btn-sm btn-view" data-id="{{ $job->id }}" title="Xem chi tiết">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </button>
+
                                         {{-- Duyệt / Từ chối --}}
                                         @if ($job->status === 'pending')
-                                            <button type="button" class="btn btn-success btn-sm btn-approve"
-                                                data-id="{{ $job->id }}" title="Duyệt">
+                                            <button type="button" class="btn btn-success btn-sm btn-approve" data-id="{{ $job->id }}" title="Duyệt">
                                                 <i class="bi bi-check-circle-fill"></i>
                                             </button>
-                                            <button type="button" class="btn btn-danger btn-sm btn-reject" data-id="{{ $job->id }}"
-                                                title="Từ chối">
+                                            <button type="button" class="btn btn-danger btn-sm btn-reject" data-id="{{ $job->id }}" title="Từ chối">
                                                 <i class="bi bi-x-circle-fill"></i>
                                             </button>
                                         @endif
 
-                                        {{-- Xem chi tiết --}}
-                                        <button type="button" class="btn btn-secondary btn-sm btn-view" data-id="{{ $job->id }}"
-                                            title="Xem chi tiết">
-                                            <i class="bi bi-eye-fill"></i>
-                                        </button>
-
                                         {{-- Xoá nếu chưa đóng hoặc đã đăng --}}
                                         @if (!in_array($job->status, ['closed', 'published']))
-                                            <form action="{{ route('admin.jobs.destroy', $job) }}" method="POST"
-                                                class="d-inline delete-form" data-id="{{ $job->id }}">
+                                            <form action="{{ route('admin.jobs.destroy', $job) }}" method="POST" class="d-inline delete-form" data-id="{{ $job->id }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-dark btn-sm btn-delete" title="Xoá">
@@ -97,24 +96,20 @@
                                             </form>
                                         @endif
 
-                                        {{-- Khôi phục nếu đã đóng hoặc đã đăng --}}
-                                        @if (in_array($job->status, ['published']))
-                                            <button type="button" class="btn btn-warning btn-sm revert-job"
-                                                data-url="{{ route('admin.jobs.revert', $job->id) }}"
-                                                title="Khôi phục về chờ duyệt">
+                                        {{-- Khôi phục nếu vừa cập nhật gần đây --}}
+                                        @if (in_array($job->status, ['published', 'closed']) && $job->updated_at->diffInMinutes(now()) <= 5)
+                                            <button type="button" class="btn btn-warning btn-sm revert-job" data-url="{{ route('admin.jobs.revert', $job->id) }}" title="Khôi phục về chờ duyệt">
                                                 <i class="bi bi-arrow-counterclockwise"></i>
                                             </button>
                                         @endif
                                     </div>
                                 </td>
-
-
                             </tr>
-                        @empty
+                       @empty
                             <tr>
                                 <td colspan="11" class="text-muted py-4">Không có tin tuyển dụng nào phù hợp.</td>
                             </tr>
-                        @endforelse
+                       @endforelse
                     </tbody>
                 </table>
             </div>
@@ -158,7 +153,74 @@
             const csrfToken = '{{ csrf_token() }}';
             let isFetchingJobDetail = false;
 
-            // Xem chi tiết
+            // ✅ Hàm dựng lại nút theo statusHtml
+            function renderActionButtons(jobId, statusHtml) {
+                const isPublished = statusHtml.includes('Đã đăng');
+                const isRejected = statusHtml.includes('Từ chối');
+                const isPending = statusHtml.includes('Chờ duyệt') || (!isPublished && !isRejected);
+
+                let html = `<div class="d-flex justify-content-center align-items-center gap-1 flex-nowrap">`;
+
+                // 👁 Xem chi tiết: luôn có
+                html += `
+                                        <button class="btn btn-secondary btn-sm btn-view" data-id="${jobId}" title="Xem chi tiết">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </button>
+                                    `;
+
+                if (isPublished) {
+                    const revertUrl = `/admin/jobs/${jobId}/revert`;
+                    html += `
+                                            <button type="button" class="btn btn-warning btn-sm revert-job"
+                                                data-url="${revertUrl}" title="Khôi phục về chờ duyệt">
+                                                <i class="bi bi-arrow-counterclockwise"></i>
+                                            </button>
+                                        `;
+                }
+
+                if (isRejected) {
+                    const deleteRoute = `{{ route('admin.jobs.destroy', ':id') }}`.replace(':id', jobId);
+                    html += `
+                                            <form action="${deleteRoute}" method="POST" class="d-inline delete-form" data-id="${jobId}">
+                                                <input type="hidden" name="_token" value="${csrfToken}">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <button type="submit" class="btn btn-dark btn-sm btn-delete" title="Xoá">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        `;
+                }
+
+                if (isPending) {
+                    // ✅ Hiện đầy đủ cả 3 nút khi pending
+                    html += `
+                                            <button type="button" class="btn btn-success btn-sm btn-approve"
+                                                data-id="${jobId}" title="Duyệt">
+                                                <i class="bi bi-check-circle-fill"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm btn-reject"
+                                                data-id="${jobId}" title="Từ chối">
+                                                <i class="bi bi-x-circle-fill"></i>
+                                            </button>
+                                        `;
+
+                    const deleteRoute = `{{ route('admin.jobs.destroy', ':id') }}`.replace(':id', jobId);
+                    html += `
+                                            <form action="${deleteRoute}" method="POST" class="d-inline delete-form" data-id="${jobId}">
+                                                <input type="hidden" name="_token" value="${csrfToken}">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <button type="submit" class="btn btn-dark btn-sm btn-delete" title="Xoá">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        `;
+                }
+
+                html += `</div>`;
+                return html;
+            }
+
+            // 👁 Xem chi tiết
             document.addEventListener('click', function (e) {
                 const btn = e.target.closest('.btn-view');
                 if (!btn || isFetchingJobDetail) return;
@@ -173,8 +235,16 @@
                 contentEl.innerHTML = '<p class="text-center text-muted">Đang tải...</p>';
 
                 fetch(`/admin/jobs/${jobId}`)
-                    .then(response => {
-                        if (!response.ok) throw new Error('Lỗi tải chi tiết');
+                    .then(async (response) => {
+                        if (!response.ok) {
+                            const contentType = response.headers.get("Content-Type") || "";
+                            if (contentType.includes("application/json")) {
+                                const json = await response.json();
+                                throw new Error(json.message || 'Lỗi không xác định');
+                            } else {
+                                throw new Error('Lỗi tải chi tiết');
+                            }
+                        }
                         return response.text();
                     })
                     .then(html => {
@@ -185,32 +255,81 @@
                             isFetchingJobDetail = false;
                         }, 50);
                     })
-                    .catch(() => {
+                    .catch((err) => {
+                        const errorMessage = err.message?.trim();
+
                         showAlertModal({
                             title: 'Lỗi',
-                            message: 'Không thể tải dữ liệu chi tiết.'
+                            message: errorMessage || 'Không thể tải dữ liệu chi tiết.'
                         });
+
+                        if (errorMessage === 'Tin tuyển dụng không tồn tại.') {
+                            const row = document.querySelector(`tr[data-id="${jobId}"]`);
+                            if (row) row.remove();
+                        }
+
                         isFetchingJobDetail = false;
                     });
+
             });
 
-            // Xoá
+            // 🗑 Xoá (không reload)
             document.addEventListener('click', function (e) {
-                const btn = e.target.closest('.btn-delete');
-                if (!btn) return;
+    const btn = e.target.closest('.btn-delete');
+    if (!btn) return;
 
-                e.preventDefault();
-                const form = btn.closest('form');
-                const id = form.dataset.id;
+    e.preventDefault();
+    const form = btn.closest('form');
+    const row = btn.closest('tr'); // ✅ Thêm dòng này
+    const id = form.dataset.id;
+    const action = form.getAttribute('action');
 
-                showAlertModal({
-                    title: `Xoá tin tuyển dụng #${id}?`,
-                    message: 'Hành động này không thể hoàn tác.',
-                    onConfirm: () => form.submit()
+    showAlertModal({
+        title: `Xoá tin tuyển dụng #${id}?`,
+        message: 'Hành động này không thể hoàn tác.',
+        onConfirm: () => {
+            fetch(action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ _method: 'DELETE' })
+            })
+                .then(async (res) => {
+                    if (res.status === 204) {
+                        return { success: true, message: 'Tin đã được xoá.' };
+                    }
+                    const data = await res.json();
+                    return data;
+                })
+                .then(res => {
+                    showAlertModal({
+                        type: 'alert',
+                        title: res.success ? 'Đã xoá' : 'Lỗi',
+                        message: res.message || (res.success ? 'Tin đã được xoá thành công.' : 'Xoá thất bại.')
+                    });
+
+                    if (res.success || res.message === 'Tin tuyển dụng không tồn tại.') {
+                        if (row) row.remove();
+                    }
+                })
+                .catch((err) => {
+                    console.error('Fetch error:', err); // để debug
+                    showAlertModal({
+                        type: 'alert',
+                        title: 'Lỗi',
+                        message: 'Không thể kết nối đến máy chủ.'
+                    });
                 });
-            });
+        }
+    });
+});
 
-            // Duyệt / Từ chối
+
+
+            // ✅ Duyệt / Từ chối
             function handleAction(selector, action, fallbackStatusHtml) {
                 document.addEventListener('click', function (e) {
                     const btn = e.target.closest(selector);
@@ -233,24 +352,17 @@
                             })
                                 .then(res => res.json())
                                 .then(res => {
+                                    const row = document.querySelector(`tr[data-id="${jobId}"]`);
+                                    if (!row || !res.status_html) return;
+
+                                    row.querySelector('.job-status').innerHTML = res.status_html;
+                                    row.querySelector('.action-cell').innerHTML = renderActionButtons(jobId, res.status_html);
+
                                     showAlertModal({
                                         type: 'alert',
                                         title: res.success ? 'Thành công' : 'Thất bại',
                                         message: res.message || 'Có lỗi xảy ra.'
                                     });
-
-                                    if (res.success) {
-                                        const row = document.querySelector(`tr[data-id="${jobId}"]`);
-                                        if (row) {
-                                            row.querySelector('.job-status').innerHTML = res.status_html || fallbackStatusHtml;
-                                            row.querySelector('.action-cell').innerHTML = `
-                                                    <div class="d-flex justify-content-center">
-                                                        <button class="btn btn-secondary btn-sm btn-view" data-id="${jobId}" title="Xem chi tiết">
-                                                            <i class="bi bi-eye-fill"></i>
-                                                        </button>
-                                                    </div>`;
-                                        }
-                                    }
                                 })
                                 .catch(() => {
                                     showAlertModal({
@@ -267,7 +379,7 @@
             handleAction('.btn-approve', 'approve', '<span class="badge bg-success">Đã đăng</span>');
             handleAction('.btn-reject', 'reject', '<span class="badge bg-danger">Từ chối</span>');
 
-            // Khôi phục trạng thái
+            // 🔁 Khôi phục về pending (không reload)
             $(document).on('click', '.revert-job', function () {
                 const url = $(this).data('url');
 
@@ -278,24 +390,31 @@
                         $.ajax({
                             url: url,
                             method: 'POST',
-                            data: {
-                                _token: csrfToken
-                            },
+                            data: { _token: csrfToken },
                             success: function (res) {
+                                const jobId = url.split('/').slice(-2, -1)[0];
+                                const row = document.querySelector(`tr[data-id="${jobId}"]`);
+                                if (!row || !res.status_html) return;
+
+                                row.querySelector('.job-status').innerHTML = res.status_html;
+                                row.querySelector('.action-cell').innerHTML = renderActionButtons(jobId, res.status_html);
+
                                 showAlertModal({
                                     type: 'alert',
                                     title: res.success ? 'Thành công' : 'Lỗi',
                                     message: res.message
                                 });
-
-                                if (res.success) location.reload();
                             },
                             error: function (xhr) {
                                 let res;
-                                try {
-                                    res = xhr.responseJSON;
-                                } catch (e) {
-                                    res = null;
+                                try { res = xhr.responseJSON; } catch (_) { res = null; }
+
+                                const jobId = url.split('/').slice(-2, -1)[0];
+                                const row = document.querySelector(`tr[data-id="${jobId}"]`);
+
+                                if (res?.status_html && row) {
+                                    row.querySelector('.job-status').innerHTML = res.status_html;
+                                    row.querySelector('.action-cell').innerHTML = renderActionButtons(jobId, res.status_html);
                                 }
 
                                 showAlertModal({
@@ -303,14 +422,6 @@
                                     title: 'Lỗi',
                                     message: res?.message || 'Không thể kết nối đến máy chủ.'
                                 });
-
-                                if (res?.status_html && xhr.status !== 500) {
-                                    const jobId = url.split('/').slice(-2, -1)[0];
-                                    const row = document.querySelector(`tr[data-id="${jobId}"]`);
-                                    if (row) {
-                                        row.querySelector('.job-status').innerHTML = res.status_html;
-                                    }
-                                }
                             }
                         });
                     }
