@@ -1,15 +1,15 @@
-<<<<<<< HEAD
+
 <!--
 composer install
 composer require laravel/sanctum
 composer dump-autoload
 php artisan key:generate
-<<<<<<<< HEAD:note.php
+
 php artisan migrate
-========
+
 
 php artisan migrate:fresh --seed
->>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd:note.txt
+
 -->
 <!-- cài gg auth2 --
 composer require league/oauth2-client
@@ -32,8 +32,7 @@ chạy tailwindcs
 
 php artisan migrate:fresh --seed -->
 
-<<<<<<<< HEAD:note.php
-========
+
 1. Cài React
 
 npm install react react-dom
@@ -64,8 +63,7 @@ Remote Database Access
 
 Cài vite 
 npm install --save-dev vite
->>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd:note.txt
-=======
+
 <template>
     <div class="p-4">
         <h1 class="mb-4 fw-bold fs-2">Quản lý đơn ứng tuyển</h1>
@@ -587,4 +585,3 @@ npm install --save-dev vite
     // Fetch ban đầu
     onMounted(() => fetchList())
 </script>
->>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd

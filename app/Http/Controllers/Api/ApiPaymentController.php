@@ -8,11 +8,12 @@ use App\Models\Payment;
 use App\Models\Setting;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\EmployerPackageLog;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\EmployerPackageOrder;
 use App\Models\EmployerPackageUsage;
+use App\Models\EmployerPackageLog;
+use App\Notifications\Employer\PackagePurchasedNotification;
 
 class ApiPaymentController extends Controller
 {
@@ -63,7 +64,6 @@ class ApiPaymentController extends Controller
                     $payment->paid_at = Carbon::parse($matchedLog->trans_time ?? $now);
                     $payment->save();
 
-
                     $matchedLog->update([
                         'is_used' => true,
                         'matched_payment_id' => $payment->id
@@ -106,7 +106,10 @@ class ApiPaymentController extends Controller
                             'updated_at' => now(),
                         ]);
 
-                        Log::info("Đã tạo order ID {$order->id} cho công ty ID {$company->id}");
+                        // ✅ Gửi thông báo khi mua gói thành công
+                        $user?->notify(new PackagePurchasedNotification($package->name, $endDate));
+
+                        Log::info("Đã tạo order ID {$order->id} và gửi thông báo mua gói cho công ty ID {$company->id}");
                     } else {
                         Log::warning("Thiếu package hoặc company khi xử lý đơn paid: payment_id={$payment->id}");
                     }
@@ -194,6 +197,4 @@ class ApiPaymentController extends Controller
             ['Content-Type' => 'text/plain']
         );
     }
-
-
 }

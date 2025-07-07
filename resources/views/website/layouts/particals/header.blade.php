@@ -184,53 +184,6 @@
                                                 <i class="fa-solid fa-gear me-2"></i> Cài đặt
                                             </a>
                                         </li>
-
-                                        {{-- Hồ sơ --}}
-                                        <li>
-                                            <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/show') ? 'active text-primary' : '' }}"
-                                                href="{{ route('profile.show') }}">
-                                                <i class="fa-solid fa-file-lines me-2"></i> Hồ sơ HireNow
-                                            </a>
-                                        </li>
-
-                                        {{-- Việc làm của tôi --}}
-                                        <li>
-                                            <a class="dropdown-item d-flex align-items-center"
-                                                {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}
-                                                href="{{ route('profile.my-jobs') }}">
-                                                <i class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi
-                                            </a>
-                                        </li>
-
-                                        {{-- Admin --}}
-                                        @if (Auth::user()->role === 'admin')
-                                            <li>
-                                                <a class="dropdown-item d-flex align-items-center"
-                                                    href="{{ route('admin.dashboard') }}">
-                                                    <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản trị
-                                                </a>
-                                            </li>
-                                        @endif
-
-                                        {{-- Nhà tuyển dụng --}}
-                                        @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
-                                            <li>
-                                                <a class="dropdown-item d-flex align-items-center"
-                                                    href="{{ route('employer.dashboard') }}">
-                                                    <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà tuyển
-                                                    dụng
-                                                </a>
-                                            </li>
-                                        @endif
-
-                                        {{-- Cài đặt --}}
-                                        <li>
-                                            <a class="dropdown-item d-flex align-items-center"
-                                                href="{{ route('profile.settings') }}">
-                                                <i class="fa-solid fa-gear me-2"></i> Cài đặt
-                                            </a>
-                                        </li>
-
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
@@ -260,33 +213,12 @@
             </div>
         </div>
     </div>
+
     @if (session('access_token'))
         <script>
             localStorage.setItem('access_token', "{{ session('access_token') }}");
         </script>
     @endif
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-</header>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> b112181 (luồng chính web)
-=======
-
-
-
-</header>
->>>>>>> c6f1b9f (sửa lại giao diện)
-=======
-
-
-
-</header>
->>>>>>> a403dbe (profile cá nhân và danh sách đã ứng tuyển)
-=======
 
     <script>
         setInterval(() => {
@@ -334,4 +266,3 @@
 
 
 </header>
->>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
