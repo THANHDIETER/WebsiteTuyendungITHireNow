@@ -180,7 +180,7 @@
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ghi chú</label>
                                     <textarea v-model="form.note" class="form-control" rows="2"
-                                        placeholder="Ghi chú thêm (tuỳ chọn)"    ></textarea>
+                                        placeholder="Ghi chú thêm (tuỳ chọn)" ></textarea>
                                 </div>
                             </div>
                         </div>

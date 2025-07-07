@@ -96,7 +96,7 @@
     <hr>
     <div class="mb-3">
         <h6 class="fw-bold"><i class="fa-solid fa-thumbtack me-1"></i>Yêu cầu công việc</h6>
-        <p class="white-space-pre-line">{{ $job->requirements }}</p>
+        <p class="white-space-pre-line">{!! $job->requirements !!}</p>
     </div>
     <hr>
 
