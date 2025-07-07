@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 
+use App\Http\Controllers\JobSeeker\ResumeController;
+use App\Http\Controllers\JobSearchController;
+// 🔐 Route dành riêng cho JOB SEEKER
+
+
 // 🔐 Các route dành cho job seeker đã đăng nhập
 Route::middleware(['auth:sanctum', 'job_seeker'])
     ->prefix('job_seeker')
@@ -14,18 +19,21 @@ Route::middleware(['auth:sanctum', 'job_seeker'])
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     });
 
-// 👤 Profile (Yêu cầu đăng nhập)
 Route::middleware(['auth'])->group(function () {
     // Hiển thị và cập nhật hồ sơ
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 
+    Route::get('profile/my-jobs/{job_slug}', [ProfileController::class, 'viewJob'])->name('profile.view-job');
+
+
     // Dashboard & việc làm của tôi
     Route::get('/profile-dashboard', [ProfileController::class, 'dashboard'])->name('profile.dashboard');
     Route::get('/profile/my-jobs', [ProfileController::class, 'myJobs'])->name('profile.my-jobs');
 
     // Cài đặt
+
     Route::get('/settings', [ProfileController::class, 'settings'])->name('profile.settings');
 
     // About Me & trình độ học vấn

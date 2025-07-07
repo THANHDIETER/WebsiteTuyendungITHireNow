@@ -5,16 +5,21 @@
         data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
         <div class="col-12 col-lg-8">
             <div class="slider-content">
-                <h1 class="title text-white">👋 Xin chào: {{ $profile->full_name ?? 'Người dùng' }}</h1>
+
+                <h1 class="title text-white">👋 Xin chào:
+                    {{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h1>
             </div>
         </div>
     </div>
-    <div class="container">
+
+    <div class="container mt-5">
+
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3">
                 <div class="bg-white shadow-sm rounded p-4">
-                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
+                    <h6 class="fw-semibold text-center mb-3">👋 Xin
+                        chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
                     <hr>
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item mb-2">
