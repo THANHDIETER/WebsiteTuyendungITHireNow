@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    
     public function index()
     {
         return response()->json(['message' => 'Welcome to the API. Use /register to create a new user or /login to authenticate.']);
     }
-   
+
 
     public function register(Request $request)
     {
