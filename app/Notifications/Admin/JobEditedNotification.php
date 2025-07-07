@@ -8,7 +8,6 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use App\Models\Job;
 
-
 class JobEditedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;

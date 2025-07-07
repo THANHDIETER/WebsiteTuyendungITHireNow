@@ -30,6 +30,6 @@ class EmployerPackageUsage extends Model
 
     public function package()
     {
-        return $this->belongsTo(EmployerPackage::class, 'employer_package_id');
+        return $this->belongsTo(EmployerPackage::class);
     }
 }

@@ -75,6 +75,7 @@
                                             <i class="bi bi-eye-fill"></i>
                                         </button>
 
+
                                         {{-- Duyệt / Từ chối --}}
                                         @if ($job->status === 'pending')
                                             <button type="button" class="btn btn-success btn-sm btn-approve" data-id="{{ $job->id }}" title="Duyệt">
@@ -114,6 +115,8 @@
                 </table>
             </div>
         </div>
+
+
 
         {{-- Pagination --}}
         @if ($jobs->hasPages())
