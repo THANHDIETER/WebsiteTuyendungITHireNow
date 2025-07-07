@@ -3,21 +3,9 @@
 
 <head>
     @include('admin.layouts.partials.header')
-
-    <!-- Chỉ cần giữ lại MỘT đoạn script để truyền dữ liệu -->
-    <script>
-        window.Laravel = {
-            userId: {{ auth()->check() ? auth()->id() : 'null' }},
-        };
-        window.APP_NAME = "{{ config('app.name') }}";
-    </script>
-
     <!-- Gọi app.js và app.scss -->
     @vite(['resources/js/app.js', 'resources/sass/app.scss'])
-
-    <!-- Font Awesome & Bootstrap Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+   
 </head>
 
 <body class="d-flex flex-column min-vh-100">

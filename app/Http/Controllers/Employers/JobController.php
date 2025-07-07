@@ -204,7 +204,7 @@ class JobController extends Controller
                     'slug' => Str::slug($skillName),
                     'group_name' => 'Chưa phân loại',
                     'is_active' => true,
-                    'user_id' => auth()->id(),
+                    'user_id' => auth::id(),
                 ]
             );
             $skillIds[] = $skill->id;
@@ -320,7 +320,7 @@ class JobController extends Controller
                     'slug' => Str::slug($skillName),
                     'group_name' => 'Chưa phân loại',
                     'is_active' => true,
-                    'user_id' => auth()->id(),
+                    'user_id' => auth::id(),
                 ]
             );
             $skillIds[] = $skill->id;

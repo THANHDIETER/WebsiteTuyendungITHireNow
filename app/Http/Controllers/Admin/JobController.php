@@ -37,6 +37,7 @@ class JobController extends Controller
     }
 
     public function show($id)
+
 {
     $job = Job::with([
         'company',
@@ -59,8 +60,18 @@ class JobController extends Controller
         ], 404);
     }
 
-    return view('admin.jobs.show', compact('job'));
-}
+
+        ])->find($id);
+
+        if (!$job) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tin tuyển dụng không tồn tại.',
+            ], 404);
+        }
+
+        return view('admin.jobs.show', compact('job'));
+    }
 
 
     public function approve(Request $request, $id)
@@ -98,31 +109,33 @@ class JobController extends Controller
         ]);
     }
 
-   public function reject(Request $request, Job $job)
-{
-    if ($job->status !== 'pending') {
-        $job->refresh();
-        return response()->json([
-            'success' => false,
-            'message' => 'Tin đã được xử lý bởi người khác.',
-            'status_html' => $job->status_badge,
-        ], 409);
-    }
 
+
+    public function reject(Request $request, Job $job)
+    {
+        if ($job->status !== 'pending') {
+            $job->refresh();
+            return response()->json([
+                'success' => false,
+                'message' => 'Tin đã được xử lý bởi người khác.',
+                'status_html' => $job->status_badge,
+            ], 409);
+        }
 
 
         $job->update(['status' => 'rejected']);
+
         // Gửi thông báo cho nhà tuyển dụng
         $employer = $job->company->user;
-
         $employer->notify(new JobRejectedNotification($job));
 
         return response()->json([
-            'success' => false,
-            'message' => 'Tin đã được xử lý bởi người khác.',
+            'success' => true,
+            'message' => 'Tin đã được từ chối thành công.',
             'status_html' => $job->status_badge,
-        ], 409);
+        ]);
     }
+
 
 
 
