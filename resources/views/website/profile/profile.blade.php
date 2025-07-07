@@ -5,6 +5,7 @@
         data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
         <div class="col-12 col-lg-8">
             <div class="slider-content">
+
                 <h1 class="title text-white">👋 Xin chào:
                     {{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h1>
             </div>
@@ -12,6 +13,7 @@
     </div>
 
     <div class="container mt-5">
+
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3">
@@ -90,7 +92,6 @@
                                 Cập nhật tiêu đề của bạn
                             </p>
                         </div>
-
                         {{-- User Info --}}
 
                         <div class="flex-grow-1">

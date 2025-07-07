@@ -5,6 +5,7 @@
         data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
         <div class="col-12 col-lg-8">
             <div class="slider-content">
+
                 <h1 class="title text-white">👋 Xin chào:
                     {{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h1>
             </div>
@@ -12,6 +13,7 @@
     </div>
 
     <div class="container mt-4">
+
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                 {{ session('success') }}

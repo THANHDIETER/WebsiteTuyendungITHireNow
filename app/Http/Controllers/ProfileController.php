@@ -159,7 +159,6 @@ class ProfileController extends Controller
         return back()->with('success', 'Cập nhật giới thiệu bản thân thành công!');
     }
 
-
     public function updateEducation(Request $request)
     {
         $request->validate([
