@@ -29,7 +29,7 @@ class job_applicationsSeeder extends Seeder
             $job = DB::table('jobs')->where('id', $jobId)->first();
             $companyId = $job->company_id;
 
-            $status = $faker->randomElement(['pending', 'approved', 'rejected']);
+            $status = $faker->randomElement(['pending']);
             $isShortlisted = $faker->boolean(30); // 30% cơ hội được shortlist
             $appliedAt = Carbon::now()->subDays($faker->numberBetween(1, 30));
 
@@ -49,7 +49,6 @@ class job_applicationsSeeder extends Seeder
                 'status' => $status,
                 'is_shortlisted' => $isShortlisted,
                 'source' => $faker->randomElement(['website', 'linkedin', 'indeed', 'email']),
-                'application_stage' => $faker->randomElement(['screening', 'interview', 'test', 'offer', null]),
                 'interview_date' => $status === 'approved' ? Carbon::now()->addDays($faker->numberBetween(1, 14)) : null,
                 'note' => $faker->optional(0.7)->paragraph(2),
                 'created_at' => $appliedAt,
