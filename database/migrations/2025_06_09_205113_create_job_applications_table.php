@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -26,7 +25,7 @@ return new class extends Migration
             $table->timestamp('applied_at')->useCurrent();
 
             // Application status
-            $table->enum('status', [
+            $$table->enum('status', [
                 'pending',             // 1 - Chờ xử lý
                 'viewed',              // 2 - Đã xem
                 'under_review',        // 3 - Đang đánh giá
@@ -38,7 +37,9 @@ return new class extends Migration
                 'hired',               // 9 - Đã nhận việc
                 'candidate_declined',  // 10 - Ứng viên từ chối
                 'no_response',         // 11 - Không phản hồi
+                'saved',               // 12 - Đã lưu hồ sơ
             ])->default('pending');
+
 
             $table->boolean('is_shortlisted')->default(false);
             $table->string('source', 100)->default('website');

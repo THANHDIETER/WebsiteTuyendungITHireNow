@@ -3,33 +3,32 @@
         <h1 class="mb-4 fw-bold fs-2">Quản lý đơn ứng tuyển</h1>
 
         <!-- Thanh tìm kiếm và chọn số dòng/trang -->
-       <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-  <!-- Dropdown chọn trạng thái (đưa lên trước) -->
-  <select v-model="filterStatus" @change="fetchList(1)" class="form-select form-select-sm"
-    style="max-width: 240px; min-width: 240px;">
-    <option value="">Tất cả trạng thái</option>
-    <option v-for="status in statusOptions" :key="status.value" :value="status.value">
-      {{ status.label }}
-    </option>
-  </select>
+        <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+            <!-- Dropdown chọn trạng thái (đưa lên trước) -->
+            <select v-model="filterStatus" @change="fetchList(1)" class="form-select form-select-sm"
+                style="max-width: 240px; min-width: 240px;">
+                <option value="">Tất cả trạng thái</option>
+                <option v-for="status in statusOptions" :key="status.value" :value="status.value">
+                    {{ status.label }}
+                </option>
+            </select>
 
-  <!-- Input tìm kiếm -->
-  <input v-model="search" @keyup.enter="fetchList(1)" class="form-control form-control-sm"
-    placeholder="Tìm ứng viên, công việc, công ty..."
-    style="max-width: 240px; min-width: 240px;" />
+            <!-- Input tìm kiếm -->
+            <input v-model="search" @keyup.enter="fetchList(1)" class="form-control form-control-sm"
+                placeholder="Tìm ứng viên, công việc, công ty..." style="max-width: 240px; min-width: 240px;" />
 
-  <button class="btn btn-outline-secondary btn-sm" @click="fetchList(1)">
-    <i class="bi bi-search"></i>
-  </button>
+            <button class="btn btn-outline-secondary btn-sm" @click="fetchList(1)">
+                <i class="bi bi-search"></i>
+            </button>
 
-  <div class="ms-auto d-flex align-items-center gap-2">
-    <label class="mb-0 text-nowrap text-secondary fw-semibold">Số dòng/trang:</label>
-    <select v-model="perPage" @change="fetchList(1)" class="form-select form-select-sm"
-      style="width: 80px;">
-      <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">{{ n }}</option>
-    </select>
-  </div>
-</div>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <label class="mb-0 text-nowrap text-secondary fw-semibold">Số dòng/trang:</label>
+                <select v-model="perPage" @change="fetchList(1)" class="form-select form-select-sm"
+                    style="width: 80px;">
+                    <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">{{ n }}</option>
+                </select>
+            </div>
+        </div>
 
 
 
@@ -183,11 +182,13 @@
 
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Trạng thái</label>
-                                    <select v-model="form.status" class="form-select">
+                                    <select v-model="form.status" class="form-select"
+                                        :disabled="validStatusOptions.length === 1">
                                         <option v-for="status in validStatusOptions" :key="status" :value="status">
                                             {{ statusLabel(status) }}
                                         </option>
                                     </select>
+
 
                                 </div>
 
@@ -362,12 +363,11 @@
         'under_review',
         'contacting',
         'interview_scheduled',
-        'interviewed',
         'offered',
-        'hired',
-        'candidate_declined',
         'no_response',
-        'rejected'
+        'rejected',
+        'saved'
+
     ]
 
     const form = ref({
@@ -391,29 +391,30 @@
     const validStatusOptions = computed(() => {
         const current = initialStatus.value
 
-        // Nếu đơn bị từ chối rồi thì chỉ hiện trạng thái rejected để không đổi
+        if (current === 'pending') {
+            // Khi đang pending, chỉ cho chọn 3 trạng thái này
+            return ['interview_scheduled', 'rejected', 'saved']
+        }
+
+        if (current === 'interview_scheduled') {
+            // Khi đang pending, chỉ cho chọn 3 trạng thái này
+            return ['offered', 'no_response', 'rejected']
+        }
+
+        if (['rejected', 'hired', 'offered', 'candidate_declined','no_response'].includes(current)) {
+            return [current]
+        }
+
         if (current === 'rejected') {
             return ['rejected']
         }
 
-        // Nếu đã nhận việc thì chỉ giữ lại trạng thái hired
-        if (current === 'hired') {
-            return ['hired']
-        }
-
-        // Nếu ứng viên từ chối hoặc không phản hồi thì chỉ giữ lại trạng thái hiện tại (không cho đổi)
-        if (['candidate_declined', 'no_response'].includes(current)) {
-            return [current]
-        }
-
-        // Nếu là trạng thái bình thường thì chỉ cho chọn trạng thái từ current trở đi (không được lùi)
         const idx = statusFlow.indexOf(current)
         if (idx === -1) return statusFlow
 
-        // Nếu đã phỏng vấn rồi thì không cho đổi xuống dưới 'interviewed' (ví dụ), bạn có thể điều chỉnh thêm logic này nếu muốn
-        // Ở đây để đơn giản cho phép chọn từ current trở đi
         return statusFlow.slice(idx)
     })
+
 
     // Hàm hiển thị thông báo sử dụng showAlertModal
     function showError(message) {
@@ -479,12 +480,11 @@
         { value: 'under_review', label: 'Đang đánh giá' },
         { value: 'contacting', label: 'Đang liên hệ' },
         { value: 'interview_scheduled', label: 'Đã mời phỏng vấn' },
-        { value: 'interviewed', label: 'Đã phỏng vấn' },
         { value: 'offered', label: 'Trúng tuyển' },
-        { value: 'hired', label: 'Đã nhận việc' },
-        { value: 'candidate_declined', label: 'Ứng viên từ chối' },
         { value: 'no_response', label: 'Không phản hồi' },
-        { value: 'rejected', label: 'Đã loại' }
+        { value: 'rejected', label: 'Đã loại' },
+        { value: 'saved', label: 'Lưu hồ sơ' },
+
     ]
 
 
@@ -529,9 +529,19 @@
                 interview_date: app.interview_date ? app.interview_date.substring(0, 16) : '',
                 note: app.note || ''
             }
+
+            // Nếu trạng thái hiện tại không còn hợp lệ thì tự động chọn cái đầu tiên
+            const validOptions = validStatusOptions.value
+            if (!validOptions.includes(form.value.status)) {
+                form.value.status = validOptions[0]
+            }
+
         } else {
             editApp.value = null
             initialStatus.value = 'pending'
+
+            const validOptions = validStatusOptions.value
+
             form.value = {
                 id: null,
                 job_id: '',
@@ -542,7 +552,7 @@
                 company_name: '',
                 image: '',
                 cover_letter: '',
-                status: 'pending',
+                status: validOptions[0], // set luôn status hợp lệ đầu tiên
                 is_shortlisted: false,
                 source: '',
                 interview_date: '',
@@ -551,6 +561,7 @@
         }
         formOpen.value = true
     }
+
 
     const closeForm = () => {
         formOpen.value = false
@@ -645,7 +656,7 @@
             'bg-secondary': status === 'pending',
             'bg-info text-dark': ['viewed', 'under_review', 'contacting', 'interview_scheduled'].includes(status),
             'bg-success': ['offered', 'hired'].includes(status),
-            'bg-danger': ['rejected', 'candidate_declined', 'no_response'].includes(status)
+            'bg-danger': ['rejected', 'no_response'].includes(status)
         }
     }
 
@@ -655,13 +666,11 @@
             case 'viewed': return 'Đã xem'
             case 'under_review': return 'Đang đánh giá'
             case 'contacting': return 'Đang liên hệ'
-            case 'interview_scheduled': return 'Đã mời phỏng vấn'
-            case 'interviewed': return 'Đã phỏng vấn'
+            case 'interview_scheduled': return 'mời phỏng vấn'
             case 'offered': return 'Trúng tuyển'
-            case 'hired': return 'Đã nhận việc'
-            case 'candidate_declined': return 'Ứng viên từ chối'
             case 'no_response': return 'Không phản hồi'
-            case 'rejected': return 'Đã loại'
+            case 'rejected': return 'loại'
+            case 'saved': return 'Lưu hồ sơ'
             default: return status
         }
     }
