@@ -17,27 +17,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-
-        {{-- Form tìm kiếm & lọc --}}
-        <form method="GET" action="{{ route('employer.companies.index') }}" class="row mb-4 g-2">
-            <div class="col-md-6">
-                <input type="text" name="keyword" class="form-control" placeholder="Tìm theo tên công ty..."
-                    value="{{ request('keyword') }}">
-            </div>
-            <div class="col-md-4">
-                <select name="status" class="form-select">
-                    <option value="">-- Tất cả trạng thái --</option>
-                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Hoạt động</option>
-                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Không hoạt động
-                    </option>
-                    <option value="banned" {{ request('status') == 'banned' ? 'selected' : '' }}>Bị cấm</option>
-                </select>
-            </div>
-            <div class="col-md-2 d-grid">
-                <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search me-1"></i>Tìm</button>
-            </div>
-        </form>
-
         {{-- Bảng danh sách --}}
         <div class="card border-0 shadow-sm rounded-3">
             <div class="card-body p-0">

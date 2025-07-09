@@ -27,84 +27,92 @@
 
             <div class="card-body pt-5">
                 {{-- Header: Back Button + Title + Actions --}}
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div class="d-flex align-items-center">
-                        <a href="{{ route('employer.companies.index') }}" class="btn btn-outline-secondary me-3"
-                            title="Quay lại">
-                            <i class="bi bi-arrow-left"></i>
-                        </a>
-                        <h2 class="mb-0">{{ $company->name }}</h2>
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+                    <div class="d-flex align-items-center flex-wrap gap-3">
+                        <h3 class="mb-0 text-primary fw-semibold d-flex align-items-center">
+                            <i class="bi bi-building me-2 text-secondary"></i>{{ $company->name }}
+                        </h3>
                     </div>
-                    <div>
-                        <a href="{{ route('employer.companies.edit', $company) }}" class="btn btn-sm btn-warning me-2">
-                            <i class="bi bi-pencil"></i> Sửa
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('employer.companies.edit', $company) }}"
+                            class="btn btn-sm btn-outline-warning d-flex align-items-center">
+                            <i class="bi bi-pencil me-1"></i> Sửa
                         </a>
-                        <form action="{{ route('employer.companies.destroy', $company) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger"
-                                onclick="return confirm('Bạn có chắc muốn xóa công ty này?')">
-                                <i class="bi bi-trash"></i> Xóa
-                            </button>
-                        </form>
+                        <a href="{{ route('employer.companies.index') }}"
+                            class="btn btn-outline-secondary d-flex align-items-center" title="Quay lại">
+                            <i class="bi bi-arrow-left me-1"></i> Quay lại
+                        </a>
                     </div>
                 </div>
 
+
                 {{-- Main Content: Basic Info + Scrollable Description/Benefits --}}
                 <div class="row gy-4">
+                    {{-- Thông tin cơ bản --}}
                     <div class="col-lg-6">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body">
-                                <h5 class="card-title mb-3"><i class="bi bi-info-circle me-2 text-primary"></i> Thông tin cơ
-                                    bản</h5>
-                                <ul class="list-unstyled mb-0">
-                                    <li class="mb-2"><i class="bi bi-globe me-2"></i><strong>Website:</strong>
+                                <h5 class="card-title fw-bold text-dark mb-4">
+                                    <i class="bi bi-info-circle me-2 text-primary"></i>Thông tin cơ bản
+                                </h5>
+                                <ul class="list-unstyled small mb-0">
+                                    <li class="mb-3">
+                                        <i class="bi bi-globe me-2 text-secondary"></i><strong>Website:</strong>
                                         @if ($company->website)
-                                            <a href="{{ $company->website }}" target="_blank">{{ $company->website }}</a>
+                                            <a href="{{ $company->website }}" target="_blank"
+                                                class="text-decoration-underline">{{ $company->website }}</a>
                                         @else
-                                            —
+                                            <span class="text-muted">—</span>
                                         @endif
                                     </li>
-                                    <li class="mb-2"><i class="bi bi-envelope me-2"></i><strong>Email:</strong>
+                                    <li class="mb-3"><i
+                                            class="bi bi-envelope me-2 text-secondary"></i><strong>Email:</strong>
                                         {{ $company->email ?? '—' }}</li>
-                                    <li class="mb-2"><i class="bi bi-phone me-2"></i><strong>Điện thoại:</strong>
-                                        {{ $company->phone ?? '—' }}</li>
-                                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i><strong>Địa chỉ:</strong>
-                                        {{ $company->address ?? '—' }}</li>
-                                    <li class="mb-2"><i class="bi bi-building me-2"></i><strong>Thành phố:</strong>
-                                        {{ $company->city ?? '—' }}</li>
-                                    <li class="mb-2"><i class="bi bi-people me-2"></i><strong>Quy mô:</strong>
-                                        {{ $company->company_size ?? '—' }}</li>
-                                    <li class="mb-2"><i class="bi bi-calendar-event me-2"></i><strong>Năm thành
-                                            lập:</strong> {{ $company->founded_year ?? '—' }}</li>
-                                    <li><i class="bi bi-briefcase me-2"></i><strong>Ngành:</strong>
+                                    <li class="mb-3"><i class="bi bi-phone me-2 text-secondary"></i><strong>Điện
+                                            thoại:</strong> {{ $company->phone ?? '—' }}</li>
+                                    <li class="mb-3"><i class="bi bi-geo-alt me-2 text-secondary"></i><strong>Địa
+                                            chỉ:</strong> {{ $company->address ?? '—' }}</li>
+                                    <li class="mb-3"><i class="bi bi-building me-2 text-secondary"></i><strong>Thành
+                                            phố:</strong> {{ $company->city ?? '—' }}</li>
+                                    <li class="mb-3"><i class="bi bi-people me-2 text-secondary"></i><strong>Quy
+                                            mô:</strong> {{ $company->company_size ?? '—' }}</li>
+                                    <li class="mb-3"><i class="bi bi-calendar-event me-2 text-secondary"></i><strong>Năm
+                                            thành lập:</strong> {{ $company->founded_year ?? '—' }}</li>
+                                    <li><i class="bi bi-briefcase me-2 text-secondary"></i><strong>Ngành:</strong>
                                         {{ $company->industry ?? '—' }}</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
+                    {{-- Mô tả & Phúc lợi --}}
                     <div class="col-lg-6">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body">
-                                <h5 class="card-title mb-3"><i class="bi bi-card-text me-2 text-secondary"></i> Mô tả &amp;
-                                    Phúc lợi</h5>
-                                {{-- Scrollable mô tả --}}
-                                <div class="mb-3">
-                                    <h6>Mô tả</h6>
-                                    <div class="border p-2 rounded" style="max-height:150px; overflow-y:auto;">
-                                        <p class="text-muted small mb-0">{!! nl2br(e($company->description)) !!}</p>
+                                <h5 class="card-title fw-bold text-dark mb-4">
+                                    <i class="bi bi-card-text me-2 text-secondary"></i>Mô tả & Phúc lợi
+                                </h5>
+
+                                {{-- Mô tả --}}
+                                <div class="mb-4">
+                                    <h6 class="fw-semibold mb-2"><i class="bi bi-info-square me-2 text-muted"></i>Mô tả</h6>
+                                    <div class="border rounded bg-light-subtle p-3"
+                                        style="max-height: 150px; overflow-y: auto;">
+                                        <p class="mb-0 text-muted small">{!! nl2br(e($company->description)) !!}</p>
                                     </div>
                                 </div>
-                                {{-- Scrollable phúc lợi --}}
+
+                                {{-- Phúc lợi --}}
                                 <div>
-                                    <h6>Phúc lợi</h6>
-                                    <div class="border p-2 rounded" style="max-height:150px; overflow-y:auto;">
+                                    <h6 class="fw-semibold mb-2"><i class="bi bi-gift me-2 text-muted"></i>Phúc lợi</h6>
+                                    <div class="border rounded bg-light-subtle p-3"
+                                        style="max-height: 150px; overflow-y: auto;">
                                         @if (is_array($company->benefits) && count($company->benefits))
-                                            <ul class="list-unstyled mb-0">
+                                            <ul class="list-inline mb-0">
                                                 @foreach ($company->benefits as $item)
-                                                    <li class="mb-1"><span
-                                                            class="badge bg-light text-dark border">{{ $item }}</span>
+                                                    <li class="list-inline-item mb-2">
+                                                        <span
+                                                            class="badge bg-secondary-subtle text-dark border">{{ $item }}</span>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -118,40 +126,61 @@
                     </div>
                 </div>
 
+
                 {{-- System Info --}}
                 <div class="card border-0 shadow-sm mt-4">
                     <div class="card-body">
-                        <h5 class="card-title mb-3"><i class="bi bi-gear me-2 text-info"></i> Thông tin hệ thống</h5>
+                        <h5 class="card-title text-dark fw-bold mb-4">
+                            <i class="bi bi-gear me-2 text-info"></i>Thông tin hệ thống
+                        </h5>
                         <div class="table-responsive">
-                            <table class="table table-striped mb-0 align-middle">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">Xác thực</th>
-                                        <td>{{ $company->is_verified ? 'Đã xác thực' : 'Chưa xác thực' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Trạng thái</th>
-                                        <td><span
-                                                class="badge bg-{{ $company->status === 'active' ? 'success' : ($company->status === 'banned' ? 'danger' : 'secondary') }}">{{ ucfirst($company->status) }}</span>
+                            <table class="table table-borderless align-middle mb-0">
+                                <tbody class="text-sm">
+                                    <tr class="border-bottom">
+                                        <th class="text-muted fw-semibold" style="width: 200px;">
+                                            <i class="bi bi-shield-check me-2 text-secondary"></i>Xác thực
+                                        </th>
+                                        <td>
+                                            <span class="badge bg-{{ $company->is_verified ? 'success' : 'secondary' }}">
+                                                {{ $company->is_verified ? 'Đã xác thực' : 'Chưa xác thực' }}
+                                            </span>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">Quota miễn phí</th>
+                                    <tr class="border-bottom">
+                                        <th class="text-muted fw-semibold">
+                                            <i class="bi bi-toggle-on me-2 text-secondary"></i>Trạng thái
+                                        </th>
                                         <td>
-                                            {{ $company->free_post_quota_used }} / {{ $company->free_post_quota }}
+                                            <span
+                                                class="badge px-3 bg-{{ $company->status === 'active' ? 'success' : ($company->status === 'banned' ? 'danger' : 'secondary') }}">
+                                                {{ ucfirst($company->status) }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-bottom">
+                                        <th class="text-muted fw-semibold">
+                                            <i class="bi bi-box-seam me-2 text-secondary"></i>Quota miễn phí
+                                        </th>
+                                        <td>
+                                            <span class="fw-semibold">{{ $company->free_post_quota_used }} /
+                                                {{ $company->free_post_quota }}</span>
                                             <br>
                                             <small class="text-muted">
-                                                <i class="bi bi-hourglass-split"></i> Hết hạn:
+                                                <i class="bi bi-hourglass-split me-1"></i>Hết hạn:
                                                 {{ $company->free_post_quota_expired_at ? $company->free_post_quota_expired_at->format('d/m/Y') : '—' }}
                                             </small>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">Ngày tạo</th>
+                                    <tr class="border-bottom">
+                                        <th class="text-muted fw-semibold">
+                                            <i class="bi bi-clock-history me-2 text-secondary"></i>Ngày tạo
+                                        </th>
                                         <td>{{ $company->created_at->format('d/m/Y H:i') }}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Cập nhật</th>
+                                        <th class="text-muted fw-semibold">
+                                            <i class="bi bi-arrow-repeat me-2 text-secondary"></i>Cập nhật
+                                        </th>
                                         <td>{{ $company->updated_at->format('d/m/Y H:i') }}</td>
                                     </tr>
                                 </tbody>
