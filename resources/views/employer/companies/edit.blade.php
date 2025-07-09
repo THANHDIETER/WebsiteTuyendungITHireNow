@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container my-5">
-        <div class="card shadow">
+        <div class="card shadow border-0">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Sửa Công ty</h5>
+                <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Sửa Công Ty</h5>
                 <a href="{{ route('employer.companies.index') }}" class="btn btn-light btn-sm">
                     <i class="bi bi-arrow-left me-1"></i>Quay lại
                 </a>
@@ -12,144 +12,237 @@
             <div class="card-body">
                 <form action="{{ route('employer.companies.update', $company) }}" method="POST"
                     enctype="multipart/form-data">
-                    @csrf @method('PUT')
+                    @csrf
+                    @method('PUT')
 
                     {{-- 1. Thông tin cơ bản --}}
                     <fieldset class="mb-4">
-                        <legend class="h6 text-secondary">1. Thông tin cơ bản</legend>
-                        @foreach (['name' => 'Tên công ty*', 'website' => 'Website', 'email' => 'Email', 'phone' => 'Điện thoại'] as $field => $label)
-                            <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label" for="{{ $field }}">{{ $label }}</label>
-                                <div class="col-sm-9">
-                                    <input id="{{ $field }}" name="{{ $field }}"
-                                        type="{{ $field == 'email' ? 'email' : ($field == 'website' ? 'url' : 'text') }}"
-                                        class="form-control @error($field) is-invalid @enderror"
-                                        value="{{ old($field, $company->$field) }}" placeholder="{{ $label }}">
-                                    @error($field)
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-light">
+                                <strong class="text-muted">1. Thông tin cơ bản</strong>
                             </div>
-                        @endforeach
-                    </fieldset>
+                            <div class="card-body">
 
-                    {{-- 2. Địa chỉ --}}
-                    <fieldset class="mb-4">
-                        <legend class="h6 text-secondary">2. Địa chỉ</legend>
-                        @foreach (['city' => 'Thành phố', 'address' => 'Địa chỉ'] as $field => $label)
-                            <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label"
-                                    for="{{ $field }}">{{ $label }}</label>
-                                <div class="col-sm-9">
-                                    @if ($field == 'address')
-                                        <textarea id="address" name="address" rows="2" class="form-control @error('address') is-invalid @enderror"
-                                            placeholder="{{ $label }}...">{{ old('address', $company->address) }}</textarea>
-                                    @else
-                                        <input id="city" name="city" type="text"
-                                            class="form-control @error('city') is-invalid @enderror"
-                                            value="{{ old('city', $company->city) }}" placeholder="{{ $label }}">
-                                    @endif
-                                    @error($field)
+                                <div class="mb-3 form-floating">
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        id="name" name="name" placeholder="Tên công ty"
+                                        value="{{ old('name', $company->name) }}">
+                                    <label for="name"><i class="bi bi-building me-1"></i>Tên công ty *</label>
+                                    @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
-                        @endforeach
-                    </fieldset>
 
-                    {{-- 3. Chi tiết công ty --}}
-                    <fieldset class="mb-4">
-                        <legend class="h6 text-secondary">3. Chi tiết công ty</legend>
-                        @foreach (['company_size' => 'Quy mô', 'founded_year' => 'Năm thành lập', 'industry' => 'Ngành nghề'] as $field => $label)
-                            <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label"
-                                    for="{{ $field }}">{{ $label }}</label>
-                                <div class="col-sm-9">
-                                    <input id="{{ $field }}" name="{{ $field }}"
-                                        type="{{ $field == 'founded_year' ? 'number' : 'text' }}"
-                                        class="form-control @error($field) is-invalid @enderror"
-                                        value="{{ old($field, $company->$field) }}" placeholder="{{ $label }}">
-                                    @error($field)
+                                <div class="mb-3 form-floating">
+                                    <input type="url" class="form-control @error('website') is-invalid @enderror"
+                                        id="website" name="website" placeholder="https://example.com"
+                                        value="{{ old('website', $company->website) }}">
+                                    <label for="website"><i class="bi bi-globe me-1"></i>Website</label>
+                                    @error('website')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
-                        @endforeach
-                        <div class="row mb-3">
-                            <label class="col-sm-3 col-form-label" for="status">Trạng thái</label>
-                            <div class="col-sm-9">
-                                <select id="status" name="status"
-                                    class="form-select @error('status') is-invalid @enderror">
-                                    @foreach (['active' => 'Active', 'inactive' => 'Inactive', 'banned' => 'Banned'] as $val => $text)
-                                        <option value="{{ $val }}"
-                                            {{ old('status', $company->status) == $val ? 'selected' : '' }}>{{ $text }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('status')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+
+                                <div class="mb-3 form-floating">
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" name="email" placeholder="email@domain.com"
+                                        value="{{ old('email', $company->email) }}">
+                                    <label for="email"><i class="bi bi-envelope me-1"></i>Email</label>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 form-floating">
+                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                        id="phone" name="phone" placeholder="0123 456 789"
+                                        value="{{ old('phone', $company->phone) }}">
+                                    <label for="phone"><i class="bi bi-phone me-1"></i>Điện thoại</label>
+                                    @error('phone')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
                         </div>
                     </fieldset>
 
-                    {{-- 4. Mô tả & Phúc lợi --}}
+                    {{-- 2. Địa chỉ --}}
                     <fieldset class="mb-4">
-                        <legend class="h6 text-secondary">4. Mô tả & Phúc lợi</legend>
-                        @foreach (['description' => 'Mô tả', 'benefits' => 'Phúc lợi'] as $field => $label)
-                            <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label"
-                                    for="{{ $field }}">{{ $label }}</label>
-                                <div class="col-sm-9">
-                                    <textarea id="{{ $field }}" name="{{ $field }}" rows="4"
-                                        class="form-control @error($field) is-invalid @enderror" placeholder="{{ $label }}...">{{ old($field, is_array($company->$field) ? implode(', ', $company->$field) : $company->$field) }}</textarea>
-                                    @error($field)
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-light">
+                                <strong class="text-muted">2. Địa chỉ</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 form-floating">
+                                    <input type="text" class="form-control @error('city') is-invalid @enderror"
+                                        id="city" name="city" placeholder="Hà Nội"
+                                        value="{{ old('city', $company->city) }}">
+                                    <label for="city">Thành phố</label>
+                                    @error('city')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 form-floating">
+                                    <textarea class="form-control @error('address') is-invalid @enderror" placeholder="Số nhà, phố, quận" id="address"
+                                        name="address" style="height: 100px">{{ old('address', $company->address) }}</textarea>
+                                    <label for="address">Địa chỉ</label>
+                                    @error('address')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
+                    </fieldset>
+
+                    {{-- 3. Thông tin công ty --}}
+                    <fieldset class="mb-4">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-light">
+                                <strong class="text-muted">3. Thông tin công ty</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 form-floating">
+                                    <input type="text" class="form-control @error('company_size') is-invalid @enderror"
+                                        id="company_size" name="company_size" placeholder="Quy mô"
+                                        value="{{ old('company_size', $company->company_size) }}">
+                                    <label for="company_size">Quy mô công ty</label>
+                                    @error('company_size')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 form-floating">
+                                    <input type="number" class="form-control @error('founded_year') is-invalid @enderror"
+                                        id="founded_year" name="founded_year" placeholder="2020"
+                                        value="{{ old('founded_year', $company->founded_year) }}">
+                                    <label for="founded_year">Năm thành lập</label>
+                                    @error('founded_year')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 form-floating">
+                                    <input type="text" class="form-control @error('industry') is-invalid @enderror"
+                                        id="industry" name="industry" placeholder="Ngành nghề"
+                                        value="{{ old('industry', $company->industry) }}">
+                                    <label for="industry">Ngành nghề</label>
+                                    @error('industry')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Trạng thái</label>
+                                    <select id="status" class="form-select @error('status') is-invalid @enderror"
+                                        name="status">
+                                        <option value="active"
+                                            {{ old('status', $company->status) == 'active' ? 'selected' : '' }}>Active
+                                        </option>
+                                        <option value="inactive"
+                                            {{ old('status', $company->status) == 'inactive' ? 'selected' : '' }}>Inactive
+                                        </option>
+                                        <option value="banned"
+                                            {{ old('status', $company->status) == 'banned' ? 'selected' : '' }}>Banned
+                                        </option>
+                                    </select>
+                                    @error('status')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    {{-- 4. Mô tả & phúc lợi --}}
+                    <fieldset class="mb-4">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-light">
+                                <strong class="text-muted">4. Mô tả & Phúc lợi</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 form-floating">
+                                    <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                        style="height: 100px">{{ old('description', $company->description) }}</textarea>
+                                    <label for="description">Mô tả</label>
+                                    @error('description')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 form-floating">
+                                    <textarea class="form-control @error('benefits') is-invalid @enderror" id="benefits" name="benefits"
+                                        style="height: 100px">{{ old('benefits', is_array($company->benefits) ? implode(', ', $company->benefits) : $company->benefits) }}</textarea>
+                                    <label for="benefits">Phúc lợi</label>
+                                    @error('benefits')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                     </fieldset>
 
                     {{-- 5. Hình ảnh --}}
                     <fieldset class="mb-4">
-                        <legend class="h6 text-secondary">5. Hình ảnh</legend>
-                        @foreach (['logo' => 'Logo', 'cover_image' => 'Ảnh bìa'] as $field => $label)
-                            <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label"
-                                    for="{{ $field }}">{{ $label }}</label>
-                                <div class="col-sm-9">
-                                    <input type="file" id="{{ $field }}" name="{{ $field }}"
-                                        class="form-control @error($field) is-invalid @enderror">
-                                    @error($field)
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-light">
+                                <strong class="text-muted">5. Hình ảnh</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="logo" class="form-label">Logo công ty</label>
+                                    <input type="file" class="form-control @error('logo') is-invalid @enderror"
+                                        id="logo" name="logo" accept="image/*"
+                                        onchange="previewImage(this, '#logoPreview')">
+                                    @error('logo')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    @php $url = $field.'_url'; @endphp
-                                    @if ($company->$url)
-                                        <div class="mt-2">
-                                            <a href="{{ asset('storage/' . $company->$url) }}" target="_blank">
-                                                <img src="{{ asset('storage/' . $company->$url) }}"
-                                                    alt="{{ $label }} hiện tại"
-                                                    style="max-height:120px; object-fit:cover;">
-                                            </a>
-                                        </div>
+                                    @if ($company->logo_url)
+                                        <img src="{{ asset('storage/' . $company->logo_url) }}"
+                                            class="mt-2 border rounded" style="max-height: 100px;">
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="cover_image" class="form-label">Ảnh bìa</label>
+                                    <input type="file" class="form-control @error('cover_image') is-invalid @enderror"
+                                        id="cover_image" name="cover_image" accept="image/*">
+                                    @error('cover_image')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    @if ($company->cover_image_url)
+                                        <img src="{{ asset('storage/' . $company->cover_image_url) }}"
+                                            class="mt-2 border rounded" style="max-height: 100px;">
                                     @endif
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
                     </fieldset>
 
-                    {{-- Buttons --}}
-                    <div class="text-end">
+                    <div class="text-end mt-4">
                         <button type="submit" class="btn btn-success me-2">
-                            <i class="bi bi-save me-1"></i>Lưu thay đổi
+                            <i class="bi bi-check-circle me-1"></i>Lưu thay đổi
                         </button>
-                        <a href="{{ route('employer.companies.index') }}" class="btn btn-outline-secondary">
-                            Hủy
-                        </a>
+                        <a href="{{ route('employer.companies.index') }}" class="btn btn-outline-secondary">Hủy</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            function previewImage(input, selector) {
+                const file = input.files[0];
+                const img = document.querySelector(selector);
+                if (file) {
+                    img.src = URL.createObjectURL(file);
+                    img.classList.remove('d-none');
+                } else {
+                    img.classList.add('d-none');
+                }
+            }
+        </script>
+    @endpush
 @endsection
