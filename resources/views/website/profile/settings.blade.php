@@ -9,114 +9,104 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container py-5">
+        {{-- Flash message --}}
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <ul class="mb-0">
                     @foreach ($errors->all() as $err)
                         <li>{{ $err }}</li>
                     @endforeach
                 </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
+
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3">
-                <div class="bg-white shadow-sm rounded p-4">
-                    <h6 class="fw-semibold text-center mb-3">👋 Xin chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
+            {{-- Sidebar --}}
+            <div class="col-md-3 mb-4">
+                <div class="bg-white shadow rounded-4 p-4">
+                    <h6 class="fw-semibold text-center mb-3">
+                        👋 Xin chào, {{ $profile->name ?? Auth::user()->name }}
+                    </h6>
                     <hr>
-                    <ul class="nav nav-pills flex-column">
-                        <li class="nav-item mb-2">
-                            <a class="nav-link {{ request()->routeIs('profile.dashboard') ? 'active' : 'text-dark' }}"
-                                href="{{ route('profile.dashboard') }}">
-                                <i class="fa-solid fa-house me-2"></i> Tổng quan
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link {{ request()->routeIs('profile.show') ? 'active' : 'text-dark' }}"
-                                href="{{ route('profile.show') }}">
-                                <i class="fa-solid fa-file-lines me-2"></i> Hồ sơ HireNow
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link {{ request()->routeIs('profile.my-jobs') ? 'active' : 'text-dark' }}"
-                                href="{{ route('profile.my-jobs') }}">
-                                <i class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('profile.settings') ? 'active' : 'text-dark' }}"
-                                href="{{ route('profile.settings') }}">
-                                <i class="fa-solid fa-gear me-2"></i> Cài đặt
-                            </a>
-                        </li>
+                    <ul class="nav flex-column nav-pills gap-2">
+                        @php
+                            $items = [
+                                ['route' => 'profile.dashboard', 'icon' => 'fa-house', 'label' => 'Tổng quan'],
+                                ['route' => 'profile.show', 'icon' => 'fa-file-lines', 'label' => 'Hồ sơ HireNow'],
+                                ['route' => 'profile.my-jobs', 'icon' => 'fa-briefcase', 'label' => 'Việc làm của tôi'],
+                                ['route' => 'profile.settings', 'icon' => 'fa-gear', 'label' => 'Cài đặt'],
+                            ];
+                        @endphp
+                        @foreach ($items as $item)
+                            <li>
+                                <a href="{{ route($item['route']) }}"
+                                    class="nav-link d-flex align-items-center gap-2 {{ request()->routeIs($item['route']) ? 'active text-white bg-primary' : 'text-dark' }} rounded-3">
+                                    <i class="fa-solid {{ $item['icon'] }}"></i> {{ $item['label'] }}
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
 
-            <!-- Main content -->
+            {{-- Main content --}}
             <div class="col-md-9">
-                <!-- Thông tin tài khoản -->
-                <div class="bg-white shadow-sm rounded p-4 mb-4">
-                    <h5 class="fw-bold mb-3">Thông tin tài khoản</h5>
+                {{-- Thông tin tài khoản --}}
+                <div class="bg-white shadow rounded-4 p-4 mb-4">
+                    <h5 class="fw-bold mb-3">🔐 Thông tin tài khoản</h5>
 
-                    <div class="mb-3">
-                        <strong>E-mail: </strong><span>{{ Auth::user()->email }}</span>
-                        <div class="text-muted small mt-1">
-                            <i class="fa-solid fa-circle-info me-1"></i>
-                            Bạn không thể thay đổi email tài khoản của mình.
+                    <div class="mb-4">
+                        <div class="mb-2"><strong>Email:</strong> {{ Auth::user()->email }}</div>
+                        <div class="text-muted small">
+                            <i class="fa-solid fa-circle-info me-1"></i> Email không thể thay đổi sau khi đăng ký.
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <strong>Họ và tên đầy đủ: </strong><span>{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</span>
-                        <div class="text-muted small mt-1">
-                            <i class="fa-solid fa-circle-info me-1"></i>
-                            Tên tài khoản của bạn được đồng bộ với thông tin hồ sơ.
+                    <div>
+                        <div class="mb-2"><strong>Họ và tên:</strong> {{ $profile->name ?? Auth::user()->name }}</div>
+                        <div class="text-muted small">
+                            <i class="fa-solid fa-circle-info me-1"></i> Tên sẽ được đồng bộ từ hồ sơ của bạn.
                         </div>
                     </div>
                 </div>
 
-                <!-- Đổi mật khẩu -->
-                <div class="bg-white shadow-sm rounded p-4">
-                    <h5 class="fw-bold mb-3">Mật khẩu</h5>
-
-                    <button type="button" class="btn btn-outline-danger px-4" data-bs-toggle="modal"
+                {{-- Thay đổi mật khẩu --}}
+                <div class="bg-white shadow rounded-4 p-4">
+                    <h5 class="fw-bold mb-3">🔒 Bảo mật</h5>
+                    <button class="btn btn-outline-danger px-4" data-bs-toggle="modal"
                         data-bs-target="#changePasswordModal">
-                        <i class="fa-solid fa-key me-2"></i> Thay đổi mật khẩu
+                        <i class="fa-solid fa-key me-2"></i> Đổi mật khẩu
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal thay đổi mật khẩu -->
+    {{-- Modal đổi mật khẩu --}}
     <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="POST" action="{{ route('profile.change-password') }}">
+                <form action="{{ route('profile.change-password') }}" method="POST">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="changePasswordModalLabel">Thay đổi mật khẩu</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        <h5 class="modal-title">Đổi mật khẩu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
+
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Mật khẩu hiện tại</label>
                             <input type="password" name="current_password" class="form-control" autocomplete="off">
-
                             @error('current_password')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -140,13 +130,14 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Cập nhật mật khẩu</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 @endsection
 
 @if ($errors->has('current_password') || $errors->has('new_password') || $errors->has('new_password_confirmation'))

@@ -9,7 +9,8 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container py-5">
+        {{-- Flash message --}}
         <div class="row">
             {{-- Sidebar trái --}}
             <div class="col-md-3">
