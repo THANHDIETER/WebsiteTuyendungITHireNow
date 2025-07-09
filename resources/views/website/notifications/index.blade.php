@@ -20,7 +20,6 @@
             </div>
         </div>
     </div>
-
     <div class="container py-5">
         <h2 class="mb-4 fw-bold text-primary">
             <i class="icofont-notification"></i> Tất cả Thông báo

@@ -9,7 +9,7 @@
             </div>
         </div>
     </div>
-    <div class="container mt-4">
+    <div class="container">
         <div class="row">
             {{-- Sidebar trái --}}
             <div class="col-md-3">
