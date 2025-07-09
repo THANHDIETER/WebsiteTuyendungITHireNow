@@ -7,7 +7,7 @@
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
 
-<title>{{ $title ?? 'Admin' }}</title>
+<title>{{ $title ?? 'Employer' }}</title>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -17,8 +17,8 @@
 
 
 <!-- Favicon icon-->
-<link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
+<link rel="icon" href="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" type="image/x-icon">
 <!-- Google font-->
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -53,9 +53,9 @@
 <meta property="og:url" content="{{ url()->current() }}">
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
-                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
-            href="javascript:void(0)">
+                src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" style="width: 100px" alt="logo"><img
+                class="for-dark" loading="lazy" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
+                style="width: 100px" alt="logo"></a><a class="close-btn" href="javascript:void(0)">
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
@@ -151,7 +151,8 @@
 
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary" href="{{ route('employer.notifications.index') }}">All
+                                    <a class="btn btn-secondary"
+                                        href="{{ route('employer.notifications.index') }}">All
                                         Notification</a>
                                 </div>
                             </li>
@@ -523,6 +524,16 @@
                     </div>
                     <div class="custom-menu overflow-hidden">
                         <ul>
+                            <li class="d-flex">
+                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 9.5L12 3L21 9.5V20A1.5 1.5 0 0 1 19.5 21H4.5A1.5 1.5 0 0 1 3 20V9.5Z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M9 21V12H15V21" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg><a class="ms-2" href="{{ route('home') }}">Client</a>
+                            </li>
                             <li class="d-flex">
                                 <!-- Icon Profile -->
                                 <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"

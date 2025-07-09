@@ -18,8 +18,8 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <!-- Favicon icon-->
-<link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
+<link rel="icon" href="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" type="image/x-icon">
 <!-- Google font-->
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -52,8 +52,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
@@ -64,9 +64,9 @@
 @endif
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
-                src="{{ asset('assets/images/logo/logo.png') }}" loading="lazy" alt="logo"><img class="for-dark"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" loading="lazy" alt="logo"></a><a
-            class="close-btn" href="javascript:void(0)">
+                src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" style="width: 100px" loading="lazy"
+                alt="logo"><img class="for-dark" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
+                style="width: " loading="lazy" alt="logo"></a><a class="close-btn" href="javascript:void(0)">
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
@@ -168,7 +168,7 @@
                             </li>
                             <script>
                                 setInterval(() => {
-                                    fetch('{{ route("admin.notifications.latest") }}')
+                                    fetch('{{ route('admin.notifications.latest') }}')
                                         .then(res => res.json())
                                         .then(notis => {
                                             const list = document.getElementById('noti-list');
@@ -533,6 +533,28 @@
                     </div>
                     <div class="custom-menu overflow-hidden">
                         <ul>
+                            <li class="d-flex">
+                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 6V5a4 4 0 0 1 8 0v1" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <rect x="4" y="6" width="16" height="14" rx="2"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg><a class="ms-2" href="{{ route('employer.dashboard') }}">Employer</a>
+                            </li>
+                            <li class="d-flex">
+                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 9.5L12 3L21 9.5V20A1.5 1.5 0 0 1 19.5 21H4.5A1.5 1.5 0 0 1 3 20V9.5Z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M9 21V12H15V21" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg><a class="ms-2" href="{{ route('home') }}">Client</a>
+                            </li>
                             <li class="d-flex">
                                 <!-- Icon Profile -->
                                 <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
