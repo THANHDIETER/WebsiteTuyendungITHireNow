@@ -11,38 +11,7 @@
                         <div class="job-search-form">
                             <form action="#">
                                 <div class="row row-gutter-10">
-                                    <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control"
-                                                placeholder="Tiêu đề việc làm hoặc từ khóa">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                        <div class="form-group">
-                                            <select class="form-control">
-                                                <option selected>Chọn Thành Phố</option>
-                                                <option>Hà Nội</option>
-                                                <option>Hồ Chí Minh</option>
-                                                <option>Đà Nẵng</option>
-                                                <option>Huế</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                        <div class="form-group">
-                                            <select class="form-control">
-                                                <option selected>Loại Công Việc</option>
-                                                <option>Web Designer</option>
-                                                <option>Web Developer</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                        <div class="form-group">
-                                            <button type="submit" class="btn-form-search"><i
-                                                    class="icofont-search-1"></i></button>
-                                        </div>
-                                    </div>
+                                    <!-- Form tìm kiếm (giữ nguyên hoặc có thể ẩn nếu không dùng) -->
                                 </div>
                             </form>
                         </div>
@@ -51,18 +20,23 @@
             </div>
         </div>
     </div>
-    <div class="container py-4">
-        <h2 class="mb-4 fw-bold">🔔 Tất cả Thông báo</h2>
+
+    <div class="container py-5">
+        <h2 class="mb-4 fw-bold text-primary">
+            <i class="icofont-notification"></i> Tất cả Thông báo
+        </h2>
+
         @forelse($notifications as $noti)
-            <div class="card mb-3 shadow-sm @if (!$noti->read_at) border-warning @endif">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <a href="{{ $noti->data['link_url'] }}" class="text-decoration-none">
-                            <h5 class="card-title mb-1">
-                                {{ $noti->data['message'] }}
+            <div
+                class="card mb-3 shadow-sm border-0 position-relative @if (!$noti->read_at) bg-light border-start border-4 border-warning @endif">
+                <div class="card-body d-flex justify-content-between align-items-start flex-wrap">
+                    <div class="me-3 flex-grow-1">
+                        <a href="{{ $noti->data['link_url'] }}" class="text-decoration-none text-dark">
+                            <h5 class="mb-2">
+                                <i class="icofont-bell me-2 text-warning"></i> {{ $noti->data['message'] }}
                             </h5>
                         </a>
-                        <p class="card-text text-muted small mb-0">
+                        <p class="mb-0 text-muted small">
                             {{ $noti->created_at->diffForHumans() }}
                         </p>
                     </div>
@@ -77,10 +51,12 @@
                 </div>
             </div>
         @empty
-            <div class="alert alert-info">Bạn chưa có thông báo nào.</div>
+            <div class="alert alert-info">
+                <i class="icofont-info-circle"></i> Bạn chưa có thông báo nào.
+            </div>
         @endforelse
 
-        <div class="mt-4">
+        <div class="mt-4 d-flex justify-content-center">
             {{ $notifications->links() }}
         </div>
     </div>
