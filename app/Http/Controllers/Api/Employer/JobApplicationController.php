@@ -105,10 +105,12 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Trạng thái không hợp lệ.'], 400);
         }
 
+
         // ❌ Không cho quay lại trạng thái trước
         if ($newIndex < $currentIndex) {
             return response()->json(['message' => 'Không thể quay lại trạng thái trước.'], 422);
         }
+
 
         // ❌ Đơn đã bị từ chối thì không cập nhật nữa
         if ($currentStatus === 'rejected' && $newStatus !== 'rejected') {
@@ -177,11 +179,34 @@ class JobApplicationController extends Controller
             }
         }
 
+
+        // ✅ Gửi thông báo nếu cần
+        $jobseeker = $jobApplication->user;
+        $job = $jobApplication->job;
+
+        if ($jobseeker && $job) {
+            if ($currentStatus !== 'offered' && $newStatus === 'offered') {
+                $jobseeker->notify(new ApplicationApprovedNotification($job));
+            }
+
+            if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
+                $jobseeker->notify(new ApplicationRejectedNotification($job));
+            }
+
+            if (
+                !empty($data['interview_date']) &&
+                $jobApplication->getOriginal('interview_date') !== $data['interview_date']
+            ) {
+                $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+            }
+        }
+
         return response()->json([
             'message' => 'Cập nhật trạng thái thành công.',
             'data' => $jobApplication->fresh()
         ]);
     }
+
 
     public function destroy(JobApplication $jobApplication)
     {

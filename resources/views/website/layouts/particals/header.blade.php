@@ -24,7 +24,7 @@
                                     <a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a>
                                 </li>
 
-                                <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
+                                {{-- <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li> --}}
 
                                 <li class="has-submenu">
                                     <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
@@ -47,13 +47,13 @@
                                 <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
 
                                 <li class="has-submenu">
-                                    <a href="#"><span>Trang Khác</span></a>
-                                    <ul class="submenu-nav">
+                                    <a href="{{ route('about-us') }}"><span>Thông Tin</span></a>
+                                    {{-- <ul class="submenu-nav">
                                         <li><a href="{{ route('about-us') }}">Thông Tin</a></li>
                                         <li><a href="{{ route('showLoginForm') }}">Đăng Nhập</a></li>
                                         <li><a href="{{ route('register') }}">Đăng Ký</a></li>
                                         <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
-                                    </ul>
+                                    </ul> --}}
                                 </li>
                             </ul>
                         </div>

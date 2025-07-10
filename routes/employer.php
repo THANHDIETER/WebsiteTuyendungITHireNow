@@ -25,7 +25,6 @@ Route::middleware(['auth:sanctum', 'employer'])
     ->group(function () {
 
         // Danh sách việc làm của nhà tuyển dụng
-
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
