@@ -52,7 +52,9 @@
                     <td>{{ app.job?.title }}</td>
                     <td>{{ app.company?.name }}</td>
                     <td>
+
                         <span :class="statusBadgeClass(app.status) ">
+
                             {{ statusLabel(app.status) }}
                         </span>
                     </td>
@@ -221,7 +223,8 @@
 
                                 <div class="col-md-12">
                                     <label class="form-label fw-semibold">Ghi chú</label>
-                                    <textarea v-model="form.note" class="form-control" rows="2"
+
+                                    <textarea v-model="form.note" class="form-control" rows="5"
                                         placeholder="Ghi chú thêm (tuỳ chọn)"></textarea>
                                 </div>
                             </div>
@@ -250,10 +253,8 @@
                         </h5>
                         <button type="button" class="btn-close btn-close-white" @click="detailApp = null"></button>
                     </div>
-
                     <div class="modal-body px-4 py-4">
                         <div class="row g-4">
-                            <!-- Thông tin cá nhân -->
                             <div class="col-md-6">
                                 <h6 class="fw-bold text-primary mb-3"><i class="bi bi-person-fill me-2"></i>Thông tin
                                     ứng viên</h6>
@@ -266,13 +267,10 @@
                                 <p>
                                     <i class="bi bi-file-earmark-person me-1 text-secondary"></i> CV:
                                     <a :href="image(detailApp.image)" target="_blank">
-                                        <i class="bi bi-box-arrow-up-right me-1"> </i>
-                                        Xem CV (PDF)
+                                        <i class="bi bi-box-arrow-up-right me-1"></i> Xem CV (PDF)
                                     </a>
                                 </p>
                             </div>
-
-                            <!-- Thông tin công việc -->
                             <div class="col-md-6">
                                 <h6 class="fw-bold text-primary mb-3"><i class="bi bi-briefcase-fill me-2"></i>Thông tin
                                     ứng tuyển</h6>
@@ -284,39 +282,22 @@
                                         formatDate(detailApp.applied_at) }}</strong></p>
                                 <p><i class="bi bi-link-45deg me-1 text-secondary"></i> Nguồn: <strong>{{
                                         detailApp.source || '—' }}</strong></p>
-                                <p><i class="bi bi-stack me-1 text-secondary"></i> Giai đoạn: <strong>{{
-                                        detailApp.application_stage || '—' }}</strong></p>
                                 <p>
-                                    <i class="bi bi-calendar-event me-1 text-secondary"></i> Ngày phỏng vấn:
-                                    <strong>{{ formatDate(detailApp.interview_date) }}</strong>
+                                    <i class="bi bi-calendar-event me-1 text-secondary"></i> Ngày phỏng vấn: <strong>{{
+                                        formatDate(detailApp.interview_date) }}</strong>
                                 </p>
                             </div>
-
-                            <!-- Trạng thái -->
                             <div class="col-md-12">
                                 <div class="p-3 bg-light rounded border">
                                     <h6 class="fw-bold text-primary mb-2"><i
                                             class="bi bi-info-circle-fill me-2"></i>Trạng thái</h6>
-                                    <span :class="{
-                'badge rounded-pill px-3 py-2 text-uppercase fw-semibold': true,
-                'bg-secondary': detailApp.status === 'pending',
-                'bg-success': detailApp.status === 'approved',
-                'bg-danger': detailApp.status === 'rejected'
-              }">
-                                        {{
-                                        detailApp.status === 'pending' ? 'Đang chờ' :
-                                        detailApp.status === 'approved' ? 'Đã duyệt' :
-                                        detailApp.status === 'rejected' ? 'Từ chối' :
-                                        detailApp.status
-                                        }}
-                                    </span>
+                                    <span :class="statusBadgeClass(detailApp.status)">{{ statusLabel(detailApp.status)
+                                        }}</span>
                                     <span v-if="detailApp.is_shortlisted" class="badge bg-primary ms-2">
                                         <i class="bi bi-star-fill me-1"></i> Đã lọt DS
                                     </span>
                                 </div>
                             </div>
-
-                            <!-- Thư xin việc -->
                             <div class="col-12">
                                 <div class="p-3 bg-white border rounded shadow-sm">
                                     <h6 class="fw-bold text-primary mb-2"><i
@@ -324,8 +305,6 @@
                                     <p class="mb-0">{{ detailApp.cover_letter || 'Không có' }}</p>
                                 </div>
                             </div>
-
-                            <!-- Ghi chú -->
                             <div class="col-12">
                                 <div class="p-3 bg-white border rounded shadow-sm">
                                     <h6 class="fw-bold text-primary mb-2"><i class="bi bi-journal-text me-2"></i>Ghi chú
@@ -333,8 +312,6 @@
                                     <p class="mb-0">{{ detailApp.note || 'Không có ghi chú.' }}</p>
                                 </div>
                             </div>
-
-                            <!-- Thông tin hệ thống -->
                             <div class="col-12">
                                 <div class="p-3 bg-light rounded border">
                                     <h6 class="fw-bold text-secondary mb-2"><i
@@ -342,215 +319,246 @@
                                     <p class="mb-1">Tạo lúc: <strong>{{ formatDate(detailApp.created_at) }}</strong></p>
                                     <p class="mb-1">Cập nhật: <strong>{{ formatDate(detailApp.updated_at) }}</strong>
                                     </p>
-                                    <p v-if="detailApp.deleted_at">Đã xoá: <strong class="text-danger">{{
+                                    <p v-if="detailApp.deleted_at" class="text-danger">Đã xoá: <strong>{{
                                             formatDate(detailApp.deleted_at) }}</strong></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="modal-footer bg-light rounded-bottom-4">
                         <button type="button" class="btn btn-outline-secondary" @click="detailApp = null">Đóng</button>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
 
-const token = localStorage.getItem('access_token')
-if (token) axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    import { ref, onMounted, computed } from 'vue'
+    import axios from 'axios'
 
-
-const jobApplications = ref([])
-const pagination = ref({})
-const page = ref(1)
-const formOpen = ref(false)
-const detailApp = ref(null)
-const editApp = ref(null)
-const search = ref('')
-const perPage = ref(10)
-const image = (filePath) => {
-    if (!filePath) return '#'
-    return `/storage/${filePath}`
-}
-
-const form = ref({
-    id: null,
-    job_id: '',
-    user_id: '',
-    company_id: '',
-    image: '',
-    cover_letter: '',
-    status: 'pending',
-    is_shortlisted: false,
-    source: '',
-    interview_date: '',
-    note: ''
-})
-
-// Hàm tính valid status options theo trạng thái hiện tại (initialStatus)
-const validStatusOptions = computed(() => {
-    const current = initialStatus.value
-
-    if (current === 'pending') {
-        // Khi đang pending, chỉ cho chọn 3 trạng thái này
-        return ['interview_scheduled', 'rejected', 'saved']
-    }
-
-    if (current === 'interview_scheduled') {
-        // Khi đang pending, chỉ cho chọn 3 trạng thái này
-        return ['offered', 'no_response', 'rejected']
-    }
-
-    if (['rejected', 'hired', 'offered', 'candidate_declined', 'no_response'].includes(current)) {
-        return [current]
-    }
-
-    if (current === 'rejected') {
-        return ['rejected']
-    }
-
-    const idx = statusFlow.indexOf(current)
-    if (idx === -1) return statusFlow
-
-    return statusFlow.slice(idx)
-})
+    const token = localStorage.getItem('access_token')
+    if (token) axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
 
-// Hàm hiển thị thông báo sử dụng showAlertModal
-function showError(message) {
-    showAlertModal({
-        title: 'Lỗi',
-        message,
-        type: 'alert',
-        status: 'error',
-        onConfirm: () => { }
+    const jobApplications = ref([])
+    const pagination = ref({})
+    const page = ref(1)
+    const formOpen = ref(false)
+    const detailApp = ref(null)
+    const editApp = ref(null)
+    const search = ref('')
+    const perPage = ref(10)
+    const filterStatus = ref('')
+
+    const initialStatus = ref('')
+
+    const canCreate = false
+
+    const image = filePath =>
+        filePath ? (filePath.startsWith('http') ? filePath : `/storage/${filePath}`) : '#'
+
+
+    const statusFlow = [
+        'pending',
+        'viewed',
+        'under_review',
+        'contacting',
+        'interview_scheduled',
+        'offered',
+        'no_response',
+        'rejected',
+        'saved'
+
+    ]
+
+    const form = ref({
+        id: null,
+        job_id: '',
+        user_id: '',
+        company_id: '',
+        job_title: '',
+        user_name: '',
+        company_name: '',
+        image: '',
+        cover_letter: '',
+        status: 'pending',
+        is_shortlisted: false,
+        source: '',
+        interview_date: '',
+        note: ''
     })
 }
 
-// Hàm validate trạng thái trước khi gửi lên API
-function validateStatusChange(currentStatus, newStatus, interviewDate) {
-    const statusOrder = statusFlow
 
-    const currentIndex = statusOrder.indexOf(currentStatus)
-    const newIndex = statusOrder.indexOf(newStatus)
+    // Hàm tính valid status options theo trạng thái hiện tại (initialStatus)
+    const validStatusOptions = computed(() => {
+        const current = initialStatus.value
 
-    if (currentIndex === -1 || newIndex === -1) {
-        showError('Trạng thái không hợp lệ.')
-        return false
-    }
-
-    if (newIndex < currentIndex) {
-        showError('Không thể quay lại trạng thái trước.')
-        return false
-    }
-
-    if (currentStatus === 'rejected' && newStatus !== 'rejected') {
-        showError('Không thể cập nhật đơn đã bị từ chối.')
-        return false
-    }
-
-    if (currentStatus === 'hired' && newStatus !== 'hired') {
-        showError('Không thể thay đổi trạng thái sau khi ứng viên đã nhận việc.')
-        return false
-    }
-
-    if (interviewDate) {
-        const now = new Date()
-        const interview = new Date(interviewDate)
-        if (now > interview) {
-            const invalidBeforeInterviewStatuses = [
-                'pending',
-                'viewed',
-                'under_review',
-                'contacting',
-                'interview_scheduled'
-            ]
-            if (invalidBeforeInterviewStatuses.includes(newStatus)) {
-                showError('Không thể chuyển trạng thái về trước sau khi ngày phỏng vấn đã trôi qua.')
-                return false
-            }
+        if (current === 'pending') {
+            // Khi đang pending, chỉ cho chọn 3 trạng thái này
+            return ['interview_scheduled', 'rejected', 'saved']
         }
-    }
 
-    return true
-}
-const statusOptions = [
-    { value: 'pending', label: 'Chờ xử lý' },
-    { value: 'viewed', label: 'Đã xem' },
-    { value: 'under_review', label: 'Đang đánh giá' },
-    { value: 'contacting', label: 'Đang liên hệ' },
-    { value: 'interview_scheduled', label: 'Đã mời phỏng vấn' },
-    { value: 'offered', label: 'Trúng tuyển' },
-    { value: 'no_response', label: 'Không phản hồi' },
-    { value: 'rejected', label: 'Đã loại' },
-    { value: 'saved', label: 'Lưu hồ sơ' },
+        if (current === 'interview_scheduled') {
+            // Khi đang pending, chỉ cho chọn 3 trạng thái này
+            return ['offered', 'no_response', 'rejected']
+        }
 
-]
+        if (['rejected', 'hired', 'offered', 'candidate_declined','no_response'].includes(current)) {
+            return [current]
+        }
+
+        if (current === 'rejected') {
+            return ['rejected']
+        }
+
+        const idx = statusFlow.indexOf(current)
+        if (idx === -1) return statusFlow
+
+        return statusFlow.slice(idx)
+    })
 
 
-const fetchList = async (gotoPage = 1) => {
-    try {
-        const { data } = await axios.get('/api/job-applications', {
-            params: {
-                page: gotoPage,
-                search: search.value,
-                per_page: perPage.value,
-                status: filterStatus.value
-            }
+    // Hàm hiển thị thông báo sử dụng showAlertModal
+    function showError(message) {
+        showAlertModal({
+            title: 'Lỗi',
+            message,
+            type: 'alert',
+            status: 'error',
+            onConfirm: () => { }
         })
-        jobApplications.value = data.data
-        pagination.value = data
-        page.value = data.current_page
-    } catch (err) {
-        showError('Lỗi tải danh sách: ' + (err.message || 'Không thể tải dữ liệu.'))
     }
-}
 
-const changePage = p => fetchList(p)
+    // Hàm validate trạng thái trước khi gửi lên API
+    function validateStatusChange(currentStatus, newStatus, interviewDate) {
+        const statusOrder = statusFlow
 
-const openForm = app => {
-    if (app) {
-        editApp.value = app
-        initialStatus.value = app.status || 'pending'
+        const currentIndex = statusOrder.indexOf(currentStatus)
+        const newIndex = statusOrder.indexOf(newStatus)
 
-        form.value = {
-            id: app.id,
-            job_id: app.job_id,
-            user_id: app.user?.id,
-            company_id: app.company?.id,
-            company_name: app.company?.name,
-            user_name: app.user?.name,
-            job_title: app.job?.title,
-            image: app.image,
-            cover_letter: app.cover_letter,
-            status: app.status,
-            is_shortlisted: app.is_shortlisted,
-            source: app.source,
-            application_stage: app.application_stage,
-            interview_date: app.interview_date,
-            note: app.note
+        if (currentIndex === -1 || newIndex === -1) {
+            showError('Trạng thái không hợp lệ.')
+            return false
         }
-    } else {
-        editApp.value = null
-        initialStatus.value = 'pending'
 
-        const validOptions = validStatusOptions.value
+        if (newIndex < currentIndex) {
+            showError('Không thể quay lại trạng thái trước.')
+            return false
+        }
 
-        form.value = {
-            id: null,
-            job_id: '',
-            user_id: '',
-            company_id: '',
-            image: '',
-            cover_letter: '',
-            status: validOptions[0], // set luôn status hợp lệ đầu tiên
+        if (currentStatus === 'rejected' && newStatus !== 'rejected') {
+            showError('Không thể cập nhật đơn đã bị từ chối.')
+            return false
+        }
+
+        if (currentStatus === 'hired' && newStatus !== 'hired') {
+            showError('Không thể thay đổi trạng thái sau khi ứng viên đã nhận việc.')
+            return false
+        }
+
+        if (interviewDate) {
+            const now = new Date()
+            const interview = new Date(interviewDate)
+            if (now > interview) {
+                const invalidBeforeInterviewStatuses = [
+                    'pending',
+                    'viewed',
+                    'under_review',
+                    'contacting',
+                    'interview_scheduled'
+                ]
+                if (invalidBeforeInterviewStatuses.includes(newStatus)) {
+                    showError('Không thể chuyển trạng thái về trước sau khi ngày phỏng vấn đã trôi qua.')
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+    const statusOptions = [
+        { value: 'pending', label: 'Chờ xử lý' },
+        { value: 'viewed', label: 'Đã xem' },
+        { value: 'under_review', label: 'Đang đánh giá' },
+        { value: 'contacting', label: 'Đang liên hệ' },
+        { value: 'interview_scheduled', label: 'Đã mời phỏng vấn' },
+        { value: 'offered', label: 'Trúng tuyển' },
+        { value: 'no_response', label: 'Không phản hồi' },
+        { value: 'rejected', label: 'Đã loại' },
+        { value: 'saved', label: 'Lưu hồ sơ' },
+
+    ]
+
+
+    const fetchList = async (gotoPage = 1) => {
+        try {
+            const { data } = await axios.get('/api/job-applications', {
+                params: {
+                    page: gotoPage,
+                    search: search.value,
+                    per_page: perPage.value,
+                    status: filterStatus.value
+                }
+            })
+            jobApplications.value = data.data
+            pagination.value = data
+            page.value = data.current_page
+        } catch (err) {
+            showError('Lỗi tải danh sách: ' + (err.message || 'Không thể tải dữ liệu.'))
+        }
+    }
+
+    const changePage = p => fetchList(p)
+
+    const openForm = app => {
+        if (app) {
+            editApp.value = app
+            initialStatus.value = app.status || 'pending'
+
+            form.value = {
+                id: app.id,
+                job_id: app.job_id,
+                user_id: app.user_id,
+                company_id: app.company_id,
+                job_title: app.job?.title || '',
+                user_name: app.user?.name || app.full_name || '',
+                company_name: app.company?.name || '',
+                image: app.image || '',
+                cover_letter: app.cover_letter || '',
+                status: app.status || 'pending',
+                is_shortlisted: !!app.is_shortlisted,
+                source: app.source || '',
+                interview_date: app.interview_date ? app.interview_date.substring(0, 16) : '',
+                note: app.note || ''
+            }
+
+            // Nếu trạng thái hiện tại không còn hợp lệ thì tự động chọn cái đầu tiên
+            const validOptions = validStatusOptions.value
+            if (!validOptions.includes(form.value.status)) {
+                form.value.status = validOptions[0]
+            }
+
+        } else {
+            editApp.value = null
+            initialStatus.value = 'pending'
+
+            const validOptions = validStatusOptions.value
+
+            form.value = {
+                id: null,
+                job_id: '',
+                user_id: '',
+                company_id: '',
+                job_title: '',
+                user_name: '',
+                company_name: '',
+                image: '',
+                cover_letter: '',
+                status: validOptions[0], // set luôn status hợp lệ đầu tiên
                 is_shortlisted: false,
                 source: '',
                 interview_date: '',

@@ -52,6 +52,7 @@ class JobApplicationController extends Controller
     public function show(JobApplication $jobApplication)
     {
         return $jobApplication->load(['job', 'user', 'company']);
+
     }
 
     public function update(Request $request, JobApplication $jobApplication)
@@ -104,19 +105,21 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Trạng thái không hợp lệ.'], 400);
         }
 
+
         // ❌ Không cho quay lại trạng thái trước
         if ($newIndex < $currentIndex) {
             return response()->json(['message' => 'Không thể quay lại trạng thái trước.'], 422);
         }
+
 
         // ❌ Đơn đã bị từ chối thì không cập nhật nữa
         if ($currentStatus === 'rejected' && $newStatus !== 'rejected') {
             return response()->json(['message' => 'Không thể cập nhật đơn đã bị từ chối.'], 403);
         }
 
-        // 2. Đã approved chỉ cho phép chuyển sang rejected hoặc giữ nguyên
-        if ($currentStatus === 'approved' && !in_array($newStatus, ['approved'])) {
-            return response()->json(['message' => 'Đơn đã duyệt không thể thay đổi.'], 403);
+        // ❌ Đơn đã nhận việc thì không cập nhật nữa
+        if ($currentStatus === 'hired' && $newStatus !== 'hired') {
+            return response()->json(['message' => 'Ứng viên đã nhận việc, không thể thay đổi trạng thái.'], 403);
         }
 
         // ❌ Đơn đã trúng tuyển thì không thể cập nhật (trừ khi giữ nguyên)
@@ -154,27 +157,28 @@ class JobApplicationController extends Controller
 
         // ✅ Cập nhật
         $jobApplication->update($data);
-        // 4. Gửi thông báo nếu trạng thái thay đổi
+
+        // ✅ Gửi thông báo nếu cần
         $jobseeker = $jobApplication->user;
         $job = $jobApplication->job;
 
         if ($jobseeker && $job) {
-            if ($currentStatus !== 'approved' && $newStatus === 'approved') {
+            if ($currentStatus !== 'offered' && $newStatus === 'offered') {
                 $jobseeker->notify(new ApplicationApprovedNotification($job));
             }
 
             if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
                 $jobseeker->notify(new ApplicationRejectedNotification($job));
             }
-        }
-        // Gửi thông báo mời phỏng vấn nếu có ngày mới
-        if (
-            !empty($data['interview_date']) &&
-            $jobApplication->getOriginal('interview_date') !== $data['interview_date']
-        ) {
 
-            $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+            if (
+                !empty($data['interview_date']) &&
+                $jobApplication->getOriginal('interview_date') !== $data['interview_date']
+            ) {
+                $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+            }
         }
+
 
         // ✅ Gửi thông báo nếu cần
         $jobseeker = $jobApplication->user;
@@ -202,6 +206,7 @@ class JobApplicationController extends Controller
             'data' => $jobApplication->fresh()
         ]);
     }
+
 
     public function destroy(JobApplication $jobApplication)
     {
