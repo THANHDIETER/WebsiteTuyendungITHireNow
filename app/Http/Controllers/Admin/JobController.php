@@ -148,6 +148,22 @@ class JobController extends Controller
         ]);
     }
 
+    // Cập nhật trạng thái
+    $job->update(['status' => 'rejected']);
+
+    // Gửi thông báo cho nhà tuyển dụng
+    $employer = $job->company->user;
+    
+    $employer->notify(new JobRejectedNotification($job));
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Tin đã bị từ chối và đã gửi thông báo.',
+        'status_html' => $job->status_badge,
+    ]);
+}
+
+
 
     public function revertToPending(Request $request, $id)
     {
@@ -188,4 +204,36 @@ class JobController extends Controller
             'status_html' => $job->status_badge,
         ]);
     }
+
+    public function revertToPending(Request $request, Job $job)
+    {
+        // Chỉ cho phép revert nếu trạng thái là published hoặc closed
+        if (!in_array($job->status, ['published', 'closed'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Trạng thái hiện tại không thể khôi phục về pending.',
+                'status_html' => $job->status_badge,
+            ], 409);
+        }
+
+        // Kiểm tra nếu đã quá 5 phút kể từ khi cập nhật
+        if ($job->updated_at->diffInMinutes(now()) > 5) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tin đã đăng quá 5 phút nên không thể khôi phục.',
+                'status_html' => $job->status_badge,
+            ]);
+        }
+
+        // Cập nhật lại trạng thái
+        $job->update(['status' => 'pending']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tin đã được khôi phục về trạng thái chờ duyệt.',
+            'status_html' => $job->status_badge,
+        ]);
+    }
+
+
 }

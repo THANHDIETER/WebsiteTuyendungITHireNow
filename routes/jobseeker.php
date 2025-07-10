@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\JobSeeker\ResumeController;
  use App\Http\Controllers\JobSearchController;
 // 🔐 Route dành riêng cho JOB SEEKER

@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
@@ -67,23 +68,11 @@ Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
 })->name('chi-tiet-ung-vien');
 
-Route::get('/blog', function () {
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index'); 
+Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show'); 
+Route::get('/blog-grid', [BlogController::class, 'indexGrid'])->name('blog-grid');
+Route::get('/blog-right-sidebar', [BlogController::class, 'indexRightSidebar'])->name('blog.rightSidebar');
 
-    return view('website.blog.blog');
-})->name('blog');
-
-Route::get('/blog-details', function () {
-    return view('website.blog.blog-details');
-})->name('blog-details');
-
-Route::get('/blog-grid', function () {
-
-    return view('website.blog.blog-grid');
-})->name('blog-grid');
-
-Route::get('/blog-right-sidebar', function () {
-    return view('website.blog.blog-right-sidebar');
-})->name('blog-right-sidebar');
 
 Route::get('/contact', function () {
     return view('website.pages.contact');

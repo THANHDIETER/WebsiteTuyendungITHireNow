@@ -18,6 +18,7 @@ class Skill extends Model
     ];
 
     protected $casts = [
+        'skill_list' => 'array',
         'is_active' => 'boolean',
     ];
 

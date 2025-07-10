@@ -26,6 +26,7 @@ return new class extends Migration {
 
             // Application status
 
+
             $table->enum('status', [
 
                 'pending',             // 1 - Chờ xử lý

@@ -88,7 +88,6 @@
                                 Cập nhật tiêu đề của bạn
                             </p>
                         </div>
-
                         {{-- User Info --}}
 
                         <div class="flex-grow-1">

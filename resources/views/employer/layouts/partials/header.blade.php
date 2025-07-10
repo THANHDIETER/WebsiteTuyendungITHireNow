@@ -88,6 +88,10 @@
                             <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
+<<<<<<< HEAD
+
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                     </a></li>
                 <li class="serchinput d-lg-none d-flex"><a class="search-mode">
                         <!-- Icon Search -->
@@ -98,11 +102,22 @@
                             <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
+<<<<<<< HEAD
+
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                     </a>
                     <div class="form-group search-form">
                         <input type="text" placeholder="Search here...">
                     </div>
                 </li>
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                 <!-- Notification menu -->
                 <li class="custom-dropdown">
                     <a href="javascript:void(0)" id="notification-toggle">
@@ -175,6 +190,7 @@
                                     <h6>{{ config('app.name') }}</h6>
                                 </div>
                                 <div class="flex-shrink-0">
+
                                     <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
                                 </div>
                             </li>
@@ -492,12 +508,20 @@
                                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg><span>Closed</span>
+<<<<<<< HEAD
+
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
+<<<<<<< HEAD
+
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                     <div class="d-flex align-items-center"><img loading="lazy"
                             src="{{ asset('assets/images/profile.png') }}" alt="">
                         <div class="flex-grow-1">
@@ -523,6 +547,10 @@
 
                     </div>
                     <div class="custom-menu overflow-hidden">
+<<<<<<< HEAD
+
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                         <ul class="list-unstyled m-0 p-0">
                             <!-- Account -->
                             <li>
@@ -581,6 +609,10 @@
                                     </svg>
                                     <span>Log Out</span>
                                 </a>
+<<<<<<< HEAD
+
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                             </li>
                         </ul>
                     </div>
@@ -589,6 +621,37 @@
         </div>
     </div>
 </header>
+<<<<<<< HEAD
+
+
+<style>
+    .custom-menu a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .custom-menu a:hover {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .menu-link {
+        color: #212529;
+        transition: color 0.2s ease;
+    }
+
+    .menu-link:hover {
+        color: #007bff;
+        /* Màu chữ khi hover */
+    }
+
+    .menu-link:hover svg {
+        stroke: #007bff;
+        /* Màu icon khi hover */
+    }
+
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
 @if (auth()->check())
     <script>
         window.Laravel = {
@@ -603,3 +666,10 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba

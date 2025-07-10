@@ -113,8 +113,22 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+<<<<<<< HEAD
+        </td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="11" class="text-muted py-4">Không có tin tuyển dụng nào phù hợp.</td>
+    </tr>
+@endforelse
 
+<<<<<<< HEAD
+=======
+=======
+        </div>
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
+
+>>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
         {{-- Pagination --}}
         @if ($jobs->hasPages())
             <div class="row mt-4 align-items-center">
