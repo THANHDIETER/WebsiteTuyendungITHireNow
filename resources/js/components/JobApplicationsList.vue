@@ -52,9 +52,7 @@
                     <td>{{ app.job?.title }}</td>
                     <td>{{ app.company?.name }}</td>
                     <td>
-
-                        <span :class="statusBadgeClass(app.status) ">
-
+                        <span :class="statusBadgeClass(app.status)">
                             {{ statusLabel(app.status) }}
                         </span>
                     </td>
@@ -223,7 +221,6 @@
 
                                 <div class="col-md-12">
                                     <label class="form-label fw-semibold">Ghi chú</label>
-
                                     <textarea v-model="form.note" class="form-control" rows="5"
                                         placeholder="Ghi chú thêm (tuỳ chọn)"></textarea>
                                 </div>
@@ -335,7 +332,6 @@
 </template>
 
 <script setup>
-
     import { ref, onMounted, computed } from 'vue'
     import axios from 'axios'
 
@@ -390,8 +386,6 @@
         interview_date: '',
         note: ''
     })
-}
-
 
     // Hàm tính valid status options theo trạng thái hiện tại (initialStatus)
     const validStatusOptions = computed(() => {

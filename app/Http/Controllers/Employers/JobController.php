@@ -56,7 +56,7 @@ class JobController extends Controller
     $remote_policies = RemotePolicy::where('is_active', true)->get();
 
     // ✅ Lấy các gói dịch vụ còn lượt đăng và đang active
-    $activePackages = \App\Models\EmployerPackageUsage::with('package')
+    $activePackages = EmployerPackageUsage::with('package')
         ->where('company_id', $company->id)
         ->where('is_active', true)
         ->whereColumn('posts_used', '<', 'post_limit')
