@@ -8,14 +8,13 @@
 <meta name="author" content="pixelstrap">
 
 <title>{{ $title ?? 'Admin' }}</title>
-
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <!-- Bootstrap JS Bundle (kèm Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Font Awesome 6 CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
 <!-- Favicon icon-->
 <link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
@@ -25,7 +24,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
     rel="stylesheet">
-
 <!-- Font awesome icon css -->
 <link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css') }}">
@@ -50,37 +48,23 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <!-- App css-->
-
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta property="og:url" content="{{ url()->current() }}">
-
-@if (session('access_token'))
-    <script>
-        localStorage.setItem('access_token', "{{ session('access_token') }}");
-    </script>
-@endif
-
 <header class="page-header row">
-
- 
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
                 src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
                 src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
             href="javascript:void(0)">
-
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
             </div>
-        </a>
-    </div>
+        </a></div>
     <div class="page-main-header col">
         <div class="header-left d-lg-block d-none">
             <form class="search-form mb-0">
-
                 <div class="input-group"><span class="input-group-text pe-0">
                         <!-- Icon Search -->
                         <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24"
@@ -96,15 +80,18 @@
             </form>
         </div>
         <div class="nav-right">
-            <ul class="header-right d-flex align-items-center">
-                <li class="modes d-flex">
-                    <a class="dark-mode">
+            <ul class="header-right">
+                <li class="modes d-flex"><a class="dark-mode">
+                        <!-- Icon Moon -->
                         <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                     </a></li>
                 <li class="serchinput d-lg-none d-flex"><a class="search-mode">
                         <!-- Icon Search -->
@@ -115,13 +102,22 @@
                             <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                     </a>
+                    <div class="form-group search-form">
+                        <input type="text" placeholder="Search here...">
+                    </div>
                 </li>
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
 >>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                 <!-- Notification menu -->
                 <li class="custom-dropdown">
                     <a href="javascript:void(0)" id="notification-toggle">
@@ -170,7 +166,8 @@
 
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary" href="{{ route('employer.notifications.index') }}">All
+                                    <a class="btn btn-secondary"
+                                        href="{{ route('employer.notifications.index') }}">All
                                         Notification</a>
                                 </div>
                             </li>
@@ -511,14 +508,20 @@
                                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg><span>Closed</span>
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li class="profile-dropdown custom-dropdown">
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                     <div class="d-flex align-items-center"><img loading="lazy"
                             src="{{ asset('assets/images/profile.png') }}" alt="">
                         <div class="flex-grow-1">
@@ -530,16 +533,24 @@
                                 @else
                                     <span class="text-muted">Guest</span>
                                 @endif
+
+
+
                             </h5>
                             @if (auth()->check())
                                 <span>{{ auth()->user()->email }}</span>
                             @else
                                 <span class="text-muted">Chưa đăng nhập</span>
                             @endif
+
                         </div>
+
                     </div>
                     <div class="custom-menu overflow-hidden">
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                         <ul class="list-unstyled m-0 p-0">
                             <!-- Account -->
                             <li>
@@ -598,7 +609,10 @@
                                     </svg>
                                     <span>Log Out</span>
                                 </a>
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
                             </li>
                         </ul>
                     </div>
@@ -607,6 +621,7 @@
         </div>
     </div>
 </header>
+<<<<<<< HEAD
 
 
 <style>
@@ -635,6 +650,8 @@
         /* Màu icon khi hover */
     }
 
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
 @if (auth()->check())
     <script>
         window.Laravel = {
@@ -650,6 +667,9 @@
     </script>
 @endif
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba

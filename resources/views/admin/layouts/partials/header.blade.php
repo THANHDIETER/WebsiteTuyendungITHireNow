@@ -1,587 +1,268 @@
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description"
-    content="Edmin admin is super flexible, powerful, clean &amp; modern responsive bootstrap admin template with unlimited possibilities.">
-<meta name="keywords"
-    content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
-<meta name="author" content="pixelstrap">
+<header class="header-area transparent">
 
-<title>{{ $title ?? 'Admin' }}</title>
-
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Bootstrap JS Bundle (kèm Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Font Awesome 6 CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Favicon icon-->
-<link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
-<!-- Google font-->
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
-    rel="stylesheet">
-
-<!-- Font awesome icon css -->
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/brands.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/solid.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/regular.css') }}">
-<!-- Ico Icon css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}">
-<!-- Flag Icon css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css') }}">
-<!-- Themify Icon css -->
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/css/vendors/themify-icons/themify-icons/css/themify.css') }}">
-<!-- Animation css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
-<!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
-<!-- Apex Chart css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
-<!-- Data Table css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
-<!-- App css-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-
-<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-<link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<meta property="og:url" content="{{ url()->current() }}">
-
-@if (session('access_token'))
-    <script>
-        localStorage.setItem('access_token', "{{ session('access_token') }}");
-    </script>
-@endif
-
-
-<header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto">
-        <a href="">
-            <img class="for-light" src="{{ asset('assets/images/logo/logo.png') }}" alt="logo">
-            <img class="for-dark" src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo">
-        </a>
-        <a class="close-btn" href="javascript:void(0)">
-
-            <div class="toggle-sidebar">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
-        </a>
-    </div>
-    <div class="page-main-header col">
-        <div class="header-left d-lg-block d-none">
-            <form class="search-form mb-0">
-                <div class="input-group">
-                    <span class="input-group-text pe-0">
-                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                    <input class="form-control" type="text" placeholder="Search anything...">
-                </div>
-            </form>
-        </div>
-        <div class="nav-right">
-            <ul class="header-right d-flex align-items-center">
-                <li class="modes d-flex">
-                    <a class="dark-mode">
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                </li>
-
-                <li class="custom-dropdown">
-                    <a href="javascript:void(0)">
-
-                        <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    <span class="badge rounded-pill badge-secondary" id="noti-count">
-                        {{ auth()->user()->unreadNotifications->count() }}
-                    </span>
-
-                    <div class="custom-menu notification-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">
-                            Notifications
-                            <a href="{{ route('admin.notifications.index') }}">
-                                <span class="font-primary">View</span>
+    <div class="container">
+        <div class="row no-gutter align-items-center position-relative">
+            <div class="col-12">
+                <div class="header-align">
+                    <div class="header-align-start">
+                        <div class="header-logo-area">
+                            <a href="{{ route('home') }}">
+                                <img class="logo-main" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
+                                    alt="Logo" />
+                                <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
+                                    alt="Logo" />
                             </a>
-                        </h5>
-                        <ul class="activity-update" id="noti-list">
-
-
-                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                <li class="d-flex align-items-center b-l-primary">
-                                    <div class="flex-grow-1">
-                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
-                                        <a href="{{ $noti->data['link_url'] }}">
-                                            <h5>{{ $noti->data['message'] }}</h5>
-                                        </a>
-                                        <h6>{{ config('app.name') }}</h6>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <img class="b-r-15 img-40"
-                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
-                                    </div>
-                                </li>
-                            @empty
-                                <li class="d-flex justify-content-center p-2 text-muted">
-                                    Không có thông báo mới
-                                </li>
-                            @endforelse
-
-                            <li class="mt-3 d-flex justify-content-center">
-                                <div class="button-group">
-                                    <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">All
-                                        Notification</a>
-                                </div>
-                            </li>
-                            <script>
-                                setInterval(() => {
-                                    fetch('{{ route('admin.notifications.latest') }}')
-                                        .then(res => res.json())
-                                        .then(notis => {
-                                            const list = document.getElementById('noti-list');
-
-                                            notis.forEach(noti => {
-                                                if (!list.querySelector(`[data-id="${noti.id}"]`)) {
-                                                    const item = `
-                            <li class="d-flex align-items-center b-l-primary" data-id="${noti.id}">
-                                <div class="flex-grow-1">
-                                    <span>${noti.time}</span>
-                                    <a href="${noti.link_url}">
-                                        <h5>${noti.message}</h5>
-
-                                    </a>
-                                    <h6>{{ config('app.name') }}</h6>
-                                </div>
-                                <div class="flex-shrink-0">
-
-                                    <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
-                                </div>
-                            </li>
-                        `;
-                                                    list.insertAdjacentHTML('afterbegin', item);
-                                                }
-                                            });
-
-                                            // Cập nhật badge
-                                            const badge = document.getElementById('noti-count');
-                                            if (badge) {
-                                                badge.innerText = notis.length;
-                                                badge.classList.toggle('d-none', notis.length === 0);
-                                            }
-                                        });
-                                }, 5000);
-                            </script>
-
-                        </ul>
-                    </div>
-                </li>
-                <!-- Bookmark menu-->
-                <li class="custom-dropdown"><a href="javascript:void(0)">
-                        <!-- Icon Star -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9" stroke="currentColor"
-                                stroke-width="2" stroke-linejoin="round" fill="none" />
-                        </svg>
-                    </a>
-                    <div class="custom-menu bookmark-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Bookmark</h5>
-                        <ul>
-                            <li>
-                                <form class="mb-3">
-                                    <div class="input-group">
-                                        <input class="form-control" type="text"
-                                            placeholder="Search Bookmark..."><span class="input-group-text">
-                                            <!-- Icon Search -->
-                                            <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="11" cy="11" r="7" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <line x1="21" y1="21" x2="16.65" y2="16.65"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-                                        </span>
-                                    </div>
-                                </form>
-                            </li>
-                            <li class="d-flex align-items-center bg-light-primary">
-                                <div class="flex-shrink-0 me-2"><a href="">
-                                        <!-- Icon Home -->
-                                        <svg class="svg-color stroke-primary" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z"
-                                                stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                            <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </a></div>
-                                <div class="d-flex justify-content-between align-items-center w-100"><a
-                                        href="">Dashboard</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
-                                            fill="none" />
-                                    </svg>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center bg-light-secondary">
-                                <div class="flex-shrink-0 me-2"><a href="">
-                                        <!-- Icon Pie -->
-                                        <svg class="svg-color stroke-secondary" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
-                                            <path d="M12 2v10h10" stroke="currentColor" stroke-width="2"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </a></div>
-                                <div class="d-flex justify-content-between align-items-center w-100"><a
-                                        href="">To-do</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
-                                            fill="none" />
-                                    </svg>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center bg-light-tertiary">
-                                <div class="flex-shrink-0 me-2"><a href="">
-                                        <!-- Icon Chart -->
-                                        <svg class="svg-color stroke-tertiary" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3 3v18h18" stroke="currentColor" stroke-width="2"
-                                                stroke-linejoin="round" />
-                                            <path d="M18 15l-5-5-4 4-3-3" stroke="currentColor" stroke-width="2"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </a></div>
-                                <div class="d-flex justify-content-between align-items-center w-100"><a
-                                        href="">Chart</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
-                                            fill="none" />
-                                    </svg>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <!-- Cart menu-->
-                <li class="custom-dropdown"><a href="javascript:void(0)">
-                        <!-- Icon Bag -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 2l3 0a3 3 0 016 0l3 0a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"
-                                stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none" />
-                            <path d="M6 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        </svg>
-                    </a>
-                    <div class="custom-menu cart-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Cart<span>Total : <span
-                                    class="font-primary">4350.9</span></span></h5>
-                        <ul>
-                            <li class="cartbox d-flex bg-light-primary">
-                                <div class="flex-shrink-0 border-primary"><img loading="lazy"
-                                        src="{{ asset('assets/images/dashboard2/product/1.png') }}" alt="">
-                                </div>
-                                <div class="touchpin-details"><a href="">
-                                        <h5>Apple Computers</h5>
-                                    </a><span>$2600.00</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <!-- Icon Minus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-primary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <!-- Icon Plus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="cartbox d-flex bg-light-secondary">
-                                <div class="flex-shrink-0 border-secondary"><img loading="lazy"
-                                        src="{{ asset('assets/images/dashboard2/product/2.png') }}" alt="">
-                                </div>
-                                <div class="touchpin-details"><a href="">
-                                        <h5>Microwave</h5>
-                                    </a><span>$1450.45</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <!-- Icon Minus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-secondary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <!-- Icon Plus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="cartbox d-flex bg-light-tertiary">
-                                <div class="flex-shrink-0 border-tertiary"><img loading="lazy"
-                                        src="{{ asset('assets/images/dashboard2/product/3.png') }}" alt="">
-                                </div>
-                                <div class="touchpin-details"><a href="">
-                                        <h5>Mackup Kit</h5>
-                                    </a><span>$300.45</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <!-- Icon Minus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-tertiary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <!-- Icon Plus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="mt-3 p-0 d-flex justify-content-center">
-                                <div><a class="btn btn-secondary" href="">Checkout</a></div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <!-- Bookmark menu-->
-                <li class="custom-dropdown"><a href="javascript:void(0)">
-                        <!-- Icon Message -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z" stroke="currentColor"
-                                stroke-width="2" stroke-linejoin="round" />
-                        </svg>
-                    </a><span class="badge rounded-pill badge-tertiary">3</span>
-                    <div class="custom-menu message-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Messages</h5>
-                        <ul>
-                            <li class="d-flex b-t-primary">
-                                <div class="d-block"><a href="">
-                                        <h5>Design meeting</h5>
-                                    </a>
-                                    <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
-                                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg><span>Just Now</span>
-                                    </h6>
-                                </div>
-                                <div class="badge badge-light-danger">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="2" />
-                                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg><span>Open</span>
-
-                                </div>
-                            </li>
-                            <li class="mt-3 d-flex justify-content-center">
-                                <div class="button-group">
-                                    <a class="btn btn-secondary" href="">All Notification</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="profile-dropdown custom-dropdown">
-
-                    <div class="d-flex align-items-center"><img loading="lazy"
-                            src="{{ asset('assets/images/profile.png') }}" alt="">
-                        <div class="flex-grow-1">
-                            <h5>
-
-                                @if (auth()->check())
-                                    {{ auth()->user()->role }}
-                                    <sup style="font-size: 0.7em; color: red;">{{ auth()->user()->id }}</sup>
-                                @else
-                                    <span class="text-muted">Guest</span>
-                                @endif
-                            </h5>
-                            @if (auth()->check())
-                                <span>{{ auth()->user()->email }}</span>
-                            @else
-                                <span class="text-muted">Chưa đăng nhập</span>
-                            @endif
                         </div>
                     </div>
-                    <div class="custom-menu overflow-hidden">
-                        <ul class="list-unstyled m-0 p-0">
-                            <!-- Account -->
-                            <li>
-                                <a href="#"
-                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="7" r="4" stroke="currentColor"
-                                            stroke-width="2" />
-                                        <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor"
-                                            stroke-width="2" stroke-linejoin="round" />
-                                    </svg>
-                                    <span>Account</span>
-                                </a>
-                            </li>
 
-                            <!-- Inbox -->
-                            <li>
-                                <a href="#"
-                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                    </svg>
-                                    <span>Inbox</span>
-                                </a>
-                            </li>
+                    <div class="header-align-center">
+                        <div class="header-navigation-area position-relative">
+                            <ul class="main-menu nav">
+                                <li><a href="{{ route('home') }}"><span>Trang Chủ</span></a></li>
 
-                            <!-- Task -->
-                            <li>
-                                <a href="#"
-                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                        <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                    <span>Task</span>
-                                </a>
-                            </li>
+                                <li class="has-submenu">
+                                    <a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a>
+                                </li>
 
-                            <!-- Log Out -->
-                            <li>
-                                <a href="{{ route('logout') }}"
-                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
-                                            stroke-width="2" stroke-linejoin="round" />
-                                        <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
-                                            stroke-linejoin="round" stroke-linecap="round" />
-                                        <path d="M15 12H3" stroke="currentColor" stroke-width="2"
-                                            stroke-linejoin="round" stroke-linecap="round" />
-                                    </svg>
-                                    <span>Log Out</span>
-                                </a>
-                            </li>
-                        </ul>
+                                <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
+
+                                <li class="has-submenu">
+                                    <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('ung-vien') }}">Ứng Cử Viên</a></li>
+                                        <li><a href="{{ route('chi-tiet-ung-vien') }}">Chi Tiết Ứng Viên</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="has-submenu">
+                                    <a href="{{ route('blog') }}"><span>Blog</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('blog') }}">Blog Grid</a></li>
+                                        <li><a href="{{ route('blog-grid') }}">Blog Left Sidebar</a></li>
+                                        <li><a href="{{ route('blog-right-sidebar') }}">Blog Right Sidebar</a></li>
+                                        <li><a href="{{ route('blog-details') }}">Chi Tiết Bài Viết</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
+
+                                <li class="has-submenu">
+                                    <a href="#"><span>Trang Khác</span></a>
+                                    <ul class="submenu-nav">
+                                        <li><a href="{{ route('about-us') }}">Thông Tin</a></li>
+                                        <li><a href="{{ route('showLoginForm') }}">Đăng Nhập</a></li>
+                                        <li><a href="{{ route('register') }}">Đăng Ký</a></li>
+                                        <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </li>
-            </ul>
+
+                    <div class="header-align-end">
+                        <div class="header-action-area">
+                            @guest
+                                <a class="btn-registration" href="{{ route('showLoginForm') }}">
+                                    Đăng Nhập
+                                </a>
+                            @else
+                            <div class="row">
+                                <div class="col">
+                                    {{-- 🔔 Chuông thông báo --}}
+                                <div class="dropdown me-3">
+                                    <button class="btn btn-icon btn-notification position-relative " type="button"
+                                        id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="icofont-notification fs-5 text-white"></i>
+                                        @if (auth()->user()->unreadNotifications->count())
+                                            <span
+                                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                id="noti-count">
+                                                {{ auth()->user()->unreadNotifications->count() }}
+                                            </span>
+                                        @endif
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3"
+                                        aria-labelledby="notificationDropdown"
+                                        style="min-width: 320px; max-height: 400px; overflow-y: auto;" id="noti-list">
+                                        <li
+                                            class="dropdown-header bg-light fw-semibold text-dark px-3 py-2 d-flex justify-content-between align-items-center">
+                                            <span>Thông báo</span>
+                                            <a href="{{ route('job_seeker.notifications.index') }}"
+                                                class="text-primary small">Xem tất cả</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider my-1">
+                                        </li>
+                                        @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
+                                            <li data-id="{{ $noti->id }}">
+                                                <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
+                                                    href="{{ $noti->data['link_url'] }}">
+                                                    <div class="icon text-primary"><i class="icofont-bell fs-5"></i></div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="fw-semibold">{{ $noti->data['message'] }}</div>
+                                                        <div class="small text-muted">
+                                                            {{ $noti->created_at->diffForHumans() }}
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        @empty
+                                            <li id="noti-empty">
+                                                <div class="text-center text-muted px-3 py-3">
+                                                    Không có thông báo mới
+                                                </div>
+                                            </li>
+                                        @endforelse
+
+                                    </ul>
+                                </div>
+                                </div>
+                                <div class="col">
+                                     {{-- 👤 Menu người dùng --}}
+                                <div class="user-info dropdown">
+                                    <a href="#" class="user-info-toggle d-flex align-items-center"
+                                        data-bs-toggle="dropdown">
+                                        <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
+                                        <span class="user-role">{{ Auth::user()->role }}</span>
+                                        <i class="icofont-caret-down ms-1"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
+                                        {{-- Tổng quan --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active text-primary' : '' }}"
+                                                href="{{ route('profile.dashboard') }}">
+                                                <i class="fa-solid fa-house me-2"></i> Tổng quan
+                                            </a>
+                                        </li>
+
+                                        {{-- Hồ sơ --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/show') ? 'active text-primary' : '' }}"
+                                                href="{{ route('profile.show') }}">
+                                                <i class="fa-solid fa-file-lines me-2"></i> Hồ sơ HireNow
+                                            </a>
+                                        </li>
+
+                                        {{-- Việc làm của tôi --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}
+                                                href="{{ route('profile.my-jobs') }}">
+                                                <i class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi
+                                            </a>
+                                        </li>
+
+                                        {{-- Admin --}}
+                                        @if (Auth::user()->role === 'admin')
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('admin.dashboard') }}">
+                                                    <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản trị
+                                                </a>
+                                            </li>
+                                        @endif
+
+                                        {{-- Nhà tuyển dụng --}}
+                                        @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('employer.dashboard') }}">
+                                                    <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà tuyển
+                                                    dụng
+                                                @elseif (Auth::user()->role === 'employer')
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('employer.details') }}">
+                                                    <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
+
+                                                </a>
+                                            </li>
+                                        @endif
+
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('profile.settings') }}">
+                                                <i class="fa-solid fa-gear me-2"></i> Cài đặt
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="{{ route('logout') }}">
+                                                <i class="icofont-logout me-1"></i> Đăng xuất
+
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                </div>
+                               
+                            </div>
+                                
+                            @endguest
+
+                            <button class="btn-menu" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#AsideOffcanvasMenu">
+                                <i class="icofont-navigation-menu"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</header>
 
+    @if (session('access_token'))
+        <script>
+            localStorage.setItem('access_token', "{{ session('access_token') }}");
+        </script>
+    @endif
 
-<style>
-    .custom-menu a {
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .custom-menu a:hover {
-        color: #007bff;
-        text-decoration: none;
-    }
-
-    .menu-link {
-        color: #212529;
-        transition: color 0.2s ease;
-    }
-
-    .menu-link:hover {
-        color: #007bff;
-        /* Màu chữ khi hover */
-    }
-
-    .menu-link:hover svg {
-        stroke: #007bff;
-        /* Màu icon khi hover */
-    }
-</style>
-
-
-@if (session('access_token'))
     <script>
-        localStorage.setItem('access_token', "{{ session('access_token') }}");
+        setInterval(() => {
+            fetch('/seeker/notifications/latest')
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById("noti-list");
+                    const count = document.getElementById("noti-count");
+
+                    if (!list) return;
+
+                    data.forEach(noti => {
+                        // Kiểm tra nếu thông báo chưa có trong danh sách thì thêm mới
+                        if (!list.querySelector(`li[data-id="${noti.id}"]`)) {
+                            const html = `
+                            <li data-id="${noti.id}">
+                                <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
+                                   href="${noti.link_url}">
+                                    <div class="icon text-primary">
+                                        <i class="icofont-bell fs-5"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold">${noti.message}</div>
+                                        <div class="small text-muted">${noti.time}</div>
+                                    </div>
+                                </a>
+                            </li>`;
+
+                            const empty = document.getElementById("noti-empty");
+                            if (empty) empty.remove(); // xoá nếu có dòng "Không có thông báo"
+
+                            // Thêm vào cuối danh sách
+                            list.insertAdjacentHTML("beforeend", html);
+                        }
+                    });
+
+                    // Cập nhật badge số lượng
+                    if (count) {
+                        count.innerText = data.length;
+                        count.classList.toggle("d-none", data.length === 0);
+                    }
+                });
+        }, 5000);
     </script>
-@endif
+
+
+</header>

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <!--
 composer install
 composer require laravel/sanctum
@@ -32,8 +33,7 @@ chạy tailwindcs
 
 php artisan migrate:fresh --seed -->
 
-<<<<<<<< HEAD:note.php
-========
+
 1. Cài React
 
 npm install react react-dom
@@ -588,3 +588,5 @@ npm install --save-dev vite
     onMounted(() => fetchList())
 </script>
 >>>>>>> e40cc0bc24c6a785a04dee9082e12ea467e2fbbd
+=======
+>>>>>>> e1b31cc551384d0ce8a081600a9faf7e9c84b8ba
