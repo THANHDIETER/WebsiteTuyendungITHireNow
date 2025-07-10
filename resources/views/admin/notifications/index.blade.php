@@ -4,7 +4,10 @@
     <div class="container py-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-bell-fill me-2"></i>Danh sách thông báo</h5>
+                <h5 class="mb-0">
+                    <i class="bi bi-bell-fill me-2"></i>Danh sách thông báo
+                    <span class="badge bg-light text-dark ms-2">{{ $notifications->total() }}</span>
+                </h5>
                 <a href="{{ route('admin.notifications.create') }}" class="btn btn-light btn-sm">
                     <i class="bi bi-plus-circle me-1"></i> Thêm mới
                 </a>
@@ -57,18 +60,24 @@
                             @forelse ($notifications as $noti)
                                 <tr class="text-center">
                                     <td>{{ $noti->id }}</td>
-                                    <td>{{ $noti->user->email ?? 'Tất cả' }}</td>
+                                    <td>
+                                        @if ($noti->user)
+                                            <span class="text-dark">{{ $noti->user->email }}</span>
+                                        @else
+                                            <span class="text-muted fst-italic">Tất cả</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <span class="badge bg-info text-dark text-uppercase">{{ $noti->type }}</span>
                                     </td>
-                                    <td class="text-start">
+                                    <td class="text-start" title="{{ $noti->message }}">
                                         <i class="bi bi-chat-left-text text-muted me-1"></i>
                                         {{ Str::limit($noti->message, 60) }}
                                     </td>
                                     <td>
                                         @if ($noti->link_url)
                                             <a href="{{ url($noti->link_url) }}" class="btn btn-outline-primary btn-sm"
-                                                target="_blank">
+                                                target="_blank" title="{{ $noti->link_url }}">
                                                 <i class="bi bi-link-45deg"></i> Xem
                                             </a>
                                         @else
@@ -77,15 +86,18 @@
                                     </td>
                                     <td>
                                         @if ($noti->is_read)
-                                            <span class="badge bg-success"><i class="bi bi-check2-circle me-1"></i>Đã
-                                                đọc</span>
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle me-1"></i> Đã đọc
+                                            </span>
                                         @else
-                                            <span class="badge bg-secondary"><i class="bi bi-eye-slash me-1"></i>Chưa
-                                                đọc</span>
+                                            <span class="badge bg-secondary">
+                                                <i class="bi bi-eye-slash me-1"></i> Chưa đọc
+                                            </span>
                                         @endif
                                     </td>
                                     <td class="text-muted">
-                                        {{ $noti->created_at->timezone(config('app.timezone'))->format('d/m/Y H:i') }}</td>
+                                        {{ $noti->created_at->timezone(config('app.timezone'))->format('d/m/Y H:i') }}
+                                    </td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
                                             <button class="btn btn-warning btn-sm btn-edit" data-bs-toggle="tooltip"
@@ -132,7 +144,7 @@
                     <h5 class="modal-title" id="notificationModalLabel">Chi tiết</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 </div>
-                <div class="modal-body" id="notificationModalBody">
+                <div class="modal-body p-4" id="notificationModalBody">
                     <div class="text-center py-4">
                         <div class="spinner-border text-primary" role="status"></div>
                         <p class="mt-3 text-muted">Đang tải nội dung...</p>
@@ -150,7 +162,6 @@
             const modalTitle = document.getElementById('notificationModalLabel');
             const modalBody = document.getElementById('notificationModalBody');
 
-            // Tooltip
             new bootstrap.Tooltip(document.body, {
                 selector: '[data-bs-toggle="tooltip"]',
                 trigger: 'hover'
@@ -159,10 +170,10 @@
             function loadModalContent(url, title) {
                 modalTitle.textContent = title;
                 modalBody.innerHTML = `
-                <div class="text-center py-4">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-3 text-muted">Đang tải nội dung...</p>
-                </div>`;
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-3 text-muted">Đang tải nội dung...</p>
+                    </div>`;
                 fetch(url)
                     .then(res => res.text())
                     .then(html => {

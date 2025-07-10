@@ -70,7 +70,7 @@
         transition: background .2s, color .2s;
     }
 
-     .sidebar-main-title {
+    .sidebar-main-title {
         font-size: 14px;
         font-weight: 600;
         padding: 10px 16px;

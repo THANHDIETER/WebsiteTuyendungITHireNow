@@ -25,7 +25,10 @@ return new class extends Migration {
             $table->timestamp('applied_at')->useCurrent();
 
             // Application status
+
+
             $table->enum('status', [
+
                 'pending',             // 1 - Chờ xử lý
                 'viewed',              // 2 - Đã xem
                 'under_review',        // 3 - Đang đánh giá
