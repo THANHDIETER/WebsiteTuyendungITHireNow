@@ -37,14 +37,15 @@
                                 <li class="has-submenu">
                                     <a href="{{ route('blog.index') }}"><span>Blog</span></a>
                                     <ul class="submenu-nav">
-                                        <li><a href="{{ route('blog-grid') }}">Blog Grid</a></li>
+                                        <li><a href="{{ route('blog.index') }}">Blog Grid</a></li>
                                         <li><a href="{{ route('blog-grid') }}">Blog Left Sidebar</a></li>
-                                        <!-- Tạm dùng chung -->
                                         <li><a href="{{ route('blog.rightSidebar') }}">Blog Right Sidebar</a></li>
-                                        <li><a href="{{ route('blog.show', ['id' => 1]) }}">Blog Details</a></li>
+                                        @isset($blog)
+                                            <a href="{{ route('blog.show', ['id' => $blog->id]) }}">Chi Tiết Bài Viết</a>
+                                        @endisset
+
                                     </ul>
                                 </li>
-
 
                                 <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
 

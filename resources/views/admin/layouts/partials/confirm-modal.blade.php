@@ -1,3 +1,4 @@
+
 <!-- Modal -->
 <div class="modal fade" id="globalAlertModal" tabindex="-1" role="dialog" aria-modal="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -114,7 +115,7 @@
             success: 'bi-check-circle-fill',
             error: 'bi-x-circle-fill',
             warning: 'bi-exclamation-circle-fill',
-            info: 'bi-info-circle-fill',
+            info: 'bi-info-circle-fill'
         };
         const iconEl = modalEl.querySelector('.modal-icon i');
         const iconWrapper = modalEl.querySelector('.modal-icon');

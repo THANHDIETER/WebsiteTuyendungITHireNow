@@ -25,14 +25,13 @@
                         <li><a href="{{ route('chi-tiet-ung-vien') }}">Chi tiết ứng viên</a></li>
                     </ul>
                 </li>
-
-                <li><a href="{{ route('blog-grid') }}">Blog</a>
-                    <ul class="sub-menu">
-                        <li><a href="{{ route('blog-grid') }}">Blog Grid</a></li>
-                        <li><a href="{{ route('blog.rightSidebar') }}">Blog (sidebar phải)</a></li>
-                        <li><a href="{{ route('blog.show', ['id' => 1]) }}">Blog Details</a></li>
-                    </ul>
-                </li>
+                <li><a href="{{ route('blog.index') }}">Tin tức</a>
+    <ul class="sub-menu">
+        <li><a href="{{ route('blog.index') }}">Lưới tin tức</a></li>
+        <li><a href="{{ route('blog.rightSidebar') }}">Blog Right Sidebar</a></li>
+        <li><a href="{{ route('blog.show', ['id' => 1]) }}">Chi tiết bài viết</a></li>
+    </ul>
+</li>
 
                 <li><a href="index.html#">Trang khác</a>
                     <ul class="sub-menu">

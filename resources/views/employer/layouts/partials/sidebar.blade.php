@@ -16,21 +16,6 @@
             </li>
 
             <li class="sidebar-list">
-                <a class="sidebar-link" href="{{ route('employer.jobs.applications') }}">
-                    <svg class="stroke-icon" width="24" height="24" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        <circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M20 8v6M23 11h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>Quản lý ứng viên</span>
-                    <svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-                <ul class="sidebar-submenu"></ul>
-            </li>
-
-            <li class="sidebar-list">
                 <a class="sidebar-link" href="#">
                     <i class="bi bi-briefcase"></i>
                     <span>Quản lý tin tuyển dụng</span>
@@ -48,13 +33,6 @@
                     <span>Mua gói dịch vụ</span>
                 </a>
             </li>
-
-            <li class="sidebar-list">
-                <a class="sidebar-link" href="{{ route('employer.companies.index') }}">
-                    <i class="bi bi-people"></i>
-                    <span>Quản lý công ty</span>
-                </a>
-            </li>
         </ul>
     </div>
 
@@ -68,16 +46,6 @@
         border-right: 1px solid #e9ecef;
         min-height: 100vh;
         transition: background .2s, color .2s;
-    }
-
-     .sidebar-main-title {
-        font-size: 14px;
-        font-weight: 600;
-        padding: 10px 16px;
-        color: #495057;
-        background: #f8f9fa;
-        border-top: 1px solid #e9ecef;
-        border-bottom: 1px solid #e9ecef;
     }
 
     .page-sidebar.dark-theme,

@@ -1,15 +1,7 @@
 @extends('website.layouts.master')
 
 @section('content')
-    <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
-        data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
-        <div class="col-12 col-lg-8">
-            <div class="slider-content">
-                <h1 class="title text-white">👋 Xin chào: {{ $profile->full_name ?? 'Người dùng' }}</h1>
-            </div>
-        </div>
-    </div>
-    <div class="container">
+    <div class="container mt-5">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3">
@@ -87,6 +79,7 @@
                                 Cập nhật tiêu đề của bạn
                             </p>
                         </div>
+
                         {{-- User Info --}}
 
                         <div class="flex-grow-1">
