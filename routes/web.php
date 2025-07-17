@@ -1,4 +1,5 @@
 <?php
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -7,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
+
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
@@ -147,3 +149,7 @@ Route::get('/seeker/notifications/latest', function () {
         ];
     }));
 })->middleware('auth');
+
+
+
+

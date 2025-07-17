@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Notifications\Jobseeker\ApplicationApprovedNotification;
 use App\Notifications\Jobseeker\ApplicationRejectedNotification;
 use App\Notifications\Jobseeker\InterviewInvitationNotification;
+use Illuminate\Support\Facades\Auth;
 
 class JobApplicationController extends Controller
 {
@@ -43,7 +44,6 @@ class JobApplicationController extends Controller
     public function show(JobApplication $jobApplication)
     {
         return $jobApplication->load(['job', 'user', 'company']);
-        
     }
 
     public function update(Request $request, JobApplication $jobApplication)
@@ -64,7 +64,8 @@ class JobApplicationController extends Controller
         }
 
         $jobApplication->update($data);
-        // 4. Gửi thông báo nếu trạng thái thay đổi
+
+        // 3. Thông báo theo trạng thái
         $jobseeker = $jobApplication->user;
         $job = $jobApplication->job;
 
@@ -77,14 +78,35 @@ class JobApplicationController extends Controller
                 $jobseeker->notify(new ApplicationRejectedNotification($job));
             }
         }
-        // Gửi thông báo mời phỏng vấn nếu có ngày mới
+
+        // 4. Gửi lời mời phỏng vấn nếu có ngày mới
         if (
             !empty($data['interview_date']) &&
             $jobApplication->getOriginal('interview_date') !== $data['interview_date']
         ) {
+            // Tạo hoặc cập nhật bản ghi interview tương ứng
+            $interview = \App\Models\Interview::updateOrCreate(
+                [
+                    'job_id' => $job->id,
+                    'jobseeker_id' => $jobseeker->id,
+                    'employer_id' => Auth::id(),
 
-            $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+                ],
+                [
+                    'scheduled_at' => $data['interview_date'],
+                    'location' => $data['location'] ?? 'Trực tuyến',
+                    'message' => $data['note'] ?? null,
+                ]
+            );
+
+            // Gửi notification với đúng interview ID
+            $jobseeker->notify(new InterviewInvitationNotification(
+                $job,
+                $interview->scheduled_at,
+                $interview->id
+            ));
         }
+
 
         return response()->json(['message' => 'Cập nhật thành công', 'data' => $jobApplication]);
     }

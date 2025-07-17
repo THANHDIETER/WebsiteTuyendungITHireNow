@@ -122,32 +122,31 @@
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('admin.notifications.index') }}">
+                            <a href="{{ route('employer.notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
                         <ul class="activity-update" id="noti-list">
 
 
-                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                <li class="d-flex align-items-center b-l-primary">
-                                    <div class="flex-grow-1">
-                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
-                                        <a href="{{ $noti->data['link_url'] }}">
-                                            <h5>{{ $noti->data['message'] }}</h5>
-                                        </a>
-                                        <h6>{{ config('app.name') }}</h6>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <img class="b-r-15 img-40"
-                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
-                                    </div>
-                                </li>
-                            @empty
-                                <li class="d-flex justify-content-center p-2 text-muted">
-                                    Không có thông báo mới
-                                </li>
-                            @endforelse
+                        @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
+    <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
+        <div class="flex-grow-1">
+            <span>{{ $noti->created_at->diffForHumans() }}</span>
+            <a href="{{ $noti->data['link_url'] }}">
+                <h5>{{ $noti->data['message'] }}</h5>
+            </a>
+            <h6>{{ config('app.name') }}</h6>
+        </div>
+        <div class="flex-shrink-0">
+            <img class="b-r-15 img-40" src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
+        </div>
+    </li>
+@empty
+    <li class="d-flex justify-content-center p-2 text-muted">
+        Không có thông báo mới
+    </li>
+@endforelse
 
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
