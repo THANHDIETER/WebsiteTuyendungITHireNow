@@ -1,16 +1,26 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
+
+Route::get('/chatchat', [ChatController::class, 'index'])->name('chat.index');
+Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
+Route::post('/chat/{id}', [ChatController::class, 'send'])->name('chat.send');
+Route::get('/chat/start/{userId}', [ChatController::class, 'start'])->name('chat.start');
+
+Route::get('/chatbot/history', [ChatBotController::class, 'history']);
+Route::view('/chat', 'chat'); 
+Route::post('/chatbot', [ChatBotController::class, 'chat']);
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');

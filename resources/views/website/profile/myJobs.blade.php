@@ -74,6 +74,7 @@
                                    <a href="{{ route('jobs.show', $job->slug) }}" class="btn btn-sm btn-outline-primary">
                                                     Xem chi tiết
                                                 </a>
+                                    
 
                                 </div>
                             </div>

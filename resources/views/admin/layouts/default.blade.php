@@ -4,7 +4,7 @@
 <head>
     @include('admin.layouts.partials.header')
     <!-- Gọi app.js và app.scss -->
-    @vite(['resources/js/app.js', 'resources/sass/app.scss'])
+    @vite(['resources/js/app.js'])
    
 </head>
 

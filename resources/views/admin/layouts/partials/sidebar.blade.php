@@ -1,4 +1,10 @@
 <style>
+    .page-sidebar {
+        top: 25px;
+        width: 250px;
+        background: #fff;
+       
+    }
     .sidebar-menu a {
         text-decoration: none !important;
         transition: background-color 0.2s ease, color 0.2s ease;

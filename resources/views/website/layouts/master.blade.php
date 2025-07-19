@@ -44,8 +44,10 @@
 
     <!--=== jQuery Modernizr Min Js ===-->
     @include('website.layouts.particals.js')
+    @include('chat')
 
-    <script>
+
+    <!-- <script>
         window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
     </script>
     <script>
@@ -53,7 +55,7 @@
             userId: {{ auth()->id() }},
         };
         window.APP_NAME = "{{ config('app.name') }}";
-    </script>
+    </script> -->
 
 </body>
 

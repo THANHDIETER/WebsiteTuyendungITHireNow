@@ -22,7 +22,7 @@ class JobController extends Controller
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->q . '%')
-                  ->orWhere('description', 'like', '%' . $request->q . '%');
+                    ->orWhere('description', 'like', '%' . $request->q . '%');
             });
 
         }
@@ -84,10 +84,10 @@ class JobController extends Controller
 
         // Dữ liệu lọc cho form
         $categories = Category::all();
-        $companies  = Company::all();
-        $skills     = Skill::all();
-        $locations  = Location::all();
-        $jobTypes   = JobType::all();
+        $companies = Company::all();
+        $skills = Skill::all();
+        $locations = Location::all();
+        $jobTypes = JobType::all();
 
         // Việc làm nổi bật gợi ý
         $topJobs = (clone $query)
@@ -97,35 +97,49 @@ class JobController extends Controller
             ->get();
 
         return view('website.jobs.job', compact(
-            'jobs', 'categories', 'companies', 'skills', 'locations', 'jobTypes', 'topJobs'
+            'jobs',
+            'categories',
+            'companies',
+            'skills',
+            'locations',
+            'jobTypes',
+            'topJobs'
         ));
     }
 
-   public function show($slug)
-{
-    $job = Job::with([
-            'company', 'skills', 'jobType', 'location', 'categories', 'level', 'experience', 'language', 'remotePolicy',     
+    public function show($slug)
+    {
+        $job = Job::with([
+            'company',
+            'skills',
+            'jobType',
+            'location',
+            'categories',
+            'level',
+            'experience',
+            'language',
+            'remotePolicy',
         ])
-        ->where('slug', $slug)
-        ->where('status', 'published')
-        ->firstOrFail();
-
-    // Lấy các công việc liên quan cùng danh mục (nếu có)
-    $relatedJobs = collect();
-
-    if ($job->categories->isNotEmpty()) {
-        $relatedJobs = Job::with(['company'])
-            ->where('id', '!=', $job->id)
+            ->where('slug', $slug)
             ->where('status', 'published')
-            ->whereHas('categories', function ($query) use ($job) {
-                $query->whereIn('category_id', $job->categories->pluck('id'));
-            })
-            ->latest()
-            ->take(6) // bạn có thể điều chỉnh số lượng
-            ->get();
-    }
+            ->firstOrFail();
 
-    return view('website.jobs.job-details', compact('job', 'relatedJobs'));
-}
+        // Lấy các công việc liên quan cùng danh mục (nếu có)
+        $relatedJobs = collect();
+
+        if ($job->categories->isNotEmpty()) {
+            $relatedJobs = Job::with(['company'])
+                ->where('id', '!=', $job->id)
+                ->where('status', 'published')
+                ->whereHas('categories', function ($query) use ($job) {
+                    $query->whereIn('category_id', $job->categories->pluck('id'));
+                })
+                ->latest()
+                ->take(6) // bạn có thể điều chỉnh số lượng
+                ->get();
+        }
+
+        return view('website.jobs.job-details', compact('job', 'relatedJobs'));
+    }
 
 }
