@@ -33,6 +33,13 @@
                     <span>Mua gói dịch vụ</span>
                 </a>
             </li>
+
+            <li class="sidebar-list">
+                <a class="sidebar-link" href="{{ route('employer.companies.index') }}">
+                    <i class="bi bi-people"></i>
+                    <span>Quản lý công ty</span>
+                </a>
+            </li>
         </ul>
     </div>
 
@@ -46,6 +53,16 @@
         border-right: 1px solid #e9ecef;
         min-height: 100vh;
         transition: background .2s, color .2s;
+    }
+
+    .sidebar-main-title {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 16px;
+        color: #495057;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom: 1px solid #e9ecef;
     }
 
     .page-sidebar.dark-theme,

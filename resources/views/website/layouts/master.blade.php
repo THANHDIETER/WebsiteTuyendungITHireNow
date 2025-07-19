@@ -57,6 +57,16 @@
         window.APP_NAME = "{{ config('app.name') }}";
     </script> -->
 
+    <script>
+        window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
+    </script>
+    <script>
+        window.Laravel = {
+            userId: {{ auth()->id() }},
+        };
+        window.APP_NAME = "{{ config('app.name') }}";
+    </script>
+
 </body>
 
 </html>

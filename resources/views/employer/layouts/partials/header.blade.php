@@ -151,13 +151,14 @@
 
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary" href="{{ route('employer.notifications.index') }}">All
+                                    <a class="btn btn-secondary"
+                                        href="{{ route('employer.notifications.index') }}">All
                                         Notification</a>
                                 </div>
                             </li>
                             <script>
                                 setInterval(() => {
-                                    fetch('{{ route('admin.notifications.latest') }}')
+                                    fetch('{{ route("admin.notifications.latest") }}')
                                         .then(res => res.json())
                                         .then(notis => {
                                             const list = document.getElementById('noti-list');
@@ -522,46 +523,64 @@
 
                     </div>
                     <div class="custom-menu overflow-hidden">
-                        <ul>
-                            <li class="d-flex">
-                                <!-- Icon Profile -->
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="7" r="4" stroke="currentColor"
-                                        stroke-width="2" />
-                                    <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor" stroke-width="2"
-                                        stroke-linejoin="round" />
-                                </svg><a class="ms-2" href="">Account</a>
+                        <ul class="list-unstyled m-0 p-0">
+                            <!-- Account -->
+                            <li>
+                                <a href="#"
+                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="7" r="4" stroke="currentColor"
+                                            stroke-width="2" />
+                                        <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor"
+                                            stroke-width="2" stroke-linejoin="round" />
+                                    </svg>
+                                    <span>Account</span>
+                                </a>
                             </li>
-                            <li class="d-flex">
-                                <!-- Icon Message -->
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
-                                        stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                </svg><a class="ms-2" href="">Inbox</a>
+
+                            <!-- Inbox -->
+                            <li>
+                                <a href="#"
+                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
+                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                                    </svg>
+                                    <span>Inbox</span>
+                                </a>
                             </li>
-                            <li class="d-flex">
-                                <!-- Icon Document -->
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
-                                        stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                    <path d="M14 2v6h6" stroke="currentColor" stroke-width="2"
-                                        stroke-linejoin="round" />
-                                </svg><a class="ms-2" href="">Task</a>
+
+                            <!-- Task -->
+                            <li>
+                                <a href="#"
+                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
+                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                                        <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                    <span>Task</span>
+                                </a>
                             </li>
-                            <li class="d-flex">
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
-                                        stroke-width="2" stroke-linejoin="round" />
-                                    <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
-                                        stroke-linejoin="round" stroke-linecap="round" />
-                                    <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
-                                        stroke-linecap="round" />
-                                </svg>
-                                <a class="ms-2" href="{{ route('logout') }}">Log Out</a>
+
+                            <!-- Log Out -->
+                            <li>
+                                <a href="{{ route('logout') }}"
+                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
+                                            stroke-width="2" stroke-linejoin="round" />
+                                        <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
+                                            stroke-linejoin="round" stroke-linecap="round" />
+                                        <path d="M15 12H3" stroke="currentColor" stroke-width="2"
+                                            stroke-linejoin="round" stroke-linecap="round" />
+                                    </svg>
+                                    <span>Log Out</span>
+                                </a>
                             </li>
                         </ul>
                     </div>

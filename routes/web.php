@@ -8,10 +8,17 @@ use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
+use App\Http\Controllers\BlogController;
 
+use App\Http\Controllers\Website\EmployerResourceController;
+
+
+// Load các route tách riêng
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
+require __DIR__ . '/notification.php';
+
 
 Route::get('/chatchat', [ChatController::class, 'index'])->name('chat.index');
 Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
@@ -23,13 +30,13 @@ Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
-
-Route::get('/showLoginForm', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
-Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 Route::get('/register/employer', [RegisterController::class, 'showRegisterEmployerForm'])->name('showRegisterEmployerForm');
 Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('registerEmployer');
+
+Route::get('/showLoginForm', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
+Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
 
 Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
@@ -50,17 +57,48 @@ Route::get('/job_seeker', function () {
     return view('employer.index');
 })->name('cong-viec');
 
+// ================= HOME =================
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
+// ================= JOB =================
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
+Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
+
+// ================= EMPLOYER =================
+Route::get('/job_seeker', function () {
+    return view('employer.index');
+})->name('cong-viec');
 
 Route::get('/employer', function () {
     return view('employer.index');
 })->name('employer');
 
+Route::get('/website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
+Route::get('/employer-details', [LoginController::class, 'employerDetails'])->name('employer.details');
 
+
+// ================= STATIC PAGES =================
+Route::get('/docs', function () {
+    return view('docs.index');
+})->name('docs');
+
+Route::get('/about-us', function () {
+    return view('website.pages.about-us');
+})->name('about-us');
+
+Route::get('/contact', function () {
+    return view('website.pages.contact');
+})->name('contact');
+
+Route::get('/404', function () {
+    return view('website.pages.404');
+})->name('404');
+
+
+// ================= JOB DETAIL / EMPLOYER DETAIL =================
 Route::get('/chi-tiet-cong-viec', function () {
     return view('website.jobs.job-details');
 })->name('chi-tiet-cong-viec');
@@ -69,6 +107,8 @@ Route::get('/chi-tiet-nhan-vien', function () {
     return view('website.employers.employe-details');
 })->name('chi-tiet-nhan-vien');
 
+
+// ================= CANDIDATES =================
 Route::get('/ung-vien', function () {
     return view('website.candidate.candidate');
 })->name('ung-vien');
@@ -77,14 +117,14 @@ Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
 })->name('chi-tiet-ung-vien');
 
-Route::get('/blog', function () {
 
+// ================= BLOG =================
+Route::get('/blog', function () {
     return view('website.blog.blog');
 })->name('blog');
 
-Route::get('/blog-details', function () {
-    return view('website.blog.blog-details');
-})->name('blog-details');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+
 
 Route::get('/blog-grid', function () {
 
@@ -104,13 +144,10 @@ Route::get('/404', function () {
 })->name('404');
 
 
-Route::get('/about-us', function () {
-    return view('website.pages.about-us');
-})->name('about-us');
-
+// ================= LOGIN / REGISTER UI =================
 Route::get('/login', function () {
     return view('website.login-register.login');
-});
+})->name('login');
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');

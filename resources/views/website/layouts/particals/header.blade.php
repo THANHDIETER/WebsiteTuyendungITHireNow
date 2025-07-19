@@ -40,7 +40,7 @@
                                         <li><a href="{{ route('blog') }}">Blog Grid</a></li>
                                         <li><a href="{{ route('blog-grid') }}">Blog Left Sidebar</a></li>
                                         <li><a href="{{ route('blog-right-sidebar') }}">Blog Right Sidebar</a></li>
-                                        <li><a href="{{ route('blog-details') }}">Chi Tiết Bài Viết</a></li>
+                                        <li><a href="">Chi Tiết Bài Viết</a></li>
                                     </ul>
                                 </li>
 
@@ -50,8 +50,6 @@
                                     <a href="#"><span>Trang Khác</span></a>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('about-us') }}">Thông Tin</a></li>
-                                        <li><a href="{{ route('showLoginForm') }}">Đăng Nhập</a></li>
-                                        <li><a href="{{ route('register') }}">Đăng Ký</a></li>
                                         <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
                                     </ul>
                                 </li>

@@ -110,6 +110,7 @@ class JobController extends Controller
             ], 409);
         }
 
+
         $job->update(['status' => 'rejected']);
 
         // Gửi thông báo cho nhà tuyển dụng

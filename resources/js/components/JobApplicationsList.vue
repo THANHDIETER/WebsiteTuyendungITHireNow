@@ -26,6 +26,7 @@
                 <select v-model="perPage" @change="fetchList(1)" class="form-select form-select-sm"
                     style="width: 80px;">
                     <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">{{ n }}</option>
+                    <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">{{ n }}</option>
                 </select>
             </div>
         </div>
@@ -148,17 +149,20 @@
                                     <label class="form-label fw-semibold">Vị trí ứng tuyển</label>
                                     <input v-model="form.job_id" type="hidden" />
                                     <input v-model="form.job_title" type="text" class="form-control bg-light"
+                                    <input v-model="form.job_title" type="text" class="form-control bg-light"
                                         placeholder="Tên vị trí" readonly />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ứng viên</label>
                                     <input v-model="form.user_id" type="hidden" />
                                     <input v-model="form.user_name" type="text" class="form-control bg-light"
+                                    <input v-model="form.user_name" type="text" class="form-control bg-light"
                                         placeholder="Họ tên ứng viên" readonly />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Công ty</label>
                                     <input v-model="form.company_id" type="hidden" />
+                                    <input v-model="form.company_name" type="text" class="form-control bg-light"
                                     <input v-model="form.company_name" type="text" class="form-control bg-light"
                                         placeholder="Tên công ty" readonly />
                                 </div>
@@ -172,7 +176,16 @@
                                             <i class="bi bi-box-arrow-up-right"></i>
                                         </a>
                                     </div>
+                                    <div class="input-group">
+                                        <input v-model="form.image" type="text" class="form-control bg-light"
+                                            readonly />
+                                        <a v-if="form.image" :href="image(form.image)" class="btn btn-outline-secondary"
+                                            target="_blank" title="Xem CV">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    </div>
                                 </div>
+
 
                                 <div class="col-12">
                                     <label class="form-label fw-semibold">Thư xin việc</label>
@@ -203,6 +216,7 @@
 
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Nguồn ứng tuyển</label>
+                                    <input v-model="form.source" type="text" class="form-control bg-light"
                                     <input v-model="form.source" type="text" class="form-control bg-light"
                                         placeholder="Ví dụ: Facebook, Website..." readonly />
                                 </div>
@@ -250,8 +264,10 @@
                         </h5>
                         <button type="button" class="btn-close btn-close-white" @click="detailApp = null"></button>
                     </div>
+
                     <div class="modal-body px-4 py-4">
                         <div class="row g-4">
+                            <!-- Thông tin cá nhân -->
                             <div class="col-md-6">
                                 <h6 class="fw-bold text-primary mb-3"><i class="bi bi-person-fill me-2"></i>Thông tin
                                     ứng viên</h6>
@@ -268,6 +284,8 @@
                                     </a>
                                 </p>
                             </div>
+
+                            <!-- Thông tin công việc -->
                             <div class="col-md-6">
                                 <h6 class="fw-bold text-primary mb-3"><i class="bi bi-briefcase-fill me-2"></i>Thông tin
                                     ứng tuyển</h6>
@@ -294,6 +312,14 @@
                                         <i class="bi bi-star-fill me-1"></i> Đã lọt DS
                                     </span>
                                 </div>
+                            </div>
+
+                            <!-- Thư xin việc -->
+                            <div class="col-12">
+                                <div class="p-3 bg-white border rounded shadow-sm">
+                                    <h6 class="fw-bold text-primary mb-2"><i
+                                            class="bi bi-envelope-paper-heart me-2"></i>Thư xin việc</h6>
+                                    <p class="mb-0">{{ detailApp.cover_letter || 'Không có' }}</p>
                             </div>
                             <div class="col-12">
                                 <div class="p-3 bg-white border rounded shadow-sm">
@@ -322,12 +348,14 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="modal-footer bg-light rounded-bottom-4">
                         <button type="button" class="btn btn-outline-secondary" @click="detailApp = null">Đóng</button>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
