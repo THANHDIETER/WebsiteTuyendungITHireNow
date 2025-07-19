@@ -1,10 +1,14 @@
-import { createApp } from "vue";
+// ✅ 1. Import Echo, Pusher, window setup
+import "./bootstrap";
+
+// ✅ 2. Các CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import '../css/app.css';
 
-// Import Vue components
+// ✅ 3. Import Vue và các components
+import { createApp } from "vue";
 import SeekerProfileAdmin from "./components/SeekerProfileAdmin.vue";
 import PaymentList from "./components/payments/PaymentList.vue";
 import EmployerJobPortal from "./components/employers/EmployerJobPortal.vue";
@@ -12,22 +16,16 @@ import JobApplicationsList from "./components/JobApplicationsList.vue";
 import bank_account from "./components/bank_account/bank_account.vue";
 import bank_log from "./components/bank_log/Listbanklog.vue";
 
-// Khởi tạo Vue app
+// ✅ 4. Khởi tạo Vue
 const app = createApp({});
-
-// Đăng ký các component
 app.component("seeker-profile-admin", SeekerProfileAdmin);
 app.component("payment-admin", PaymentList);
 app.component("employer-job-portal", EmployerJobPortal);
 app.component("employer-job-application", JobApplicationsList);
 app.component("bank-account-admin", bank_account);
 app.component("banklog-account-admin", bank_log);
-
-// Mount Vue app
 app.mount("#vue-wrapper");
 
-// Import Bootstrap sau khi Vue load (nếu cần)
-import "./bootstrap";
 
 // Realtime notifications - đảm bảo chỉ chạy 1 lần, đúng thời điểm
 document.addEventListener("DOMContentLoaded", () => {

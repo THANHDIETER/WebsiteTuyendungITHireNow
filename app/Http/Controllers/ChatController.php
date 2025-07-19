@@ -90,4 +90,5 @@ class ChatController extends Controller
 
         return redirect()->route('chat.show', $conversation->id);
     }
+    
 }

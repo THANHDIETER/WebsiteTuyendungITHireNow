@@ -4,7 +4,10 @@ use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobSeeker\ResumeController;
-use App\Http\Controllers\JobSearchController;
+ use App\Http\Controllers\JobSearchController;
+use App\Http\Controllers\InterviewController;
+use App\Http\Controllers\InterviewResponseController;
+
 // 🔐 Route dành riêng cho JOB SEEKER
 
 
@@ -15,8 +18,17 @@ Route::middleware(['auth:sanctum', 'job_seeker'])
     ->group(function () {
         // 📌 Thông báo
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+        // 📩 Xem chi tiết lời mời phỏng vấn
+        Route::get('/interviews/{interview}', [InterviewController::class, 'show'])
+            ->name('interviews.show');
+
+        // 📩 Phản hồi thư mời phỏng vấn
+        Route::post('/interviews/{interview}/respond', [InterviewResponseController::class, 'store'])
+            ->name('interviews.respond');
     });
 
+    // profile routes
 Route::middleware(['auth'])->group(function () {
     // Hiển thị và cập nhật hồ sơ
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

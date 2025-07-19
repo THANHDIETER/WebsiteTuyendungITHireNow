@@ -18,7 +18,7 @@
 </head>
 
 <body>
-
+    
     <!--wrapper start-->
     <div class="wrapper">
 
@@ -56,6 +56,19 @@
         };
         window.APP_NAME = "{{ config('app.name') }}";
     </script> -->
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.15.0/echo.iife.js"></script>
+<script>
+    Pusher.logToConsole = false;
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '{{ env("PUSHER_APP_KEY") }}',
+        cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
+        forceTLS: true
+    });
+</script>
+
 
     <script>
         window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};

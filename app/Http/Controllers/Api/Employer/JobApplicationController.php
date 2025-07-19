@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Notifications\Jobseeker\ApplicationApprovedNotification;
 use App\Notifications\Jobseeker\ApplicationRejectedNotification;
 use App\Notifications\Jobseeker\InterviewInvitationNotification;
+use Illuminate\Support\Facades\Auth;
 
 class JobApplicationController extends Controller
 {
@@ -52,7 +53,6 @@ class JobApplicationController extends Controller
     public function show(JobApplication $jobApplication)
     {
         return $jobApplication->load(['job', 'user', 'company']);
-
     }
 
     public function update(Request $request, JobApplication $jobApplication)

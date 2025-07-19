@@ -1,4 +1,5 @@
 <?php
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
@@ -10,15 +11,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\BlogController;
 
-use App\Http\Controllers\Website\EmployerResourceController;
-
-
-// Load các route tách riêng
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
 require __DIR__ . '/notification.php';
-
 
 Route::get('/chatchat', [ChatController::class, 'index'])->name('chat.index');
 Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
@@ -194,3 +190,7 @@ Route::get('/seeker/notifications/latest', function () {
         ];
     }));
 })->middleware('auth');
+
+
+
+

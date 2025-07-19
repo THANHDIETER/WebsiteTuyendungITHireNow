@@ -78,6 +78,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(SeekerProfile::class, 'user_id', 'id');
     }
+    public function jobApplications()
+{
+    return $this->hasMany(JobApplication::class);
+}
+
 
     public function appliedJobs()
     {

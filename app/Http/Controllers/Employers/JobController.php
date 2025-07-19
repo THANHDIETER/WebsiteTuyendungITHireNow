@@ -31,7 +31,7 @@ class JobController extends Controller
         return redirect()->route('employer.dashboard')->withErrors('Bạn chưa có thông tin công ty.');
     }
 
-    $jobs = Job::with(['categories', 'jobType']) // Load thêm jobType
+    $jobs = Job::with(['categories', 'jobType']) 
                 ->where('company_id', $user->company->id)
                 ->latest()
                 ->paginate(10);

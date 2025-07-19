@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Employers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
+use App\Http\Controllers\Employers\CompanyController;
 use App\Http\Controllers\Employers\PackageController;
 use App\Http\Controllers\Employers\PaymentController;
 use App\Http\Controllers\Employers\DashboardController;
+use App\Http\Controllers\Employers\NotificationController;
 use App\Http\Controllers\Employers\SubscriptionController;
 use App\Http\Controllers\Employers\JobApplicationController;
 

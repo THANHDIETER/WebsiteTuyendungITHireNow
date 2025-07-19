@@ -69,5 +69,4 @@
             {{ $notifications->links() }}
         </div>
     </div>
->>>>>>> 450a124ee0ffda3e22e78c70110d9f0665edafb4
 @endsection

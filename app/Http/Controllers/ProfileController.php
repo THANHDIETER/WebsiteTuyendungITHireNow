@@ -37,14 +37,14 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'         => 'required|email|max:255',
-            'phone_number'         => 'required|string|max:20',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone_number' => 'required|string|max:20',
             'date_of_birth' => 'required|date',
-            'gender'        => 'required|in:nam,nữ,khác',
-            'city'          => 'required|string|max:100',
-            'address'       => 'required|string|max:255',
-            'avatar'        => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'gender' => 'required|in:nam,nữ,khác',
+            'city' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $userId = Auth::id();
@@ -74,10 +74,10 @@ class ProfileController extends Controller
     {
         $request->validate([
             'current_password' => 'required',
-            'new_password'     => 'required|min:8|confirmed',
+            'new_password' => 'required|min:8|confirmed',
         ], [
             'new_password.confirmed' => 'Mật khẩu xác nhận không khớp.',
-            'new_password.min'       => 'Mật khẩu mới phải có ít nhất 8 ký tự.',
+            'new_password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự.',
         ]);
 
         $userId = Auth::id();
@@ -99,26 +99,18 @@ class ProfileController extends Controller
         $user = Auth::user();
         $profile = $user->profile;
 
-        $appliedJobs = DB::table('job_applications')
-            ->join('jobs', 'job_applications.job_id', '=', 'jobs.id')
-            ->leftJoin('companies', 'jobs.company_id', '=', 'companies.id')
-            ->leftJoin('locations', 'jobs.location_id', '=', 'locations.id')
-            ->where('job_applications.user_id', $user->id)
-            ->select(
-                'jobs.id as job_id',
-                'jobs.title as job_title',
-                'jobs.slug as slug',
-                'jobs.thumbnail as job_thumbnail',
-                'locations.name as location_name',
-                'companies.name as company_name',
-                'companies.logo_url as company_logo',
-                'job_applications.created_at as applied_at'
-            )
-            ->orderByDesc('applied_at')
+        $appliedJobs = $user->jobApplications()
+        ->with([
+                'job.company.user',
+                'job.location'
+            ])
+            ->orderByDesc('created_at')
             ->paginate(4);
+
 
         return view('website.profile.myJobs', compact('profile', 'appliedJobs'));
     }
+
 
     public function viewJob($slug)
     {
@@ -162,26 +154,26 @@ class ProfileController extends Controller
     public function updateEducation(Request $request)
     {
         $request->validate([
-            'school'     => 'required|string|max:255',
-            'field'      => 'nullable|string|max:150',
-            'degree'     => 'nullable|string|max:100',
+            'school' => 'required|string|max:255',
+            'field' => 'nullable|string|max:150',
+            'degree' => 'nullable|string|max:100',
             'start_date' => 'nullable|date',
-            'end_date'   => 'nullable|date|after_or_equal:start_date',
-            'details'    => 'nullable|string',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'details' => 'nullable|string',
         ]);
 
         $userId = Auth::id();
 
         DB::table('educations')->insert([
-            'user_id'     => $userId,
+            'user_id' => $userId,
             'school_name' => $request->school,
-            'major'       => $request->field,
-            'degree'      => $request->degree,
-            'start_date'  => $request->start_date ? $request->start_date . '-01' : null, // input[month] = YYYY-MM
-            'end_date'    => $request->end_date ? $request->end_date . '-01' : null,
-            'details'     => $request->details,
-            'created_at'  => now(),
-            'updated_at'  => now(),
+            'major' => $request->field,
+            'degree' => $request->degree,
+            'start_date' => $request->start_date ? $request->start_date . '-01' : null, // input[month] = YYYY-MM
+            'end_date' => $request->end_date ? $request->end_date . '-01' : null,
+            'details' => $request->details,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return back()->with('success', 'Thêm học vấn thành công!');
@@ -190,24 +182,24 @@ class ProfileController extends Controller
     public function storeWorkExperience(Request $request)
     {
         $request->validate([
-            'position'           => 'required|string|max:150',
-            'company_name'       => 'required|string|max:255',
-            'start_date'         => 'nullable|date',
-            'end_date'           => 'nullable|date|after_or_equal:start_date',
-            'work_description'   => 'nullable|string',
-            'project_details'    => 'nullable|string',
+            'position' => 'required|string|max:150',
+            'company_name' => 'required|string|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'work_description' => 'nullable|string',
+            'project_details' => 'nullable|string',
         ]);
 
         DB::table('work_experiences')->insert([
-            'user_id'           => Auth::id(),
-            'position'          => $request->position,
-            'company_name'      => $request->company_name,
-            'start_date'        => $request->start_date ? $request->start_date . '-01' : null, // input[month] = YYYY-MM
-            'end_date'          => $request->end_date ? $request->end_date . '-01' : null,
-            'work_description'  => $request->work_description,
-            'project_details'   => $request->project_details,
-            'created_at'        => now(),
-            'updated_at'        => now(),
+            'user_id' => Auth::id(),
+            'position' => $request->position,
+            'company_name' => $request->company_name,
+            'start_date' => $request->start_date ? $request->start_date . '-01' : null, // input[month] = YYYY-MM
+            'end_date' => $request->end_date ? $request->end_date . '-01' : null,
+            'work_description' => $request->work_description,
+            'project_details' => $request->project_details,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return back()->with('success', 'Thêm kinh nghiệm làm việc thành công!');
@@ -221,11 +213,11 @@ class ProfileController extends Controller
         ]);
 
         DB::table('skills')->insert([
-            'user_id'     => Auth::id(),
-            'group_name'  => $request->group_name,
-            'skill_name'  => $request->skill_input,
-            'created_at'  => now(),
-            'updated_at'  => now(),
+            'user_id' => Auth::id(),
+            'group_name' => $request->group_name,
+            'skill_name' => $request->skill_input,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return back()->with('success', 'Đã thêm kỹ năng thành công!');
@@ -234,24 +226,24 @@ class ProfileController extends Controller
     public function storeProject(Request $request)
     {
         $request->validate([
-            'project_name'        => 'required|string|max:255',
-            'start_date'          => 'nullable|date_format:Y-m',
-            'end_date'            => 'nullable|date_format:Y-m|after_or_equal:start_date',
+            'project_name' => 'required|string|max:255',
+            'start_date' => 'nullable|date_format:Y-m',
+            'end_date' => 'nullable|date_format:Y-m|after_or_equal:start_date',
             'project_description' => 'nullable|string|max:2500',
-            'project_link'        => 'nullable|url|max:255',
+            'project_link' => 'nullable|url|max:255',
         ]);
 
         $userId = Auth::id();
 
         DB::table('projects')->insert([
-            'user_id'             => $userId,
-            'project_name'        => $request->project_name,
-            'start_date'          => $request->start_date ? $request->start_date . '-01' : null,
-            'end_date'            => $request->end_date ? $request->end_date . '-01' : null,
+            'user_id' => $userId,
+            'project_name' => $request->project_name,
+            'start_date' => $request->start_date ? $request->start_date . '-01' : null,
+            'end_date' => $request->end_date ? $request->end_date . '-01' : null,
             'project_description' => $request->project_description,
-            'project_link'        => $request->project_link,
-            'created_at'          => now(),
-            'updated_at'          => now(),
+            'project_link' => $request->project_link,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return back()->with('success', 'Đã lưu dự án thành công!');
@@ -260,24 +252,24 @@ class ProfileController extends Controller
     public function storeCertificate(Request $request)
     {
         $request->validate([
-            'certificate_name'     => 'required|string|max:255',
-            'organization'         => 'required|string|max:255',
-            'start_date'           => 'nullable|string|regex:/^\d{4}-\d{2}$/',
-            'certificate_link'     => 'nullable|url|max:255',
-            'project_description'  => 'nullable|string|max:2000',
+            'certificate_name' => 'required|string|max:255',
+            'organization' => 'required|string|max:255',
+            'start_date' => 'nullable|string|regex:/^\d{4}-\d{2}$/',
+            'certificate_link' => 'nullable|url|max:255',
+            'project_description' => 'nullable|string|max:2000',
         ]);
 
         $startDate = $request->start_date ? $request->start_date . '-01' : null;
 
         DB::table('certificates')->insert([
-            'user_id'              => Auth::id(),
-            'certificate_name'     => $request->certificate_name,
-            'organization'         => $request->organization,
-            'start_date'           => $startDate,
-            'certificate_link'     => $request->certificate_link,
-            'description'          => $request->project_description,
-            'created_at'           => now(),
-            'updated_at'           => now(),
+            'user_id' => Auth::id(),
+            'certificate_name' => $request->certificate_name,
+            'organization' => $request->organization,
+            'start_date' => $startDate,
+            'certificate_link' => $request->certificate_link,
+            'description' => $request->project_description,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return back()->with('success', 'Thêm chứng chỉ thành công!');
@@ -286,22 +278,22 @@ class ProfileController extends Controller
     public function storeAward(Request $request)
     {
         $request->validate([
-            'award_name'         => 'required|string|max:255',
-            'organization'       => 'nullable|string|max:255',
-            'start_date'         => 'nullable|string|regex:/^\d{4}-\d{2}$/', // YYYY-MM
+            'award_name' => 'required|string|max:255',
+            'organization' => 'nullable|string|max:255',
+            'start_date' => 'nullable|string|regex:/^\d{4}-\d{2}$/', // YYYY-MM
             'project_description' => 'nullable|string|max:2000',
         ]);
 
         $startDate = $request->start_date ? $request->start_date . '-01' : null;
 
         DB::table('awards')->insert([
-            'user_id'     => Auth::id(),
-            'award_name'  => $request->award_name,
+            'user_id' => Auth::id(),
+            'award_name' => $request->award_name,
             'organization' => $request->organization,
-            'start_date'  => $startDate,
+            'start_date' => $startDate,
             'description' => $request->project_description,
-            'created_at'  => now(),
-            'updated_at'  => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return back()->with('success', 'Thêm giải thưởng thành công!');

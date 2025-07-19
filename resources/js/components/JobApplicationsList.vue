@@ -4,37 +4,28 @@
 
         <!-- Thanh tìm kiếm và chọn số dòng/trang -->
         <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-            <!-- Dropdown chọn trạng thái (đưa lên trước) -->
-            <select v-model="filterStatus" @change="fetchList(1)" class="form-select form-select-sm"
-                style="max-width: 240px; min-width: 240px;">
+            <select v-model="filterStatus" @change="fetchList(1)" class="form-select form-select-sm" style="max-width: 240px; min-width: 240px;">
                 <option value="">Tất cả trạng thái</option>
-                <option v-for="status in statusOptions" :key="status.value" :value="status.value">
-                    {{ status.label }}
-                </option>
+                <option v-for="status in statusOptions" :key="status.value" :value="status.value">{{ status.label }}</option>
             </select>
 
-            <!-- Input tìm kiếm -->
             <input v-model="search" @keyup.enter="fetchList(1)" class="form-control form-control-sm"
                 placeholder="Tìm ứng viên, công việc, công ty..." style="max-width: 240px; min-width: 240px;" />
-
             <button class="btn btn-outline-secondary btn-sm" @click="fetchList(1)">
                 <i class="bi bi-search"></i>
             </button>
 
             <div class="ms-auto d-flex align-items-center gap-2">
                 <label class="mb-0 text-nowrap text-secondary fw-semibold">Số dòng/trang:</label>
-                <select v-model="perPage" @change="fetchList(1)" class="form-select form-select-sm"
-                    style="width: 80px;">
-                    <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">{{ n }}</option>
+                <select v-model="perPage" @change="fetchList(1)" class="form-select form-select-sm" style="width: 80px;">
                     <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">{{ n }}</option>
                 </select>
             </div>
         </div>
 
-
-
         <button v-if="canCreate" @click="openForm()" class="mb-4 btn btn-primary">Tạo mới</button>
 
+        <!-- Table -->
         <table class="table table-bordered mb-4 align-middle">
             <thead class="table-light">
                 <tr>
@@ -52,28 +43,20 @@
                     <td>{{ app.user?.name || app.full_name }}</td>
                     <td>{{ app.job?.title }}</td>
                     <td>{{ app.company?.name }}</td>
-                    <td>
-                        <span :class="statusBadgeClass(app.status)">
-                            {{ statusLabel(app.status) }}
-                        </span>
-                    </td>
+                    <td><span :class="statusBadgeClass(app.status)">{{ statusLabel(app.status) }}</span></td>
                     <td class="text-nowrap align-middle">
                         <div class="d-flex justify-content-center align-items-center gap-2">
-                            <button @click="showDetail(app)"
-                                class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
+                            <button @click="showDetail(app)" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
                                 <i class="bi bi-eye"></i> Xem
                             </button>
-                            <button @click="openForm(app)"
-                                class="btn btn-sm btn-outline-warning d-flex align-items-center gap-1">
+                            <button @click="openForm(app)" class="btn btn-sm btn-outline-warning d-flex align-items-center gap-1">
                                 <i class="bi bi-pencil-square"></i> Sửa
                             </button>
-                            <button @click="remove(app.id)"
-                                class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
+                            <button @click="remove(app.id)" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
                                 <i class="bi bi-trash"></i> Xoá
                             </button>
                         </div>
                     </td>
-
                 </tr>
                 <tr v-if="jobApplications.length === 0">
                     <td colspan="6" class="text-center text-muted py-4">Không có dữ liệu</td>
@@ -85,47 +68,25 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
             <div class="text-secondary fw-semibold">
                 Tổng <span class="text-primary">{{ pagination.total || 0 }}</span> bản ghi | Trang
-                <span class="text-primary">{{ page }}</span> / <span class="text-primary">{{ pagination.last_page || 1
-                    }}</span>
+                <span class="text-primary">{{ page }}</span> / <span class="text-primary">{{ pagination.last_page || 1 }}</span>
             </div>
 
             <nav aria-label="Page navigation">
                 <ul class="pagination pagination-sm mb-0">
-
-                    <!-- Trang đầu -->
                     <li class="page-item" :class="{ disabled: page <= 1 }">
-                        <button class="page-link" @click="changePage(1)" :disabled="page <= 1" aria-label="Trang đầu">
-                            «
-                        </button>
+                        <button class="page-link" @click="changePage(1)" :disabled="page <= 1">«</button>
                     </li>
-
-                    <!-- Trang trước -->
                     <li class="page-item" :class="{ disabled: page <= 1 }">
-                        <button class="page-link" @click="changePage(page - 1)" :disabled="page <= 1"
-                            aria-label="Trang trước">
-                            ←
-                        </button>
+                        <button class="page-link" @click="changePage(page - 1)" :disabled="page <= 1">←</button>
                     </li>
-
-                    <!-- Các số trang hiển thị (ví dụ: hiện 5 trang xung quanh trang hiện tại) -->
                     <li v-for="p in pageNumbers" :key="p" class="page-item" :class="{ active: p === page }">
                         <button class="page-link" @click="changePage(p)">{{ p }}</button>
                     </li>
-
-                    <!-- Trang sau -->
-                    <li class="page-item" :class="{ disabled: page >= (pagination.last_page || 1) }">
-                        <button class="page-link" @click="changePage(page + 1)"
-                            :disabled="page >= (pagination.last_page || 1)" aria-label="Trang sau">
-                            →
-                        </button>
+                    <li class="page-item" :class="{ disabled: page >= pagination.last_page }">
+                        <button class="page-link" @click="changePage(page + 1)" :disabled="page >= pagination.last_page">→</button>
                     </li>
-
-                    <!-- Trang cuối -->
-                    <li class="page-item" :class="{ disabled: page >= (pagination.last_page || 1) }">
-                        <button class="page-link" @click="changePage(pagination.last_page)"
-                            :disabled="page >= (pagination.last_page || 1)" aria-label="Trang cuối">
-                            »
-                        </button>
+                    <li class="page-item" :class="{ disabled: page >= pagination.last_page }">
+                        <button class="page-link" @click="changePage(pagination.last_page)" :disabled="page >= pagination.last_page">»</button>
                     </li>
                 </ul>
             </nav>
@@ -148,103 +109,66 @@
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Vị trí ứng tuyển</label>
                                     <input v-model="form.job_id" type="hidden" />
-                                    <input v-model="form.job_title" type="text" class="form-control bg-light"
-                                    <input v-model="form.job_title" type="text" class="form-control bg-light"
-                                        placeholder="Tên vị trí" readonly />
+                                    <input v-model="form.job_title" type="text" class="form-control bg-light" readonly />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ứng viên</label>
                                     <input v-model="form.user_id" type="hidden" />
-                                    <input v-model="form.user_name" type="text" class="form-control bg-light"
-                                    <input v-model="form.user_name" type="text" class="form-control bg-light"
-                                        placeholder="Họ tên ứng viên" readonly />
+                                    <input v-model="form.user_name" type="text" class="form-control bg-light" readonly />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Công ty</label>
                                     <input v-model="form.company_id" type="hidden" />
-                                    <input v-model="form.company_name" type="text" class="form-control bg-light"
-                                    <input v-model="form.company_name" type="text" class="form-control bg-light"
-                                        placeholder="Tên công ty" readonly />
+                                    <input v-model="form.company_name" type="text" class="form-control bg-light" readonly />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Đường dẫn CV</label>
                                     <div class="input-group">
-                                        <input v-model="form.image" type="text" class="form-control bg-light"
-                                            readonly />
-                                        <a v-if="form.image" :href="image(form.image)" class="btn btn-outline-secondary"
-                                            target="_blank" title="Xem CV">
-                                            <i class="bi bi-box-arrow-up-right"></i>
-                                        </a>
-                                    </div>
-                                    <div class="input-group">
-                                        <input v-model="form.image" type="text" class="form-control bg-light"
-                                            readonly />
-                                        <a v-if="form.image" :href="image(form.image)" class="btn btn-outline-secondary"
-                                            target="_blank" title="Xem CV">
+                                        <input v-model="form.image" type="text" class="form-control bg-light" readonly />
+                                        <a v-if="form.image" :href="image(form.image)" class="btn btn-outline-secondary" target="_blank" title="Xem CV">
                                             <i class="bi bi-box-arrow-up-right"></i>
                                         </a>
                                     </div>
                                 </div>
-
-
                                 <div class="col-12">
                                     <label class="form-label fw-semibold">Thư xin việc</label>
-                                    <textarea class="form-control bg-light" rows="3"
-                                        :value="form.cover_letter || 'Không có'" readonly></textarea>
+                                    <textarea class="form-control bg-light" rows="3" :value="form.cover_letter || 'Không có'" readonly></textarea>
                                 </div>
-
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Trạng thái</label>
-                                    <select v-model="form.status" class="form-select"
-                                        :disabled="validStatusOptions.length === 1">
-                                        <option v-for="status in validStatusOptions" :key="status" :value="status">
-                                            {{ statusLabel(status) }}
-                                        </option>
+                                    <select v-model="form.status" class="form-select" :disabled="validStatusOptions.length === 1">
+                                        <option v-for="status in validStatusOptions" :key="status" :value="status">{{ statusLabel(status) }}</option>
                                     </select>
-
-
                                 </div>
-
                                 <div class="col-md-6 d-flex align-items-end">
                                     <div class="form-check mt-3">
-                                        <input class="form-check-input" type="checkbox" v-model="form.is_shortlisted"
-                                            id="shortlistedCheck" />
-                                        <label class="form-check-label" for="shortlistedCheck">Đã lọt vào danh
-                                            sách</label>
+                                        <input class="form-check-input" type="checkbox" v-model="form.is_shortlisted" id="shortlistedCheck" />
+                                        <label class="form-check-label" for="shortlistedCheck">Đã lọt vào danh sách</label>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Nguồn ứng tuyển</label>
-                                    <input v-model="form.source" type="text" class="form-control bg-light"
-                                    <input v-model="form.source" type="text" class="form-control bg-light"
-                                        placeholder="Ví dụ: Facebook, Website..." readonly />
+                                    <input v-model="form.source" type="text" class="form-control bg-light" readonly />
                                 </div>
-
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ngày phỏng vấn (nếu có)</label>
                                     <div class="input-group">
-                                        <input v-model="form.interview_date" type="datetime-local" class="form-control"
-                                            aria-label="Ngày phỏng vấn" />
+                                        <input v-model="form.interview_date" type="datetime-local" class="form-control" />
                                         <span class="input-group-text bg-light text-muted" style="font-size: 0.875rem;">
                                             <i class="bi bi-calendar-event me-1"></i>
                                             {{ formatDateTime(form.interview_date) }}
                                         </span>
                                     </div>
                                 </div>
-
                                 <div class="col-md-12">
                                     <label class="form-label fw-semibold">Ghi chú</label>
-                                    <textarea v-model="form.note" class="form-control" rows="5"
-                                        placeholder="Ghi chú thêm (tuỳ chọn)"></textarea>
+                                    <textarea v-model="form.note" class="form-control" rows="5" placeholder="Ghi chú thêm (tuỳ chọn)"></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer bg-light rounded-bottom-4">
                             <button type="button" class="btn btn-outline-secondary" @click="closeForm">Huỷ</button>
-                            <button type="submit" class="btn btn-success">
-                                {{ editApp ? 'Lưu thay đổi' : 'Tạo mới' }}
-                            </button>
+                            <button type="submit" class="btn btn-success">{{ editApp ? 'Lưu thay đổi' : 'Tạo mới' }}</button>
                         </div>
                     </form>
                 </div>
@@ -257,107 +181,72 @@
                 <div class="modal-content shadow border-0 rounded-4">
                     <div class="modal-header bg-info text-white rounded-top-4">
                         <h5 class="modal-title">
-                            <i class="bi bi-person-lines-fill me-2"></i>
-                            Chi tiết đơn ứng tuyển
-                            <span v-if="detailApp?.id" class="badge bg-warning text-dark ms-2">#{{ detailApp.id
-                                }}</span>
+                            <i class="bi bi-person-lines-fill me-2"></i> Chi tiết đơn ứng tuyển
+                            <span v-if="detailApp?.id" class="badge bg-warning text-dark ms-2">#{{ detailApp.id }}</span>
                         </h5>
                         <button type="button" class="btn-close btn-close-white" @click="detailApp = null"></button>
                     </div>
-
                     <div class="modal-body px-4 py-4">
                         <div class="row g-4">
-                            <!-- Thông tin cá nhân -->
                             <div class="col-md-6">
-                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-person-fill me-2"></i>Thông tin
-                                    ứng viên</h6>
-                                <p><i class="bi bi-person me-1 text-secondary"></i> Họ tên: <strong>{{
-                                        detailApp.full_name }}</strong></p>
-                                <p><i class="bi bi-envelope me-1 text-secondary"></i> Email: <strong>{{ detailApp.email
-                                        }}</strong></p>
-                                <p><i class="bi bi-telephone me-1 text-secondary"></i> SĐT: <strong>{{ detailApp.phone
-                                        }}</strong></p>
-                                <p>
-                                    <i class="bi bi-file-earmark-person me-1 text-secondary"></i> CV:
+                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-person-fill me-2"></i>Thông tin ứng viên</h6>
+                                <p><i class="bi bi-person me-1 text-secondary"></i> Họ tên: <strong>{{ detailApp.full_name }}</strong></p>
+                                <p><i class="bi bi-envelope me-1 text-secondary"></i> Email: <strong>{{ detailApp.email }}</strong></p>
+                                <p><i class="bi bi-telephone me-1 text-secondary"></i> SĐT: <strong>{{ detailApp.phone }}</strong></p>
+                                <p><i class="bi bi-file-earmark-person me-1 text-secondary"></i> CV:
                                     <a :href="image(detailApp.image)" target="_blank">
                                         <i class="bi bi-box-arrow-up-right me-1"></i> Xem CV (PDF)
                                     </a>
                                 </p>
                             </div>
-
-                            <!-- Thông tin công việc -->
                             <div class="col-md-6">
-                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-briefcase-fill me-2"></i>Thông tin
-                                    ứng tuyển</h6>
-                                <p><i class="bi bi-briefcase me-1 text-secondary"></i> Vị trí: <strong>{{
-                                        detailApp.job?.title }}</strong></p>
-                                <p><i class="bi bi-building me-1 text-secondary"></i> Công ty: <strong>{{
-                                        detailApp.company?.name }}</strong></p>
-                                <p><i class="bi bi-calendar-check me-1 text-secondary"></i> Ngày ứng tuyển: <strong>{{
-                                        formatDate(detailApp.applied_at) }}</strong></p>
-                                <p><i class="bi bi-link-45deg me-1 text-secondary"></i> Nguồn: <strong>{{
-                                        detailApp.source || '—' }}</strong></p>
-                                <p>
-                                    <i class="bi bi-calendar-event me-1 text-secondary"></i> Ngày phỏng vấn: <strong>{{
-                                        formatDate(detailApp.interview_date) }}</strong>
-                                </p>
+                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-briefcase-fill me-2"></i>Thông tin ứng tuyển</h6>
+                                <p><i class="bi bi-briefcase me-1 text-secondary"></i> Vị trí: <strong>{{ detailApp.job?.title }}</strong></p>
+                                <p><i class="bi bi-building me-1 text-secondary"></i> Công ty: <strong>{{ detailApp.company?.name }}</strong></p>
+                                <p><i class="bi bi-calendar-check me-1 text-secondary"></i> Ngày ứng tuyển: <strong>{{ formatDate(detailApp.applied_at) }}</strong></p>
+                                <p><i class="bi bi-link-45deg me-1 text-secondary"></i> Nguồn: <strong>{{ detailApp.source || '—' }}</strong></p>
+                                <p><i class="bi bi-calendar-event me-1 text-secondary"></i> Ngày phỏng vấn: <strong>{{ formatDate(detailApp.interview_date) }}</strong></p>
                             </div>
                             <div class="col-md-12">
                                 <div class="p-3 bg-light rounded border">
-                                    <h6 class="fw-bold text-primary mb-2"><i
-                                            class="bi bi-info-circle-fill me-2"></i>Trạng thái</h6>
-                                    <span :class="statusBadgeClass(detailApp.status)">{{ statusLabel(detailApp.status)
-                                        }}</span>
+                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-info-circle-fill me-2"></i>Trạng thái</h6>
+                                    <span :class="statusBadgeClass(detailApp.status)">{{ statusLabel(detailApp.status) }}</span>
                                     <span v-if="detailApp.is_shortlisted" class="badge bg-primary ms-2">
                                         <i class="bi bi-star-fill me-1"></i> Đã lọt DS
                                     </span>
                                 </div>
                             </div>
-
-                            <!-- Thư xin việc -->
                             <div class="col-12">
                                 <div class="p-3 bg-white border rounded shadow-sm">
-                                    <h6 class="fw-bold text-primary mb-2"><i
-                                            class="bi bi-envelope-paper-heart me-2"></i>Thư xin việc</h6>
-                                    <p class="mb-0">{{ detailApp.cover_letter || 'Không có' }}</p>
-                            </div>
-                            <div class="col-12">
-                                <div class="p-3 bg-white border rounded shadow-sm">
-                                    <h6 class="fw-bold text-primary mb-2"><i
-                                            class="bi bi-envelope-paper-heart me-2"></i>Thư xin việc</h6>
+                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-envelope-paper-heart me-2"></i>Thư xin việc</h6>
                                     <p class="mb-0">{{ detailApp.cover_letter || 'Không có' }}</p>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="p-3 bg-white border rounded shadow-sm">
-                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-journal-text me-2"></i>Ghi chú
-                                    </h6>
+                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-journal-text me-2"></i>Ghi chú</h6>
                                     <p class="mb-0">{{ detailApp.note || 'Không có ghi chú.' }}</p>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="p-3 bg-light rounded border">
-                                    <h6 class="fw-bold text-secondary mb-2"><i
-                                            class="bi bi-clock-history me-2"></i>Thông tin hệ thống</h6>
+                                    <h6 class="fw-bold text-secondary mb-2"><i class="bi bi-clock-history me-2"></i>Thông tin hệ thống</h6>
                                     <p class="mb-1">Tạo lúc: <strong>{{ formatDate(detailApp.created_at) }}</strong></p>
-                                    <p class="mb-1">Cập nhật: <strong>{{ formatDate(detailApp.updated_at) }}</strong>
-                                    </p>
-                                    <p v-if="detailApp.deleted_at" class="text-danger">Đã xoá: <strong>{{
-                                            formatDate(detailApp.deleted_at) }}</strong></p>
+                                    <p class="mb-1">Cập nhật: <strong>{{ formatDate(detailApp.updated_at) }}</strong></p>
+                                    <p v-if="detailApp.deleted_at" class="text-danger">Đã xoá: <strong>{{ formatDate(detailApp.deleted_at) }}</strong></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="modal-footer bg-light rounded-bottom-4">
                         <button type="button" class="btn btn-outline-secondary" @click="detailApp = null">Đóng</button>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
+
 
 <script setup>
     import { ref, onMounted, computed } from 'vue'

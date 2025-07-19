@@ -17,11 +17,13 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = Company::with('user')
+            ->where('user_id', auth()->id())
             ->latest('created_at')
             ->paginate(10);
 
         return view('employer.companies.index', compact('companies'));
     }
+
 
     /**
      * Hiển thị chi tiết một công ty.
@@ -55,29 +57,29 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'       => 'required|string|max:255',
-            'slug'       => 'nullable|string|max:255',
-            'website'    => 'nullable|url|max:255',
-            'email'      => 'nullable|email|max:255',
-            'phone'      => 'nullable|string|max:20',    
-            'address'    => 'nullable|string|max:500',
-            'logo_url'   => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'logo_url' => 'nullable|string|max:255',
             'cover_image_url' => 'nullable|string|max:5020',
-            'city'       => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
             'company_size' => 'nullable|string|max:255',
             'founded_year' => 'nullable|integer|min:1900|max:' . date('Y'),
-            'industry'   => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:1000',
-            'benefits'    => 'nullable|string|max:1000',
-            'is_active'  => 'nullable|boolean',
-            'status'     => 'nullable|string|max:255',
+            'industry' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:3000',
+            'benefits' => 'nullable|string|max:3000',
+            'is_active' => 'nullable|boolean',
+            'status' => 'nullable|string|max:255',
             'free_post_quota' => 'nullable|integer|min:0',
             'free_post_quota_expired_at' => 'nullable|date',
             'free_post_quota_used' => 'nullable|integer|min:0',
         ]);
 
         $validated['user_id'] = Auth::id();
-        $validated['slug']    = Str::slug($validated['name']) . '-' . uniqid();
+        $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
 
         if ($request->hasFile('logo')) {
             $validated['logo_url'] = $request->file('logo')
@@ -103,37 +105,37 @@ class CompanyController extends Controller
         $company = Company::findOrFail($id);
 
         $validated = $request->validate([
-            'name'           => 'required|string|max:255',
-            'website'        => 'nullable|url|max:255',
-            'email'          => 'nullable|email|max:255',
-            'phone'          => 'nullable|string|max:20',
-            'address'        => 'nullable|string|max:500',
-            'city'           => 'nullable|string|max:255',
-            'company_size'   => 'nullable|string|max:255',
-            'founded_year'   => 'nullable|integer|min:1900|max:' . date('Y'),
-            'industry'       => 'nullable|string|max:255',
-            'description'    => 'nullable|string',
-            'benefits'       => 'nullable|string',
-            'status'         => 'nullable|in:active,inactive,banned',
-            'logo'           => 'nullable|image|max:5020',
-            'cover_image'    => 'nullable|image|max:5020',
+            'name' => 'required|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:255',
+            'company_size' => 'nullable|string|max:255',
+            'founded_year' => 'nullable|integer|min:1900|max:' . date('Y'),
+            'industry' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:3000',
+            'benefits' => 'nullable|string|max:3000',
+            'status' => 'nullable|in:active,inactive,banned',
+            'logo' => 'nullable|image|max:5020',
+            'cover_image' => 'nullable|image|max:5020',
         ]);
 
         // Cập nhật các trường thường
         $company->fill([
-            'name'          => $validated['name'],
-            'slug'          => Str::slug($validated['name']),
-            'website'       => $validated['website'] ?? null,
-            'email'         => $validated['email'] ?? null,
-            'phone'         => $validated['phone'] ?? null,
-            'address'       => $validated['address'] ?? null,
-            'city'          => $validated['city'] ?? null,
-            'company_size'  => $validated['company_size'] ?? null,
-            'founded_year'  => $validated['founded_year'] ?? null,
-            'industry'      => $validated['industry'] ?? null,
-            'description'   => $validated['description'] ?? null,
-            'benefits'      => $validated['benefits'] ?? null,
-            'status'        => $validated['status'] ?? 'inactive',
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+            'website' => $validated['website'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'address' => $validated['address'] ?? null,
+            'city' => $validated['city'] ?? null,
+            'company_size' => $validated['company_size'] ?? null,
+            'founded_year' => $validated['founded_year'] ?? null,
+            'industry' => $validated['industry'] ?? null,
+            'description' => $validated['description'] ?? null,
+            'benefits' => $validated['benefits'] ?? null,
+            'status' => $validated['status'] ?? 'inactive',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -161,7 +163,7 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         $company = Company::findOrFail($id);
-        $name    = $company->name;
+        $name = $company->name;
         $company->delete();
 
         return redirect()
