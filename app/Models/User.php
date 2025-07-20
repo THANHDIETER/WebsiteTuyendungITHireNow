@@ -58,7 +58,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class, 'user_id', 'id');
     }
-
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
 
     public function currentPackage()
     {
@@ -75,6 +78,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(SeekerProfile::class, 'user_id', 'id');
     }
+    public function jobApplications()
+{
+    return $this->hasMany(JobApplication::class);
+}
+
 
     public function appliedJobs()
     {

@@ -1,14 +1,11 @@
+
 <style>
     .page-sidebar {
         top: 25px;
         width: 250px;
         background: #fff;
-        color: #212529;
-        border-right: 1px solid #e9ecef;
-        min-height: 100vh;
-        transition: background .2s, color .2s;
+       
     }
-
     .sidebar-menu a {
         text-decoration: none !important;
         transition: background-color 0.2s ease, color 0.2s ease;
@@ -122,9 +119,12 @@
             </a>
         </li>
         <li class="sidebar-list">
-            <a class="sidebar-link" href="{{ route('admin.bank_log.index') }}">
-                <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
-            </a>
-        </li>
+    <a class="sidebar-link" href="{{ route('admin.bank_log.index') }}">
+        <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
+    </a>
+</li>
+
+
+
     </ul>
 </aside>

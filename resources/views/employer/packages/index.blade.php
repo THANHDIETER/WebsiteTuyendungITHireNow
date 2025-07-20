@@ -71,9 +71,13 @@
                                     @endif
 
                                    @if ($currentSubscription && $currentSubscription->id === $pkg->id)
-                                    <button class="btn btn-light border border-success text-success fw-semibold mt-auto w-100 rounded-pill" disabled>
-                                        <i class="fas fa-check-circle me-1"></i> Đang sử dụng
-                                    </button>
+                                     <a href="{{ route('employer.packages.purchase', $pkg->id) }}"
+                                    class="btn btn-gradient-primary mt-auto w-100 rounded-pill fw-bold shadow-sm text-black">
+                                        <i class="fas fa-shopping-cart me-2"></i> Mua ngay
+                                    </a>
+                                   <!-- <button class="btn btn-light border border-success text-success fw-semibold mt-auto w-100 rounded-pill" disabled>
+                                        <i class="fas fa-check-circle me-1"></i>
+                                    </button> -->
                                 @else
                                     <a href="{{ route('employer.packages.purchase', $pkg->id) }}"
                                     class="btn btn-gradient-primary mt-auto w-100 rounded-pill fw-bold shadow-sm text-black">

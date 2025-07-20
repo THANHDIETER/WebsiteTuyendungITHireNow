@@ -10,15 +10,39 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-   protected $fillable = [
-    'title', 'description', 'requirements', 'thumbnail', 'benefits',
-    'salary_min', 'salary_max', 'salary_negotiable','salary_display', 'address',
-    'experience_id', 'meta_title', 'meta_description', 'keyword',
-    'search_index', 'currency', 'remote_policy_id', 'language_id',
-    'deadline', 'company_id', 'slug', 'status', 'is_approved', 'views',
-    'is_featured', 'salary_display', 'is_paid',
-    'level_id' ,'job_type_id', 'location_id', ''
-];
+    protected $fillable = [
+        'title',
+        'description',
+        'requirements',
+        'thumbnail',
+        'benefits',
+        'salary_min',
+        'salary_max',
+        'salary_negotiable',
+        'salary_display',
+        'address',
+        'experience_id',
+        'meta_title',
+        'meta_description',
+        'keyword',
+        'search_index',
+        'currency',
+        'remote_policy_id',
+        'language_id',
+        'deadline',
+        'company_id',
+        'slug',
+        'status',
+        'is_approved',
+        'views',
+        'is_featured',
+        'salary_display',
+        'is_paid',
+        'level_id',
+        'job_type_id',
+        'location_id',
+        ''
+    ];
 
 
     protected $casts = [
@@ -37,20 +61,20 @@ class Job extends Model
         return $this->belongsTo(Company::class);
     }
 
-     public function categories()
+    public function categories()
     {
         return $this->belongsToMany(Category::class, 'job_category', 'job_id', 'category_id');
     }
     public function skills()
-{
-    return $this->belongsToMany(Skill::class, 'job_skill')
-                ->withPivot('priority_level', 'required')
-                ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(Skill::class, 'job_skill')
+            ->withPivot('priority_level', 'required')
+            ->withTimestamps();
+    }
     public function jobType()
-{
-    return $this->belongsTo(JobType::class, 'job_type_id');
-}
+    {
+        return $this->belongsTo(JobType::class, 'job_type_id');
+    }
 
 
     // 🔘 Accessors
@@ -94,33 +118,45 @@ class Job extends Model
         return 'Thương lượng';
     }
     public function level()
+    {
+        return $this->belongsTo(Level::class);
+    }
+
+    public function experience()
+    {
+        return $this->belongsTo(JobExperience::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function language()
+    {
+        return $this->belongsTo(JobLanguage::class);
+    }
+
+    public function remotePolicy()
+    {
+        return $this->belongsTo(RemotePolicy::class);
+    }
+    // locations
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
+    public function recruiter()
 {
-    return $this->belongsTo(Level::class);
+    return $this->belongsTo(User::class, 'user_id');
 }
 
-public function experience()
-{
-    return $this->belongsTo(JobExperience::class);
-}
-public function category()
-{
-    return $this->belongsTo(Category::class);
-}
+    public function interviews()
+    {
+        return $this->hasMany(Interview::class);
+    }
 
-public function language()
-{
-    return $this->belongsTo(JobLanguage::class);
-}
-
-public function remotePolicy()
-{
-    return $this->belongsTo(RemotePolicy::class);
-}
-// locations
-public function location()
-{
-    return $this->belongsTo(Location::class);
-}
-
-
+    public function employer()
+    {
+        return $this->belongsTo(\App\Models\Employer::class);
+    }
 }

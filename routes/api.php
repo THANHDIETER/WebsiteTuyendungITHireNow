@@ -53,4 +53,3 @@ Route::middleware(['auth:sanctum', 'employer'])->group(function () {
 });
 Route::get('/check-pending-payments', [ApiPaymentController::class, 'handlePending']);
 Route::get('/sync-bank', [BankSyncController::class, 'sync']);
-

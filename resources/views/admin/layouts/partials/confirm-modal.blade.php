@@ -1,3 +1,4 @@
+
 <!-- Modal -->
 <div class="modal fade" id="globalAlertModal" tabindex="-1" role="dialog" aria-modal="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -138,7 +139,7 @@
         // Gọi callback
         newBtn.onclick = () => {
             modal.hide();
-            if (type === 'confirm') onConfirm();
+            if (type === 'confirm' || type === 'alert') onConfirm();
         };
 
         modal.show();

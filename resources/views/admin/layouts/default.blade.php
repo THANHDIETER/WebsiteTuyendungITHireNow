@@ -4,7 +4,7 @@
 <head>
     @include('admin.layouts.partials.header')
     <!-- Gọi app.js và app.scss -->
-    @vite(['resources/js/app.js', 'resources/sass/app.scss'])
+    @vite(['resources/js/app.js'])
    
 </head>
 
@@ -32,6 +32,15 @@
     @include('admin.layouts.partials.footer')
     @include('admin.layouts.partials.confirm-modal')
 
+    <!-- <script>
+        window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
+    </script>
+    <script>
+        window.Laravel = {
+            userId: {{ auth()->id() }},
+        };
+        window.APP_NAME = "{{ config('app.name') }}";
+    </script> -->
 </body>
 
 </html>

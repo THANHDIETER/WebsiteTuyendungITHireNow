@@ -122,7 +122,7 @@
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('admin.notifications.index') }}">
+                            <a href="{{ route('employer.notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
@@ -130,7 +130,7 @@
 
 
                             @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                <li class="d-flex align-items-center b-l-primary">
+                                <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
                                     <div class="flex-grow-1">
                                         <span>{{ $noti->created_at->diffForHumans() }}</span>
                                         <a href="{{ $noti->data['link_url'] }}">
@@ -158,7 +158,7 @@
                             </li>
                             <script>
                                 setInterval(() => {
-                                    fetch('{{ route('admin.notifications.latest') }}')
+                                    fetch('{{ route("admin.notifications.latest") }}')
                                         .then(res => res.json())
                                         .then(notis => {
                                             const list = document.getElementById('noti-list');

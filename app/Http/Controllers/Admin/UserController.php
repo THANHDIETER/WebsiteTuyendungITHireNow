@@ -54,13 +54,12 @@ class UserController extends Controller
         return view('admin.users.edit', compact('user'));
     }
 
-    // ❌ Xóa user
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully.']);
+        return response()->json(['message' => 'đã xóa người dùng thành công.'], 200);
     }
 
     

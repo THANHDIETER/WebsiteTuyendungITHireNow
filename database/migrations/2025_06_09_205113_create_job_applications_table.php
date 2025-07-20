@@ -27,7 +27,6 @@ return new class extends Migration {
             // Application status
 
             $table->enum('status', [
-
                 'pending',             // 1 - Chờ xử lý
                 'viewed',              // 2 - Đã xem
                 'under_review',        // 3 - Đang đánh giá
@@ -41,6 +40,7 @@ return new class extends Migration {
                 'no_response',         // 11 - Không phản hồi
                 'saved',               // 12 - Đã lưu hồ sơ
             ])->default('pending');
+
 
 
             $table->boolean('is_shortlisted')->default(false);

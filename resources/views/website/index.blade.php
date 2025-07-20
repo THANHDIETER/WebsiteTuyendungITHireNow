@@ -177,7 +177,7 @@
                                         {{ ucfirst($job->job_type ?? 'N/A') }}
                                     </span>
                                     <p class="job-desc text-secondary small mb-3">
-                                        {{ Str::limit($job->description ?? '', 80) }}</p>
+                                        {!! Str::limit($job->description ?? '', 80) !!}</p>
                                     <div class="skills-tags d-flex flex-wrap gap-2 mb-3">
                                         @if ($job->skills ?? [])
                                             @foreach ($job->skills as $skill)

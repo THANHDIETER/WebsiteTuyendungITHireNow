@@ -1,15 +1,14 @@
 @extends('website.layouts.master')
 
 @section('content')
-    <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
-        data-bg-img="../client/assets/img/banner/15.png" style="height: 300px;">
-        <div class="col-12 col-lg-8">
-            <div class="slider-content">
-                <h1 class="title text-white">👋 Xin chào: {{ $profile->full_name ?? 'Người dùng' }}</h1>
-            </div>
-        </div>
+   <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
+        data-bg-img="{{ asset('client/assets/img/banner/15.png') }}"
+        style="max-height: 80px; height: 80px; padding: 0 !important;">
+        &nbsp;
     </div>
-    <div class="container py-5">
+
+    <div class="container py-4">
+
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3">
@@ -88,7 +87,6 @@
                                 Cập nhật tiêu đề của bạn
                             </p>
                         </div>
-
                         {{-- User Info --}}
 
                         <div class="flex-grow-1">
@@ -789,3 +787,58 @@
         </div>
     </div>
 @endsection
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const skills = [];
+        const skillInput = document.getElementById('skillInput');
+        const addSkillBtn = document.getElementById('addSkillBtn');
+        const skillList = document.getElementById('skillList');
+        const skillsJson = document.getElementById('skillsJson');
+        const saveBtn = document.getElementById('saveBtn');
+        const emptySkillList = document.getElementById('emptySkillList');
+
+        function renderSkills() {
+            skillList.innerHTML = '';
+            skills.forEach((skill, index) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.textContent = skill;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-sm btn-outline-danger';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.onclick = () => {
+                    skills.splice(index, 1);
+                    renderSkills();
+                };
+
+                li.appendChild(removeBtn);
+                skillList.appendChild(li);
+            });
+
+            // Cập nhật JSON vào hidden input
+            skillsJson.value = JSON.stringify(skills);
+
+            // Ẩn hiện danh sách
+            if (skills.length > 0) {
+                skillList.classList.remove('d-none');
+                emptySkillList.querySelector('div').style.display = 'none';
+                saveBtn.disabled = false;
+            } else {
+                skillList.classList.add('d-none');
+                emptySkillList.querySelector('div').style.display = 'block';
+                saveBtn.disabled = true;
+            }
+        }
+
+        addSkillBtn.addEventListener('click', () => {
+            const value = skillInput.value.trim();
+            if (value && !skills.includes(value)) {
+                skills.push(value);
+                skillInput.value = '';
+                renderSkills();
+            }
+        });
+    });
+</script> --}}
