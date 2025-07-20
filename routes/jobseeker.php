@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\JobSeeker\ResumeController;
- use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\InterviewController;
+use App\Http\Controllers\JobSearchController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\JobSeeker\ResumeController;
 use App\Http\Controllers\InterviewResponseController;
 
 // 🔐 Route dành riêng cho JOB SEEKER
@@ -28,7 +29,7 @@ Route::middleware(['auth:sanctum', 'job_seeker'])
             ->name('interviews.respond');
     });
 
-    // profile routes
+// profile routes
 Route::middleware(['auth'])->group(function () {
     // Hiển thị và cập nhật hồ sơ
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -68,4 +69,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Ngôn ngữ
     Route::post('/profile/languages', [ProfileController::class, 'storeLanguage'])->name('profile.languages.store');
+});
+
+Route::middleware(['job_seeker'])->group(function () {
+    Route::get('/chatchat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{id}', [ChatController::class, 'send'])->name('chat.send');
+    Route::get('/chat/start/{userId}', [ChatController::class, 'start'])->name('chat.start');
 });

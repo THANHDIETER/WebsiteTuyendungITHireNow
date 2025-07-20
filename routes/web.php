@@ -15,14 +15,11 @@ require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
 require __DIR__ . '/notification.php';
+require __DIR__ . '/channels.php';
 
-Route::get('/chatchat', [ChatController::class, 'index'])->name('chat.index');
-Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
-Route::post('/chat/{id}', [ChatController::class, 'send'])->name('chat.send');
-Route::get('/chat/start/{userId}', [ChatController::class, 'start'])->name('chat.start');
 
 Route::get('/chatbot/history', [ChatBotController::class, 'history']);
-Route::view('/chat', 'chat'); 
+Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');

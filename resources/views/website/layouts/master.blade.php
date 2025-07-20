@@ -18,7 +18,8 @@
 </head>
 
 <body>
-    
+
+
     <!--wrapper start-->
     <div class="wrapper">
 
@@ -36,17 +37,18 @@
         <div id="scroll-to-top" class="scroll-to-top"><span class="icofont-rounded-up"></span></div>
 
         <!--== Bắt đầu Menu bên ==-->
+
         @include('website.layouts.particals.aside-menu')
         <!--== Kết thúc Menu bên ==-->
     </div>
 
     <!--=======================Javascript============================-->
-
     <!--=== jQuery Modernizr Min Js ===-->
     @include('website.layouts.particals.js')
+    @vite(['resources/js/app.js'])
     @include('chat')
-
-
+    @stack('scripts')
+   
     <!-- <script>
         window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
     </script>
@@ -56,29 +58,7 @@
         };
         window.APP_NAME = "{{ config('app.name') }}";
     </script> -->
-    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.15.0/echo.iife.js"></script>
-<script>
-    Pusher.logToConsole = false;
 
-    window.Echo = new Echo({
-        broadcaster: 'pusher',
-        key: '{{ env("PUSHER_APP_KEY") }}',
-        cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
-        forceTLS: true
-    });
-</script>
-
-
-    <script>
-        window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
-    </script>
-    <script>
-        window.Laravel = {
-            userId: {{ auth()->id() }},
-        };
-        window.APP_NAME = "{{ config('app.name') }}";
-    </script>
 
 </body>
 

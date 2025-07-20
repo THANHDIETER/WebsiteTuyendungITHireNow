@@ -7,14 +7,17 @@ use App\Models\Conversation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
+use App\Events\MessageSent;
 
 class ChatController extends Controller
 {
+
     public function index()
     {
         $userId = Auth::id();
 
-        $conversations = Conversation::with(['userOne', 'userTwo'])
+        $conversations = Conversation::with(['userOne', 'userTwo','latestMessage'])
             ->where('user_one', $userId)
             ->orWhere('user_two', $userId)
             ->get();
@@ -24,11 +27,12 @@ class ChatController extends Controller
 
     public function show($id)
     {
-        $conversation = Conversation::with(['userOne', 'userTwo', 'messages'])->findOrFail($id);
         $userId = Auth::id();
 
+        $conversation = Conversation::with(['userOne', 'userTwo', 'messages'])->findOrFail($id);
+
         if ($conversation->user_one !== $userId && $conversation->user_two !== $userId) {
-            abort(403);
+            return redirect()->route('chat.index')->with('error', 'Bạn không có quyền truy cập cuộc trò chuyện này.');
         }
 
         $chatWith = $conversation->user_one === $userId ? $conversation->userTwo : $conversation->userOne;
@@ -47,27 +51,35 @@ class ChatController extends Controller
         ]);
     }
 
+
     public function send(Request $request, $id)
-    {
-        $request->validate([
-            'message' => 'required|string|max:1000',
-        ]);
+{
+    $request->validate([
+        'message' => 'required|string|max:1000',
+    ]);
 
-        $conversation = Conversation::findOrFail($id);
-        $userId = Auth::id();
+    $conversation = Conversation::findOrFail($id);
+    $userId = Auth::id();
 
-        if ($conversation->user_one !== $userId && $conversation->user_two !== $userId) {
-            abort(403);
-        }
-
-        Message::create([
-            'conversation_id' => $conversation->id,
-            'sender_id' => $userId,
-            'message' => $request->message,
-        ]);
-
-        return redirect()->route('chat.show', $id);
+    if ($conversation->user_one !== $userId && $conversation->user_two !== $userId) {
+        abort(403);
     }
+
+    $msg = Message::create([
+        'conversation_id' => $conversation->id,
+        'sender_id' => $userId,
+        'message' => $request->message,
+    ]);
+
+    broadcast(new MessageSent($msg))->toOthers();
+
+    if ($request->expectsJson()) {
+        return response()->json(['status' => 'success', 'message' => $msg]);
+    }
+
+    return redirect()->route('chat.show', $id);
+}
+
 
     public function start($userId)
     {
@@ -90,5 +102,5 @@ class ChatController extends Controller
 
         return redirect()->route('chat.show', $conversation->id);
     }
-    
+
 }
