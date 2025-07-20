@@ -19,6 +19,7 @@
 
 <body>
 
+
     <!--wrapper start-->
     <div class="wrapper">
 
@@ -36,16 +37,19 @@
         <div id="scroll-to-top" class="scroll-to-top"><span class="icofont-rounded-up"></span></div>
 
         <!--== Bắt đầu Menu bên ==-->
+
         @include('website.layouts.particals.aside-menu')
         <!--== Kết thúc Menu bên ==-->
     </div>
 
     <!--=======================Javascript============================-->
-
     <!--=== jQuery Modernizr Min Js ===-->
     @include('website.layouts.particals.js')
-
-    <script>
+    @vite(['resources/js/app.js'])
+    @include('chat')
+    @stack('scripts')
+   
+    <!-- <script>
         window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
     </script>
     <script>
@@ -53,7 +57,8 @@
             userId: {{ auth()->id() }},
         };
         window.APP_NAME = "{{ config('app.name') }}";
-    </script>
+    </script> -->
+
 
 </body>
 

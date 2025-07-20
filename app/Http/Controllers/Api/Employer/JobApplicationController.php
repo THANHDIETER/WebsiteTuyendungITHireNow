@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Notifications\Jobseeker\ApplicationApprovedNotification;
 use App\Notifications\Jobseeker\ApplicationRejectedNotification;
 use App\Notifications\Jobseeker\InterviewInvitationNotification;
+use Illuminate\Support\Facades\Auth;
 
 class JobApplicationController extends Controller
 {
@@ -154,6 +155,7 @@ class JobApplicationController extends Controller
                 'message' => 'Không thể chuyển về trạng thái trước phỏng vấn sau khi ngày phỏng vấn đã trôi qua.'
             ], 422);
         }
+
 
         // ✅ Cập nhật
         $jobApplication->update($data);

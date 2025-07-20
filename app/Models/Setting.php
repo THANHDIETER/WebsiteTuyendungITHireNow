@@ -30,7 +30,7 @@ class Setting extends Model
             ],
             'random_prefix' => [
                 'name' => 'Tiền tố nội dung chuyển khoản',
-                'value' => 'NAP-'
+                'value' => ''
             ],
             'payment_timeout_minutes' => [
                 'name' => 'Thời gian Show nạp tiền',

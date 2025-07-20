@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class InterviewInvitationNotification extends Notification implements ShouldBroadcast
 {
-    public function __construct(public $job, public $interviewDateTime) {}
+    public function __construct(public $job, public $interviewDateTime, public $interviewId) {}
 
     public function via($notifiable)
     {
@@ -19,7 +19,7 @@ class InterviewInvitationNotification extends Notification implements ShouldBroa
     {
         return [
             'message' => "Bạn được mời phỏng vấn vị trí '{$this->job->title}' lúc {$this->formatTime($this->interviewDateTime)}.",
-            'link_url' => route('job_seeker.notifications.index'),
+            'link_url' => route('job_seeker.interviews.show', $this->interviewId),
         ];
     }
 

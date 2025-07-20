@@ -58,11 +58,31 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class, 'user_id', 'id');
     }
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function currentPackage()
+    {
+        return $this->hasOne(Payment::class)
+            ->where('status', 'paid')
+            ->latestOfMany(); // lấy đơn thanh toán hợp lệ gần nhất
+    }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 
     public function profile()
     {
-        return $this->hasOne(SeekerProfile::class);
+        return $this->hasOne(SeekerProfile::class, 'user_id', 'id');
     }
+    public function jobApplications()
+{
+    return $this->hasMany(JobApplication::class);
+}
+
 
     public function appliedJobs()
     {

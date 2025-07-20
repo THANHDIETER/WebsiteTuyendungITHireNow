@@ -33,3 +33,4 @@ app/Providers/RouteServiceProvider.php
 resources/views/admin.blade.php
 
 
+cloudflared.exe.exe

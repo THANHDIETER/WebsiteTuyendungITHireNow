@@ -161,8 +161,7 @@
                                             type: 'alert',
                                             status: 'success',
                                             onConfirm: () => {
-                                                // ✅ Reload trang sau khi đóng thông báo
-                                                location.reload();
+                                                btn.closest('tr').remove();
                                             }
                                         });
                                     } else {

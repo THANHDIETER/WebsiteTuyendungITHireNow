@@ -1,13 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Broadcast;
-Broadcast::routes(['middleware' => ['auth']]);
-
-// Channel tùy chỉnh riêng nếu bạn dùng Echo.private('notifications.{userId}')
-Broadcast::channel('notifications.{userId}', function ($user, $userId) {
-    return $user->id === (int) $userId;
+Broadcast::channel('chat.{conversationId}', function ($user, $conversationId) {
+    return true; // hoặc kiểm tra quyền nếu cần
 });
 
-// Channel mặc định Laravel dùng cho Notification::send()
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return $user->id === (int) $id;
-});

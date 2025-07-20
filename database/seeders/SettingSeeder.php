@@ -28,7 +28,12 @@ class SettingSeeder extends Seeder
             [
                 'name' => 'Tiền tố nội dung chuyển khoản',
                 'key' => 'random_prefix',
-                'value' => 'NAP-',
+                'value' => '',
+            ],
+            [
+                'name' => 'Thời gian Show nạp tiền',
+                'key' => 'payment_timeout_minutes',
+                'value' => '6',
             ],
         ];
 

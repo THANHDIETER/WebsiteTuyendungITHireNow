@@ -24,7 +24,7 @@
                                     <a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a>
                                 </li>
 
-                                {{-- <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li> --}}
+                                <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
 
                                 <li class="has-submenu">
                                     <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
@@ -35,28 +35,23 @@
                                 </li>
 
                                 <li class="has-submenu">
-                                    <a href="{{ route('blog.index') }}"><span>Blog</span></a>
+                                    <a href="{{ route('blog') }}"><span>Blog</span></a>
                                     <ul class="submenu-nav">
-                                        <li><a href="{{ route('blog.index') }}">Blog Grid</a></li>
+                                        <li><a href="{{ route('blog') }}">Blog Grid</a></li>
                                         <li><a href="{{ route('blog-grid') }}">Blog Left Sidebar</a></li>
-                                        <li><a href="{{ route('blog.rightSidebar') }}">Blog Right Sidebar</a></li>
-                                        @isset($blog)
-                                            <a href="{{ route('blog.show', ['id' => $blog->id]) }}">Chi Tiết Bài Viết</a>
-                                        @endisset
-
+                                        <li><a href="{{ route('blog-right-sidebar') }}">Blog Right Sidebar</a></li>
+                                        <li><a href="">Chi Tiết Bài Viết</a></li>
                                     </ul>
                                 </li>
 
                                 <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
 
                                 <li class="has-submenu">
-                                    <a href="{{ route('about-us') }}"><span>Thông Tin</span></a>
-                                    {{-- <ul class="submenu-nav">
+                                    <a href="#"><span>Trang Khác</span></a>
+                                    <ul class="submenu-nav">
                                         <li><a href="{{ route('about-us') }}">Thông Tin</a></li>
-                                        <li><a href="{{ route('showLoginForm') }}">Đăng Nhập</a></li>
-                                        <li><a href="{{ route('register') }}">Đăng Ký</a></li>
                                         <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
-                                    </ul> --}}
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
@@ -73,21 +68,24 @@
                                     <div class="col">
                                         {{-- 🔔 Chuông thông báo --}}
                                         <div class="dropdown me-3">
-                                            <button class="btn btn-icon btn-notification position-relative " type="button"
-                                                id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="icofont-notification fs-5 text-white"></i>
+                                            <button class="btn btn-icon position-relative" type="button"
+                                                id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                                aria-label="Thông báo">
+                                                <i class="icofont-notification fs-4 text-white"></i>
+
                                                 @if (auth()->user()->unreadNotifications->count())
                                                     <span
-                                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                                        id="noti-count">
+                                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                                         {{ auth()->user()->unreadNotifications->count() }}
                                                     </span>
                                                 @endif
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3"
+
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2"
                                                 aria-labelledby="notificationDropdown"
                                                 style="min-width: 320px; max-height: 400px; overflow-y: auto;"
                                                 id="noti-list">
+
                                                 <li
                                                     class="dropdown-header bg-light fw-semibold text-dark px-3 py-2 d-flex justify-content-between align-items-center">
                                                     <span>Thông báo</span>
@@ -97,30 +95,30 @@
                                                 <li>
                                                     <hr class="dropdown-divider my-1">
                                                 </li>
+
                                                 @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                                    <li data-id="{{ $noti->id }}">
-                                                        <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
+                                                    <li>
+                                                        <a class="dropdown-item d-flex align-items-start gap-2 px-3 py-2"
                                                             href="{{ $noti->data['link_url'] }}">
-                                                            <div class="icon text-primary"><i class="icofont-bell fs-5"></i>
+                                                            <div class="text-primary"><i class="icofont-bell fs-5"></i>
                                                             </div>
                                                             <div class="flex-grow-1">
                                                                 <div class="fw-semibold">{{ $noti->data['message'] }}</div>
-                                                                <div class="small text-muted">
-                                                                    {{ $noti->created_at->diffForHumans() }}
-                                                                </div>
+                                                                <small
+                                                                    class="text-muted">{{ $noti->created_at->diffForHumans() }}</small>
                                                             </div>
                                                         </a>
                                                     </li>
                                                 @empty
-                                                    <li id="noti-empty">
+                                                    <li>
                                                         <div class="text-center text-muted px-3 py-3">
                                                             Không có thông báo mới
                                                         </div>
                                                     </li>
                                                 @endforelse
-
                                             </ul>
                                         </div>
+
                                     </div>
                                     <div class="col">
                                         {{-- 👤 Menu người dùng --}}

@@ -1,3 +1,6 @@
+
+
+
 <aside class="off-canvas-wrapper offcanvas offcanvas-start" tabindex="-1" id="AsideOffcanvasMenu"
     aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
@@ -25,19 +28,16 @@
                         <li><a href="{{ route('chi-tiet-ung-vien') }}">Chi tiết ứng viên</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ route('blog.index') }}">Tin tức</a>
-    <ul class="sub-menu">
-        <li><a href="{{ route('blog.index') }}">Lưới tin tức</a></li>
-        <li><a href="{{ route('blog.rightSidebar') }}">Blog Right Sidebar</a></li>
-        <li><a href="{{ route('blog.show', ['id' => 1]) }}">Chi tiết bài viết</a></li>
-    </ul>
-</li>
-
+                <li><a href="{{ route('blog') }}">Tin tức</a>
+                    <ul class="sub-menu">
+                        <li><a href="{{ route('blog') }}">Lưới tin tức</a></li>
+                        <li><a href="{{ route('blog-grid') }}">Blog (sidebar trái)</a></li>
+                        <li><a href="{{ route('blog-right-sidebar') }}">Blog (sidebar phải)</a></li>
+                    </ul>
+                </li>
                 <li><a href="index.html#">Trang khác</a>
                     <ul class="sub-menu">
                         <li><a href="{{ route('about-us') }}">Giới thiệu</a></li>
-                        <li><a href="{{ route('showLoginForm') }}">Đăng nhập</a></li>
-                        <li><a href="{{ route('register') }}">Đăng ký</a></li>
                         <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
                     </ul>
                 </li>

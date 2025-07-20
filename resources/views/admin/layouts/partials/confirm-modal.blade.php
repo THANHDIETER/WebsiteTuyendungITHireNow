@@ -115,7 +115,7 @@
             success: 'bi-check-circle-fill',
             error: 'bi-x-circle-fill',
             warning: 'bi-exclamation-circle-fill',
-            info: 'bi-info-circle-fill'
+            info: 'bi-info-circle-fill',
         };
         const iconEl = modalEl.querySelector('.modal-icon i');
         const iconWrapper = modalEl.querySelector('.modal-icon');
@@ -139,7 +139,7 @@
         // Gọi callback
         newBtn.onclick = () => {
             modal.hide();
-            if (type === 'confirm') onConfirm();
+            if (type === 'confirm' || type === 'alert') onConfirm();
         };
 
         modal.show();
