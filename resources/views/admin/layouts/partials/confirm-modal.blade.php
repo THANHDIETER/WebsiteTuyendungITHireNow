@@ -1,3 +1,4 @@
+
 <!-- Modal -->
 <div class="modal fade" id="globalAlertModal" tabindex="-1" role="dialog" aria-modal="true">
     <div class="modal-dialog modal-dialog-centered">

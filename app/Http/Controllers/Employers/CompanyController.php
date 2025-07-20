@@ -119,6 +119,7 @@ class CompanyController extends Controller
             'status' => 'nullable|in:active,inactive,banned',
             'logo' => 'nullable|image|max:5020',
             'cover_image' => 'nullable|image|max:5020',
+
         ]);
 
         // Cập nhật các trường thường

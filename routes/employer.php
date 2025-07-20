@@ -113,5 +113,3 @@ Route::middleware(['auth:sanctum', 'employer'])
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
        
     });
-
-
