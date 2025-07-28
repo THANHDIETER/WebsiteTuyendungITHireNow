@@ -93,6 +93,11 @@
                 <i class="bi bi-people sidebar-icon"></i> Quản lý người dùng
             </a>
         </li>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.job-applications.index') }}">
+                <i class="bi bi-file-earmark-person sidebar-icon"></i> Quản lý đơn ứng tuyển
+            </a>
+        </li>
 
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.payment.index') }}">

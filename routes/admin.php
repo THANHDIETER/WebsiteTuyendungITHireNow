@@ -11,7 +11,9 @@ use App\Http\Controllers\Admin\{
     DashboardController,
     NotificationController,
     ServicePackageController,
-    BankAccountControlle
+    BankAccountControlle,
+    LogoController,
+    BankAccountController
 };
 use App\Http\Controllers\Admin\SeekerProfileController;
 
@@ -55,7 +57,7 @@ Route::prefix('admin')
             Route::put('{service_package}', 'update')->name('update');
             Route::delete('{service_package}', 'destroy')->name('destroy');
         });
-
+        
         // 👤 Quản lý người dùng
         Route::prefix('users')->name('users.')->controller(UserController::class)->group(function () {
             Route::get('/', 'index')->name('index');

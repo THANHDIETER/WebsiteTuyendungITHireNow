@@ -21,8 +21,8 @@ Route::get('/user', function (Request $request) {
 
 
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/register', [AuthController::class, 'register']);
+// Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('payments/{id}/pdf', [PaymentController::class, 'downloadPdf']);
