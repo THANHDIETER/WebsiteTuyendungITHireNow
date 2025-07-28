@@ -26,7 +26,8 @@ class BlogController extends Controller
     public function indexRightSidebar()
     {
         $blogs = Blog::latest()->paginate(6);
-        return view('website.blog.blog-right-sidebar', compact('blogs')); // ✅ sửa đúng: blogs
+         $categories = Category::all();
+        return view('website.blog.blog-right-sidebar', compact('blogs' , 'categories')); // ✅ sửa đúng: blogs
     }
 
     public function show($id)

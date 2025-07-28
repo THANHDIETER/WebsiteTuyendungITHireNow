@@ -115,8 +115,6 @@
             </div>
         </div>
 
-
-
         {{-- Pagination --}}
         @if ($jobs->hasPages())
             <div class="row mt-4 align-items-center">

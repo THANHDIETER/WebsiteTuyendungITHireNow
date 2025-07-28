@@ -187,7 +187,3 @@ Route::get('/seeker/notifications/latest', function () {
         ];
     }));
 })->middleware('auth');
-
-
-
-

@@ -53,6 +53,7 @@ class JobApplicationController extends Controller
     public function show(JobApplication $jobApplication)
     {
         return $jobApplication->load(['job', 'user', 'company']);
+
     }
 
     public function update(Request $request, JobApplication $jobApplication)
@@ -154,6 +155,7 @@ class JobApplicationController extends Controller
                 'message' => 'Không thể chuyển về trạng thái trước phỏng vấn sau khi ngày phỏng vấn đã trôi qua.'
             ], 422);
         }
+
 
         // ✅ Cập nhật
         $jobApplication->update($data);

@@ -64,3 +64,8 @@ Remote Database Access
 Cài vite 
 npm install --save-dev vite
 
+
+    // Fetch ban đầu
+    onMounted(() => fetchList())
+</script>
+

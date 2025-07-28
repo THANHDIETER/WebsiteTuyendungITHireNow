@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->timestamp('applied_at')->useCurrent();
 
             // Application status
+
             $table->enum('status', [
                 'pending',             // 1 - Chờ xử lý
                 'viewed',              // 2 - Đã xem
@@ -39,6 +40,7 @@ return new class extends Migration {
                 'no_response',         // 11 - Không phản hồi
                 'saved',               // 12 - Đã lưu hồ sơ
             ])->default('pending');
+
 
 
             $table->boolean('is_shortlisted')->default(false);
