@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use App\Events\MessageSent;
+use App\Events\TypingEvent;
 
 class ChatController extends Controller
 {
@@ -17,7 +18,7 @@ class ChatController extends Controller
     {
         $userId = Auth::id();
 
-        $conversations = Conversation::with(['userOne', 'userTwo','latestMessage'])
+        $conversations = Conversation::with(['userOne', 'userTwo', 'latestMessage'])
             ->where('user_one', $userId)
             ->orWhere('user_two', $userId)
             ->get();
@@ -53,32 +54,32 @@ class ChatController extends Controller
 
 
     public function send(Request $request, $id)
-{
-    $request->validate([
-        'message' => 'required|string|max:1000',
-    ]);
+    {
+        $request->validate([
+            'message' => 'required|string|max:1000',
+        ]);
 
-    $conversation = Conversation::findOrFail($id);
-    $userId = Auth::id();
+        $conversation = Conversation::findOrFail($id);
+        $userId = Auth::id();
 
-    if ($conversation->user_one !== $userId && $conversation->user_two !== $userId) {
-        abort(403);
+        if ($conversation->user_one !== $userId && $conversation->user_two !== $userId) {
+            abort(403);
+        }
+
+        $msg = Message::create([
+            'conversation_id' => $conversation->id,
+            'sender_id' => $userId,
+            'message' => $request->message,
+        ]);
+
+        broadcast(new MessageSent($msg))->toOthers();
+
+        if ($request->expectsJson()) {
+            return response()->json(['status' => 'success', 'message' => $msg]);
+        }
+
+        return redirect()->route('chat.show', $id);
     }
-
-    $msg = Message::create([
-        'conversation_id' => $conversation->id,
-        'sender_id' => $userId,
-        'message' => $request->message,
-    ]);
-
-    broadcast(new MessageSent($msg))->toOthers();
-
-    if ($request->expectsJson()) {
-        return response()->json(['status' => 'success', 'message' => $msg]);
-    }
-
-    return redirect()->route('chat.show', $id);
-}
 
 
     public function start($userId)
@@ -101,6 +102,18 @@ class ChatController extends Controller
         );
 
         return redirect()->route('chat.show', $conversation->id);
+    }
+
+    public function typing(Request $request, $conversationId)
+    {
+        broadcast(new TypingEvent(
+            $conversationId,
+            auth()->id(),
+            auth()->user()->name,
+            auth()->user()->avatar ?? null
+        ))->toOthers();
+
+        return response()->json(['status' => 'ok']);
     }
 
 }

@@ -46,7 +46,6 @@
 </aside>
 <style>
     .page-sidebar {
-        top: 25px;
         width: 250px;
         background: #fff;
         color: #212529;
