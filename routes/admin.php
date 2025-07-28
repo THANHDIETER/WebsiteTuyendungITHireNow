@@ -98,4 +98,7 @@ Route::prefix('admin')
             Route::put('{id}', 'update')->name('update');
             Route::delete('{id}', 'destroy')->name('destroy');
         });
+        Route::resource('logos', App\Http\Controllers\Admin\LogoController::class)->names('logos');
+
+
     });

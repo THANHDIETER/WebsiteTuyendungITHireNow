@@ -6,7 +6,42 @@
 <meta name="keywords"
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
+<style>
+    .logo-wrapper {
+    display: flex;
+    align-items: center;
+}
 
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px; /* Chiều cao tùy chỉnh */
+}
+
+.logo-img {
+    max-height: 50px;
+    height: auto;
+    width: auto;
+    display: block;
+}
+.logo-wrapper {
+    display: flex;
+    justify-content: center; /* căn giữa ngang */
+    align-items: center;     /* căn giữa dọc */
+    height: 70px; /* hoặc chiều cao đúng của header */
+    width: 220px; /* hoặc chiều rộng phần khung trắng chứa logo */
+}
+
+.logo-wrapper img {
+    max-height: 45px;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+}
+
+
+</style>
 <title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -63,16 +98,36 @@
     </script>
 @endif
 <header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
-                src="{{ asset('assets/images/logo/logo.png') }}" loading="lazy" alt="logo"><img class="for-dark"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" loading="lazy" alt="logo"></a><a
-            class="close-btn" href="javascript:void(0)">
-            <div class="toggle-sidebar">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
-        </a></div>
+    @php
+    $lightLogo = \App\Models\Logo::where('is_active', true)->where('type', 'light')->first();
+    $darkLogo = \App\Models\Logo::where('is_active', true)->where('type', 'dark')->first();
+@endphp
+
+<div class="logo-wrapper d-flex align-items-center col-auto" style="padding-left: 10px;">
+    <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 220px;">
+        <a href="{{ route('home') }}">
+            @php
+                $logo = \App\Models\Logo::where('is_active', true)->first();
+            @endphp
+            <img 
+                src="{{ $logo ? asset('storage/' . $logo->image_path) : asset('images/default.png') }}" 
+                alt="Logo"
+                class="logo-img"
+            >
+        </a>
+    </div>
+
+    <a class="close-btn ms-3" href="javascript:void(0)">
+        <div class="toggle-sidebar">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </a>
+</div>
+
+
+
     <div class="page-main-header col">
         <div class="header-left d-lg-block d-none">
             <form class="search-form mb-0">

@@ -7,10 +7,14 @@
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
-                                <img class="logo-main" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
-                                    alt="Logo" />
-                                <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
-                                    alt="Logo" />
+                                @php
+                                    $activeLogo = \App\Models\Logo::where('is_active', true)->first();
+                                @endphp
+
+                                <img src="{{ asset('storage/' . ($activeLogo->image_path ?? 'default.png')) }}"
+                                    alt="Logo">
+
+
                             </a>
                         </div>
                     </div>
