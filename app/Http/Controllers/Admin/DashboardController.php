@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Job;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
@@ -19,39 +20,39 @@ class DashboardController extends Controller
     }
 
     /**
-     * API: Thống kê số lượng user theo vai trò
+     * API: Thống kê số lượng user theo vai trò (admin, employer, seeker)
      */
     public function userStats()
     {
-        $data = [
-            'admin' => User::where('role', 'admin')->count(),
-            'employer' => User::where('role', 'employer')->count(),
-            'seeker' => User::where('role', 'job_seeker')->count(),
-        ];
+        $roles = ['admin', 'employer', 'job_seeker'];
 
-        return response()->json($data);
+        $users = User::whereIn('role', $roles)
+            ->selectRaw('role, COUNT(*) as total')
+            ->groupBy('role')
+            ->pluck('total', 'role');
+
+        return response()->json([
+            'admin' => $users->get('admin', 0),
+            'employer' => $users->get('employer', 0),
+            'seeker' => $users->get('job_seeker', 0),
+        ]);
     }
 
     /**
-     * API: Thống kê job theo trạng thái
+     * API: Thống kê job theo trạng thái (active hoặc closed dựa vào deadline)
      */
-
     public function jobStats()
     {
-        $today = now()->toDateString();
+        $today = now()->startOfDay();
 
-        $data = [
-            'active' => Job::whereDate('deadline', '>=', $today)->count(),
-            'closed' => Job::whereDate('deadline', '<', $today)->count(),
-        ];
+        $active = Job::whereDate('deadline', '>=', $today)->count();
+        $closed = Job::whereDate('deadline', '<', $today)->count();
 
-
-        return response()->json($data);
+        return response()->json([
+            'active' => $active,
+            'closed' => $closed,
+        ]);
     }
-
-
-
-
 
 
     /**
@@ -61,18 +62,21 @@ class DashboardController extends Controller
     {
         $type = $request->input('type', 'weekly');
 
-        $query = Application::query();
+        $start = Carbon::now()->startOfYear();
+        $end = Carbon::now()->endOfYear();
 
-        if ($type === 'weekly') {
-            $query->selectRaw('WEEK(created_at) as period, COUNT(*) as total')
-                ->whereYear('created_at', now()->year)
-                ->groupBy('period');
-        } else {
-            $query->selectRaw('MONTH(created_at) as period, COUNT(*) as total')
-                ->whereYear('created_at', now()->year)
-                ->groupBy('period');
-        }
+        $applications = Application::query()
+            ->whereBetween('created_at', [$start, $end])
+            ->when($type === 'weekly', function ($query) {
+                return $query->selectRaw('WEEK(created_at, 1) as period, COUNT(*) as total')
+                    ->groupBy('period');
+            }, function ($query) {
+                return $query->selectRaw('MONTH(created_at) as period, COUNT(*) as total')
+                    ->groupBy('period');
+            })
+            ->orderBy('period')
+            ->get();
 
-        return response()->json($query->orderBy('period')->get());
+        return response()->json($applications);
     }
 }

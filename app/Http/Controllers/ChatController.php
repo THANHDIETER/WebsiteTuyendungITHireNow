@@ -21,10 +21,25 @@ class ChatController extends Controller
         $conversations = Conversation::with(['userOne', 'userTwo', 'latestMessage'])
             ->where('user_one', $userId)
             ->orWhere('user_two', $userId)
-            ->get();
+            ->get()
+            ->map(function ($conv) use ($userId) {
+                $conv->unread_count = $conv->messages()
+                    ->where('sender_id', '!=', $userId)
+                    ->whereNull('read_at')
+                    ->count();
+                return $conv;
+            });
 
-        return view('chat.index', compact('conversations', 'userId'));
+        $totalUnread = $conversations->sum('unread_count');
+
+        return view('chat.index', [
+            'conversations' => $conversations,
+            'userId' => $userId,
+            'conversationId' => null,
+            'totalUnread' => $totalUnread
+        ]);
     }
+
 
     public function show($id)
     {
@@ -36,21 +51,39 @@ class ChatController extends Controller
             return redirect()->route('chat.index')->with('error', 'Bạn không có quyền truy cập cuộc trò chuyện này.');
         }
 
+        // Đánh dấu tin nhắn là đã đọc khi vào xem conversation
+        $conversation->messages()
+            ->where('sender_id', '!=', $userId)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
         $chatWith = $conversation->user_one === $userId ? $conversation->userTwo : $conversation->userOne;
         $messages = $conversation->messages()->orderBy('created_at')->get();
 
+        // Lấy danh sách conversation và số tin chưa đọc
         $conversations = Conversation::with(['userOne', 'userTwo'])
             ->where('user_one', $userId)
             ->orWhere('user_two', $userId)
-            ->get();
+            ->get()
+            ->map(function ($conv) use ($userId) {
+                $conv->unread_count = $conv->messages()
+                    ->where('sender_id', '!=', $userId)
+                    ->whereNull('read_at')
+                    ->count();
+                return $conv;
+            });
+
+        $totalUnread = $conversations->sum('unread_count');
 
         return view('chat.index', [
             'messages' => $messages,
             'chatWith' => $chatWith,
             'conversationId' => $conversation->id,
             'conversations' => $conversations,
+            'totalUnread' => $totalUnread, // Gửi cho view để hiện badge ở header
         ]);
     }
+
 
 
     public function send(Request $request, $id)

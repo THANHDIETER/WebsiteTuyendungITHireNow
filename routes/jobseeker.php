@@ -77,6 +77,6 @@ Route::middleware(['job_seeker'])->group(function () {
     Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/chat/{id}', [ChatController::class, 'send'])->name('chat.send');
     Route::get('/chat/start/{userId}', [ChatController::class, 'start'])->name('chat.start');
+    Route::post('/chat/{conversation}/typing', [ChatController::class, 'typing'])->name('chat.typing');
 });
-Route::post('/chat/{conversation}/typing', [App\Http\Controllers\ChatController::class, 'typing'])->name('chat.typing');
 

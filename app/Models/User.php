@@ -9,12 +9,12 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
 
-    use HasApiTokens, Notifiable, HasRoles, HasFactory;
-
+    use HasApiTokens, Notifiable, HasRoles, HasFactory,SoftDeletes;
     protected $fillable = [
         'email',
         'password',
@@ -79,9 +79,9 @@ class User extends Authenticatable
         return $this->hasOne(SeekerProfile::class, 'user_id', 'id');
     }
     public function jobApplications()
-{
-    return $this->hasMany(JobApplication::class);
-}
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 
 
     public function appliedJobs()

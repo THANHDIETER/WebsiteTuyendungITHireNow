@@ -13,6 +13,7 @@
 
   <!--== Bootstrap CSS ==-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <!--== Icofont Icon CSS ==-->
   <link href="{{ asset('client/assets/css/icofont.css') }}" rel="stylesheet" />
   <!--== Swiper CSS ==-->
