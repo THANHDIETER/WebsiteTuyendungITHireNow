@@ -8,14 +8,15 @@
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
                                 @php
-                                    $activeLogo = \App\Models\Logo::where('is_active', true)->first();
+                                    $clientLogo = \App\Models\Logo::where('type', 'client')
+                                        ->where('is_active', true)
+                                        ->first();
                                 @endphp
 
-                                <img src="{{ asset('storage/' . ($activeLogo->image_path ?? 'default.png')) }}"
-                                    alt="Logo">
-
-
+                                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
+                                    alt="Client Logo" style="height: 120px;" {{-- hoặc dùng class --}}>
                             </a>
+
                         </div>
                     </div>
 

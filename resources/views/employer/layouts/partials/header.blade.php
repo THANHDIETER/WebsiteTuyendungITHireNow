@@ -51,14 +51,21 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-<header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto">
-    <a href="{{ route('home') }}">
-        <img class="for-light" loading="lazy"
-             src="{{ asset('storage/' . ($lightLogo->image_path ?? 'default-light.png')) }}" alt="logo">
-        <img class="for-dark" loading="lazy"
-             src="{{ asset('storage/' . ($darkLogo->image_path ?? 'default-dark.png')) }}" alt="logo">
-    </a>
+<header class="page-header row justify-content-between align-items-center bg-white">
+    <div class="logo-wrapper d-flex align-items-center col-4">
+   <a href="{{ route('home') }}">
+    @php
+        $clientLogo = \App\Models\Logo::where('type', 'client')->where('is_active', true)->first();
+    @endphp
+
+    <img 
+        src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
+        alt="Client Logo"
+        style="height: 120px;" {{-- hoặc dùng class --}}
+    >
+</a>
+
+
     <a class="close-btn" href="javascript:void(0)">
         <div class="toggle-sidebar">
             <div class="line"></div>
@@ -68,23 +75,8 @@
     </a>
 </div>
 
-    <div class="page-main-header col">
-        <div class="header-left d-lg-block d-none">
-            <form class="search-form mb-0">
-                <div class="input-group"><span class="input-group-text pe-0">
-                        <!-- Icon Search -->
-                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                    <input class="form-control" type="text" placeholder="Search anything...">
-                </div>
-            </form>
-        </div>
+    <div class="page-main-header d-flex align-items-center col-auto">
+       
         <div class="nav-right">
             <ul class="header-right">
                 <li class="modes d-flex"><a class="dark-mode">

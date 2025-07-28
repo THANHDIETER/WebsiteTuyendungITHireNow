@@ -7,38 +7,6 @@
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
 <style>
-    .logo-wrapper {
-    display: flex;
-    align-items: center;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 60px; /* Chiều cao tùy chỉnh */
-}
-
-.logo-img {
-    max-height: 50px;
-    height: auto;
-    width: auto;
-    display: block;
-}
-.logo-wrapper {
-    display: flex;
-    justify-content: center; /* căn giữa ngang */
-    align-items: center;     /* căn giữa dọc */
-    height: 70px; /* hoặc chiều cao đúng của header */
-    width: 220px; /* hoặc chiều rộng phần khung trắng chứa logo */
-}
-
-.logo-wrapper img {
-    max-height: 45px;
-    height: auto;
-    width: auto;
-    object-fit: contain;
-}
 
 
 </style>
@@ -87,8 +55,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
@@ -97,54 +65,32 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
-<header class="page-header row">
-    @php
-    $lightLogo = \App\Models\Logo::where('is_active', true)->where('type', 'light')->first();
-    $darkLogo = \App\Models\Logo::where('is_active', true)->where('type', 'dark')->first();
-@endphp
+<header class="page-header row justify-content-between align-items-center bg-white">
 
-<div class="logo-wrapper d-flex align-items-center col-auto" style="padding-left: 10px;">
-    <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 220px;">
-        <a href="{{ route('home') }}">
+    <div class="logo-wrapper d-flex align-items-center col-4" style="padding-left: 10px;">
+        <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 220px;">
             @php
-                $logo = \App\Models\Logo::where('is_active', true)->first();
+                $logo = \App\Models\Logo::where('type', 'admin')->where('is_active', true)->first();
             @endphp
-            <img 
-                src="{{ $logo ? asset('storage/' . $logo->image_path) : asset('images/default.png') }}" 
-                alt="Logo"
-                class="logo-img"
-            >
+
+            <a href="{{ route('home') }}">
+                <img src="{{ $logo ? asset('storage/' . $logo->image_path) : asset('images/default.png') }}"
+                    alt="Admin Logo" class="logo-img">
+            </a>
+
+
+        </div>
+
+        <a class="close-btn ms-3" href="javascript:void(0)">
+            <div class="toggle-sidebar">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
         </a>
     </div>
+    <div class="page-main-header d-flex align-items-center col-auto">
 
-    <a class="close-btn ms-3" href="javascript:void(0)">
-        <div class="toggle-sidebar">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-        </div>
-    </a>
-</div>
-
-
-
-    <div class="page-main-header col">
-        <div class="header-left d-lg-block d-none">
-            <form class="search-form mb-0">
-                <div class="input-group"><span class="input-group-text pe-0">
-                        <!-- Icon Search -->
-                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                    <input class="form-control" type="text" placeholder="Search anything...">
-                </div>
-            </form>
-        </div>
         <div class="nav-right">
             <ul class="header-right">
                 <li class="modes d-flex"><a class="dark-mode">
@@ -155,20 +101,6 @@
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a></li>
-                <li class="serchinput d-lg-none d-flex"><a class="search-mode">
-                        <!-- Icon Search -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    <div class="form-group search-form">
-                        <input type="text" placeholder="Search here...">
-                    </div>
-                </li>
                 <!-- Notification menu -->
                 <li class="custom-dropdown">
                     <a href="javascript:void(0)" id="notification-toggle">
@@ -195,26 +127,25 @@
                         <ul class="activity-update" id="noti-list">
 
 
-          @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-    <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
-        <div class="flex-grow-1">
-            <span>{{ $noti->created_at->diffForHumans() }}</span>
-            <a href="{{ $noti->data['link_url'] }}">
-                <h5>{{ $noti->data['message'] }}</h5>
-            </a>
-            <h6>{{ config('app.name') }}</h6>
-        </div>
-        <div class="flex-shrink-0">
-            <img class="b-r-15 img-40" src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
-        </div>
-    </li>
-@empty
-    <li class="d-flex justify-content-center p-2 text-muted">
-        Không có thông báo mới
-    </li>
-@endforelse
-
-
+                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
+                                <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
+                                    <div class="flex-grow-1">
+                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
+                                        <a href="{{ $noti->data['link_url'] }}">
+                                            <h5>{{ $noti->data['message'] }}</h5>
+                                        </a>
+                                        <h6>{{ config('app.name') }}</h6>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <img class="b-r-15 img-40"
+                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
+                                    </div>
+                                </li>
+                            @empty
+                                <li class="d-flex justify-content-center p-2 text-muted">
+                                    Không có thông báo mới
+                                </li>
+                            @endforelse
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
                                     <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">All
@@ -223,7 +154,7 @@
                             </li>
                             <script>
                                 setInterval(() => {
-                                    fetch('{{ route("admin.notifications.latest") }}')
+                                    fetch('{{ route('admin.notifications.latest') }}')
                                         .then(res => res.json())
                                         .then(notis => {
                                             const list = document.getElementById('noti-list');
@@ -257,7 +188,6 @@
                                         });
                                 }, 5000);
                             </script>
-
                         </ul>
                     </div>
                 </li>
