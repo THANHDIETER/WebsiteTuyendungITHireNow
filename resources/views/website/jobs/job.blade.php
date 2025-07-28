@@ -1,51 +1,52 @@
 @extends('website.layouts.master')
 
 @section('content')
+    <main class="main-content">
 
-<main class="main-content">
-
-    <!--== Bắt đầu header trang ==-->
-    <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
-        <div class="container pt--0 pb--0">
-            <div class="row">
-                <div class="col-12">
-                    <div class="job-search-wrap">
-                        <div class="job-search-form">
-                            <form action="#">
-                                <div class="row row-gutter-10">
-                                    <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Tiêu đề việc làm hoặc từ khóa">
+        <!--== Bắt đầu header trang ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="job-search-wrap">
+                            <div class="job-search-form">
+                                <form action="#">
+                                    <div class="row row-gutter-10">
+                                        <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control"
+                                                    placeholder="Tiêu đề việc làm hoặc từ khóa">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                            <div class="form-group">
+                                                <select class="form-control">
+                                                    <option selected>Chọn Thành Phố</option>
+                                                    <option>Hà Nội</option>
+                                                    <option>Hồ Chí Minh</option>
+                                                    <option>Đà Nẵng</option>
+                                                    <option>Huế</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                            <div class="form-group">
+                                                <select class="form-control">
+                                                    <option selected>Loại Công Việc</option>
+                                                    <option>Web Designer</option>
+                                                    <option>Web Developer</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn-form-search"><i
+                                                        class="icofont-search-1"></i></button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                        <div class="form-group">
-                                            <select class="form-control">
-                                                <option selected>Chọn Thành Phố</option>
-                                                <option>Hà Nội</option>
-                                                <option>Hồ Chí Minh</option>
-                                                <option>Đà Nẵng</option>
-                                                <option>Huế</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                        <div class="form-group">
-                                            <select class="form-control">
-                                                <option selected>Loại Công Việc</option>
-                                                <option>Web Designer</option>
-                                                <option>Web Developer</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                        <div class="form-group">
-                                            <button type="submit" class="btn-form-search"><i class="icofont-search-1"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -153,114 +154,19 @@
             </div>
         </section>
 
-        {{-- Thông tin chi tiết công việc --}}
-        <div class="job-details mt-2">
-            <h4 class="job-title mb-2 text-dark fw-bold">
-                <a href="{{ route('jobs.show', $job->slug) }}" class="text-dark text-decoration-none">
-                    {{ $job->title ?: 'Không có tiêu đề' }}
-                </a>
-            </h4>
-
-            {{-- Loại công việc --}}
-            <p class="text-success mb-2 small">
-                {{ $job->jobType->name ?? ucfirst($job->job_type ?? 'N/A') }}
-            </p>
-
-            {{-- Mô tả ngắn --}}
-            <p class="job-desc text-muted mb-3">
-                {!! $job->description ? Str::limit(strip_tags($job->description), 100) : 'Chưa có mô tả' !!}
-            </p>
-
-            {{-- Kỹ năng --}}
-            <div class="skills-tags d-flex flex-wrap gap-2 mb-3">
-                @if ($job->skills->isNotEmpty())
-                    @foreach ($job->skills as $skill)
-                        <span class="badge bg-light text-success small px-2 py-1">{{ $skill->name }}</span>
-                    @endforeach
-                @else
-                    <span class="badge bg-light text-muted small px-2 py-1">Không có kỹ năng</span>
-                @endif
-            </div>
-        </div>
-
-        {{-- Chân thẻ công việc: lương + nút --}}
-        <div class="job-footer d-flex justify-content-between align-items-end mt-auto p-2">
-            <div class="salary-info">
-                <h5 class="text-success fw-bold mb-0">
-                    @if ($job->salary_min > 0 || $job->salary_max > 0)
-                        {{ number_format($job->salary_min) }} - {{ number_format($job->salary_max) }}
-                    @else
-                        Thỏa thuận
-                    @endif
-                </h5>
-                <p class="text-muted small">{{ $job->currency ?? 'VND' }}/tháng</p>
-            </div>
-            <a href="{{ route('jobs.show', $job->slug) }}"
-               class="btn btn-primary rounded-pill px-3 py-2 fw-semibold text-white hover-scale"
-               style="background-color: #007bff; transition: all 0.3s ease;">
-                Ứng tuyển ngay
-            </a>
-        </div>
-    </div>
-</div>
-@empty
-<div class="col-12">
-    <div class="alert alert-info text-center rounded-3 shadow-sm py-3">
-        <i class="bi bi-info-circle fs-4 mb-2"></i>
-        <h5 class="mb-0">Chưa có tin tuyển dụng nào.</h5>
-    </div>
-</div>
-@endforelse
-
-            </div>
-        </div>
-    </section>
-
-    <style>
-        .job-card {
-            position: relative;
-            overflow: visible;
-            transition: transform 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
-        }
-        .job-card:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-        .hover-scale {
-            transition: all 0.3s ease;
-        }
-        .hover-scale:hover {
-            transform: scale(1.05);
-        }
-        .badge-hot-ithirenow {
-            background: #ff2d2d;
-            color: #fff;
-            font-weight: bold;
-            font-size: 1.05em;
-            padding: 0.55em 1.3em;
-            border-radius: 0.7em 0.7em 0.7em 0.7em;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-            transform: rotate(-18deg);
-            left: -18px;
-            top: -18px;
-            position: absolute;
-            letter-spacing: 1px;
-            pointer-events: none;
-            transition: transform 0.3s cubic-bezier(.4,2,.6,1);
-        }
-        .job-card:hover .badge-hot-ithirenow {
-            transform: scale(1.05) rotate(-18deg) translateY(-5px);
-        }
-        @media (max-width: 768px) {
+        <style>
             .job-card {
                 position: relative;
                 overflow: hidden;
             }
-            .salary-info h5 {
-                font-size: 1.1rem;
+
+            .job-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             }
-            .btn-primary {
-                padding: 0.5rem 1rem;
+
+            .hover-scale {
+                transition: all 0.3s ease;
             }
 
             .hover-scale:hover {
@@ -287,4 +193,8 @@
             }
         </style>
     </main>
+<<<<<<< HEAD
 @endsection
+=======
+@endsection
+>>>>>>> Thanh-Tu

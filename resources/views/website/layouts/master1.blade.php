@@ -26,7 +26,6 @@
         @yield('content')
 
         <!--== Bắt đầu Footer ==-->
-        @include('website.layouts.particals.footer')
         <!--== Kết thúc Footer ==-->
 
         <!--== Nút cuộn lên đầu trang ==-->

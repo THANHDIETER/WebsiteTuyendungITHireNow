@@ -1,10 +1,6 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-
 window.Pusher = Pusher;
 
 window.Echo = new Echo({

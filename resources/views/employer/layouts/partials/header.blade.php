@@ -2,19 +2,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description"
-    content="Edmin admin is super flexible, powerful, clean &amp; modern responsive bootstrap admin template with unlimited possibilities.">
+    content="Edmin admin is super flexible, powerful, clean &amp; modern responsive  admin template with unlimited possibilities.">
 <meta name="keywords"
-    content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
+    content="admin template, Edmin admin template, best javascript admin, dashboard template,  admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <title>{{ $title ?? 'Admin' }}</title>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap JS Bundle (kèm Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 
 <!-- Favicon icon-->
 <link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
@@ -127,72 +121,12 @@
                             </a>
                         </h5>
                         <ul class="activity-update" id="noti-list">
-
-
-                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
-                                    <div class="flex-grow-1">
-                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
-                                        <a href="{{ $noti->data['link_url'] }}">
-                                            <h5>{{ $noti->data['message'] }}</h5>
-                                        </a>
-                                        <h6>{{ config('app.name') }}</h6>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <img class="b-r-15 img-40"
-                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
-                                    </div>
-                                </li>
-                            @empty
-                                <li class="d-flex justify-content-center p-2 text-muted">
-                                    Không có thông báo mới
-                                </li>
-                            @endforelse
-
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
                                     <a class="btn btn-secondary"
-                                        href="{{ route('employer.notifications.index') }}">All
-                                        Notification</a>
+                                        href="">AllNotification</a>
                                 </div>
                             </li>
-                            <script>
-                                setInterval(() => {
-                                    fetch('{{ route("admin.notifications.latest") }}')
-                                        .then(res => res.json())
-                                        .then(notis => {
-                                            const list = document.getElementById('noti-list');
-
-                                            notis.forEach(noti => {
-                                                if (!list.querySelector(`[data-id="${noti.id}"]`)) {
-                                                    const item = `
-                            <li class="d-flex align-items-center b-l-primary" data-id="${noti.id}">
-                                <div class="flex-grow-1">
-                                    <span>${noti.time}</span>
-                                    <a href="${noti.link_url}">
-                                        <h5>${noti.message}</h5>
-                                    </a>
-                                    <h6>{{ config('app.name') }}</h6>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
-                                </div>
-                            </li>
-                        `;
-                                                    list.insertAdjacentHTML('afterbegin', item);
-                                                }
-                                            });
-
-                                            // Cập nhật badge
-                                            const badge = document.getElementById('noti-count');
-                                            if (badge) {
-                                                badge.innerText = notis.length;
-                                                badge.classList.toggle('d-none', notis.length === 0);
-                                            }
-                                        });
-                                }, 5000);
-                            </script>
-
                         </ul>
                     </div>
                 </li>
@@ -589,17 +523,30 @@
         </div>
     </div>
 </header>
-@if (auth()->check())
-    <script>
-        window.Laravel = {
-            userId: {{ auth()->id() }},
-            APP_NAME: "{{ config('app.name') }}",
-        };
-    </script>
-@endif
-
 @if (session('access_token'))
     <script>
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const darkModeBtn = document.querySelector('.dark-mode');
+
+        darkModeBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.documentElement.classList.toggle('dark');
+
+            // Lưu trạng thái vào localStorage để giữ trạng thái khi reload
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Auto load theme nếu đã lưu
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    });
+</script>

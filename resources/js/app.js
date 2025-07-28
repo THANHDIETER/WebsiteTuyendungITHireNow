@@ -2,8 +2,6 @@
 import "./bootstrap";
 
 // ✅ 2. Các CSS
-
-import "bootstrap";
 import '../css/app.css';
 
 // ✅ 3. Import Vue và các components

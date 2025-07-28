@@ -1,5 +1,4 @@
 <header class="header-area transparent">
-
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
@@ -7,25 +6,17 @@
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
-                                <img class="logo-main" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
-                                    alt="Logo" />
-                                <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
-                                    alt="Logo" />
+                                <img class="logo-main" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" alt="Logo" />
+                                <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" alt="Logo" />
                             </a>
                         </div>
                     </div>
-
                     <div class="header-align-center">
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
                                 <li><a href="{{ route('home') }}"><span>Trang Chủ</span></a></li>
-
-                                <li class="has-submenu">
-                                    <a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a>
-                                </li>
-
+                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a></li>
                                 <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
-
                                 <li class="has-submenu">
                                     <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
                                     <ul class="submenu-nav">
@@ -33,7 +24,6 @@
                                         <li><a href="{{ route('chi-tiet-ung-vien') }}">Chi Tiết Ứng Viên</a></li>
                                     </ul>
                                 </li>
-
                                 <li class="has-submenu">
                                     <a href="{{ route('blog') }}"><span>Blog</span></a>
                                     <ul class="submenu-nav">
@@ -43,9 +33,7 @@
                                         <li><a href="">Chi Tiết Bài Viết</a></li>
                                     </ul>
                                 </li>
-
                                 <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
-
                                 <li class="has-submenu">
                                     <a href="#"><span>Trang Khác</span></a>
                                     <ul class="submenu-nav">
@@ -56,7 +44,6 @@
                             </ul>
                         </div>
                     </div>
-
                     <div class="header-align-end">
                         <div class="header-action-area">
                             @guest
@@ -64,65 +51,39 @@
                                     Đăng Nhập
                                 </a>
                             @else
-                                <div class="row">
-                                    <div class="col">
-                                        {{-- 🔔 Chuông thông báo --}}
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <!-- 🔔 ICON THÔNG BÁO động -->
                                         <div class="dropdown me-3">
-                                            <button class="btn btn-icon position-relative" type="button"
-                                                id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false"
-                                                aria-label="Thông báo">
-                                                <i class="icofont-notification fs-4 text-white"></i>
-
-                                                @if (auth()->user()->unreadNotifications->count())
-                                                    <span
-                                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                                        {{ auth()->user()->unreadNotifications->count() }}
-                                                    </span>
-                                                @endif
+                                            <button class="btn btn-icon position-relative p-0 bg-transparent border-0"
+                                                type="button" id="notificationDropdown" data-bs-toggle="dropdown"
+                                                aria-expanded="false" aria-label="Thông báo">
+                                                <i id="notification-bell" class="bi bi-bell fs-4 text-white"></i>
+                                                <span id="notification-dot"
+                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__bounce"
+                                                    style="display:none; font-size:10px; min-width:12px; height:12px; padding:0;"></span>
                                             </button>
-
-                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2"
-                                                aria-labelledby="notificationDropdown"
-                                                style="min-width: 320px; max-height: 400px; overflow-y: auto;"
-                                                id="noti-list">
-
-                                                <li
-                                                    class="dropdown-header bg-light fw-semibold text-dark px-3 py-2 d-flex justify-content-between align-items-center">
-                                                    <span>Thông báo</span>
-                                                    <a href="{{ route('job_seeker.notifications.index') }}"
-                                                        class="text-primary small">Xem tất cả</a>
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider my-1">
-                                                </li>
-
-                                                @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-start gap-2 px-3 py-2"
-                                                            href="{{ $noti->data['link_url'] }}">
-                                                            <div class="text-primary"><i class="icofont-bell fs-5"></i>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <div class="fw-semibold">{{ $noti->data['message'] }}</div>
-                                                                <small
-                                                                    class="text-muted">{{ $noti->created_at->diffForHumans() }}</small>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                @empty
-                                                    <li>
-                                                        <div class="text-center text-muted px-3 py-3">
-                                                            Không có thông báo mới
-                                                        </div>
-                                                    </li>
-                                                @endforelse
-                                            </ul>
                                         </div>
-
+                                    </div>
+                                    <div class="col-auto">
+                                        <!-- 💬 ICON CHAT động -->
+                                        <div class="dropdown me-3">
+                                           <a class="btn btn-icon position-relative p-0 bg-transparent border-0"
+                                            href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
+                                                <i id="chat-bubble" class="bi bi-chat-dots fs-4 text-white"></i>
+                                                @if(isset($totalUnread) && $totalUnread > 0)
+                                                <span id="chat-dot"
+                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                    style="font-size:10px; min-width:18px; height:18px; padding:0 6px;">
+                                                    {{ $totalUnread > 99 ? '99+' : $totalUnread }}
+                                                </span>
+                                                @endif
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="col">
                                         {{-- 👤 Menu người dùng --}}
-                                        <div class="user-info dropdown">
+                                        <div class="user-info dropdown me-3">
                                             <a href="#" class="user-info-toggle d-flex align-items-center"
                                                 data-bs-toggle="dropdown">
                                                 <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
@@ -137,7 +98,6 @@
                                                         <i class="fa-solid fa-house me-2"></i> Tổng quan
                                                     </a>
                                                 </li>
-
                                                 {{-- Hồ sơ --}}
                                                 <li>
                                                     <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/show') ? 'active text-primary' : '' }}"
@@ -145,23 +105,19 @@
                                                         <i class="fa-solid fa-file-lines me-2"></i> Hồ sơ HireNow
                                                     </a>
                                                 </li>
-
                                                 {{-- Việc làm của tôi --}}
                                                 <li>
-                                                    <a class="dropdown-item d-flex align-items-center"
-                                                        {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}
+                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}"
                                                         href="{{ route('profile.my-jobs') }}">
                                                         <i class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi
                                                     </a>
                                                 </li>
-
                                                 {{-- Admin --}}
                                                 @if (Auth::user()->role === 'admin')
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
                                                             href="{{ route('admin.dashboard') }}">
-                                                            <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang
-                                                            quản trị
+                                                            <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản trị
                                                         </a>
                                                     </li>
                                                 @endif
@@ -171,15 +127,14 @@
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
                                                             href="{{ route('employer.dashboard') }}">
-                                                            <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà
-                                                            tuyển
-                                                            dụng
-                                                        @elseif (Auth::user()->role === 'employer')
+                                                            <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà tuyển dụng
+                                                        </a>
+                                                    </li>
+                                                @endif
+                                                @if (Auth::user()->role === 'employer')
                                                     <li>
-                                                        <a class="dropdown-item" href="{{ route('employer.details') }}">
-                                                            <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển
-                                                            dụng
-
+                                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('employer.details') }}">
+                                                            <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
                                                         </a>
                                                     </li>
                                                 @endif
@@ -190,22 +145,16 @@
                                                         <i class="fa-solid fa-gear me-2"></i> Cài đặt
                                                     </a>
                                                 </li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-
+                                                <li><hr class="dropdown-divider"></li>
                                                 <li>
                                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                                         <i class="icofont-logout me-1"></i> Đăng xuất
-
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
-
                                 </div>
-
                             @endguest
 
                             <button class="btn-menu" type="button" data-bs-toggle="offcanvas"
@@ -213,62 +162,14 @@
                                 <i class="icofont-navigation-menu"></i>
                             </button>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    @if (session('access_token'))
-        <script>
-            localStorage.setItem('access_token', "{{ session('access_token') }}");
-        </script>
-    @endif
-
-    <script>
-        setInterval(() => {
-            fetch('/seeker/notifications/latest')
-                .then(res => res.json())
-                .then(data => {
-                    const list = document.getElementById("noti-list");
-                    const count = document.getElementById("noti-count");
-
-                    if (!list) return;
-
-                    data.forEach(noti => {
-                        // Kiểm tra nếu thông báo chưa có trong danh sách thì thêm mới
-                        if (!list.querySelector(`li[data-id="${noti.id}"]`)) {
-                            const html = `
-                            <li data-id="${noti.id}">
-                                <a class="dropdown-item d-flex align-items-start px-3 py-2 gap-2"
-                                   href="${noti.link_url}">
-                                    <div class="icon text-primary">
-                                        <i class="icofont-bell fs-5"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="fw-semibold">${noti.message}</div>
-                                        <div class="small text-muted">${noti.time}</div>
-                                    </div>
-                                </a>
-                            </li>`;
-
-                            const empty = document.getElementById("noti-empty");
-                            if (empty) empty.remove(); // xoá nếu có dòng "Không có thông báo"
-
-                            // Thêm vào cuối danh sách
-                            list.insertAdjacentHTML("beforeend", html);
-                        }
-                    });
-
-                    // Cập nhật badge số lượng
-                    if (count) {
-                        count.innerText = data.length;
-                        count.classList.toggle("d-none", data.length === 0);
-                    }
-                });
-        }, 5000);
-    </script>
-
-
 </header>
+@if (session('access_token'))
+    <script>
+        localStorage.setItem('access_token', "{{ session('access_token') }}");
+    </script>
+@endif
