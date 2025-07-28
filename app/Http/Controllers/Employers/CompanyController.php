@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -31,6 +32,7 @@ class CompanyController extends Controller
     public function show($id)
     {
         $company = Company::with('user')->findOrFail($id);
+        $job = Job::findOrFail($id);
         return view('employer.companies.show', compact('company'));
     }
 

@@ -64,3 +64,6 @@ composer require stichoza/google-translate-php
 composer require openai-php/laravel
 
 composer require pusher/pusher-php-server
+
+
+php artisan make:provider ChatServiceProvider

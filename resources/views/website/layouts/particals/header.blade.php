@@ -6,16 +6,19 @@
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
-                                <img class="logo-main" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" alt="Logo" />
-                                <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" alt="Logo" />
+                                <img class="logo-main" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
+                                    alt="Logo" />
+                                <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
+                                    alt="Logo" />
                             </a>
                         </div>
                     </div>
-                    <div class="header-align-center">
+                    <div class="header-align-center me-3">
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
                                 <li><a href="{{ route('home') }}"><span>Trang Chủ</span></a></li>
-                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a></li>
+                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm Việc
+                                            Làm</span></a></li>
                                 <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
                                 <li class="has-submenu">
                                     <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
@@ -65,22 +68,24 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <!--icon chat nhắn tin  -->
                                     <div class="col-auto">
-                                        <!-- 💬 ICON CHAT động -->
                                         <div class="dropdown me-3">
-                                           <a class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                            href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
+                                            <a class="btn btn-icon position-relative p-0 bg-transparent border-0"
+                                                href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
                                                 <i id="chat-bubble" class="bi bi-chat-dots fs-4 text-white"></i>
+
                                                 @if(isset($totalUnread) && $totalUnread > 0)
-                                                <span id="chat-dot"
-                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                                    style="font-size:10px; min-width:18px; height:18px; padding:0 6px;">
-                                                    {{ $totalUnread > 99 ? '99+' : $totalUnread }}
-                                                </span>
+                                                    <span id="chat-dot"
+                                                        class="position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow"
+                                                        style="font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;">
+                                                        {{ $totalUnread > 99 ? '99+' : $totalUnread }}
+                                                    </span>
                                                 @endif
                                             </a>
                                         </div>
                                     </div>
+                                    
                                     <div class="col">
                                         {{-- 👤 Menu người dùng --}}
                                         <div class="user-info dropdown me-3">
@@ -117,7 +122,8 @@
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
                                                             href="{{ route('admin.dashboard') }}">
-                                                            <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản trị
+                                                            <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản
+                                                            trị
                                                         </a>
                                                     </li>
                                                 @endif
@@ -127,13 +133,15 @@
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
                                                             href="{{ route('employer.dashboard') }}">
-                                                            <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà tuyển dụng
+                                                            <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà
+                                                            tuyển dụng
                                                         </a>
                                                     </li>
                                                 @endif
                                                 @if (Auth::user()->role === 'employer')
                                                     <li>
-                                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('employer.details') }}">
+                                                        <a class="dropdown-item d-flex align-items-center"
+                                                            href="{{ route('employer.details') }}">
                                                             <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
                                                         </a>
                                                     </li>
@@ -145,7 +153,9 @@
                                                         <i class="fa-solid fa-gear me-2"></i> Cài đặt
                                                     </a>
                                                 </li>
-                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
                                                 <li>
                                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                                         <i class="icofont-logout me-1"></i> Đăng xuất
@@ -173,3 +183,37 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatDot = document.getElementById('chat-dot');
+        const authId = {{ auth()->id() }};
+
+        if (window.Echo && authId) {
+            window.Echo.private('user.' + authId)
+                .listen('MessageNotification', (e) => {
+                    const unread = e.unread_total;
+
+                    if (chatDot) {
+                        if (unread > 0) {
+                            chatDot.innerText = unread > 99 ? '99+' : unread;
+                            chatDot.style.display = 'flex';
+                        } else {
+                            chatDot.style.display = 'none';
+                        }
+                    } else {
+                        // Nếu chưa có sẵn badge, thì tạo mới
+                        const aTag = document.getElementById('chatDropdown');
+                        if (aTag) {
+                            const badge = document.createElement('span');
+                            badge.id = 'chat-dot';
+                            badge.className = 'position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow';
+                            badge.style = 'font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;';
+                            badge.innerText = unread > 99 ? '99+' : unread;
+                            aTag.appendChild(badge);
+                        }
+                    }
+                });
+        }
+    });
+</script>
