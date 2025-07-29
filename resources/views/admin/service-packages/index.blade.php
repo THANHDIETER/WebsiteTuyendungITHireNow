@@ -61,25 +61,25 @@
 
     {{-- Modal hiển thị nội dung động --}}
     <div class="modal fade" id="packageModal" tabindex="-1" aria-labelledby="packageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered  modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="packageModalLabel">Modal</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-            </div>
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="packageModalLabel">Modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
 
-            <div class="modal-body" id="packageModalBody" style="max-height: 400px; overflow-y: auto;">
-                Đang tải nội dung...
-            </div>
+                <div class="modal-body" id="packageModalBody" style="max-height: 400px; overflow-y: auto;">
+                    Đang tải nội dung...
+                </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fa fa-times-circle me-1"></i> Đóng
-                </button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times-circle me-1"></i> Đóng
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 @endsection
@@ -94,12 +94,12 @@
             function loadModalContent(url, title) {
                 modalTitle.innerText = title;
                 modalBody.innerHTML = 'Đang tải...';
-
                 fetch(url)
                     .then(res => res.text())
                     .then(data => {
                         modalBody.innerHTML = data;
                         modal.show();
+                        bindAjaxForm();
                     })
                     .catch(err => {
                         showAlertModal({
@@ -111,12 +111,72 @@
                     });
             }
 
+            // Tạo/sửa xem đều dùng 1 form partial
+            function bindAjaxForm() {
+                const form = modalBody.querySelector('form');
+                if (!form) return;
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const oldAlerts = form.querySelectorAll('.alert');
+                    oldAlerts.forEach(alert => alert.remove());
+
+                    const formData = new FormData(form);
+                    fetch(form.action, {
+                        method: form.method,
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                        .then(async res => {
+                            if (res.status === 422) {
+                                const data = await res.json();
+                                let html = `<div class="alert alert-danger small"><ul class="mb-0">`;
+                                for (let k in data.errors) {
+                                    data.errors[k].forEach(msg => {
+                                        html += `<li><i class="fa fa-exclamation-circle me-1"></i> ${msg}</li>`;
+                                    });
+                                }
+                                html += `</ul></div>`;
+                                form.insertAdjacentHTML('afterbegin', html);
+                            } else if (res.ok) {
+                                const data = await res.json();
+                                showAlertModal({
+                                    title: 'Thành công',
+                                    message: data.message || 'Lưu thành công.',
+                                    type: 'alert',
+                                    status: 'success',
+                                    onConfirm: function () {
+                                        window.location.reload(); // hoặc reload lại bảng động nếu bạn dùng AJAX cho bảng
+                                    }
+                                });
+                            } else {
+                                showAlertModal({
+                                    title: 'Lỗi',
+                                    message: 'Có lỗi hệ thống!',
+                                    type: 'alert',
+                                    status: 'error'
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            showAlertModal({
+                                title: 'Lỗi',
+                                message: err.message || 'Không thể kết nối!',
+                                type: 'alert',
+                                status: 'error'
+                            });
+                        });
+                });
+            }
+
             // Thêm gói mới
             document.querySelector('.btn-create').addEventListener('click', () => {
                 loadModalContent(`{{ route('admin.service-packages.create') }}`, 'Thêm Gói Dịch Vụ');
             });
 
-            // Chi tiết
+            // Chi tiết (nếu có show detail)
             document.querySelectorAll('.btn-view').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.id;
@@ -134,16 +194,17 @@
 
             // Xoá
             document.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const url = btn.dataset.url;
-                    const name = btn.dataset.name;
+                btn.addEventListener('click', function () {
+                    const btnDelete = this;
+                    const url = btnDelete.dataset.url;
+                    const name = btnDelete.dataset.name;
 
                     showAlertModal({
                         title: 'Xác nhận xoá',
-                        message: `Bạn có chắc chắn muốn xoá gói "${name}" không?`,
+                        message: `Bạn có chắc chắn muốn xoá gói <b>${name}</b> không?`,
                         type: 'confirm',
                         status: 'warning',
-                        onConfirm: () => {
+                        onConfirm: function () {
                             fetch(url, {
                                 method: 'DELETE',
                                 headers: {
@@ -154,14 +215,13 @@
                                 .then(res => res.json())
                                 .then(data => {
                                     if (data.success) {
-                                        // ✅ Hiển thị modal Thành công, sau đó reload
                                         showAlertModal({
                                             title: 'Thành công',
-                                            message: data.message || 'Thao tác thành công.',
+                                            message: data.message || 'Xoá thành công.',
                                             type: 'alert',
                                             status: 'success',
-                                            onConfirm: () => {
-                                                btn.closest('tr').remove();
+                                            onConfirm: function () {
+                                                btnDelete.closest('tr').remove();
                                             }
                                         });
                                     } else {
@@ -183,9 +243,10 @@
                                 });
                         }
                     });
-
                 });
             });
+
         });
+
     </script>
 @endpush

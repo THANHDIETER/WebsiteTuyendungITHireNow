@@ -2,13 +2,10 @@
 <html lang="en">
 
 <head>
+    
     @include('employer.layouts.partials.header')
+    @stack('style')
 
-    @if (session('access_token'))
-        <script>
-            localStorage.setItem('access_token', "{{ session('access_token') }}");
-        </script>
-    @endif
 </head>
 
 <body class="d-flex flex-column min-vh-100">

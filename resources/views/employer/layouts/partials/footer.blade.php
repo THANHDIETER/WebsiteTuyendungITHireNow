@@ -6,9 +6,9 @@
 
 <!-- jquery-->
 <script src="{{ asset('assets/js/vendors/jquery/dist/jquery.min.js')}}"></script>
-<!-- bootstrap js-->
-<script src="{{ asset('assets/js/vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{ asset('assets/js/config.js')}}"></script>
+<script src="{{ asset('assets/js/vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+
 <!-- Sidebar js-->
 <script src="{{ asset('assets/js/sidebar.js')}}"></script>
 <!-- Apexchart js-->

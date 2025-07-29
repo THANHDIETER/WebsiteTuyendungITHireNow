@@ -146,6 +146,7 @@ class JobController extends Controller
         $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
     }
 
+
     $validated['deadline'] = $request->input('application_deadline') ?? null;
     $validated['currency'] = $validated['currency'] ?? 'VND';
     $validated['salary_negotiable'] = $request->boolean('salary_negotiable', false);

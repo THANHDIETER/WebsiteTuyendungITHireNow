@@ -9,12 +9,12 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
 
-    use HasApiTokens, Notifiable, HasRoles, HasFactory;
-
+    use HasApiTokens, Notifiable, HasRoles, HasFactory,SoftDeletes;
     protected $fillable = [
         'email',
         'password',
@@ -79,9 +79,9 @@ class User extends Authenticatable
         return $this->hasOne(SeekerProfile::class, 'user_id', 'id');
     }
     public function jobApplications()
-{
-    return $this->hasMany(JobApplication::class);
-}
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 
 
     public function appliedJobs()
@@ -136,4 +136,16 @@ class User extends Authenticatable
 
         return "<span class=\"badge bg-{$color}\">{$label}</span>";
     }
+    public function unreadMessagesCount()
+{
+    return \App\Models\Conversation::where(function ($q) {
+        $q->where('user_one', $this->id)->orWhere('user_two', $this->id);
+    })->get()->sum(function ($conv) {
+        return $conv->messages()
+            ->where('sender_id', '!=', $this->id)
+            ->whereNull('read_at')
+            ->count();
+    });
+}
+
 }

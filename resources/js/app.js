@@ -1,8 +1,11 @@
 // ✅ 1. Import Echo, Pusher, window setup
 import "./bootstrap";
 
-// ✅ 2. Các CSS
 
+<<<<<<< HEAD
+=======
+// ✅ 2. Các CSS
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
 import '../css/app.css';
 
 // ✅ 3. Import Vue và các components
