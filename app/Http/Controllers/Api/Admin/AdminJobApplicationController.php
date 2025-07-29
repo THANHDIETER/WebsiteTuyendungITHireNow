@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
 
-class JobApplicationController extends Controller
+class AdminJobApplicationController extends Controller
 {
     public function index(Request $request)
     {
@@ -30,19 +30,30 @@ class JobApplicationController extends Controller
 
     public function update(Request $request, $id)
     {
-        $application = JobApplication::findOrFail($id);
+        $request->validate([
+        'status' => 'nullable|in:pending,viewed,under_review,rejected,contacting,interview_scheduled,interviewed,offered,hired,candidate_declined,no_response,saved',
+        'is_shortlisted' => 'nullable|boolean',
+        'note' => 'nullable|string',
+        'interview_date' => 'nullable|date',
+    ]);
 
-        $application->status = $request->status ?? $application->status;
-        $application->is_shortlisted = $request->is_shortlisted ?? $application->is_shortlisted;
-        $application->note = $request->note ?? $application->note;
-        $application->interview_date = $request->interview_date ?? $application->interview_date;
-        $application->save();
+    $application = JobApplication::findOrFail($id);
 
-        return response()->json([
-            'message' => 'Cập nhật đơn ứng tuyển thành công!',
-            'data' => $application
-        ]);
-    }
+    $application->update([
+        'status' => $request->status ?? $application->status,
+        'is_shortlisted' => $request->is_shortlisted ?? $application->is_shortlisted,
+        'note' => $request->note ?? $application->note,
+        'interview_date' => $request->interview_date ?? $application->interview_date,
+    ]);
+
+    $application->load(['user', 'job', 'company']);
+
+    return response()->json([
+        'message' => 'Cập nhật đơn ứng tuyển thành công!',
+        'data' => $application
+    ]);
+}
+
     public function destroy($id)
     {
         $application = JobApplication::findOrFail($id);

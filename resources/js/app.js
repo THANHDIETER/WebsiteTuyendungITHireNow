@@ -3,7 +3,6 @@ import "./bootstrap";
 
 // ✅ 2. Các CSS
 
-import "bootstrap";
 import '../css/app.css';
 
 // ✅ 3. Import Vue và các components
@@ -14,6 +13,8 @@ import EmployerJobPortal from "./components/employers/EmployerJobPortal.vue";
 import JobApplicationsList from "./components/JobApplicationsList.vue";
 import bank_account from "./components/bank_account/bank_account.vue";
 import bank_log from "./components/bank_log/Listbanklog.vue";
+import job_application_admin from "./components/admin/JobApplicationsList.vue";
+
 // import chat_box from "./components/chatbox/ChatBox.vue";
 
 // ✅ 4. Khởi tạo Vue
@@ -24,6 +25,8 @@ app.component("employer-job-portal", EmployerJobPortal);
 app.component("employer-job-application", JobApplicationsList);
 app.component("bank-account-admin", bank_account);
 app.component("banklog-account-admin", bank_log);
+app.component("job-application-admin", job_application_admin);
+
 // app.component("chat-box", chat_box);
 const el = document.getElementById("vue-wrapper");
 if (el) {

@@ -94,7 +94,7 @@
             </a>
         </li>
         <li class="sidebar-list">
-            <a class="sidebar-link" href="{{ route('admin.job-applications.index') }}">
+            <a class="sidebar-link" href="{{ route('admin.job-application.index') }}">
                 <i class="bi bi-file-earmark-person sidebar-icon"></i> Quản lý đơn ứng tuyển
             </a>
         </li>

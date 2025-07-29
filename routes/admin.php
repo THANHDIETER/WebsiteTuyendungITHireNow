@@ -13,7 +13,8 @@ use App\Http\Controllers\Admin\{
     ServicePackageController,
     BankAccountControlle,
     LogoController,
-    BankAccountController
+    BankAccountController,
+    JobApplications
 };
 use App\Http\Controllers\Admin\SeekerProfileController;
 
@@ -76,6 +77,9 @@ Route::prefix('admin')
         Route::prefix('seekerprofile')->controller(SeekerProfileController::class)->group(function () {
             Route::get('/', 'index')->name('seekerprofile.index');
         });
+        Route::prefix('job-application')->controller(JobApplications::class)->group(function () {
+            Route::get('/', 'index')->name('job-application.index');
+        });
 
         // 💳 Thanh toán & tài khoản ngân hàng
         Route::prefix('payment')->controller(PaymentController::class)->group(function () {
@@ -102,5 +106,5 @@ Route::prefix('admin')
         });
         Route::resource('logos', App\Http\Controllers\Admin\LogoController::class)->names('logos');
 
-
+        
     });
