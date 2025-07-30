@@ -53,15 +53,12 @@ class JobController extends Controller
 
     ])->find($id);
 
-    if (!$job) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Tin tuyển dụng không tồn tại.',
-        ], 404);
-    }
-
-
-        ])->find($id);
+   if (!$job) {
+    return response()->json([
+        'success' => false,
+        'message' => 'Tin tuyển dụng không tồn tại.',
+    ], 404);
+}
 
         if (!$job) {
             return response()->json([
