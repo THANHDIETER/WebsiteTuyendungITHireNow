@@ -25,7 +25,7 @@
                                                     <option>Hà Nội</option>
                                                     <option>Hồ Chí Minh</option>
                                                     <option>Đà Nẵng</option>
-                                                    <option>Huế </option>
+                                                    <option>Huế</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -81,7 +81,7 @@
                                             style="max-height: 160px; width: 100%; object-fit: cover; border-radius: 0.5rem;">
                                     </a>
 
-                                    {{-- Logo công ty --}}
+                                    {{-- Logo công ty nếu có --}}
                                     @if ($job->company)
                                         <div class="company-logo-overlay position-absolute top-0 start-0 m-2">
                                             <img src="{{ $job->company->logo_url ?? asset('client/assets/img/companies/1.webp') }}"
