@@ -37,8 +37,7 @@
 <!-- Animation css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
 <!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
 <!-- Apex Chart css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
 <!-- Data Table css-->
@@ -119,15 +118,14 @@
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('employer.notifications.index') }}">
+                            <a href="{{ route('admin.notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
                         <ul class="activity-update" id="noti-list">
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary"
-                                        href="">AllNotification</a>
+                                    <a class="btn btn-secondary" href="">AllNotification</a>
                                 </div>
                             </li>
                         </ul>
@@ -532,10 +530,10 @@
     </script>
 @endif
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const darkModeBtn = document.querySelector('.dark-mode');
 
-        darkModeBtn.addEventListener('click', function (e) {
+        darkModeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             document.documentElement.classList.toggle('dark');
 

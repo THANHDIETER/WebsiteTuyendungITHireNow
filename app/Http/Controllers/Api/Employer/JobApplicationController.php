@@ -12,6 +12,7 @@ use App\Notifications\Jobseeker\ApplicationRejectedNotification;
 use App\Notifications\Jobseeker\InterviewInvitationNotification;
 use Illuminate\Support\Facades\Auth;
 
+
 class JobApplicationController extends Controller
 {
     public function index(Request $request)
@@ -53,7 +54,6 @@ class JobApplicationController extends Controller
     public function show(JobApplication $jobApplication)
     {
         return $jobApplication->load(['job', 'user', 'company']);
-
     }
 
     public function update(Request $request, JobApplication $jobApplication)
@@ -101,34 +101,26 @@ class JobApplicationController extends Controller
         $currentIndex = array_search($currentStatus, $statusOrder);
         $newIndex = array_search($newStatus, $statusOrder);
 
-        // ❌ Trạng thái không hợp lệ
         if ($currentIndex === false || $newIndex === false) {
             return response()->json(['message' => 'Trạng thái không hợp lệ.'], 400);
         }
 
-
-        // ❌ Không cho quay lại trạng thái trước
         if ($newIndex < $currentIndex) {
             return response()->json(['message' => 'Không thể quay lại trạng thái trước.'], 422);
         }
 
-
-        // ❌ Đơn đã bị từ chối thì không cập nhật nữa
         if ($currentStatus === 'rejected' && $newStatus !== 'rejected') {
             return response()->json(['message' => 'Không thể cập nhật đơn đã bị từ chối.'], 403);
         }
 
-        // ❌ Đơn đã nhận việc thì không cập nhật nữa
         if ($currentStatus === 'hired' && $newStatus !== 'hired') {
             return response()->json(['message' => 'Ứng viên đã nhận việc, không thể thay đổi trạng thái.'], 403);
         }
 
-        // ❌ Đơn đã trúng tuyển thì không thể cập nhật (trừ khi giữ nguyên)
         if ($currentStatus === 'offered' && $newStatus !== 'offered') {
             return response()->json(['message' => 'Ứng viên đã trúng tuyển, không thể thay đổi trạng thái.'], 403);
         }
 
-        // ❌ Nếu đã phỏng vấn rồi, không quay về các bước trước phỏng vấn
         $preInterviewStatuses = [
             'pending',
             'viewed',
@@ -136,6 +128,7 @@ class JobApplicationController extends Controller
             'contacting',
             'interview_scheduled'
         ];
+
         if (
             in_array($currentStatus, ['interviewed', 'offered', 'hired']) &&
             in_array($newStatus, $preInterviewStatuses)
@@ -145,7 +138,6 @@ class JobApplicationController extends Controller
             ], 422);
         }
 
-        // ❌ Nếu đã qua ngày phỏng vấn, không được về lại trạng thái trước phỏng vấn
         if (
             !empty($data['interview_date']) &&
             now()->gt($data['interview_date']) &&
@@ -156,37 +148,22 @@ class JobApplicationController extends Controller
             ], 422);
         }
 
-
-        // ✅ Cập nhật
+        // ✅ Cập nhật đơn ứng tuyển
         $jobApplication->update($data);
 
-        // ✅ Gửi thông báo nếu cần
+        // ✅ Lấy các model liên quan
         $jobseeker = $jobApplication->user;
         $job = $jobApplication->job;
+        $company = $job->company;
+        $employerId = $company->user_id ?? null;
 
-        if ($jobseeker && $job) {
-            if ($currentStatus !== 'offered' && $newStatus === 'offered') {
-                $jobseeker->notify(new ApplicationApprovedNotification($job));
-            }
-
-            if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
-                $jobseeker->notify(new ApplicationRejectedNotification($job));
-            }
-
-            if (
-                !empty($data['interview_date']) &&
-                $jobApplication->getOriginal('interview_date') !== $data['interview_date']
-            ) {
-                $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
-            }
+        if (!$employerId) {
+            return response()->json(['message' => 'Không tìm thấy nhà tuyển dụng.'], 422);
         }
 
-
         // ✅ Gửi thông báo nếu cần
-        $jobseeker = $jobApplication->user;
-        $job = $jobApplication->job;
-
         if ($jobseeker && $job) {
+
             if ($currentStatus !== 'offered' && $newStatus === 'offered') {
                 $jobseeker->notify(new ApplicationApprovedNotification($job));
             }
@@ -199,7 +176,22 @@ class JobApplicationController extends Controller
                 !empty($data['interview_date']) &&
                 $jobApplication->getOriginal('interview_date') !== $data['interview_date']
             ) {
-                $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+                // Tạo lịch phỏng vấn mới
+                $interview = \App\Models\Interview::create([
+                    'job_id' => $job->id,
+                    'employer_id' => $employerId, // ✅ user_id của nhà tuyển dụng
+                    'jobseeker_id' => $jobseeker->id,
+                    'scheduled_at' => $data['interview_date'],
+                    'location' => 'Online / Tại văn phòng',
+                    'message' => 'Bạn được mời phỏng vấn công việc "' . $job->title . '"',
+                ]);
+
+                // Gửi thông báo mời phỏng vấn
+                $jobseeker->notify(new InterviewInvitationNotification(
+                    $job,
+                    $data['interview_date'],
+                    $interview->id
+                ));
             }
         }
 
@@ -208,6 +200,7 @@ class JobApplicationController extends Controller
             'data' => $jobApplication->fresh()
         ]);
     }
+
 
 
     public function destroy(JobApplication $jobApplication)
