@@ -6,11 +6,7 @@
 <meta name="keywords"
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
-<<<<<<< HEAD
 <style>
-=======
-<meta name="csrf-token" content="{{ csrf_token() }}">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
 
 
 </style>
@@ -51,7 +47,6 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <!-- App css-->
-<<<<<<< HEAD
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -82,16 +77,6 @@
         </div>
 
         <a class="close-btn ms-3" href="javascript:void(0)">
-=======
-<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-<link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
-<meta property="og:url" content="{{ url()->current() }}">
-<header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
-                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
-            href="javascript:void(0)">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
@@ -135,7 +120,6 @@
                             </a>
                         </h5>
                         <ul class="activity-update" id="noti-list">
-<<<<<<< HEAD
 
 
                             @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
@@ -157,15 +141,12 @@
                                     Không có thông báo mới
                                 </li>
                             @endforelse
-=======
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
                                     <a class="btn btn-secondary"
                                         href="">AllNotification</a>
                                 </div>
                             </li>
-<<<<<<< HEAD
                             <script>
                                 setInterval(() => {
                                     fetch('{{ route('admin.notifications.latest') }}')
@@ -202,8 +183,6 @@
                                         });
                                 }, 5000);
                             </script>
-=======
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                         </ul>
                     </div>
                 </li>
@@ -605,28 +584,3 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
-<<<<<<< HEAD
-=======
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const darkModeBtn = document.querySelector('.dark-mode');
-
-        darkModeBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.documentElement.classList.toggle('dark');
-
-            // Lưu trạng thái vào localStorage để giữ trạng thái khi reload
-            if (document.documentElement.classList.contains('dark')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        });
-
-        // Auto load theme nếu đã lưu
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        }
-    });
-</script>
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b

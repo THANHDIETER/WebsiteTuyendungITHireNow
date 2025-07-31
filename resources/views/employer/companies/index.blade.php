@@ -5,11 +5,7 @@
         {{-- Tiêu đề và nút thêm --}}
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
             <h2 class="h4 mb-0"><i class="bi bi-building me-2"></i>Quản lý Công ty</h2>
-<<<<<<< HEAD
             <a href="{{ route('employer.companies.create') }}" class="btn btn-success d-flex align-items-center">
-=======
-            <a href="{{ route('employer.companies.create') }}" class="btn btn-success d-flex align-items-center shadow-sm rounded-pill px-3">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                 <i class="bi bi-plus-lg me-1"></i>Thêm Công ty
             </a>
         </div>
@@ -21,14 +17,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-<<<<<<< HEAD
         {{-- Bảng danh sách --}}
         <div class="card border-0 shadow-sm rounded-3">
-=======
-
-        {{-- Bảng danh sách --}}
-        <div class="card border-0 shadow-sm rounded-3 mb-2">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
             <div class="card-body p-0">
                 @if ($companies->count())
                     <div class="table-responsive">
@@ -67,7 +57,6 @@
                                             @endswitch
                                         </td>
                                         <td>{{ $company->created_at->format('d/m/Y H:i') }}</td>
-<<<<<<< HEAD
                                         <td class="text-end">
                                             <div class="dropdown">
                                                 <button class="btn btn-sm btn-light border dropdown-toggle" type="button"
@@ -96,26 +85,6 @@
                                                         </button>
                                                     </li>
                                                 </ul>
-=======
-                                        <td class="text-end mb-2" >
-                                            <div class="d-inline-flex gap-2 align-items-center justify-content-end">
-                                                <a href="{{ route('employer.companies.show', $company) }}"
-                                                class="btn btn-circle btn-view" data-bs-toggle="tooltip" title="Xem">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <a href="{{ route('employer.companies.edit', $company) }}"
-                                                class="btn btn-circle btn-edit" data-bs-toggle="tooltip" title="Sửa">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <button type="button"
-                                                        class="btn btn-circle btn-delete delete-btn"
-                                                        data-bs-toggle="tooltip" title="Xóa"
-                                                        data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                                        data-id="{{ $company->id }}" data-name="{{ $company->name }}"
-                                                        data-action="{{ route('employer.companies.destroy', $company) }}">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                                             </div>
                                         </td>
                                     </tr>
@@ -165,69 +134,9 @@
         </div>
     </div>
 
-<<<<<<< HEAD
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-=======
-    {{-- Style cho nút icon hành động --}}
- <style>
-    .btn-circle {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        border: none;
-        background: #f8f9fa;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        box-shadow: 0 2px 6px 0 rgba(0,0,0,0.05);
-        transition: all 0.2s;
-        outline: none !important;
-    }
-    .btn-circle .bi { vertical-align: middle; }
-
-    .btn-view { color: #0d6efd; }
-    .btn-edit { color: #fd7e14; }
-    .btn-delete { color: #dc3545; }
-
-    .btn-view:hover, .btn-view:focus {
-        background: #0d6efd;
-        color: #fff;
-        box-shadow: 0 2px 10px 0 #0d6efd33;
-    }
-    .btn-edit:hover, .btn-edit:focus {
-        background: #fd7e14;
-        color: #fff;
-        box-shadow: 0 2px 10px 0 #fd7e1433;
-    }
-    .btn-delete:hover, .btn-delete:focus {
-        background: #dc3545;
-        color: #fff;
-        box-shadow: 0 2px 10px 0 #dc354533;
-    }
-
-    .table th, .table td { vertical-align: middle; }
-    .table { border-radius: 16px !important; overflow: hidden; }
-    .table thead th {
-        background: #f8fafc;
-        font-weight: 700;
-        border: none;
-    }
-    .table tbody tr {
-        background: #fff;
-        border-bottom: 1px solid #f1f3f7;
-    }
-    .table tbody tr:last-child { border-bottom: none; }
-</style>
-
-
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Xử lý modal xác nhận xóa
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                 const confirmModal = document.getElementById('confirmModal');
                 confirmModal.addEventListener('show.bs.modal', function(event) {
                     const button = event.relatedTarget;
@@ -236,20 +145,7 @@
                     document.getElementById('deleteForm').setAttribute('action', action);
                     document.getElementById('companyName').textContent = name;
                 });
-<<<<<<< HEAD
             });
         </script>
     @endpush
 @endsection
-=======
-
-                // Kích hoạt tooltip Bootstrap 5
-                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-                tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl)
-                });
-            });
-        </script>
-    @endpush
-@endsection
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b

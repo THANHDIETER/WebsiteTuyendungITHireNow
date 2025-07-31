@@ -50,7 +50,6 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-<<<<<<< HEAD
 <header class="page-header row justify-content-between align-items-center bg-white">
     <div class="logo-wrapper d-flex align-items-center col-4">
    <a href="{{ route('home') }}">
@@ -71,35 +70,6 @@
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
-=======
-<header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
-                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
-            href="javascript:void(0)">
-            <div class="toggle-sidebar">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
-        </a></div>
-    <div class="page-main-header col">
-        <div class="header-left d-lg-block d-none">
-            <form class="search-form mb-0">
-                <div class="input-group"><span class="input-group-text pe-0">
-                        <!-- Icon Search -->
-                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                    <input class="form-control" type="text" placeholder="Search anything...">
-                </div>
-            </form>
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
         </div>
     </a>
 </div>

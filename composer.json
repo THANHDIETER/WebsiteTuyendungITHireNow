@@ -19,7 +19,7 @@
         "league/oauth2-client": "^2.8",
         "league/oauth2-google": "^4.0",
         "openai-php/laravel": "^0.14.0",
-        "pusher/pusher-php-server": "^7.2",
+        "pusher/pusher-php-server": "*",
         "spatie/laravel-permission": "^6.18",
         "stichoza/google-translate-php": "^5.3"
     },

@@ -1,7 +1,6 @@
 @extends('website.layouts.master')
 
 @section('content')
-<<<<<<< HEAD
 
 <main class="main-content">
 
@@ -47,54 +46,6 @@
                                 </div>
                             </form>
 
-=======
-    <main class="main-content">
-
-        <!--== Bắt đầu header trang ==-->
-        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
-            <div class="container pt--0 pb--0">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="job-search-wrap">
-                            <div class="job-search-form">
-                                <form action="#">
-                                    <div class="row row-gutter-10">
-                                        <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control"
-                                                    placeholder="Tiêu đề việc làm hoặc từ khóa">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                            <div class="form-group">
-                                                <select class="form-control">
-                                                    <option selected>Chọn Thành Phố</option>
-                                                    <option>Hà Nội</option>
-                                                    <option>Hồ Chí Minh</option>
-                                                    <option>Đà Nẵng</option>
-                                                    <option>Huế</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                            <div class="form-group">
-                                                <select class="form-control">
-                                                    <option selected>Loại Công Việc</option>
-                                                    <option>Web Designer</option>
-                                                    <option>Web Developer</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                            <div class="form-group">
-                                                <button type="submit" class="btn-form-search"><i
-                                                        class="icofont-search-1"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                         </div>
                     </div>
                 </div>
@@ -278,8 +229,4 @@
             }
         </style>
     </main>
-<<<<<<< HEAD
 @endsection
-=======
-@endsection
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b

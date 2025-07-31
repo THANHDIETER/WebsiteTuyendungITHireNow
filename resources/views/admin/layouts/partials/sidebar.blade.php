@@ -4,21 +4,9 @@
         top: 24px;
         width: 250px;
         background: #fff;
-<<<<<<< HEAD
 
     }
 
-=======
-        min-height: 100vh;
-    }
-
-    .sidebar-menu {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
     .sidebar-menu a {
         text-decoration: none !important;
         transition: background-color 0.2s ease, color 0.2s ease;
@@ -165,15 +153,12 @@
                 <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
             </a>
         </li>
-<<<<<<< HEAD
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.logos.index') }}">
                 <i class="bi bi-image sidebar-icon"></i> Logo
             </a>
         </li>
 
-=======
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
 
     </ul>
 </aside>
