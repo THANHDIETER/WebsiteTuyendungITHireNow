@@ -111,9 +111,6 @@ Route::get('/chi-tiet-ung-vien', function () {
 })->name('chi-tiet-ung-vien');
 
 Route::get('/blog', function () {
-
-// ================= BLOG =================
-Route::get('/blog', function () {
     return view('website.blog.blog');
 })->name('blog');
 
