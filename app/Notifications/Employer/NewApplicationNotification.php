@@ -3,9 +3,10 @@ namespace App\Notifications\Employer;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class NewApplicationNotification extends Notification implements ShouldBroadcast
+class NewApplicationNotification extends Notification implements ShouldBroadcastNow
 {
     public function __construct(public $job, public $jobseeker) {
     }
@@ -19,7 +20,7 @@ class NewApplicationNotification extends Notification implements ShouldBroadcast
     {
         return [
             'message' => "Ứng viên {$this->jobseeker->name} đã ứng tuyển vào vị trí '{$this->job->title}'.",
-            'link_url' => route('employer.jobs.applications', $this->job->id),
+            'link_url' => route('notifications.index'),
         ];
     }
 
