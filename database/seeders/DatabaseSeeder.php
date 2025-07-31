@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
             SkillsSeeder::class,
             LocationsSeeder::class,
             SalariesSeeder::class,
-            CompaniesSeeder::class, 
+            CompaniesSeeder::class,
             LevelSeeder::class,
             RemotePolicySeeder::class,
             JobExperienceSeeder::class,
@@ -72,6 +72,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             JobTypesSeeder::class,
             BankAccountsSeeder::class,
+            BlogSeeder::class,
         ]);
     }
 }

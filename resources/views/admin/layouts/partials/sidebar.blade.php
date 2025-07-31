@@ -73,7 +73,6 @@
         background-color: #495057;
         color: #0d6efd !important;
     }
-
 </style>
 
 <aside class="page-sidebar">
@@ -125,6 +124,12 @@
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.payment.index') }}">
                 <i class="bi bi-credit-card sidebar-icon"></i> Quản lý thanh toán
+            </a>
+        </li>
+
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.blogs.index') }}">
+                <i class="bi bi-journal-text sidebar-icon"></i> Quản lý Blog
             </a>
         </li>
 

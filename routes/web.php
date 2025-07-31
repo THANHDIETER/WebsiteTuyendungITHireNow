@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
@@ -187,3 +189,8 @@ Route::get('/seeker/notifications/latest', function () {
         ];
     }));
 })->middleware('auth');
+
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('blogs', AdminBlogController::class);
+});

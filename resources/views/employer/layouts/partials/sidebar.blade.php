@@ -128,7 +128,6 @@
     </div>
 
 </aside>
-<<<<<<< HEAD
 <style>
     .page-sidebar {
         top: 74px;
@@ -232,5 +231,3 @@
         /* Show when sidebar is mobile open */
     }
 </style>
-=======
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
