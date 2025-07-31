@@ -10,13 +10,11 @@
     </div>
     <main class="main-content py-4 mx-auto" style="max-width: 800px;">
 
-
         <div class="row mb-3">
             <div class="col-12 text-center">
                 <h4 class="fw-bold text-primary mb-1">
                     <i class="fas fa-bell bell-ring text-warning me-2"></i> Thông báo của bạn
                 </h4>
-
 
             </div>
         </div>
@@ -29,7 +27,7 @@
                 style="transition: all 0.3s ease; font-size: 0.9rem;">
                 <div class="card-body py-2 px-3 d-flex justify-content-between align-items-start">
                     <div class="noti-content">
-                        <a href="{{ $noti->data['link_url'] }}" class="text-decoration-none text-dark">
+                        <a href="{{ $noti->data['link_url'] ?? '#' }}" class="text-decoration-none text-dark">
                             <h6 class="mb-1 fw-semibold">
                                 @php
                                     $msg = $noti->data['message'];

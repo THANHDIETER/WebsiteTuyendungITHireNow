@@ -11,10 +11,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>HireNow - Nền tảng tuyển dụng IT hiện đại</title>
     @include('website.layouts.particals.css')
-    @vite(['resources/js/web.js'])
 
 </head>
 <body>
+    @vite(['resources/js/web.js'])
 
     <!--wrapper start-->
     <div class="wrapper">

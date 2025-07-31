@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Api\Employer;
 
+use Carbon\Carbon;
+use App\Models\Interview;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Models\JobApplication;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\InterviewRejectedNotification;
+use App\Notifications\InterviewScheduledNotification;
 use App\Notifications\Jobseeker\ApplicationApprovedNotification;
 use App\Notifications\Jobseeker\ApplicationRejectedNotification;
 use App\Notifications\Jobseeker\InterviewInvitationNotification;
-use Illuminate\Support\Facades\Auth;
 
 
 class JobApplicationController extends Controller
@@ -73,6 +77,7 @@ class JobApplicationController extends Controller
                     'hired',
                     'candidate_declined',
                     'no_response',
+                    'saved',
                     'rejected'
                 ]),
             ],
@@ -96,6 +101,7 @@ class JobApplicationController extends Controller
             'candidate_declined',
             'no_response',
             'rejected',
+            'saved',
         ];
 
         $currentIndex = array_search($currentStatus, $statusOrder);
@@ -121,6 +127,7 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Ứng viên đã trúng tuyển, không thể thay đổi trạng thái.'], 403);
         }
 
+
         $preInterviewStatuses = [
             'pending',
             'viewed',
@@ -138,6 +145,12 @@ class JobApplicationController extends Controller
             ], 422);
         }
 
+        if ($data['status'] === 'interview_scheduled' && empty($data['interview_date'])) {
+            return response()->json([
+                'message' => 'Khi chọn trạng thái "Mời phỏng vấn", bạn phải chọn ngày phỏng vấn.'
+            ], 422);
+        }
+
         if (
             !empty($data['interview_date']) &&
             now()->gt($data['interview_date']) &&
@@ -147,6 +160,20 @@ class JobApplicationController extends Controller
                 'message' => 'Không thể chuyển về trạng thái trước phỏng vấn sau khi ngày phỏng vấn đã trôi qua.'
             ], 422);
         }
+
+
+        if ($newStatus === 'interview_scheduled' && !empty($data['interview_date'])) {
+            $interviewDateTime = Carbon::parse($data['interview_date']);
+
+            $hour = $interviewDateTime->hour;
+            if ($hour < 7 || $hour >= 20) {
+                return response()->json([
+                    'message' => 'Thời gian phỏng vấn phải nằm trong khoảng từ 07:00 đến 20:00.'
+                ], 422);
+            }
+        }
+
+
 
         // ✅ Cập nhật đơn ứng tuyển
         $jobApplication->update($data);
@@ -172,14 +199,31 @@ class JobApplicationController extends Controller
                 $jobseeker->notify(new ApplicationRejectedNotification($job));
             }
 
+            // mail gửi thông báo phỏng vấn
+            if ($currentStatus !== 'interview_scheduled' && $newStatus === 'interview_scheduled') {
+                $jobseeker->notify(new InterviewScheduledNotification(
+                    $job,
+                    Carbon::parse($data['interview_date'])
+                ));
+            }
+            
+            // mail gửi thông báo từ chối phỏng vấn
+            if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
+                $rejectionReason = $data['note'] ?? null;
+                $jobseeker->notify(new InterviewRejectedNotification(
+                    $job,
+                    $rejectionReason
+                ));
+            }
+
             if (
                 !empty($data['interview_date']) &&
                 $jobApplication->getOriginal('interview_date') !== $data['interview_date']
             ) {
                 // Tạo lịch phỏng vấn mới
-                $interview = \App\Models\Interview::create([
+                $interview = Interview::create([
                     'job_id' => $job->id,
-                    'employer_id' => $employerId, // ✅ user_id của nhà tuyển dụng
+                    'employer_id' => $employerId,
                     'jobseeker_id' => $jobseeker->id,
                     'scheduled_at' => $data['interview_date'],
                     'location' => 'Online / Tại văn phòng',
@@ -200,8 +244,6 @@ class JobApplicationController extends Controller
             'data' => $jobApplication->fresh()
         ]);
     }
-
-
 
     public function destroy(JobApplication $jobApplication)
     {
