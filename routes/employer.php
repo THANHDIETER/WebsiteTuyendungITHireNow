@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Employers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
+use App\Http\Controllers\Employers\CompanyController;
 use App\Http\Controllers\Employers\PackageController;
 use App\Http\Controllers\Employers\PaymentController;
 use App\Http\Controllers\Employers\DashboardController;
+use App\Http\Controllers\Employers\NotificationController;
 use App\Http\Controllers\Employers\SubscriptionController;
 use App\Http\Controllers\Employers\JobApplicationController;
 
@@ -96,6 +97,13 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
     Route::get('/{id}', [PackageController::class, 'show'])->name('employer.packages.show'); // tuỳ chọn
 });
 
+Route::prefix('employer/companies')
+    ->middleware(['auth', 'employer'])
+    ->name('employer.companies.')
+    ->group(function () {
+        Route::resource('/', CompanyController::class)->parameters(['' => 'id']);
+    });
+
 
 Route::middleware(['auth:sanctum', 'employer'])
     ->prefix('employer')
@@ -105,6 +113,3 @@ Route::middleware(['auth:sanctum', 'employer'])
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
        
     });
-
-
-

@@ -8,15 +8,12 @@
     <meta name="description" content="Finate - Nền tảng việc làm & tuyển dụng sử dụng Bootstrap 5" />
     <meta name="keywords" content="việc làm, tuyển dụng, website việc làm, hiện đại, responsive, tìm việc" />
     <meta name="author" content="hastech" />
-
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>HireNow - Nền tảng tuyển dụng IT hiện đại</title>
-
-
     @include('website.layouts.particals.css')
+    @vite(['resources/js/web.js'])
 
 </head>
-
 <body>
 
     <!--wrapper start-->
@@ -36,24 +33,16 @@
         <div id="scroll-to-top" class="scroll-to-top"><span class="icofont-rounded-up"></span></div>
 
         <!--== Bắt đầu Menu bên ==-->
+
         @include('website.layouts.particals.aside-menu')
         <!--== Kết thúc Menu bên ==-->
     </div>
 
     <!--=======================Javascript============================-->
-
     <!--=== jQuery Modernizr Min Js ===-->
     @include('website.layouts.particals.js')
-
-    <script>
-        window.Laravel = {!! json_encode(['userId' => auth()->id()]) !!};
-    </script>
-    <script>
-        window.Laravel = {
-            userId: {{ auth()->id() }},
-        };
-        window.APP_NAME = "{{ config('app.name') }}";
-    </script>
+    @include('chat')
+    @stack('scripts')
 
 </body>
 

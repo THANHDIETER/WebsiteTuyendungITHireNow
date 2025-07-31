@@ -119,23 +119,57 @@
     @endif
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const forms = document.querySelectorAll('.delete-form');
-            forms.forEach(form => {
-                const btn = form.querySelector('.btn-delete');
-                btn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const userId = form.dataset.id;
+            document.addEventListener('DOMContentLoaded', function () {
+    const forms = document.querySelectorAll('.delete-form');
+    forms.forEach(form => {
+        const btn = form.querySelector('.btn-delete');
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const userId = form.dataset.id;
 
-                    showAlertModal({
-                        type: 'confirm',
-                        title: 'Xác nhận xoá',
-                        message: `Bạn có chắc chắn muốn xoá người dùng ID #${userId}?`,
-                        onConfirm: () => form.submit()
+            showAlertModal({
+                type: 'confirm',
+                title: 'Xác nhận xoá',
+                message: `Bạn có chắc chắn muốn xoá người dùng ID #${userId}?`,
+                onConfirm: () => {
+                    const url = form.action;
+                    const row = form.closest('tr');
+
+                    fetch(url, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.message) {
+                            showAlertModal({
+                                title: 'Thành công',
+                                message: data.message,
+                                type: 'alert',
+                                status: 'success',
+                                onConfirm: () => row.remove()
+                            });
+                        } else {
+                            throw new Error('Phản hồi không hợp lệ');
+                        }
+                    })
+                    .catch(err => {
+                        showAlertModal({
+                            title: 'Lỗi',
+                            message: err.message || 'Không thể xoá người dùng.',
+                            type: 'alert',
+                            status: 'error'
+                        });
                     });
-                });
+                }
             });
         });
+    });
+});
+
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {

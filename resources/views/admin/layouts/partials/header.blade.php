@@ -6,16 +6,22 @@
 <meta name="keywords"
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
+<<<<<<< HEAD
+<style>
+=======
+<meta name="csrf-token" content="{{ csrf_token() }}">
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
 
+
+</style>
 <title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Bootstrap JS Bundle (kèm Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Font Awesome 6 CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
 <!-- Favicon icon-->
 <link rel="icon" href="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" type="image/x-icon">
@@ -26,11 +32,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
     rel="stylesheet">
 <!-- Font awesome icon css -->
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/brands.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/solid.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/regular.css') }}">
+
 <!-- Ico Icon css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}">
 <!-- Flag Icon css -->
@@ -49,8 +51,11 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <!-- App css-->
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -62,34 +67,44 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
+<header class="page-header row justify-content-between align-items-center bg-white">
+
+    <div class="logo-wrapper d-flex align-items-center col-4" style="padding-left: 10px;">
+        <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 220px;">
+            @php
+                $logo = \App\Models\Logo::where('type', 'admin')->where('is_active', true)->first();
+            @endphp
+
+            <a href="{{ route('home') }}">
+                <img src="{{ $logo ? asset('storage/' . $logo->image_path) : asset('images/default.png') }}"
+                    alt="Admin Logo" class="logo-img">
+            </a>
+
+
+        </div>
+
+        <a class="close-btn ms-3" href="javascript:void(0)">
+<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+<link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
+<meta property="og:url" content="{{ url()->current() }}">
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light"
                 src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}" style="width: 100px" loading="lazy"
                 alt="logo"><img class="for-dark" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
                 style="width: " loading="lazy" alt="logo"></a><a class="close-btn" href="javascript:void(0)">
+    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
+                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
+                src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
+            href="javascript:void(0)">
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
             </div>
-        </a></div>
-    <div class="page-main-header col">
-        <div class="header-left d-lg-block d-none">
-            <form class="search-form mb-0">
-                <div class="input-group"><span class="input-group-text pe-0">
-                        <!-- Icon Search -->
-                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                    <input class="form-control" type="text" placeholder="Search anything...">
-                </div>
-            </form>
-        </div>
+        </a>
+    </div>
+    <div class="page-main-header d-flex align-items-center col-auto">
+
         <div class="nav-right">
             <ul class="header-right">
                 <li class="modes d-flex"><a class="dark-mode">
@@ -100,20 +115,6 @@
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a></li>
-                <li class="serchinput d-lg-none d-flex"><a class="search-mode">
-                        <!-- Icon Search -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    <div class="form-group search-form">
-                        <input type="text" placeholder="Search here...">
-                    </div>
-                </li>
                 <!-- Notification menu -->
                 <li class="custom-dropdown">
                     <a href="javascript:void(0)" id="notification-toggle">
@@ -133,7 +134,7 @@
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('admin.notifications.index') }}">
+                            <a href="{{ route('employer.notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
@@ -141,7 +142,7 @@
 
 
                             @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
-                                <li class="d-flex align-items-center b-l-primary">
+                                <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
                                     <div class="flex-grow-1">
                                         <span>{{ $noti->created_at->diffForHumans() }}</span>
                                         <a href="{{ $noti->data['link_url'] }}">
@@ -159,15 +160,15 @@
                                     Không có thông báo mới
                                 </li>
                             @endforelse
-
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">All
-                                        Notification</a>
+                                    <a class="btn btn-secondary"
+                                        href="">AllNotification</a>
                                 </div>
                             </li>
                             <script>
                                 setInterval(() => {
+                                    fetch('{{ route('admin.notifications.latest') }}')
                                     fetch('{{ route('admin.notifications.latest') }}')
                                         .then(res => res.json())
                                         .then(notis => {
@@ -202,10 +203,10 @@
                                         });
                                 }, 5000);
                             </script>
-
                         </ul>
                     </div>
                 </li>
+
                 <!-- Bookmark menu-->
                 <li class="custom-dropdown"><a href="javascript:void(0)">
                         <!-- Icon Star -->
@@ -532,6 +533,20 @@
 
                     </div>
                     <div class="custom-menu overflow-hidden">
+                        <ul class="list-unstyled m-0 p-0">
+                            <!-- Account -->
+                            <li>
+                                <a href="#"
+                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="7" r="4" stroke="currentColor"
+                                            stroke-width="2" />
+                                        <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor"
+                                            stroke-width="2" stroke-linejoin="round" />
+                                    </svg>
+                                    <span>Account</span>
+                                </a>
                         <ul>
                             <li class="d-flex">
                                 <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
@@ -565,35 +580,49 @@
                                         stroke-linejoin="round" />
                                 </svg><a class="ms-2" href="">Account</a>
                             </li>
-                            <li class="d-flex">
-                                <!-- Icon Message -->
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
-                                        stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                </svg><a class="ms-2" href="">Inbox</a>
+
+                            <!-- Inbox -->
+                            <li>
+                                <a href="#"
+                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
+                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                                    </svg>
+                                    <span>Inbox</span>
+                                </a>
                             </li>
-                            <li class="d-flex">
-                                <!-- Icon Document -->
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
-                                        stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                    <path d="M14 2v6h6" stroke="currentColor" stroke-width="2"
-                                        stroke-linejoin="round" />
-                                </svg><a class="ms-2" href="">Task</a>
+
+                            <!-- Task -->
+                            <li>
+                                <a href="#"
+                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
+                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                                        <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                    <span>Task</span>
+                                </a>
                             </li>
-                            <li class="d-flex">
-                                <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
-                                        stroke-width="2" stroke-linejoin="round" />
-                                    <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
-                                        stroke-linejoin="round" stroke-linecap="round" />
-                                    <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
-                                        stroke-linecap="round" />
-                                </svg>
-                                <a class="ms-2" href="{{ route('logout') }}">Log Out</a>
+
+                            <!-- Log Out -->
+                            <li>
+                                <a href="{{ route('logout') }}"
+                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
+                                            stroke-width="2" stroke-linejoin="round" />
+                                        <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
+                                            stroke-linejoin="round" stroke-linecap="round" />
+                                        <path d="M15 12H3" stroke="currentColor" stroke-width="2"
+                                            stroke-linejoin="round" stroke-linecap="round" />
+                                    </svg>
+                                    <span>Log Out</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -602,10 +631,33 @@
         </div>
     </div>
 </header>
-
-
 @if (session('access_token'))
     <script>
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
+<<<<<<< HEAD
+=======
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const darkModeBtn = document.querySelector('.dark-mode');
+
+        darkModeBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.documentElement.classList.toggle('dark');
+
+            // Lưu trạng thái vào localStorage để giữ trạng thái khi reload
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Auto load theme nếu đã lưu
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    });
+</script>
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b

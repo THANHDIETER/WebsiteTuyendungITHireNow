@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Notifications\Jobseeker\ApplicationApprovedNotification;
 use App\Notifications\Jobseeker\ApplicationRejectedNotification;
 use App\Notifications\Jobseeker\InterviewInvitationNotification;
+use Illuminate\Support\Facades\Auth;
 
 class JobApplicationController extends Controller
 {
@@ -105,10 +106,12 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Trạng thái không hợp lệ.'], 400);
         }
 
+
         // ❌ Không cho quay lại trạng thái trước
         if ($newIndex < $currentIndex) {
             return response()->json(['message' => 'Không thể quay lại trạng thái trước.'], 422);
         }
+
 
         // ❌ Đơn đã bị từ chối thì không cập nhật nữa
         if ($currentStatus === 'rejected' && $newStatus !== 'rejected') {
@@ -153,8 +156,31 @@ class JobApplicationController extends Controller
             ], 422);
         }
 
+
         // ✅ Cập nhật
         $jobApplication->update($data);
+
+        // ✅ Gửi thông báo nếu cần
+        $jobseeker = $jobApplication->user;
+        $job = $jobApplication->job;
+
+        if ($jobseeker && $job) {
+            if ($currentStatus !== 'offered' && $newStatus === 'offered') {
+                $jobseeker->notify(new ApplicationApprovedNotification($job));
+            }
+
+            if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
+                $jobseeker->notify(new ApplicationRejectedNotification($job));
+            }
+
+            if (
+                !empty($data['interview_date']) &&
+                $jobApplication->getOriginal('interview_date') !== $data['interview_date']
+            ) {
+                $jobseeker->notify(new InterviewInvitationNotification($job, $data['interview_date']));
+            }
+        }
+
 
         // ✅ Gửi thông báo nếu cần
         $jobseeker = $jobApplication->user;
@@ -182,6 +208,7 @@ class JobApplicationController extends Controller
             'data' => $jobApplication->fresh()
         ]);
     }
+
 
     public function destroy(JobApplication $jobApplication)
     {

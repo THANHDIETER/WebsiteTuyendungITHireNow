@@ -31,7 +31,7 @@ class JobController extends Controller
         return redirect()->route('employer.dashboard')->withErrors('Bạn chưa có thông tin công ty.');
     }
 
-    $jobs = Job::with(['categories', 'jobType']) // Load thêm jobType
+    $jobs = Job::with(['categories', 'jobType']) 
                 ->where('company_id', $user->company->id)
                 ->latest()
                 ->paginate(10);
@@ -56,7 +56,7 @@ class JobController extends Controller
     $remote_policies = RemotePolicy::where('is_active', true)->get();
 
     // ✅ Lấy các gói dịch vụ còn lượt đăng và đang active
-    $activePackages = \App\Models\EmployerPackageUsage::with('package')
+    $activePackages = EmployerPackageUsage::with('package')
         ->where('company_id', $company->id)
         ->where('is_active', true)
         ->whereColumn('posts_used', '<', 'post_limit')
@@ -145,6 +145,7 @@ class JobController extends Controller
     if ($request->hasFile('thumbnail')) {
         $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
     }
+
 
     $validated['deadline'] = $request->input('application_deadline') ?? null;
     $validated['currency'] = $validated['currency'] ?? 'VND';

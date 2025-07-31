@@ -1,4 +1,88 @@
-<div class="overlay"></div>
+<style>
+    /* Default (Light Mode) */
+    .page-sidebar {
+        top: 24px;
+        width: 250px;
+        background: #fff;
+        min-height: 100vh;
+    }
+
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar-menu a {
+        text-decoration: none !important;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        padding: 10px 14px;
+        display: block;
+        border-radius: 6px;
+        color: #212529;
+        font-weight: 500;
+    }
+
+    .sidebar-menu a:hover {
+        background-color: #f0f8ff;
+        color: #0d6efd !important;
+    }
+
+    .sidebar-main-title {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 16px;
+        color: #495057;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .sidebar-submenu {
+        padding-left: 24px;
+    }
+
+    .sidebar-submenu li a {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+
+    .badge-primary {
+        background-color: #0d6efd;
+        color: #fff;
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .sidebar-icon {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    /* DARK MODE */
+    .dark .page-sidebar {
+        background: #212529;
+    }
+
+    .dark .sidebar-main-title {
+        color: #dee2e6;
+        background: #343a40;
+        border-top: 1px solid #495057;
+        border-bottom: 1px solid #495057;
+    }
+
+    .dark .sidebar-menu a {
+        color: #dee2e6;
+    }
+
+    .dark .sidebar-menu a:hover {
+        background-color: #495057;
+        color: #0d6efd !important;
+    }
+
+</style>
+
+
 <aside class="page-sidebar" data-sidebar-layout="stroke-svg">
     <!-- Mũi tên trái -->
     <div class="left-arrow" id="left-arrow" role="button">
@@ -33,13 +117,25 @@
                     <span>Mua gói dịch vụ</span>
                 </a>
             </li>
+<<<<<<< HEAD
+
+            <li class="sidebar-list">
+=======
+             <li class="sidebar-list">
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
+                <a class="sidebar-link" href="{{ route('employer.companies.index') }}">
+                    <i class="bi bi-people"></i>
+                    <span>Quản lý công ty</span>
+                </a>
+            </li>
         </ul>
     </div>
 
 </aside>
+<<<<<<< HEAD
 <style>
     .page-sidebar {
-        top: 25px;
+        top: 74px;
         width: 250px;
         background: #fff;
         color: #212529;
@@ -48,7 +144,7 @@
         transition: background .2s, color .2s;
     }
 
-     .sidebar-main-title {
+    .sidebar-main-title {
         font-size: 14px;
         font-weight: 600;
         padding: 10px 16px;
@@ -140,3 +236,5 @@
         /* Show when sidebar is mobile open */
     }
 </style>
+=======
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b

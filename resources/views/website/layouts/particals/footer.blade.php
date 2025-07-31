@@ -1,24 +1,30 @@
 <footer class="footer-area">
     <!--== Start Footer Top ==-->
-    <div class="footer-top">
-        <div class="container pt--0 pb--0">
-            <div class="row">
+    <div class="footer-top py-0 text-white" style="background-color: #00A8FF;">
+        <div class="container">
+            <div class="row align-items-center gy-3">
+                <!-- Tiêu đề -->
                 <div class="col-lg-5">
-                    <div class="footer-newsletter-content">
-                        <h4 class="title">Đăng ký nhận bản tin việc làm hàng ngày.</h4>
-                    </div>
+                    <h4 class="fw-bold mb-0 text-dark">
+                        📬 Nhận bản tin việc làm mỗi ngày
+                    </h4>
+                    <p class="text-white fs-5 fw-medium mt-1">Cập nhật cơ hội nghề nghiệp mới nhất từ HireNow</p>
                 </div>
+
+                <!-- Form đăng ký -->
                 <div class="col-lg-7">
-                    <div class="footer-newsletter-form">
-                        <form action="index.html#">
-                            <input type="email" placeholder="Nhập Email của bạn">
-                            <button type="submit" class="btn-newsletter">Đăng Ký Ngay</button>
-                        </form>
-                    </div>
+                    <form class="d-flex flex-column flex-md-row gap-2">
+                        <input type="email" class="form-control shadow-sm rounded-pill px-4"
+                            placeholder="Nhập email của bạn" required>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                            Đăng ký ngay
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
     <!--== End Footer Top ==-->
 
     <!--== Start Footer Main ==-->
@@ -33,7 +39,8 @@
                                     alt="Logo" />
                             </a>
                         </div>
-                        <p class="desc">Ít nhưng chất lượng</p>
+                        <p class="desc">HireNow - Nền tảng tuyển dụng IT chất lượng tại Việt Nam. Kết nối nhà tuyển
+                            dụng với nhân tài công nghệ.</p>
                         <div class="social-icons">
                             <a href="https://www.facebook.com" target="_blank" rel="noopener"><i
                                     class="icofont-facebook"></i></a>
@@ -112,7 +119,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="footer-bottom-content">
-                        <p class="copyright">© 2025. Made with <i class="icofont-heart"></i> Hire Now</p>
+                        © 2025 HireNow. Made with <i class="icofont-heart text-danger"></i> in Vietnam.
                     </div>
                 </div>
             </div>

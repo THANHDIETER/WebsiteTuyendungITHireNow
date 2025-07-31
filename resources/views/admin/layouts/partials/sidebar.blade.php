@@ -1,14 +1,24 @@
 <style>
+    /* Default (Light Mode) */
     .page-sidebar {
-        top: 25px;
+        top: 24px;
         width: 250px;
         background: #fff;
-        color: #212529;
-        border-right: 1px solid #e9ecef;
-        min-height: 100vh;
-        transition: background .2s, color .2s;
+<<<<<<< HEAD
+
     }
 
+=======
+        min-height: 100vh;
+    }
+
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
     .sidebar-menu a {
         text-decoration: none !important;
         transition: background-color 0.2s ease, color 0.2s ease;
@@ -54,6 +64,28 @@
         margin-right: 8px;
         font-size: 16px;
     }
+
+    /* DARK MODE */
+    .dark .page-sidebar {
+        background: #212529;
+    }
+
+    .dark .sidebar-main-title {
+        color: #dee2e6;
+        background: #343a40;
+        border-top: 1px solid #495057;
+        border-bottom: 1px solid #495057;
+    }
+
+    .dark .sidebar-menu a {
+        color: #dee2e6;
+    }
+
+    .dark .sidebar-menu a:hover {
+        background-color: #495057;
+        color: #0d6efd !important;
+    }
+
 </style>
 
 <aside class="page-sidebar">
@@ -96,6 +128,11 @@
                 <i class="bi bi-people sidebar-icon"></i> Quản lý người dùng
             </a>
         </li>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.job-application.index') }}">
+                <i class="bi bi-file-earmark-person sidebar-icon"></i> Quản lý đơn ứng tuyển
+            </a>
+        </li>
 
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.payment.index') }}">
@@ -116,15 +153,27 @@
                 <i class="bi bi-gear sidebar-icon"></i> Cài đặt hệ thống
             </a>
         </li>
+
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.bank_account.index') }}">
                 <i class="bi bi-bank sidebar-icon"></i> Quản lý ngân hàng
             </a>
         </li>
+
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.bank_log.index') }}">
                 <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
             </a>
         </li>
+<<<<<<< HEAD
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.logos.index') }}">
+                <i class="bi bi-image sidebar-icon"></i> Logo
+            </a>
+        </li>
+
+=======
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
+
     </ul>
 </aside>
