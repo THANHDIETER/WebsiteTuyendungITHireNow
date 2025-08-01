@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\GlobalNotificationEvent;
 use App\Models\Job;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -89,6 +90,7 @@ class JobController extends Controller
         // Gửi notification cho nhà tuyển dụng
         $employer = $job->company->user;
         $employer->notify(new JobApprovedNotification($job));
+        event(new GlobalNotificationEvent("Tin tuyển dụng '{$job->title}' đã được duyệt!"));
 
         return response()->json([
             'success' => true,

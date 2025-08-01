@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
-                <div class="header-align">
+                <div class="header-align " style="align-items: center; height: 80px;">
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
@@ -62,17 +62,51 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <!-- 🔔 ICON THÔNG BÁO động -->
-                                        <div class="dropdown me-3">
-                                            <button class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                                type="button" id="notificationDropdown" data-bs-toggle="dropdown"
-                                                aria-expanded="false" aria-label="Thông báo">
+                                        <div class="me-3">
+                                            <a href="{{ route('notifications.index') }}"
+                                                class="btn btn-icon position-relative p-0 bg-transparent border-0"
+                                                aria-label="Thông báo">
                                                 <i id="notification-bell" class="bi bi-bell fs-4 text-white"></i>
                                                 <span id="notification-dot"
                                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__bounce"
-                                                    style="display:none; font-size:10px; min-width:12px; height:12px; padding:0;"></span>
-                                            </button>
+                                                    style="display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'inline-block' : 'none' }}; font-size:10px; min-width:12px; height:12px; padding:0;">
+                                                </span>
+                                            </a>
                                         </div>
+                                        <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+                                        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
+
+                                        <script>
+                                            window.Pusher = Pusher;
+
+                                            window.Echo = new Echo({
+                                                broadcaster: 'pusher',
+                                                key: '1ea633f39dfb08c3c0c2',
+                                                cluster: 'ap1',
+                                                forceTLS: true,
+                                            });
+                                            console.log('ffff', window.Echo);
+
+                                            const userId = {{ auth()->id() }};
+
+                                            if (userId && window.Echo) {
+                                                window.Echo.private(`App.Models.User.${userId}`)
+                                                    .notification((notification) => {
+                                                        console.log('Received new notification via Pusher:', notification);
+
+                                                        // Hiện badge đỏ notification-dot
+                                                        const notificationDot = document.getElementById('notification-dot');
+                                                        if (notificationDot) {
+                                                            notificationDot.style.display = 'inline-block';
+                                                        }
+                                                    });
+                                            } else {
+                                                console.warn('User is not logged in or Echo is not initialized.');
+                                            }
+                                        </script>
+
                                     </div>
+
                                     <!--icon chat nhắn tin  -->
                                     <div class="col-auto">
                                         <div class="dropdown me-3">
@@ -80,7 +114,7 @@
                                                 href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
                                                 <i id="chat-bubble" class="bi bi-chat-dots fs-4 text-white"></i>
 
-                                                @if(isset($totalUnread) && $totalUnread > 0)
+                                                @if (isset($totalUnread) && $totalUnread > 0)
                                                     <span id="chat-dot"
                                                         class="position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow"
                                                         style="font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;">
@@ -90,7 +124,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col">
                                         {{-- 👤 Menu người dùng --}}
                                         <div class="user-info dropdown me-3">
@@ -127,7 +161,8 @@
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
                                                             href="{{ route('admin.dashboard') }}">
-                                                            <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang quản
+                                                            <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang
+                                                            quản
                                                             trị
                                                         </a>
                                                     </li>
@@ -190,7 +225,7 @@
 @endif
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const chatDot = document.getElementById('chat-dot');
         const authId = {{ auth()->id() }};
 
@@ -212,13 +247,25 @@
                         if (aTag) {
                             const badge = document.createElement('span');
                             badge.id = 'chat-dot';
-                            badge.className = 'position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow';
-                            badge.style = 'font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;';
+                            badge.className =
+                                'position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow';
+                            badge.style =
+                                'font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;';
                             badge.innerText = unread > 99 ? '99+' : unread;
                             aTag.appendChild(badge);
                         }
                     }
                 });
+<<<<<<< HEAD
         }
     });
 </script>
+=======
+            }
+        }, 5000);
+
+    </script>
+
+
+</header>
+>>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec

@@ -78,8 +78,8 @@ class JobController extends Controller
             $query->where('is_featured', 1);
         }
 
-        // Lấy danh sách việc làm
-        $jobs = $query->latest()->paginate(9)->appends($request->except('page'));
+        $jobs = $query->orderBy('views', 'desc')->paginate(9)->appends($request->except('page'));
+
 
         // Dữ liệu lọc cho form
         $categories = Category::all();

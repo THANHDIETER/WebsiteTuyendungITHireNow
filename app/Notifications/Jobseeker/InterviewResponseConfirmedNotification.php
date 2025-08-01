@@ -27,7 +27,7 @@ class InterviewResponseConfirmedNotification extends Notification implements Sho
     {
         return [
             'message' => "Phản hồi của bạn về cuộc phỏng vấn vị trí '{$this->interview->job->title}' đã được ghi nhận.",
-            'link_url' => route('job_seeker.interviews.show', $this->interview->id),
+            'link_url' => route('interviews.show', $this->interview->id),
         ];
     }
 

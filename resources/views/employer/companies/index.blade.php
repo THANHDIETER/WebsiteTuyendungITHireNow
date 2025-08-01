@@ -17,7 +17,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec
         {{-- Bảng danh sách --}}
         <div class="card border-0 shadow-sm rounded-3 mb-2">
             <div class="card-body p-0">
@@ -107,10 +110,6 @@
                 </div>
                 <form method="POST" id="deleteForm">
                     @csrf
-                    @method('DELETE')
-                    <div class="modal-body">
-                        <p>Bạn có chắc chắn muốn xóa công ty <strong id="companyName"></strong> không?</p>
-                        <p class="text-danger small mb-0">* Hành động này không thể hoàn tác.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>

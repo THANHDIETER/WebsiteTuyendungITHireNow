@@ -9,12 +9,16 @@
     <meta name="keywords" content="việc làm, tuyển dụng, website việc làm, hiện đại, responsive, tìm việc" />
     <meta name="author" content="hastech" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <title>HireNow - Nền tảng tuyển dụng IT hiện đại</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     @include('website.layouts.particals.css')
-    @vite(['resources/js/web.js'])
 
 </head>
 <body>
+    @vite(['resources/js/web.js'])
 
     <!--wrapper start-->
     <div class="wrapper">
@@ -44,6 +48,7 @@
     @include('chat')
     @stack('scripts')
 
+    @yield('scripts') <!-- 🔥 THÊM DÒNG NÀY -->
 </body>
 
 </html>

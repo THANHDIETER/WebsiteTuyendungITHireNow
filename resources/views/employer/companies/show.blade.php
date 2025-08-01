@@ -1,5 +1,6 @@
 @extends('employer.layouts.default')
 
+<<<<<<< HEAD
 @section('title', $job->meta_title ?? $job->title)
 @section('meta_description', strip_tags(html_entity_decode($job->meta_description ?? Str::limit($job->description, 150))))
 @section('meta_keywords', $job->keyword ?? '')
@@ -155,6 +156,8 @@
 @endsection
 @extends('employer.layouts.default')
 
+=======
+>>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec
 @section('content')
     <div class="container py-4">
         <div class="card shadow-sm border-0">

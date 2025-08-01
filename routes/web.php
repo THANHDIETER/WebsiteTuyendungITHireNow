@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,24 @@ require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
 require __DIR__ . '/notification.php';
 require __DIR__ . '/channels.php';
+
+use App\Models\User;
+use App\Notifications\NewJobSubmittedNotification;
+use Illuminate\Http\Request;
+
+Route::get('/test-notification', function (Request $request) {
+    $user = User::find(2); // user id = 2
+    if (!$user) {
+        return 'User không tồn tại';
+    }
+
+    $message = $request->query('message', "Thông báo mặc định");
+
+    $user->notify(new NewJobSubmittedNotification($message));
+
+    return "Đã gửi notification cho user #{$user->id} với nội dung: {$message}";
+});
+
 
 
 Route::get('/chatbot/history', [ChatBotController::class, 'history']);
@@ -46,7 +65,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
-
+Route::middleware('auth')->post('/favorites/{job}', [FavoriteController::class, 'store']);
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
