@@ -104,7 +104,7 @@
                 </li>
                 <!-- Notification menu -->
                 <li class="custom-dropdown">
-                    <a href="javascript:void(0)" id="notification-toggle">
+                    <a href="{{ route('notifications.index') }}" id="notification-toggle">
                         <!-- Icon Bell -->
                         <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -118,10 +118,11 @@
                         {{ auth()->user()->unreadNotifications->count() }}
                     </span>
 
-                    <div class="custom-menu notification-dropdown py-0 overflow-hidden">
+
+                    {{-- <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('employer.notifications.index') }}">
+                            <a href="{{ route('notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
@@ -132,7 +133,7 @@
                                 </div>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </li>
 
                 <!-- Bookmark menu-->
@@ -448,6 +449,7 @@
         </div>
     </div>
 </header>
+
 @if (session('access_token'))
     <script>
         localStorage.setItem('access_token', "{{ session('access_token') }}");
@@ -499,8 +501,10 @@
                         if (aTag) {
                             const badge = document.createElement('span');
                             badge.id = 'chat-dot';
-                            badge.className = 'position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow';
-                            badge.style = 'font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;';
+                            badge.className =
+                                'position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow';
+                            badge.style =
+                                'font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;';
                             badge.innerText = unread > 99 ? '99+' : unread;
                             aTag.appendChild(badge);
                         }
@@ -508,4 +512,71 @@
                 });
         }
     });
+</script>
+
+<script>
+    if (typeof window.Echo !== 'undefined') {
+        console.log('Echo loaded, lắng nghe thông báo toàn cục...');
+
+        window.Echo.channel('global-notification')
+            .listen('.global.notification', function (data) {
+                console.log('Đã nhận sự kiện toàn cục:', data);
+                showGlobalNotification(data.message, data.link);
+            });
+    } else {
+        console.error('Echo chưa được khởi tạo hoặc chưa kết nối Pusher!');
+    }
+
+    function showGlobalNotification(message, link) {
+        // Loại bỏ toast cũ (nếu có)
+        $('#global-toast').remove();
+
+        // Tạo popup/toast
+        let html = `<div id="global-toast" style="
+            position:fixed;top:24px;right:24px;z-index:99999;
+            background:#232323;color:#fff;padding:16px 32px;
+            border-radius:8px;font-size:1.1rem;box-shadow:0 2px 12px #0006;
+            display:flex;align-items:center;
+        ">
+            <span>${message}</span>
+            ${link ? `<a href="${link}" style="color:#ffd700;text-decoration:underline;margin-left:12px;">Xem</a>` : ''}
+            <span style="cursor:pointer;float:right;font-weight:bold;margin-left:16px;" onclick="$('#global-toast').fadeOut()">×</span>
+        </div>`;
+        $('body').append(html);
+        setTimeout(() => {
+            $('#global-toast').fadeOut();
+        }, 10000);
+    }
+</script>
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
+<script>
+    window.Pusher = Pusher;
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '1ea633f39dfb08c3c0c2',
+        cluster: 'ap1',
+        forceTLS: true,
+    });
+    console.log('ffff', window.Echo);
+
+    const userId = {{ auth()->id() }};
+
+    if (userId && window.Echo) {
+        window.Echo.private(`App.Models.User.${userId}`)
+            .notification((notification) => {
+                console.log('Received new notification via Pusher:', notification);
+
+                const notiCount = document.getElementById('noti-count');
+                if (notiCount) {
+                    let count = parseInt(notiCount.textContent) || 0;
+                    notiCount.textContent = count + 1; // tăng số badge lên 1
+                    notiCount.style.display = 'inline-block';
+                }
+            });
+
+    } else {
+        console.warn('User is not logged in or Echo is not initialized.');
+    }
 </script>

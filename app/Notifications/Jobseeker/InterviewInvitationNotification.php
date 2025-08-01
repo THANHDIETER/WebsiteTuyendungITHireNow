@@ -19,7 +19,7 @@ class InterviewInvitationNotification extends Notification implements ShouldBroa
     {
         return [
             'message' => "Bạn được mời phỏng vấn vị trí '{$this->job->title}' lúc {$this->formatTime($this->interviewDateTime)}.",
-            'link_url' => route('job_seeker.interviews.show', $this->interviewId),
+            'link_url' => route('interviews.show', $this->interviewId),
         ];
     }
 

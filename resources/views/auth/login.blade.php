@@ -103,7 +103,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label">Password</label>
+                                    <label class="col-form-label mt-3">Password</label>
                                     <div class="form-input position-relative">
                                         <input class="form-control" type="password" id="password" name="password"
                                             placeholder="*********">
@@ -115,9 +115,10 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group mb-0 checkbox-checked">
-                                    <a class="link-two" href="forget-password.html">Forgot password?</a>
-                                    <button class="btn btn-primary btn-block w-100 mt-3" type="submit">Sign
+                                <div class="form-group mb-0 checkbox-checked row" style="row-gap: 2rem;">
+                                    <a class="link-two " href="forget-password.html">Forgot password?</a>
+                                    
+                                    <button class="btn btn-primary btn-block w-100 mt-4" type="submit">Sign
                                         in</button>
                                 </div>
                                 <div class="login-social-title">

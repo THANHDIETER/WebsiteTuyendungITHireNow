@@ -160,17 +160,16 @@
                         {{-- Nội dung thẻ --}}
                         <div class="d-flex flex-column h-100 gap-2">
 
-                            {{-- LOGO --}}
-                            <div class="text-center">
-                                @if ($job->company && $job->company->logo)
-                                <img src="{{ asset('storage/' . $job->company->logo) }}"
-                                    alt="Logo {{ $job->company->name }}" class="img-fluid"
-                                    style="max-height: 50px; object-fit: contain;">
-                                @else
-                                <img src="https://itplus-academy.edu.vn/upload/c47d9c29fc44c2b7996a2613aec3c1f9/files/png.jpg"
-                                    alt="No Logo" class="img-fluid" style="max-height: 50px; object-fit: contain;">
-                                @endif
-                            </div>
+                            
+                       {{-- Logo công ty --}}
+                        <div class="text-center mb-3">
+                            <a href="{{ route('jobs.show', $job->slug) }}" class="d-inline-block" style="width: 70px; height: 70px;">
+                                <img src="{{ $job->company?->logo_url ?? asset('assets/img/default-logo.png') }}"
+                                    alt="{{ $job->company?->name ?? 'Company Logo' }}"
+                                    class="img-fluid rounded-circle border p-1 bg-white shadow-sm"
+                                    style="width:100%; height:100%; object-fit:contain;">
+                            </a>
+                        </div>
 
                             @php
                             $titleTooltip = $job->title . ' - ' . strip_tags($job->description);
@@ -502,16 +501,17 @@
                             <span class="badge bg-danger position-absolute top-0 start-0 m-3">NỔI BẬT</span>
                         @endif
 
-                        {{-- Logo công ty --}}
+                       {{-- Logo công ty --}}
                         <div class="text-center mb-3">
-                            <a href="{{ route('jobs.show', $job->slug) }}">
-                                @if ($job->company && $job->company->logo_url)
-                                    <img src="{{ $job->company->logo_url }}" class="rounded-circle border p-1 bg-white shadow-sm" width="60" height="60" alt="{{ $job->company->name }}">
-                                @else
-                                    <img src="https://via.placeholder.com/60" class="rounded-circle border p-1 bg-white shadow-sm" alt="No Logo">
-                                @endif
+                            <a href="{{ route('jobs.show', $job->slug) }}" class="d-inline-block" style="width: 70px; height: 70px;">
+                                <img src="{{ $job->company?->logo_url ?? asset('assets/img/default-logo.png') }}"
+                                    alt="{{ $job->company?->name ?? 'Company Logo' }}"
+                                    class="img-fluid rounded-circle border p-1 bg-white shadow-sm"
+                                    style="width:100%; height:100%; object-fit:contain;">
                             </a>
                         </div>
+
+
 
                         {{-- Nội dung việc làm --}}
                         <div class="job-content d-flex flex-column h-100">

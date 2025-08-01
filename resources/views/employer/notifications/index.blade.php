@@ -2,7 +2,6 @@
 
 @section('content')
 
-
     <div class="container py-5">
         <h2 class="mb-4 text-primary fw-bold">
             <i class="bi bi-bell-fill me-2 text-warning"></i> Tất cả thông báo
