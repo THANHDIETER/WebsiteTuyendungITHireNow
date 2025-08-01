@@ -38,7 +38,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
-
+Route::middleware('auth')->post('/favorites/{job}', [FavoriteController::class, 'store']);
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');

@@ -5,11 +5,7 @@
         {{-- Tiêu đề và nút thêm --}}
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
             <h2 class="h4 mb-0"><i class="bi bi-building me-2"></i>Quản lý Công ty</h2>
-<<<<<<< HEAD
-            <a href="{{ route('employer.companies.create') }}" class="btn btn-success d-flex align-items-center">
-=======
             <a href="{{ route('employer.companies.create') }}" class="btn btn-success d-flex align-items-center shadow-sm rounded-pill px-3">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                 <i class="bi bi-plus-lg me-1"></i>Thêm Công ty
             </a>
         </div>
@@ -21,14 +17,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-<<<<<<< HEAD
-        {{-- Bảng danh sách --}}
-        <div class="card border-0 shadow-sm rounded-3">
-=======
-
         {{-- Bảng danh sách --}}
         <div class="card border-0 shadow-sm rounded-3 mb-2">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
             <div class="card-body p-0">
                 @if ($companies->count())
                     <div class="table-responsive">
@@ -67,36 +57,6 @@
                                             @endswitch
                                         </td>
                                         <td>{{ $company->created_at->format('d/m/Y H:i') }}</td>
-<<<<<<< HEAD
-                                        <td class="text-end">
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-light border dropdown-toggle" type="button"
-                                                    data-bs-toggle="dropdown">
-                                                    <i class="bi bi-three-dots-vertical"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('employer.companies.show', $company) }}">
-                                                            <i class="bi bi-eye me-2"></i>Xem
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('employer.companies.edit', $company) }}">
-                                                            <i class="bi bi-pencil me-2"></i>Sửa
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <button type="button" class="dropdown-item text-danger delete-btn"
-                                                            data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                                            data-id="{{ $company->id }}" data-name="{{ $company->name }}"
-                                                            data-action="{{ route('employer.companies.destroy', $company) }}">
-                                                            <i class="bi bi-trash me-2"></i>Xóa
-                                                        </button>
-                                                    </li>
-                                                </ul>
-=======
                                         <td class="text-end mb-2" >
                                             <div class="d-inline-flex gap-2 align-items-center justify-content-end">
                                                 <a href="{{ route('employer.companies.show', $company) }}"
@@ -115,15 +75,10 @@
                                                         data-action="{{ route('employer.companies.destroy', $company) }}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
-<<<<<<< HEAD
-
-=======
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                             </tbody>
                         </table>
                     </div>
@@ -151,10 +106,6 @@
                 </div>
                 <form method="POST" id="deleteForm">
                     @csrf
-                    @method('DELETE')
-                    <div class="modal-body">
-                        <p>Bạn có chắc chắn muốn xóa công ty <strong id="companyName"></strong> không?</p>
-                        <p class="text-danger small mb-0">* Hành động này không thể hoàn tác.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -165,11 +116,6 @@
         </div>
     </div>
 
-<<<<<<< HEAD
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-=======
     {{-- Style cho nút icon hành động --}}
  <style>
     .btn-circle {
@@ -227,7 +173,6 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Xử lý modal xác nhận xóa
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                 const confirmModal = document.getElementById('confirmModal');
                 confirmModal.addEventListener('show.bs.modal', function(event) {
                     const button = event.relatedTarget;
@@ -236,12 +181,6 @@
                     document.getElementById('deleteForm').setAttribute('action', action);
                     document.getElementById('companyName').textContent = name;
                 });
-<<<<<<< HEAD
-            });
-        </script>
-    @endpush
-@endsection
-=======
 
                 // Kích hoạt tooltip Bootstrap 5
                 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
@@ -252,4 +191,3 @@
         </script>
     @endpush
 @endsection
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b

@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
-                <div class="header-align">
+                <div class="header-align " style="align-items: center; height: 80px;">
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
@@ -219,14 +219,10 @@
                         }
                     }
                 });
-<<<<<<< HEAD
+            }
         }, 5000);
+
     </script>
 
 
 </header>
-=======
-        }
-    });
-</script>
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b

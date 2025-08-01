@@ -39,6 +39,12 @@ class User extends Authenticatable
 
     public $timestamps = true;
 
+    public function favoriteJobs()
+{
+    return $this->belongsToMany(\App\Models\Job::class, 'favorites', 'user_id', 'job_id')
+        ->withPivot('note')
+        ->withTimestamps();
+}
 
 
     public function getAuthPassword()
