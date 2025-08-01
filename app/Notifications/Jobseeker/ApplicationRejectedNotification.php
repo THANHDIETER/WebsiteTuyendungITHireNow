@@ -20,7 +20,7 @@ class ApplicationRejectedNotification extends Notification implements ShouldBroa
     {
         return [
             'message' => "Đơn ứng tuyển của bạn vào vị trí '{$this->job->title}' đã bị từ chối.",
-            'link_url' => route('notifications.index'),
+            'link_url' => route('job_seeker.notifications.index'),
         ];
     }
 

@@ -17,6 +17,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+<<<<<<< HEAD
+        {{-- Bảng danh sách --}}
+        <div class="card border-0 shadow-sm rounded-3">
+=======
+
         {{-- Bảng danh sách --}}
         <div class="card border-0 shadow-sm rounded-3 mb-2">
             <div class="card-body p-0">

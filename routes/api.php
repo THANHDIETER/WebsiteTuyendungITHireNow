@@ -23,8 +23,8 @@ Route::get('/user', function (Request $request) {
 
 
 
-// Route::post('/register', [AuthController::class, 'register']);
-// Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('payments/{id}/pdf', [PaymentController::class, 'downloadPdf']);
@@ -34,17 +34,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/bank-logs', [BankLogController::class, 'index']);
 });
 
-    Route::middleware(['auth:sanctum' , 'admin'])->name('admin/job-applications.')->controller(AdminJobApplicationController::class)->group(function () {
-        Route::get('admin/job-applications', 'index')->name('index');                      
-        Route::get('admin/job-applications/{job_application}', 'show')->name('show');         
-        Route::put('admin/job-applications/{job_application}', 'update')->name('update');     
-        Route::delete('admin/job-applications/{job_application}', 'destroy')->name('destroy');
-    });
-
-
-    Route::middleware(['auth:sanctum', 'employer'])->group(function () {
-        Route::apiResource('job-applications', JobApplicationController::class);
-    });
+Route::middleware(['auth:sanctum', 'employer'])->group(function () {
+    Route::apiResource('job-applications', JobApplicationController::class);
+});
 
 Route::prefix('admin/stats')
     ->middleware([])

@@ -73,4 +73,3 @@ Route::middleware(['job_seeker'])->group(function () {
     Route::get('/chat/start/{userId}', [ChatController::class, 'start'])->name('chat.start');
     Route::post('/chat/{conversation}/typing', [ChatController::class, 'typing'])->name('chat.typing');
 });
-

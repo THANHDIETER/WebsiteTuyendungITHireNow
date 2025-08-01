@@ -50,12 +50,11 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-
 <header class="page-header row justify-content-between align-items-center bg-white">
     <div class="logo-wrapper d-flex align-items-center col-4">
    <a href="{{ route('home') }}">
     @php
-        $clientLogo = \App\Models\Logo::where('type', 'header')->where('is_active', true)->first();
+        $clientLogo = \App\Models\Logo::where('type', 'client')->where('is_active', true)->first();
     @endphp
 
     <img 
@@ -71,13 +70,7 @@
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
-
         </div>
-    </a>
-</div>
-
-    <div class="page-main-header d-flex align-items-center col-auto">
-       
         <div class="nav-right">
             <ul class="header-right">
                 <li class="modes d-flex"><a class="dark-mode">
@@ -513,70 +506,3 @@
         }
     });
 </script>
-
-<script>
-    if (typeof window.Echo !== 'undefined') {
-        console.log('Echo loaded, lắng nghe thông báo toàn cục...');
-
-        window.Echo.channel('global-notification')
-            .listen('.global.notification', function (data) {
-                console.log('Đã nhận sự kiện toàn cục:', data);
-                showGlobalNotification(data.message, data.link);
-            });
-    } else {
-        console.error('Echo chưa được khởi tạo hoặc chưa kết nối Pusher!');
-    }
-
-    function showGlobalNotification(message, link) {
-        // Loại bỏ toast cũ (nếu có)
-        $('#global-toast').remove();
-
-        // Tạo popup/toast
-        let html = `<div id="global-toast" style="
-            position:fixed;top:24px;right:24px;z-index:99999;
-            background:#232323;color:#fff;padding:16px 32px;
-            border-radius:8px;font-size:1.1rem;box-shadow:0 2px 12px #0006;
-            display:flex;align-items:center;
-        ">
-            <span>${message}</span>
-            ${link ? `<a href="${link}" style="color:#ffd700;text-decoration:underline;margin-left:12px;">Xem</a>` : ''}
-            <span style="cursor:pointer;float:right;font-weight:bold;margin-left:16px;" onclick="$('#global-toast').fadeOut()">×</span>
-        </div>`;
-        $('body').append(html);
-        setTimeout(() => {
-            $('#global-toast').fadeOut();
-        }, 10000);
-    }
-</script>
-{{-- <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
-<script>
-    window.Pusher = Pusher;
-
-    window.Echo = new Echo({
-        broadcaster: 'pusher',
-        key: '1ea633f39dfb08c3c0c2',
-        cluster: 'ap1',
-        forceTLS: true,
-    });
-    console.log('ffff', window.Echo);
-
-    const userId = {{ auth()->id() }};
-
-    if (userId && window.Echo) {
-        window.Echo.private(`App.Models.User.${userId}`)
-            .notification((notification) => {
-                console.log('Received new notification via Pusher:', notification);
-
-                const notiCount = document.getElementById('noti-count');
-                if (notiCount) {
-                    let count = parseInt(notiCount.textContent) || 0;
-                    notiCount.textContent = count + 1; // tăng số badge lên 1
-                    notiCount.style.display = 'inline-block';
-                }
-            });
-
-    } else {
-        console.warn('User is not logged in or Echo is not initialized.');
-    }
-</script> --}}
