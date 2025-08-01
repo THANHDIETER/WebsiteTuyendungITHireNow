@@ -2,11 +2,12 @@
 
 namespace App\Notifications\Employer;
 
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class JobRejectedNotification extends Notification implements ShouldBroadcast
+class JobRejectedNotification extends Notification implements ShouldBroadcastNow
 {
     public function __construct(public $job, public $reason = null) {}
 
@@ -15,9 +16,8 @@ class JobRejectedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            'message' => "Tin tuyển dụng '{$this->job->title}' đã bị từ chối." .
-                         ($this->reason ? " Lý do: {$this->reason}" : ''),
-            'link_url' => route('employer.jobs.edit', $this->job->id),
+            'message' => "Tin tuyển dụng '{$this->job->title}' đã bị từ chối.",
+            'link_url' => route('notifications.index'),
         ];
     }
 
