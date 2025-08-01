@@ -4,10 +4,11 @@ namespace App\Notifications\Employer;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class JobApprovedNotification extends Notification implements ShouldBroadcast
+class JobApprovedNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
 
@@ -22,7 +23,7 @@ class JobApprovedNotification extends Notification implements ShouldBroadcast
     {
         return [
             'message' => "Tin tuyển dụng '{$this->job->title}' đã được phê duyệt.",
-            'link_url' => route('employer.jobs.show', $this->job->id),
+            'link_url' => route('notifications.index'),
         ];
     }
 

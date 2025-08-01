@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
-                <div class="header-align">
+                <div class="header-align " style="align-items: center; height: 80px;">
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
@@ -57,16 +57,15 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <!-- 🔔 ICON THÔNG BÁO động -->
-                                        <div class="me-3">
-                                            <a href="{{ route('notifications.index') }}"
-                                                class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                                aria-label="Thông báo">
+                                        <div class="dropdown me-3">
+                                            <button class="btn btn-icon position-relative p-0 bg-transparent border-0"
+                                                type="button" id="notificationDropdown" data-bs-toggle="dropdown"
+                                                aria-expanded="false" aria-label="Thông báo">
                                                 <i id="notification-bell" class="bi bi-bell fs-4 text-white"></i>
-                                                <span id="notification-dot"
+                                                <span id="notification-count"
                                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__bounce"
-                                                    style="display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'inline-block' : 'none' }}; font-size:10px; min-width:12px; height:12px; padding:0;">
-                                                </span>
-                                            </a>
+                                                    style="display:none; font-size:10px; min-width:12px; height:12px; padding:0;"></span>
+                                            </button>
                                         </div>
                                         <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
                                         <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
@@ -101,7 +100,6 @@
                                         </script>
 
                                     </div>
-
                                     <!--icon chat nhắn tin  -->
                                     <div class="col-auto">
                                         <div class="dropdown me-3">
@@ -251,6 +249,8 @@
                         }
                     }
                 });
-        }
-    });
-</script>
+        }, 5000);
+    </script>
+
+
+</header>

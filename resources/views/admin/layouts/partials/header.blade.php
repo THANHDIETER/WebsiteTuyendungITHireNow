@@ -7,6 +7,8 @@
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
 <meta name="csrf-token" content="{{ csrf_token() }}">
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
+
 
 <title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
@@ -47,13 +49,6 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-<style>
-    body.modal-open {
-    overflow-x: hidden !important;
-    padding-right: 0 !important; /* bỏ padding-right nếu popup thêm vào */
-}
-</style>
-
 <header class="page-header row">
     <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
                 src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
@@ -135,7 +130,8 @@
                         <ul class="activity-update" id="noti-list">
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary" href="">AllNotification</a>
+                                    <a class="btn btn-secondary"
+                                        href="">AllNotification</a>
                                 </div>
                             </li>
                         </ul>

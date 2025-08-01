@@ -90,7 +90,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label">Password</label>
+                                    <label class="col-form-label mt-3">Password</label>
                                     <div class="form-input position-relative">
                                         <input class="form-control" type="password" id="login[password]" name="password"
                                             placeholder="*********">
@@ -101,10 +101,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mb-0 checkbox-checked">
-                                    <div class="form-check checkbox-solid-info">
-                                        <input class="form-check-input" id="solid6" type="checkbox">
-                                        <label class="form-check-label" for="solid6">Remember password</label>
-                                    </div><a class="link-two" href="forget-password.html">Forgot password?</a>
+                                    <a class="link-two" href="forget-password.html">Forgot password?</a>
                                     <button class="btn btn-primary btn-block w-100 mt-3" type="submit">Sign
                                         in</button>
                                 </div>

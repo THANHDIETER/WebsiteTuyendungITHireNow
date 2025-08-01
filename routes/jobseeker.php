@@ -6,27 +6,18 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\NotificationController;
-
 use App\Http\Controllers\JobSeeker\ResumeController;
 use App\Http\Controllers\InterviewResponseController;
 
 // 🔐 Route dành riêng cho JOB SEEKER
 
 
-// 🔐 Các route dành cho job seeker đã đăng nhập
-Route::middleware(['auth:sanctum', 'job_seeker'])
-    ->prefix('job_seeker')
-    ->name('job_seeker.')
-    ->group(function () {
-        // 📌 Thông báo
-        // Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-
-
-    });
 
 // profile routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+
     // 📩 Xem chi tiết lời mời phỏng vấn
     Route::get('/interviews/{interview}', [InterviewController::class, 'show'])
         ->name('interviews.show');
@@ -34,7 +25,6 @@ Route::middleware(['auth'])->group(function () {
     // 📩 Phản hồi thư mời phỏng vấn
     Route::post('/interviews/{interview}/respond', [InterviewResponseController::class, 'store'])
         ->name('interviews.respond');
-
 
     // Hiển thị và cập nhật hồ sơ
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

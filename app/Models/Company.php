@@ -152,4 +152,34 @@ class Company extends Model
     {
         return $this->user();
     }
+    // Company.php
+public function getLogoUrlAttribute()
+{
+    $logo = $this->attributes['logo_url'] ?? null;
+
+    if (!$logo) {
+        return asset('assets/img/default-logo.png');
+    }
+
+    // Nếu là URL thì trả thẳng
+    if (filter_var($logo, FILTER_VALIDATE_URL)) {
+        return $logo;
+    }
+
+    // Nếu là đường dẫn trong storage
+    if (\Storage::disk('public')->exists($logo)) {
+        return asset('storage/' . $logo);
+    }
+
+    return asset('assets/img/default-logo.png');
+}
+
+
+
+
+
+    public function employer()
+    {
+        return $this->user();
+    }
 }

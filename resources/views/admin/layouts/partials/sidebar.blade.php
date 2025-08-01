@@ -160,6 +160,15 @@
                 <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
             </a>
         </li>
+<<<<<<< HEAD
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.logos.index') }}">
+                <i class="bi bi-image sidebar-icon"></i> Logo
+            </a>
+        </li>
+
+=======
+>>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
 
     </ul>
 </aside>

@@ -8,8 +8,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use App\Models\Job;
 use App\Models\User;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class JobseekerAppliedNotification extends Notification implements ShouldBroadcast
+class JobseekerAppliedNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
 
@@ -24,7 +25,7 @@ class JobseekerAppliedNotification extends Notification implements ShouldBroadca
     {
         return [
             'message' => "Ứng viên {$this->jobseeker->name} đã ứng tuyển vào vị trí {$this->job->title}.",
-            'link_url' => route('admin.notifications.index', ['job_id' => $this->job->id]),
+            'link_url' => route('notifications.index'),
         ];
     }
 
