@@ -117,12 +117,8 @@
                     <span>Mua gói dịch vụ</span>
                 </a>
             </li>
-<<<<<<< HEAD
 
             <li class="sidebar-list">
-=======
-             <li class="sidebar-list">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                 <a class="sidebar-link" href="{{ route('employer.companies.index') }}">
                     <i class="bi bi-people"></i>
                     <span>Quản lý công ty</span>
@@ -132,10 +128,9 @@
     </div>
 
 </aside>
-<<<<<<< HEAD
 <style>
     .page-sidebar {
-        top: 74px;
+        top: 70px;
         width: 250px;
         background: #fff;
         color: #212529;
@@ -236,5 +231,3 @@
         /* Show when sidebar is mobile open */
     }
 </style>
-=======
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b

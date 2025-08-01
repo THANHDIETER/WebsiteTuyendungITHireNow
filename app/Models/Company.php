@@ -82,13 +82,13 @@ class Company extends Model
 
     // Lấy package subscription còn hiệu lực mới nhất
     public function activePackage()
-{
-    return $this->hasOne(Payment::class, 'user_id', 'user_id')
-        ->where('status', 'paid')
-        ->whereNotNull('paid_at')
-        ->latest('paid_at')
-        ->first()?->package;
-}
+    {
+        return $this->hasOne(Payment::class, 'user_id', 'user_id')
+            ->where('status', 'paid')
+            ->whereNotNull('paid_at')
+            ->latest('paid_at')
+            ->first()?->package;
+    }
 
 
 
@@ -147,6 +147,35 @@ class Company extends Model
             return 0;
         return $this->free_post_quota - $this->free_post_quota_used;
     }
-   
+
+    public function employer()
+    {
+        return $this->user();
+    }
+    // Company.php
+public function getLogoUrlAttribute()
+{
+    $logo = $this->attributes['logo_url'] ?? null;
+
+    if (!$logo) {
+        return asset('assets/img/default-logo.png');
+    }
+
+    // Nếu là URL thì trả thẳng
+    if (filter_var($logo, FILTER_VALIDATE_URL)) {
+        return $logo;
+    }
+
+    // Nếu là đường dẫn trong storage
+    if (\Storage::disk('public')->exists($logo)) {
+        return asset('storage/' . $logo);
+    }
+
+    return asset('assets/img/default-logo.png');
+}
+
+
+
+
 
 }
