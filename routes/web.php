@@ -10,6 +10,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
@@ -30,6 +32,12 @@ Route::post('/register/employer', [RegisterController::class, 'registerEmployer'
 
 Route::get('/showLoginForm', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
+
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
@@ -147,8 +155,6 @@ Route::get('/registration', function () {
 });
 
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
-
-
 
 Route::get('/admin/noti/latest', function () {
     $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();

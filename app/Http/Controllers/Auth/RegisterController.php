@@ -32,12 +32,8 @@ class RegisterController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'role' => $role,
+                'status' => 'active',
             ]);
-            // Gửi thông báo cho admin khi jobseeker đăng ký
-            $admins = User::where('role', 'admin')->get();
-            foreach ($admins as $admin) {
-                $admin->notify(new NewJobseekerRegisteredNotification($user));
-            }
 
             // Gán role bằng Spatie (nếu có)
             try {
@@ -77,12 +73,8 @@ class RegisterController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'role' => 'employer', // Mặc định vai trò là employer
+                'status' => 'active', // Mặc định trạng thái là active
             ]);
-            // Gửi thông báo cho admin khi employer đăng ký
-            $admins = User::where('role', 'admin')->get();
-            foreach ($admins as $admin) {
-                $admin->notify(new NewEmployerRegisteredNotification($user));
-            }
 
             // Gán vai trò cho người dùng
             try {

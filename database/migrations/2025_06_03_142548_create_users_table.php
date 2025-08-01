@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('referral_code', 20)->nullable();
             $table->string('referred_by', 20)->nullable();
             $table->string('ip_address', 45)->nullable();
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });

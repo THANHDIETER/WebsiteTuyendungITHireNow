@@ -24,7 +24,6 @@ class JobController extends Controller
                 $q->where('title', 'like', '%' . $request->q . '%')
                     ->orWhere('description', 'like', '%' . $request->q . '%');
             });
-
         }
 
         // Địa điểm
@@ -141,5 +140,4 @@ class JobController extends Controller
 
         return view('website.jobs.job-details', compact('job', 'relatedJobs'));
     }
-
 }

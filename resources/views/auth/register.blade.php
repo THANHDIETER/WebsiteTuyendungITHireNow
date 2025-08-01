@@ -68,7 +68,7 @@
                                     class="img-fluid for-dark m-auto"
                                     src="{{ asset('../assets/images/logo/dark-logo.png') }}" alt="logo"></a></div>
                         <div class="login-main">
-                            <form class="theme-form" method="POST" action="{{ route('register') }}">
+                            <form class="theme-form" method="POST" action="{{ route('register.post') }}">
                                 @csrf
                                 <h2 class="text-center">Create your account</h2>
                                 <p class="text-center">Enter your personal details to create account</p>

@@ -54,4 +54,3 @@ class InterviewResponseController extends Controller
         return redirect()->back()->with('success', 'Phản hồi của bạn đã được ghi nhận.');
     }
 }
- 

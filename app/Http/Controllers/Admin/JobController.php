@@ -62,7 +62,6 @@ class JobController extends Controller
         return view('admin.jobs.show', compact('job'));
     }
 
-
     public function approve(Request $request, $id)
     {
         // kiểm tra xem job có tồn tại không 
@@ -98,7 +97,6 @@ class JobController extends Controller
         ]);
     }
 
-
     public function reject(Request $request, Job $job)
     {
         if ($job->status !== 'pending') {
@@ -123,12 +121,6 @@ class JobController extends Controller
         ]);
     }
 
-
-
-
-
-
-
     public function destroy($id)
     {
         $job = Job::find($id);
@@ -147,7 +139,6 @@ class JobController extends Controller
             'message' => 'Tin tuyển dụng đã được xoá.'
         ]);
     }
-
 
     public function revertToPending(Request $request, $id)
     {
@@ -189,4 +180,3 @@ class JobController extends Controller
         ]);
     }
 }
-

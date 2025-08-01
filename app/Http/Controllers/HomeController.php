@@ -18,7 +18,7 @@ class HomeController extends Controller
 
         // Get jobs with less restrictive conditions
         $jobs = Job::with(['company', 'category'])
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('status', 'published')
                     ->orWhereNull('status');
             })
@@ -38,8 +38,5 @@ class HomeController extends Controller
             ->get();
 
         return view('website.index', compact('jobs', 'categories'));
-
-
-        
     }
 }

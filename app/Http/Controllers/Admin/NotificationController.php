@@ -40,7 +40,7 @@ class NotificationController extends Controller
 
     public function show($id)
     {
-        $notification = \App\Models\Notification::with('user')->findOrFail($id);
+        $notification = Notification::with('user')->findOrFail($id);
         return view('admin.notifications.show', compact('notification'));
     }
     public function create()
