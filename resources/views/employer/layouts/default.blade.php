@@ -2,7 +2,10 @@
 <html lang="en">
 
 <head>
+    
     @include('employer.layouts.partials.header')
+    @stack('style')
+
 </head>
 
 <body class="d-flex flex-column min-vh-100">

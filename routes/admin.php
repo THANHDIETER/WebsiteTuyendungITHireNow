@@ -11,7 +11,10 @@ use App\Http\Controllers\Admin\{
     DashboardController,
     NotificationController,
     ServicePackageController,
-    BankAccountControlle
+    BankAccountControlle,
+    LogoController,
+    BankAccountController,
+    JobApplications
 };
 use App\Http\Controllers\Admin\SeekerProfileController;
 
@@ -55,7 +58,7 @@ Route::prefix('admin')
             Route::put('{service_package}', 'update')->name('update');
             Route::delete('{service_package}', 'destroy')->name('destroy');
         });
-
+        
         // 👤 Quản lý người dùng
         Route::prefix('users')->name('users.')->controller(UserController::class)->group(function () {
             Route::get('/', 'index')->name('index');
@@ -73,6 +76,9 @@ Route::prefix('admin')
         // 📑 Sơ yếu lý lịch (CV)
         Route::prefix('seekerprofile')->controller(SeekerProfileController::class)->group(function () {
             Route::get('/', 'index')->name('seekerprofile.index');
+        });
+        Route::prefix('job-application')->controller(JobApplications::class)->group(function () {
+            Route::get('/', 'index')->name('job-application.index');
         });
 
         // 💳 Thanh toán & tài khoản ngân hàng
@@ -98,4 +104,7 @@ Route::prefix('admin')
             Route::put('{id}', 'update')->name('update');
             Route::delete('{id}', 'destroy')->name('destroy');
         });
+        Route::resource('logos', App\Http\Controllers\Admin\LogoController::class)->names('logos');
+
+        
     });

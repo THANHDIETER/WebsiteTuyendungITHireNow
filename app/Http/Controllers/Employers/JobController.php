@@ -146,6 +146,7 @@ class JobController extends Controller
         $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
     }
 
+
     $validated['deadline'] = $request->input('application_deadline') ?? null;
     $validated['currency'] = $validated['currency'] ?? 'VND';
     $validated['salary_negotiable'] = $request->boolean('salary_negotiable', false);
@@ -226,8 +227,14 @@ class JobController extends Controller
     $company = $user->company;
 
     $job = $company->jobs()->with(['skills', 'categories'])->findOrFail($id);
-    $jobTypes = JobType::where('is_active', true)->get(); // hoặc tất cả
 
+    // ✅ Nếu trạng thái không phải "pending" thì chuyển về "pending"
+    if ($job->status !== 'pending') {
+        $job->status = 'pending';
+        $job->save();
+    }
+
+    $jobTypes = JobType::where('is_active', true)->get();
     $locations = Location::where('is_active', true)->orderBy('name')->get();
     $categories = Category::all();
     $skills = Skill::all();
@@ -236,19 +243,26 @@ class JobController extends Controller
     $languages = JobLanguage::where('is_active', true)->get();
     $remote_policies = RemotePolicy::where('is_active', true)->get();
 
-    // ✅ Thêm địa chỉ từ thông tin công ty
-    $company_addresses = $company->addresses ?? []; // hoặc $company->getAddressList() nếu bạn có hàm hỗ trợ
+    // ✅ Địa chỉ từ công ty (nếu có)
+    $company_addresses = $company->addresses ?? [];
 
-    // Kỹ năng đã chọn (hiển thị trong input skills_text)
+    // ✅ Dữ liệu đã chọn để gán lại form
     $selectedSkills = $job->skills->pluck('skill_name')->implode(', ');
-
-    // Ngành nghề đã chọn
     $selectedCategories = $job->categories->pluck('id')->toArray();
 
     return view('employer.jobs.edit', compact(
         'job',
         'categories',
-        'skills','levels','experiences','languages','remote_policies', 'locations','company_addresses','selectedSkills','selectedCategories', 'jobTypes'
+        'skills',
+        'levels',
+        'experiences',
+        'languages',
+        'remote_policies',
+        'locations',
+        'company_addresses',
+        'selectedSkills',
+        'selectedCategories',
+        'jobTypes'
     ));
 }
 

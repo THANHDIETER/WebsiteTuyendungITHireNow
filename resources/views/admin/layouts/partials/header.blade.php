@@ -8,6 +8,8 @@
 <meta name="author" content="pixelstrap">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
+</style>
 <title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -37,45 +39,52 @@
 <!-- Animation css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
 <!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
 <!-- Apex Chart css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
 <!-- Data Table css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <!-- App css-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-<header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
-                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
-            href="javascript:void(0)">
+@if (session('access_token'))
+    <script>
+        localStorage.setItem('access_token', "{{ session('access_token') }}");
+    </script>
+@endif
+<header class="page-header row justify-content-between align-items-center bg-white">
+
+    <div class="logo-wrapper d-flex align-items-center col-4" style="padding-left: 80px; ">
+        <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 90px;">
+            @php
+                $logo = \App\Models\Logo::where('type', 'admin')->where('is_active', true)->first();
+            @endphp
+
+            <a href="{{ route('home') }}">
+                <img src="{{ $logo ? asset('storage/' . $logo->image_path) : asset('images/default.png') }}"
+                    alt="Admin Logo" class="logo-img" style="height:90px;">
+            </a>
+
+
+        </div>
+
+        <a class="close-btn ms-4" href="javascript:void(0)"  >
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
             </div>
-        </a></div>
-    <div class="page-main-header col">
-        <div class="header-left d-lg-block d-none">
-            <form class="search-form mb-0">
-                <div class="input-group"><span class="input-group-text pe-0">
-                        <!-- Icon Search -->
-                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                    <input class="form-control" type="text" placeholder="Search anything...">
-                </div>
-            </form>
-        </div>
+        </a>
+    </div>
+    <div class="page-main-header d-flex align-items-center col-auto">
+
         <div class="nav-right">
             <ul class="header-right">
                 <li class="modes d-flex"><a class="dark-mode">
@@ -86,28 +95,14 @@
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a></li>
-                <li class="serchinput d-lg-none d-flex"><a class="search-mode">
-                        <!-- Icon Search -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    <div class="form-group search-form">
-                        <input type="text" placeholder="Search here...">
-                    </div>
-                </li>
                 <!-- Notification menu -->
                 <li class="custom-dropdown">
-                    <a href="javascript:void(0)" id="notification-toggle">
+                    <a href="{{ route('notifications.index') }}" id="notification-toggle">
                         <!-- Icon Bell -->
-                        <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
@@ -116,22 +111,81 @@
                         {{ auth()->user()->unreadNotifications->count() }}
                     </span>
 
-                    <div class="custom-menu notification-dropdown py-0 overflow-hidden">
+
+
+
+                    {{-- <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('employer.notifications.index') }}">
+                            <a href="{{ route('notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
                         <ul class="activity-update" id="noti-list">
+
+
+                            @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
+                                <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
+                                    <div class="flex-grow-1">
+                                        <span>{{ $noti->created_at->diffForHumans() }}</span>
+                                        <a href="{{ $noti->data['link_url'] }}">
+                                            <h5>{{ $noti->data['message'] }}</h5>
+                                        </a>
+                                        <h6>{{ config('app.name') }}</h6>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <img class="b-r-15 img-40"
+                                            src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
+                                    </div>
+                                </li>
+                            @empty
+                                <li class="d-flex justify-content-center p-2 text-muted">
+                                    Không có thông báo mới
+                                </li>
+                            @endforelse
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
-                                    <a class="btn btn-secondary"
-                                        href="">AllNotification</a>
+                                    <a class="btn btn-secondary" href="">AllNotification</a>
                                 </div>
                             </li>
+                            <script>
+                                setInterval(() => {
+                                    fetch('{{ route('admin.notifications.latest') }}')
+                                        .then(res => res.json())
+                                        .then(notis => {
+                                            const list = document.getElementById('noti-list');
+
+                                            notis.forEach(noti => {
+                                                if (!list.querySelector(`[data-id="${noti.id}"]`)) {
+                                                    const item = `
+                            <li class="d-flex align-items-center b-l-primary" data-id="${noti.id}">
+                                <div class="flex-grow-1">
+                                    <span>${noti.time}</span>
+                                    <a href="${noti.link_url}">
+                                        <h5>${noti.message}</h5>
+                                    </a>
+                                    <h6>{{ config('app.name') }}</h6>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
+                                </div>
+                            </li>
+                        `;
+                                                    list.insertAdjacentHTML('afterbegin', item);
+                                                }
+                                            });
+
+                                            // Cập nhật badge
+                                            const badge = document.getElementById('noti-count');
+                                            if (badge) {
+                                                badge.innerText = notis.length;
+                                                badge.classList.toggle('d-none', notis.length === 0);
+                                            }
+                                        });
+                                }, 5000);
+                            </script>
                         </ul>
-                    </div>
+                    </div> --}}
                 </li>
 
                 <!-- Bookmark menu-->
@@ -149,17 +203,15 @@
                             <li>
                                 <form class="mb-3">
                                     <div class="input-group">
-                                        <input class="form-control" type="text"
-                                            placeholder="Search Bookmark..."><span class="input-group-text">
+                                        <input class="form-control" type="text" placeholder="Search Bookmark..."><span
+                                            class="input-group-text">
                                             <!-- Icon Search -->
                                             <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="11" cy="11" r="7" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <line x1="21" y1="21" x2="16.65" y2="16.65"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
+                                                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
                                         </span>
                                     </div>
@@ -168,8 +220,8 @@
                             <li class="d-flex align-items-center bg-light-primary">
                                 <div class="flex-shrink-0 me-2"><a href="">
                                         <!-- Icon Home -->
-                                        <svg class="svg-color stroke-primary" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg class="svg-color stroke-primary" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z"
                                                 stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                             <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2"
@@ -178,8 +230,8 @@
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">Dashboard</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -191,16 +243,15 @@
                                         <!-- Icon Pie -->
                                         <svg class="svg-color stroke-secondary" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                             <path d="M12 2v10h10" stroke="currentColor" stroke-width="2"
                                                 stroke-linejoin="round" />
                                         </svg>
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">To-do</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -220,8 +271,8 @@
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">Chart</a>
-                                    <svg class="svg-color icon-star" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -257,8 +308,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-primary" type="number"
@@ -267,10 +318,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -289,8 +340,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-secondary" type="number"
@@ -299,10 +350,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -321,8 +372,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-tertiary" type="number"
@@ -331,10 +382,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -364,20 +415,18 @@
                                         <h5>Design meeting</h5>
                                     </a>
                                     <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
+                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                             <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" />
                                         </svg><span>Just Now</span>
                                     </h6>
                                 </div>
                                 <div class="badge badge-light-danger">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="2" />
+                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg><span>Open</span>
@@ -388,20 +437,18 @@
                                         <h5>Weekly scurm Meeting</h5>
                                     </a>
                                     <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
+                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                             <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" />
                                         </svg><span>1 Hour Ago</span>
                                     </h6>
                                 </div>
                                 <div class="badge badge-light-danger">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="2" />
+                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg><span>Open</span>
@@ -412,20 +459,18 @@
                                         <h5>Check your login page</h5>
                                     </a>
                                     <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="2" />
+                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                             <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" />
                                         </svg><span>2 Hour Ago</span>
                                     </h6>
                                 </div>
                                 <div class="badge badge-light-success">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="2" />
+                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
                                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg><span>Closed</span>
@@ -465,12 +510,11 @@
                             <li>
                                 <a href="#"
                                     class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="7" r="4" stroke="currentColor"
-                                            stroke-width="2" />
-                                        <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor"
-                                            stroke-width="2" stroke-linejoin="round" />
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                                        <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor" stroke-width="2"
+                                            stroke-linejoin="round" />
                                     </svg>
                                     <span>Account</span>
                                 </a>
@@ -480,8 +524,8 @@
                             <li>
                                 <a href="#"
                                     class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                     </svg>
@@ -493,8 +537,8 @@
                             <li>
                                 <a href="#"
                                     class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                         <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" />
@@ -507,8 +551,8 @@
                             <li>
                                 <a href="{{ route('logout') }}"
                                     class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
                                             stroke-width="2" stroke-linejoin="round" />
                                         <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
@@ -552,4 +596,36 @@
             document.documentElement.classList.add('dark');
         }
     });
+</script>
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
+<script>
+    window.Pusher = Pusher;
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '1ea633f39dfb08c3c0c2',
+        cluster: 'ap1',
+        forceTLS: true,
+    });
+    console.log('ffff', window.Echo);
+
+    const userId = {{ auth()->id() }};
+
+    if (userId && window.Echo) {
+        window.Echo.private(`App.Models.User.${userId}`)
+            .notification((notification) => {
+                console.log('Received new notification via Pusher:', notification);
+
+                const notiCount = document.getElementById('noti-count');
+                if (notiCount) {
+                    let count = parseInt(notiCount.textContent) || 0;
+                    notiCount.textContent = count + 1; // tăng số badge lên 1
+                    notiCount.style.display = 'inline-block';
+                }
+            });
+
+    } else {
+        console.warn('User is not logged in or Echo is not initialized.');
+    }
 </script>

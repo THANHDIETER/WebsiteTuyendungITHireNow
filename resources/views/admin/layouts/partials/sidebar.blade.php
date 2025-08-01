@@ -122,6 +122,11 @@
                 <i class="bi bi-people sidebar-icon"></i> Quản lý người dùng
             </a>
         </li>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.job-application.index') }}">
+                <i class="bi bi-file-earmark-person sidebar-icon"></i> Quản lý đơn ứng tuyển
+            </a>
+        </li>
 
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.payment.index') }}">
@@ -154,6 +159,12 @@
                 <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
             </a>
         </li>
+        <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.logos.index') }}">
+                <i class="bi bi-image sidebar-icon"></i> Logo
+            </a>
+        </li>
+
 
     </ul>
 </aside>
