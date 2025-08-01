@@ -10,8 +10,8 @@ use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
-use App\Http\Controllers\BlogController;
 
+// Load các route tách riêng
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
@@ -42,7 +42,7 @@ Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
 Route::get('/register/employer', [RegisterController::class, 'showRegisterEmployerForm'])->name('showRegisterEmployerForm');
 Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('registerEmployer');
@@ -129,14 +129,13 @@ Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
 })->name('chi-tiet-ung-vien');
 
-
-// ================= BLOG =================
 Route::get('/blog', function () {
     return view('website.blog.blog');
 })->name('blog');
 
-Route::get('/blog', [BlogController::class, 'index'])->name('blog');
-
+Route::get('/blog-details', function () {
+    return view('website.blog.blog-details');
+})->name('blog-details');
 
 Route::get('/blog-grid', function () {
 
@@ -147,19 +146,11 @@ Route::get('/blog-right-sidebar', function () {
     return view('website.blog.blog-right-sidebar');
 })->name('blog-right-sidebar');
 
-Route::get('/contact', function () {
-    return view('website.pages.contact');
-})->name('contact');
-
-Route::get('/404', function () {
-    return view('website.pages.404');
-})->name('404');
-
 
 // ================= LOGIN / REGISTER UI =================
 Route::get('/login', function () {
     return view('website.login-register.login');
-})->name('login');
+});
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');

@@ -1,7 +1,6 @@
 // ✅ 1. Import Echo, Pusher, window setup
 import "./bootstrap";
 
-
 import '../css/app.css';
 
 // ✅ 3. Import Vue và các components

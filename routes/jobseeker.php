@@ -6,7 +6,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\NotificationController;
-
 use App\Http\Controllers\JobSeeker\ResumeController;
 use App\Http\Controllers\InterviewResponseController;
 
@@ -83,3 +82,4 @@ Route::middleware(['job_seeker'])->group(function () {
     Route::get('/chat/start/{userId}', [ChatController::class, 'start'])->name('chat.start');
     Route::post('/chat/{conversation}/typing', [ChatController::class, 'typing'])->name('chat.typing');
 });
+

@@ -33,6 +33,7 @@
                         <li><a href="{{ route('blog') }}">Lưới tin tức</a></li>
                         <li><a href="{{ route('blog-grid') }}">Blog (sidebar trái)</a></li>
                         <li><a href="{{ route('blog-right-sidebar') }}">Blog (sidebar phải)</a></li>
+                        <li><a href="{{ route('blog-details', ['id' =>$id ?? null ]) }}">Chi tiết bài viết</a></li>
                     </ul>
                 </li>
                 <li><a href="index.html#">Trang khác</a>
