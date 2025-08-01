@@ -61,51 +61,20 @@
                             @else
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <!-- 🔔 ICON THÔNG BÁO động -->
                                         <div class="me-3">
                                             <a href="{{ route('notifications.index') }}"
                                                 class="btn btn-icon position-relative p-0 bg-transparent border-0"
                                                 aria-label="Thông báo">
                                                 <i id="notification-bell" class="bi bi-bell fs-4 text-white"></i>
-                                                <span id="notification-dot"
+                                                <span id="notification-count"
                                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__bounce"
-                                                    style="display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'inline-block' : 'none' }}; font-size:10px; min-width:12px; height:12px; padding:0;">
+                                                    style="display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'inline-block' : 'none' }}; font-size: 0.75rem;">
+                                                    {{ auth()->user()->unreadNotifications->count() }}
                                                 </span>
                                             </a>
                                         </div>
-                                        <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-                                        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
-
-                                        <script>
-                                            window.Pusher = Pusher;
-
-                                            window.Echo = new Echo({
-                                                broadcaster: 'pusher',
-                                                key: '1ea633f39dfb08c3c0c2',
-                                                cluster: 'ap1',
-                                                forceTLS: true,
-                                            });
-                                            console.log('ffff', window.Echo);
-
-                                            const userId = {{ auth()->id() }};
-
-                                            if (userId && window.Echo) {
-                                                window.Echo.private(`App.Models.User.${userId}`)
-                                                    .notification((notification) => {
-                                                        console.log('Received new notification via Pusher:', notification);
-
-                                                        // Hiện badge đỏ notification-dot
-                                                        const notificationDot = document.getElementById('notification-dot');
-                                                        if (notificationDot) {
-                                                            notificationDot.style.display = 'inline-block';
-                                                        }
-                                                    });
-                                            } else {
-                                                console.warn('User is not logged in or Echo is not initialized.');
-                                            }
-                                        </script>
-
                                     </div>
+
 
                                     <!--icon chat nhắn tin  -->
                                     <div class="col-auto">

@@ -3,13 +3,14 @@
 namespace App\Notifications\Admin;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use App\Models\Job;
 
 
-class JobEditedNotification extends Notification implements ShouldBroadcast
+class JobEditedNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
 
@@ -34,8 +35,8 @@ class JobEditedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            'message' => "Tin tuyển dụng '{$this->job->title}' đã được nhà tuyển dụng chỉnh sửa.",
-            'link_url' => route('admin.jobs.show', $this->job->id), // tuỳ chỉnh route admin
+            'message' => "Tin tuyển dụng {$this->job->title} vừa được nhà tuyển dụng cập nhật lại thông tin. Vui lòng kiểm tra để đảm bảo các thay đổi phù hợp với tiêu chuẩn của hệ thống.",
+            'link_url' => route('notifications.index'),
         ];
     }
 
