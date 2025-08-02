@@ -113,10 +113,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group mb-0 checkbox-checked">
-                                    <div class="form-check checkbox-solid-info">
+                                    {{-- <div class="form-check checkbox-solid-info">
                                         <input class="form-check-input" id="solid6" type="checkbox">
                                         <label class="form-check-label" for="solid6">Remember password</label>
-                                    </div>
+                                    </div> --}}
                                     <button class="btn btn-primary btn-block w-100 mt-3" type="submit">Create
                                         Account</button>
                                 </div>

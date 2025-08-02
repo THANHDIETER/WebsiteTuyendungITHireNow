@@ -50,10 +50,6 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
-<<<<<<< HEAD
-=======
-
->>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec
 <header class="page-header row justify-content-between align-items-center bg-white">
     <div class="logo-wrapper d-flex align-items-center col-4">
    <a href="{{ route('home') }}">
@@ -74,10 +70,6 @@
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec
         </div>
     </a>
 </div>

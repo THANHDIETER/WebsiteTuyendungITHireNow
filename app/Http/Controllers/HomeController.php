@@ -13,10 +13,6 @@ class HomeController extends Controller
         $locationId = $request->input('location');
         $page = $request->get('page', 1);
 
-<<<<<<< HEAD
-        // Get jobs with less restrictive conditions
-        $jobs = Job::with(['company', 'category'])
-=======
         $featuredJobs = collect();
 
         if ($page == 1) {
@@ -55,7 +51,6 @@ class HomeController extends Controller
 
         // Việc làm gần đây
         $jobs = Job::with(['company', 'category', 'skills'])
->>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec
             ->where(function ($query) {
                 $query->where('status', 'published')
                       ->orWhereNull('status');
@@ -70,10 +65,6 @@ class HomeController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-<<<<<<< HEAD
-        return view('website.index', compact('jobs', 'categories'));
-=======
         return view('website.index', compact('jobs', 'categories', 'featuredJobs'));
->>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec
     }
 }

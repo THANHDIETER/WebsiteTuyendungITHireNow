@@ -597,8 +597,6 @@
         }
     });
 </script>
-<<<<<<< HEAD
-=======
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
 <script>
@@ -631,4 +629,3 @@
         console.warn('User is not logged in or Echo is not initialized.');
     }
 </script>
->>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec

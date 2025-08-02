@@ -115,17 +115,10 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-<<<<<<< HEAD
-                                <div class="form-group mb-0 checkbox-checked">
-                                    <a class="link-two" href="{{ route('password.request') }}">Forgot password?</a>
-                                    <button class="btn btn-primary btn-block w-100 mt-3" type="submit">Sign
-=======
                                 <div class="form-group mb-0 checkbox-checked row" style="row-gap: 2rem;">
-                                    <a class="link-two " href="forget-password.html">Forgot password?</a>
+                                    <a class="link-two " href="{{ route('password.request') }}">Forgot password?</a>
                                     
-                                    <button class="btn btn-primary btn-block w-100 mt-4" type="submit">Sign
->>>>>>> 6e48b775fbcdf948f127af553ce8a4755137c5ec
-                                        in</button>
+                                    <button class="btn btn-primary btn-block w-100 mt-4" type="submit">Sign in</button>
                                 </div>
                                 <div class="login-social-title">
                                     <h6>Or Sign in with </h6>
