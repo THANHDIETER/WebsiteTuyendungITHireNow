@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
@@ -12,7 +13,6 @@ class JobApprovalController extends Controller
 {
     public function sync(Request $request)
     {
-        // Xác thực token query string
         if ($request->query('token') !== config('app.payment_check_token')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
@@ -20,9 +20,13 @@ class JobApprovalController extends Controller
         $openAI = app(OpenAIService::class);
         $telegram = app(TelegramService::class);
 
-        // Danh sách từ khóa cấm (bạn có thể bổ sung thêm)
         $blacklist = [
-            'đm', 'con chó', 'loại từ tục tĩu khác', 'bậy bạ', 'spam', 'xxx',
+            'đm',
+            'con chó',
+            'loại từ tục tĩu khác',
+            'bậy bạ',
+            'spam',
+            'xxx',
         ];
 
         $jobs = Job::where('status', 'pending')
@@ -50,12 +54,17 @@ class JobApprovalController extends Controller
                 }
             }
 
-            // 2. Kiểm tra mô tả (đã bỏ tag HTML và kiểm tra từ khóa cấm)
+            // 2. Kiểm tra mô tả
             $descriptionRaw = $job->description;
             if (is_array($descriptionRaw)) {
                 $descriptionRaw = json_encode($descriptionRaw);
             }
+
             $plainDescription = strip_tags((string) $descriptionRaw);
+            $plainDescription = html_entity_decode($plainDescription, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $plainDescription = str_replace(["\u{A0}", "\xc2\xa0"], ' ', $plainDescription);
+            $plainDescription = preg_replace('/\s+/', ' ', $plainDescription);
+            $plainDescription = trim($plainDescription);
 
             if (empty($plainDescription)) {
                 $fieldErrors[] = 'Mô tả tuyển dụng bị trống hoặc không rõ ràng.';
@@ -70,7 +79,41 @@ class JobApprovalController extends Controller
                 }
             }
 
-            // 3. Các kiểm tra khác như salary, currency, location, deadline
+            // 3. Kiểm tra yêu cầu (requirements)
+            $requirementsRaw = $job->requirements;
+            if (is_array($requirementsRaw)) {
+                $requirementsRaw = json_encode($requirementsRaw);
+            }
+            $requirements = strip_tags((string) $requirementsRaw);
+            $requirements = html_entity_decode($requirements, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $requirements = str_replace(["\u{A0}", "\xc2\xa0"], ' ', $requirements);
+            $requirements = preg_replace('/\s+/', ' ', $requirements);
+            $requirements = trim($requirements);
+
+            if (empty($requirements)) {
+                $fieldErrors[] = 'Thiếu phần yêu cầu ứng viên (requirements).';
+            } elseif (mb_strlen($requirements) < 30) {
+                $fieldErrors[] = 'Phần yêu cầu ứng viên quá ngắn.';
+            }
+
+            // 4. Kiểm tra quyền lợi (benefits)
+            $benefitsRaw = $job->benefits;
+            if (is_array($benefitsRaw)) {
+                $benefitsRaw = json_encode($benefitsRaw);
+            }
+            $benefits = strip_tags((string) $benefitsRaw);
+            $benefits = html_entity_decode($benefits, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $benefits = str_replace(["\u{A0}", "\xc2\xa0"], ' ', $benefits);
+            $benefits = preg_replace('/\s+/', ' ', $benefits);
+            $benefits = trim($benefits);
+
+            if (empty($benefits)) {
+                $fieldErrors[] = 'Thiếu phần quyền lợi (benefits).';
+            } elseif (mb_strlen($benefits) < 30) {
+                $fieldErrors[] = 'Phần quyền lợi quá ngắn.';
+            }
+
+            // 5. Lương
             if (!$job->salary_negotiable) {
                 if (empty($job->salary_min) && empty($job->salary_max)) {
                     $fieldErrors[] = 'Mức lương chưa được cung cấp hoặc không có thông báo thương lượng.';
@@ -105,7 +148,6 @@ class JobApprovalController extends Controller
                 }
             }
 
-            // Kiểm tra khóa ngoại quan trọng
             if (empty($job->company_id)) {
                 $fieldErrors[] = 'Công ty đăng tin không hợp lệ.';
             }
@@ -126,7 +168,7 @@ class JobApprovalController extends Controller
                 $fieldErrors[] = 'Tin tuyển dụng không ở trạng thái chờ duyệt.';
             }
 
-            // Nếu có lỗi (bao gồm lỗi từ khóa cấm), từ chối luôn
+            // Nếu có lỗi dữ liệu thì reject ngay
             if (!empty($fieldErrors)) {
                 $job->status = 'rejected';
                 $job->ai_processed_at = now();
@@ -148,12 +190,14 @@ class JobApprovalController extends Controller
                 continue;
             }
 
-            // Nếu không có lỗi dữ liệu, gọi AI đánh giá mô tả
-            $result = $openAI->analyzeJobDescription($plainDescription);
+            // Gọi AI đánh giá tổng thể tiêu đề + mô tả + yêu cầu + quyền lợi
+            $fullContent = "Tiêu đề: {$job->title}\nMô tả: {$plainDescription}\nYêu cầu: {$requirements}\nQuyền lợi: {$benefits}";
+            // dd($fullContent);
+            $result = $openAI->analyzeJobDescription($fullContent);
 
             if ($result['ok']) {
                 $job->status = 'published';
-                $job->approved_by = 0; // hệ thống tự duyệt
+                $job->approved_by = 0;
                 $job->ai_processed_at = now();
                 $job->save();
 
@@ -170,9 +214,8 @@ class JobApprovalController extends Controller
 
                 $approvedCount++;
             } else {
-                // Từ chối do AI đánh giá
-                $job->status = 'rejected';
-                $job->ai_processed_at = now();
+                $job->status = 'pending';  // sửa lại từ 'pending' thành 'rejected'
+                // $job->ai_processed_at = now();
                 $job->save();
 
                 $message = "⚠️ Bài tuyển dụng không được duyệt (AI đánh giá):\n"
