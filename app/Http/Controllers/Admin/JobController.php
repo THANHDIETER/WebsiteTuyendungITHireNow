@@ -19,8 +19,6 @@ class JobController extends Controller
 
         if ($request->has('is_approved')) {
             $query->where('is_approved', $request->is_approved);
-        } else {
-            $query->where('is_approved', false);
         }
 
         if ($request->filled('category')) {
