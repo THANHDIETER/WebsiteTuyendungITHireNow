@@ -2,15 +2,20 @@
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
-                <div class="header-align">
+                <div class="header-align " style="align-items: center; height: 80px;">
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
-                                <img class="logo-main" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
-                                    alt="Logo" />
-                                <img class="logo-light" src="{{ asset('client/assets/img/logo-ithirenow-glow.png') }}"
-                                    alt="Logo" />
+                                @php
+                                    $clientLogo = \App\Models\Logo::where('type', 'client')
+                                        ->where('is_active', true)
+                                        ->first();
+                                @endphp
+
+                                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
+                                    alt="Client Logo" style="height: 120px;" {{-- hoặc dùng class --}}>
                             </a>
+
                         </div>
                     </div>
                     <div class="header-align-center me-3">
@@ -220,6 +225,10 @@
                         }
                     }
                 });
-        }
-    });
-</script>
+            }
+        }, 5000);
+
+    </script>
+
+
+</header>
