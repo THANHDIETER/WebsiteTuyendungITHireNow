@@ -73,10 +73,13 @@ Route::get('/job_seeker', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
+
 // ================= JOB =================
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/cong-viec/tim-kiem', [JobController::class, 'search'])->name('jobs.search'); // <--- Route search mới
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
 
 
 // ================= EMPLOYER =================

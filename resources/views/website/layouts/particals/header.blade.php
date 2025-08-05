@@ -100,7 +100,7 @@
                                             <a href="#" class="user-info-toggle d-flex align-items-center"
                                                 data-bs-toggle="dropdown">
                                                 <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
-                                                <span class="user-role">{{ Auth::user()->role }}</span>
+                                                {{-- <span class="user-role">{{ Auth::user()->role }}</span> --}}
                                                 <i class="icofont-caret-down ms-1"></i>
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
