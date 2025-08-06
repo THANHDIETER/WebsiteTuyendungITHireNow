@@ -178,8 +178,5 @@ public function getLogoUrlAttribute()
 
 
 
-    public function employer()
-    {
-        return $this->user();
-    }
+
 }
