@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-4">Tạo Blog mới</h2>
+    <h2 class="mb-4">Tạo bài viết mới</h2>
 
     <form action="{{ route('admin.blogs.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm">
         @csrf
@@ -34,7 +34,7 @@
         {{-- Nội dung blog --}}
         <div class="mb-4">
             <h5 class="border-bottom pb-2 mb-3">
-                <i class="bi bi-card-text"></i> Nội dung Blog
+                <i class="bi bi-card-text"></i> Nội dung bài viết
             </h5>
 
             <div class="form-floating">
@@ -47,7 +47,7 @@
         <div class="text-end">
             <a href="{{ route('admin.blogs.index') }}" class="btn btn-secondary">Hủy</a>
             <button type="submit" class="btn btn-primary">
-                <i class="bi bi-save"></i> Lưu Blog
+                <i class="bi bi-save"></i> Lưu bài viết
             </button>
         </div>
     </form>

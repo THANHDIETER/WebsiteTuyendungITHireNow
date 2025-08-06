@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Chi tiết Blog</h2>
+        <h2 class="mb-0">Chi tiết bài viết</h2>
         <div>
             <a href="{{ route('admin.blogs.edit', $blog) }}" class="btn btn-outline-primary me-2">
                 <i class="bi bi-pencil-square"></i> Sửa

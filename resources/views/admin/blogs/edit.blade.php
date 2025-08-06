@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-4">Sửa Blog: #{{ $blog->id }}</h2>
+    <h2 class="mb-4">Sửa bài viết: #{{ $blog->id }}</h2>
 
     <form action="{{ route('admin.blogs.update', $blog) }}" method="POST" class="bg-white p-4 rounded shadow-sm">
         @csrf
@@ -35,7 +35,7 @@
         {{-- Nội dung blog --}}
         <div class="mb-4">
             <h5 class="border-bottom pb-2 mb-3">
-                <i class="bi bi-card-text"></i> Nội dung Blog
+                <i class="bi bi-card-text"></i> Nội dung bài viết
             </h5>
 
             <div class="form-floating">

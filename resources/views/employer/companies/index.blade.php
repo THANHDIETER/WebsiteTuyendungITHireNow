@@ -89,10 +89,6 @@
                                         </td>
                                     </tr>
                                 @endforeach
-<<<<<<< HEAD
-
-=======
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
                             </tbody>
                         </table>
                     </div>

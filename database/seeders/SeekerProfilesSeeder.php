@@ -44,7 +44,7 @@ class SeekerProfilesSeeder extends Seeder
                 'language_skills' => 'English, Vietnamese',
                 'education' => 'Bachelor of Computer Science',
                 'work_experience' => 'Company ABC 2019-2022',
-                'is_visible' => false,
+                'is_visible' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
