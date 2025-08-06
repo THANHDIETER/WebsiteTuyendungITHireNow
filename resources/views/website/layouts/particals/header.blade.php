@@ -61,19 +61,56 @@
                             @else
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <div class="me-3">
-                                            <a href="{{ route('notifications.index') }}"
+                                        <div class="dropdown me-3 notification-dropdown-wrapper">
+                                            <a href="#" id="notification-bell-btn"
                                                 class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                                aria-label="Thông báo">
-                                                <i id="notification-bell" class="bi bi-bell fs-4 text-white"></i>
+                                                data-bs-toggle="dropdown" aria-expanded="false" aria-label="Thông báo">
+                                                <i class="bi bi-bell fs-4 text-white"></i>
                                                 <span id="notification-count"
                                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__bounce"
                                                     style="display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'inline-block' : 'none' }}; font-size: 0.75rem;">
                                                     {{ auth()->user()->unreadNotifications->count() }}
                                                 </span>
                                             </a>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow p-0"
+                                                style="width: 340px; max-height: 420px; overflow-y: auto;"
+                                                aria-labelledby="notification-bell-btn">
+                                                <li
+                                                    class="dropdown-header bg-primary text-white px-3 py-2 d-flex justify-content-between align-items-center">
+                                                    <span>Thông báo</span>
+                                                    <a href="{{ route('notifications.index') }}"
+                                                        class="text-white-50 small">Xem tất cả</a>
+                                                </li>
+                                                <!-- Danh sách thông báo realtime -->
+                                                <ul id="notification-list-items" class="list-unstyled mb-0">
+                                                    @php $notis = auth()->user()->unreadNotifications->take(6); @endphp
+                                                    @if ($notis->count())
+                                                        @foreach ($notis as $noti)
+                                                            <li class="border-bottom px-3 py-2 small notification-item"
+                                                                data-id="{{ $noti->id }}">
+                                                                <div>
+                                                                    <a href="{{ $noti->data['link_url'] ?? '#' }}"
+                                                                        class="text-decoration-none fw-semibold">
+                                                                        {{ $noti->data['message'] ?? 'Có thông báo mới!' }}
+                                                                    </a>
+                                                                    <div class="text-muted" style="font-size: 0.8em;">
+                                                                        {{ $noti->created_at->diffForHumans() }}
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    @else
+                                                        <li class="text-center text-muted py-3">Không có thông báo mới</li>
+                                                    @endif
+                                                </ul>
+                                                <li class="dropdown-footer p-2 text-center bg-light">
+                                                    <a href="{{ route('notifications.index') }}"
+                                                        class="text-secondary small">Xem tất cả thông báo</a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
+
 
 
                                     <!--icon chat nhắn tin  -->
@@ -142,7 +179,8 @@
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
                                                             href="{{ route('employer.dashboard') }}">
-                                                            <i class="fa-solid fa-building me-2 text-success"></i> Trang nhà
+                                                            <i class="fa-solid fa-building me-2 text-success"></i> Trang
+                                                            nhà
                                                             tuyển dụng
                                                         </a>
                                                     </li>
@@ -151,7 +189,8 @@
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
                                                             href="{{ route('employer.details') }}">
-                                                            <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển dụng
+                                                            <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển
+                                                            dụng
                                                         </a>
                                                     </li>
                                                 @endif
@@ -192,17 +231,64 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
-
+<!-- Nhúng các thư viện cần thiết -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
 <script>
+    window.Pusher = Pusher;
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '1ea633f39dfb08c3c0c2',
+        cluster: 'ap1',
+        forceTLS: true,
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
-        const chatDot = document.getElementById('chat-dot');
         const authId = {{ auth()->id() }};
+        const notiCount = document.getElementById('notification-count');
+        const notiList = document.getElementById('notification-list-items');
 
         if (window.Echo && authId) {
+            window.Echo.private('App.Models.User.' + authId)
+                .notification(function(notification) {
+                    // 1. Cập nhật badge
+                    if (notiCount) {
+                        let count = parseInt(notiCount.innerText) || 0;
+                        count = isNaN(count) ? 0 : count;
+                        notiCount.innerText = (count + 1) > 99 ? '99+' : (count + 1);
+                        notiCount.style.display = 'inline-block';
+                    }
+                    // 2. Chèn vào dropdown (luôn realtime)
+                    if (notiList) {
+                        // Xoá thông báo "Không có thông báo mới" nếu có
+                        let empty = notiList.querySelector('.text-muted');
+                        if (empty) notiList.removeChild(empty);
+
+                        // Nội dung notification
+                        let html = `
+                        <li class="border-bottom px-3 py-2 small notification-item" data-id="${notification.id}">
+                            <div>
+                                <a href="${notification.data.link_url || '#'}" class="text-decoration-none fw-semibold">${notification.data.message || 'Có thông báo mới!'}</a>
+                                <div class="text-muted" style="font-size: 0.8em;">Vừa xong</div>
+                            </div>
+                        </li>
+                    `;
+                        notiList.insertAdjacentHTML('afterbegin', html);
+
+                        // Giữ tối đa 6 thông báo mới nhất
+                        let items = notiList.querySelectorAll('li.notification-item');
+                        if (items.length > 6) {
+                            notiList.removeChild(items[items.length - 1]);
+                        }
+                    }
+                });
+
+            // Chat badge giữ nguyên (nếu dùng)
             window.Echo.private('user.' + authId)
                 .listen('MessageNotification', (e) => {
+                    const chatDot = document.getElementById('chat-dot');
                     const unread = e.unread_total;
-
                     if (chatDot) {
                         if (unread > 0) {
                             chatDot.innerText = unread > 99 ? '99+' : unread;
@@ -211,7 +297,6 @@
                             chatDot.style.display = 'none';
                         }
                     } else {
-                        // Nếu chưa có sẵn badge, thì tạo mới
                         const aTag = document.getElementById('chatDropdown');
                         if (aTag) {
                             const badge = document.createElement('span');
@@ -225,10 +310,13 @@
                         }
                     }
                 });
-            }
-        }, 5000);
+        }
+    });
+</script>
 
-    </script>
+
+
+
 
 
 </header>
