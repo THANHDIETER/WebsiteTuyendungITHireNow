@@ -58,7 +58,7 @@
                                 <p><strong>Email:</strong> {{ $employer->email }}</p>
                                 <p><strong>Tên:</strong> {{ $employer->name }}</p>
                                 <p><strong>Số điện thoại:</strong> {{ $employer->phone_number ?? '-' }}</p>
-                                <p><strong>Trạng thái:</strong> 
+                                <p><strong>Trạng thái:</strong>
                                     <span class="badge
                                         {{ $employer->status === 'active' ? 'bg-success' : ($employer->status === 'inactive' ? 'bg-secondary' : 'bg-danger') }}">
                                         {{ ucfirst($employer->status) }}
@@ -140,7 +140,7 @@
                     <p><strong>Email:</strong> {{ $company->email }}</p>
                     <p><strong>Địa chỉ:</strong> {{ $company->address ?? '-' }}</p>
                     <p><strong>Số điện thoại:</strong> {{ $company->phone ?? '-' }}</p>
-                    <p><strong>Website:</strong> 
+                    <p><strong>Website:</strong>
                         @if ($company->website)
                             <a href="{{ $company->website }}" target="_blank">{{ $company->website }}</a>
                         @else
@@ -148,7 +148,7 @@
                         @endif
                     </p>
                     <p><strong>Mô tả:</strong> {!! nl2br(e($company->description ?? '-')) !!}</p>
-                    <p><strong>Lợi ích:</strong> {!! nl2br(e($company->benefits ?? '-')) !!}</p>
+                    <p><strong>Lợi ích:</strong> {!! nl2br(e(value: $company->benefits ?? '-')) !!}</p>
                     <p><strong>Năm thành lập:</strong> {{ $company->founded_year ?? '-' }}</p>
                     <p><strong>Quy mô công ty:</strong> {{ $company->company_size ?? '-' }}</p>
                     <p><strong>Ngành nghề:</strong> {{ $company->industry ?? '-' }}</p>
