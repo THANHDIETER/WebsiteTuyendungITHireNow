@@ -119,7 +119,7 @@
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('notifications.index') }}">
+                            <a href="{{ route('employer.notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
@@ -150,7 +150,7 @@
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
                                     <a class="btn btn-secondary"
-                                        href="{{ route('notifications.index') }}">AllNotification</a>
+                                        href="{{ route('employer.notifications.index') }}">AllNotification</a>
                                 </div>
                             </li>
                         </ul>
