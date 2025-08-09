@@ -40,7 +40,8 @@
 <!-- Animation css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
 <!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
+<link rel="stylesheet" type="text/css"
+    href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
 <!-- Apex Chart css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
 <!-- Data Table css-->
@@ -50,27 +51,31 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
+
 <header class="page-header row justify-content-between align-items-center bg-white">
     <div class="logo-wrapper d-flex align-items-center col-4">
-   <a href="{{ route('home') }}">
-    @php
-        $clientLogo = \App\Models\Logo::where('type', 'client')->where('is_active', true)->first();
-    @endphp
+        <a href="{{ route('home') }}">
+            @php
+                $clientLogo = \App\Models\Logo::where('type', 'header')->where('is_active', true)->first();
+            @endphp
 
-    <img 
-        src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
-        alt="Client Logo"
-        style="height: 120px;" {{-- hoặc dùng class --}}
-    >
-</a>
+            <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
+                alt="Client Logo" style="height: 120px;" {{-- hoặc dùng class --}}>
+        </a>
 
 
-    <a class="close-btn" href="javascript:void(0)">
-        <div class="toggle-sidebar">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-        </div>
+        <a class="close-btn" href="javascript:void(0)">
+            <div class="toggle-sidebar">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+
+            </div>
+        </a>
+    </div>
+
+    <div class="page-main-header d-flex align-items-center col-auto">
+
         <div class="nav-right">
             <ul class="header-right">
                 <li class="modes d-flex"><a class="dark-mode">
@@ -85,10 +90,10 @@
                         <!-- Icon Search -->
                         <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"
+                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
                     <div class="form-group search-form">
@@ -99,10 +104,10 @@
                 <li class="custom-dropdown">
                     <a href="{{ route('notifications.index') }}" id="notification-toggle">
                         <!-- Icon Bell -->
-                        <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
+                        <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
@@ -144,15 +149,17 @@
                             <li>
                                 <form class="mb-3">
                                     <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="Search Bookmark..."><span
-                                            class="input-group-text">
+                                        <input class="form-control" type="text"
+                                            placeholder="Search Bookmark..."><span class="input-group-text">
                                             <!-- Icon Search -->
                                             <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                <circle cx="11" cy="11" r="7" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <line x1="21" y1="21" x2="16.65" y2="16.65"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
                                             </svg>
                                         </span>
                                     </div>
@@ -161,8 +168,8 @@
                             <li class="d-flex align-items-center bg-light-primary">
                                 <div class="flex-shrink-0 me-2"><a href="">
                                         <!-- Icon Home -->
-                                        <svg class="svg-color stroke-primary" width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg class="svg-color stroke-primary" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z"
                                                 stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                             <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2"
@@ -171,8 +178,8 @@
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">Dashboard</a>
-                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -184,15 +191,16 @@
                                         <!-- Icon Pie -->
                                         <svg class="svg-color stroke-secondary" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="2" />
                                             <path d="M12 2v10h10" stroke="currentColor" stroke-width="2"
                                                 stroke-linejoin="round" />
                                         </svg>
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">To-do</a>
-                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -212,8 +220,8 @@
                                     </a></div>
                                 <div class="d-flex justify-content-between align-items-center w-100"><a
                                         href="">Chart</a>
-                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="svg-color icon-star" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
                                             fill="none" />
@@ -249,8 +257,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-primary" type="number"
@@ -259,10 +267,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -281,8 +289,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-secondary" type="number"
@@ -291,10 +299,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -313,8 +321,8 @@
                                             <!-- Icon Minus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                         <input class="form-control input-touchspin bg-light-tertiary" type="number"
@@ -323,10 +331,10 @@
                                             <!-- Icon Plus -->
                                             <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
+                                                <line x1="12" y1="5" x2="12" y2="19"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                                <line x1="5" y1="12" x2="19" y2="12"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -382,11 +390,12 @@
                             <li>
                                 <a href="#"
                                     class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
-                                        <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor" stroke-width="2"
-                                            stroke-linejoin="round" />
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="7" r="4" stroke="currentColor"
+                                            stroke-width="2" />
+                                        <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor"
+                                            stroke-width="2" stroke-linejoin="round" />
                                     </svg>
                                     <span>Account</span>
                                 </a>
@@ -396,8 +405,8 @@
                             <li>
                                 <a href="#"
                                     class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                     </svg>
@@ -409,8 +418,8 @@
                             <li>
                                 <a href="#"
                                     class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
                                             stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                                         <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" />
@@ -423,8 +432,8 @@
                             <li>
                                 <a href="{{ route('logout') }}"
                                     class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
                                             stroke-width="2" stroke-linejoin="round" />
                                         <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
@@ -449,10 +458,10 @@
     </script>
 @endif
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const darkModeBtn = document.querySelector('.dark-mode');
 
-        darkModeBtn.addEventListener('click', function (e) {
+        darkModeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             document.documentElement.classList.toggle('dark');
 
@@ -472,7 +481,7 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const chatDot = document.getElementById('chat-dot');
         const authId = {{ auth()->id() }};
 
@@ -506,3 +515,70 @@
         }
     });
 </script>
+
+<script>
+    if (typeof window.Echo !== 'undefined') {
+        console.log('Echo loaded, lắng nghe thông báo toàn cục...');
+
+        window.Echo.channel('global-notification')
+            .listen('.global.notification', function(data) {
+                console.log('Đã nhận sự kiện toàn cục:', data);
+                showGlobalNotification(data.message, data.link);
+            });
+    } else {
+        console.error('Echo chưa được khởi tạo hoặc chưa kết nối Pusher!');
+    }
+
+    function showGlobalNotification(message, link) {
+        // Loại bỏ toast cũ (nếu có)
+        $('#global-toast').remove();
+
+        // Tạo popup/toast
+        let html = `<div id="global-toast" style="
+            position:fixed;top:24px;right:24px;z-index:99999;
+            background:#232323;color:#fff;padding:16px 32px;
+            border-radius:8px;font-size:1.1rem;box-shadow:0 2px 12px #0006;
+            display:flex;align-items:center;
+        ">
+            <span>${message}</span>
+            ${link ? `<a href="${link}" style="color:#ffd700;text-decoration:underline;margin-left:12px;">Xem</a>` : ''}
+            <span style="cursor:pointer;float:right;font-weight:bold;margin-left:16px;" onclick="$('#global-toast').fadeOut()">×</span>
+        </div>`;
+        $('body').append(html);
+        setTimeout(() => {
+            $('#global-toast').fadeOut();
+        }, 10000);
+    }
+</script>
+{{-- <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
+<script>
+    window.Pusher = Pusher;
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '1ea633f39dfb08c3c0c2',
+        cluster: 'ap1',
+        forceTLS: true,
+    });
+    console.log('ffff', window.Echo);
+
+    const userId = {{ auth()->id() }};
+
+    if (userId && window.Echo) {
+        window.Echo.private(`App.Models.User.${userId}`)
+            .notification((notification) => {
+                console.log('Received new notification via Pusher:', notification);
+
+                const notiCount = document.getElementById('noti-count');
+                if (notiCount) {
+                    let count = parseInt(notiCount.textContent) || 0;
+                    notiCount.textContent = count + 1; // tăng số badge lên 1
+                    notiCount.style.display = 'inline-block';
+                }
+            });
+
+    } else {
+        console.warn('User is not logged in or Echo is not initialized.');
+    }
+</script> --}}

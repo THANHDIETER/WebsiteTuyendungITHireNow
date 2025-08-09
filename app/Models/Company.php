@@ -57,10 +57,12 @@ class Company extends Model
     {
         return $this->hasMany(Job::class);
     }
+
     public function jobApplications()
     {
         return $this->hasMany(JobApplication::class);
     }
+
     // Đánh giá công ty
     public function reviews()
     {
@@ -90,9 +92,6 @@ class Company extends Model
             ->first()?->package;
     }
 
-
-
-
     // Lấy package có lượt đăng còn lại (trả phí, còn hạn, còn quota)
     public function activeEmployerPackage()
     {
@@ -112,7 +111,6 @@ class Company extends Model
         $paid = $pkg ? ($pkg->post_limit - $pkg->posts_used) : 0;
         return $free + $paid;
     }
-    // Company.php
 
     public function isFreeQuotaActive()
     {
@@ -135,7 +133,6 @@ class Company extends Model
         return $this->hasMany(EmployerPackageOrder::class);
     }
 
-
     public function useFreeQuota()
     {
         $this->increment('free_post_quota_used');
@@ -148,38 +145,30 @@ class Company extends Model
         return $this->free_post_quota - $this->free_post_quota_used;
     }
 
+    // This method kept only once
     public function employer()
     {
         return $this->user();
     }
-    // Company.php
-public function getLogoUrlAttribute()
-{
-    $logo = $this->attributes['logo_url'] ?? null;
 
-    if (!$logo) {
+    public function getLogoUrlAttribute()
+    {
+        $logo = $this->attributes['logo_url'] ?? null;
+
+        if (!$logo) {
+            return asset('assets/img/default-logo.png');
+        }
+
+        // Nếu là URL thì trả thẳng
+        if (filter_var($logo, FILTER_VALIDATE_URL)) {
+            return $logo;
+        }
+
+        // Nếu là đường dẫn trong storage
+        if (\Storage::disk('public')->exists($logo)) {
+            return asset('storage/' . $logo);
+        }
+
         return asset('assets/img/default-logo.png');
-    }
-
-    // Nếu là URL thì trả thẳng
-    if (filter_var($logo, FILTER_VALIDATE_URL)) {
-        return $logo;
-    }
-
-    // Nếu là đường dẫn trong storage
-    if (\Storage::disk('public')->exists($logo)) {
-        return asset('storage/' . $logo);
-    }
-
-    return asset('assets/img/default-logo.png');
-}
-
-
-
-
-
-    public function employer()
-    {
-        return $this->user();
     }
 }
