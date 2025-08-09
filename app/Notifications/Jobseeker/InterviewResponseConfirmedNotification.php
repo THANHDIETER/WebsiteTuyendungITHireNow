@@ -5,9 +5,10 @@ namespace App\Notifications\Jobseeker;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class InterviewResponseConfirmedNotification extends Notification implements ShouldBroadcast
+class InterviewResponseConfirmedNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
 
@@ -27,7 +28,7 @@ class InterviewResponseConfirmedNotification extends Notification implements Sho
     {
         return [
             'message' => "Phản hồi của bạn về cuộc phỏng vấn vị trí '{$this->interview->job->title}' đã được ghi nhận.",
-            'link_url' => route('interviews.show', $this->interview->id),
+            'link_url' => route('notifications.index'),
         ];
     }
 

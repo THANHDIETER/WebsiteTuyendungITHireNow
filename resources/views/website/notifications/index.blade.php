@@ -8,56 +8,47 @@
         style="max-height: 80px; height: 80px; padding: 0 !important;">
         &nbsp;
     </div>
-    <main class="main-content py-4 mx-auto" style="max-width: 800px;">
 
+    <main class="main-content py-4 mx-auto" style="max-width: 800px;">
         <div class="row mb-3">
             <div class="col-12 text-center">
                 <h4 class="fw-bold text-primary mb-1">
                     <i class="fas fa-bell bell-ring text-warning me-2"></i> Thông báo của bạn
                 </h4>
-
             </div>
         </div>
 
-        {{-- CHỈ CÓ 1 VÒNG LẶP NÀY! --}}
-        @forelse($notifications as $noti)
-            <div class="notification-card card shadow-sm mb-2 rounded-3 border-start 
-                @if (!$noti->read_at) border-warning border-3 bg-light-warning @endif
-            "
-                style="transition: all 0.3s ease; font-size: 0.9rem;">
-                <div class="card-body py-2 px-3 d-flex justify-content-between align-items-start">
-                    <div class="noti-content">
-                        <a href="{{ $noti->data['link_url'] ?? '#' }}" class="text-decoration-none text-dark">
-                            <h6 class="mb-1 fw-semibold">
-                                @php
-                                    $msg = $noti->data['message'];
-                                @endphp
-
-                                <a href="{{ $noti->data['link_url'] ?? '#' }}" class="text-decoration-none text-dark">
-                                    <h6 class="mb-1 fw-semibold">
-                                        {{ is_array($msg) || is_object($msg) ? $msg['message'] ?? '' : $msg }}
-                                    </h6>
-                                </a>
-                            </h6>
-                        </a>
-                        <small class="text-muted">{{ $noti->created_at->diffForHumans() }}</small>
-                    </div>
-                    <div class="noti-status ms-3 text-end">
-                        @if ($noti->read_at)
-                            <span class="badge bg-secondary">✓</span>
-                        @else
-                            <span class="badge bg-warning text-dark">Mới</span>
-                        @endif
+        <div id="notification-list">
+            @forelse($notifications as $noti)
+                <div class="notification-card card shadow-sm mb-2 rounded-3 border-start 
+                @if (!$noti->read_at) border-warning border-3 bg-light-warning @endif"
+                    style="transition: all 0.3s ease; font-size: 0.9rem;">
+                    <div class="card-body py-2 px-3 d-flex justify-content-between align-items-start">
+                        <div class="noti-content">
+                            @php $msg = $noti->data['message'] ?? ''; @endphp
+                            <a href="{{ $noti->data['link_url'] ?? '#' }}" class="text-decoration-none text-dark">
+                                <h6 class="mb-1 fw-semibold">
+                                    {{ is_array($msg) || is_object($msg) ? $msg['message'] ?? '' : $msg }}
+                                </h6>
+                            </a>
+                            <small class="text-muted">{{ $noti->created_at->diffForHumans() }}</small>
+                        </div>
+                        <div class="noti-status ms-3 text-end">
+                            @if ($noti->read_at)
+                                <span class="badge bg-secondary">✓</span>
+                            @else
+                                <span class="badge bg-warning text-dark">Mới</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div class="alert alert-info text-center rounded-3 shadow-sm small">
-                <i class="bi bi-info-circle me-2"></i> Bạn chưa có thông báo nào.
-            </div>
-        @endforelse
+            @empty
+                <div class="alert alert-info text-center rounded-3 shadow-sm small">
+                    <i class="bi bi-info-circle me-2"></i> Bạn chưa có thông báo nào.
+                </div>
+            @endforelse
+        </div>
 
-        <!-- Pagination -->
         <div class="mt-3 d-flex justify-content-center small">
             {{ $notifications->links() }}
         </div>
@@ -76,9 +67,7 @@
         .noti-content h6:hover {
             color: #007bff;
         }
-    </style>
 
-    <style>
         @keyframes ring {
             0% {
                 transform: rotate(0);
@@ -179,5 +168,58 @@
             transform-origin: top center;
         }
     </style>
-
 @endsection
+
+@push('scripts')
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
+
+    <script>
+        window.Pusher = Pusher;
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: '{{ config('broadcasting.connections.pusher.key') }}',
+            cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
+            forceTLS: true,
+        });
+
+        const userId = {{ auth()->id() }};
+        if (userId && window.Echo) {
+            window.Echo.private(`App.Models.User.${userId}`)
+                .notification((notification) => {
+                    // Tăng badge số ở chuông
+                    const countBadge = document.getElementById('notification-count');
+                    if (countBadge) {
+                        let currentCount = parseInt(countBadge.textContent || '0');
+                        countBadge.textContent = currentCount + 1;
+                        countBadge.style.display = 'inline-block';
+                    }
+
+                    // Thêm vào đầu danh sách nếu có notification-list
+                    const list = document.getElementById('notification-list');
+                    if (list) {
+                        const message = notification.message ?? 'Bạn có thông báo mới';
+                        const link = notification.link_url ?? '#';
+                        const createdAt = new Date().toLocaleString('vi-VN');
+                        const html = `
+                        <div class="notification-card card shadow-sm mb-2 rounded-3 border-start border-warning border-3 bg-light-warning"
+                            style="transition: all 0.3s ease; font-size: 0.9rem;">
+                            <div class="card-body py-2 px-3 d-flex justify-content-between align-items-start">
+                                <div class="noti-content">
+                                    <a href="${link}" class="text-decoration-none text-dark">
+                                        <h6 class="mb-1 fw-semibold">${message}</h6>
+                                    </a>
+                                    <small class="text-muted">${createdAt}</small>
+                                </div>
+                                <div class="noti-status ms-3 text-end">
+                                    <span class="badge bg-warning text-dark">Mới</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                        list.insertAdjacentHTML('afterbegin', html);
+                    }
+                });
+        }
+    </script>
+@endpush

@@ -5,9 +5,10 @@ namespace App\Notifications\Employer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class InterviewRespondedNotification extends Notification implements ShouldBroadcast
+class InterviewRespondedNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
 
@@ -34,7 +35,7 @@ class InterviewRespondedNotification extends Notification implements ShouldBroad
                 ($this->response === 'accepted' ? 'chấp nhận' : 'từ chối') .
                 " lời mời phỏng vấn vị trí '{$this->interview->job->title}'.",
             'note' => $this->note,
-            'link_url' => url("/employer/interviews/{$this->interview->id}")
+            'link_url' => route('notifications.index', $this->interview->id),
         ];
     }
 
