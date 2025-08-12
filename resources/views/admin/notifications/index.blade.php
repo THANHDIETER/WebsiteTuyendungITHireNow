@@ -1,134 +1,187 @@
 @extends('admin.layouts.default')
 
 @section('content')
-<div class="container py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">
-                <i class="bi bi-bell-fill me-2"></i>Danh sách thông báo đã gửi
-            </h5>
-            <div>
-                <a href="{{ route('admin.notifications.create') }}" class="btn btn-light btn-sm">
-                    <i class="bi bi-plus-circle-fill me-1"></i> Thêm thông báo
+    <div class="container my-4">
+        <!-- Tiêu đề -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2 class="fw-semibold text-dark">Danh sách Notifications</h2>
+            </div>
+        </div>
+
+        <!-- Thanh tìm kiếm và nút Thêm mới -->
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-8 col-lg-6">
+                <input type="text" class="form-control" placeholder="Tìm kiếm notifications..." id="searchInput">
+            </div>
+            <div class="col-md-4 col-lg-6 text-end">
+                <a href="{{ route('admin.notifications.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Thêm mới
                 </a>
             </div>
         </div>
 
-        <div class="card-body">
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
+        <!-- Thông báo thành công -->
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+            </div>
+        @endif
 
-            <form method="GET" action="{{ route('admin.notifications.index') }}" class="row g-3 mb-3">
-                <div class="col-md-3">
-                    <select name="status" class="form-select" onchange="this.form.submit()">
-                        <option value="">Tất cả trạng thái</option>
-                        <option value="read" {{ request('status') == 'read' ? 'selected' : '' }}>Đã đọc</option>
-                        <option value="unread" {{ request('status') == 'unread' ? 'selected' : '' }}>Chưa đọc</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <select name="user_id" class="form-select" onchange="this.form.submit()">
-                        <option value="">Tất cả người nhận</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
-                                {{ $user->email }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </form>
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle mb-0">
-                    <thead class="table-light text-center">
+        <!-- Bảng dữ liệu -->
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 15%;">Loại</th>
+                        <th style="width: 15%;">Kiểu đối tượng</th>
+                        <th style="width: 10%;">ID đối tượng</th>
+                        <th style="width: 25%;">Nội dung</th>
+                        <th style="width: 10%;">Đã đọc</th>
+                        <th style="width: 15%;">Ngày tạo</th>
+                        <th style="width: 15%;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="notificationTable">
+                    @forelse ($notifications as $notification)
                         <tr>
-                            <th>#</th>
-                            <th>Người nhận</th>
-                            <th>Loại</th>
-                            <th>Nội dung</th>
-                            <th>Link</th>
-                            <th>Trạng thái</th>
-                            <th>Thời gian</th>
-                            <th>Hành động</th>
+                            <td title="{{ $notification->id }}">{{ $notification->id }}</td>
+                            <td>{{ $notification->type }}</td>
+                            <td>{{ $notification->notifiable_type }}</td>
+                            <td>{{ $notification->notifiable_id }}</td>
+                            <td>{{ $notification->data['message'] ?? '-' }}</td>
+                            <td>
+                                @if ($notification->read_at)
+                                    <span class="badge bg-success">Đã đọc</span>
+                                    <div class="text-muted small">{{ $notification->read_at->format('d/m/Y H:i') }}</div>
+                                @else
+                                    <span class="badge bg-warning text-dark">Chưa đọc</span>
+                                @endif
+                            </td>
+                            <td>{{ $notification->created_at->format('d/m/Y H:i') }}</td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Thao tác">
+                                    <a href="{{ route('admin.notifications.show', $notification->id) }}"
+                                        class="btn btn-sm btn-outline-primary" title="Xem">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('admin.notifications.edit', $notification->id) }}"
+                                        class="btn btn-sm btn-outline-warning" title="Sửa">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ route('admin.notifications.destroy', $notification->id) }}"
+                                        method="POST" onsubmit="return confirm('Bạn chắc chắn muốn xóa?')"
+                                        style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($notifications as $noti)
-                            <tr>
-                                <td class="text-center">{{ $noti->id }}</td>
-                                <td>{{ $noti->user->email ?? 'Tất cả' }}</td>
-                                <td class="text-center">
-                                    <span class="badge bg-info text-dark text-uppercase">{{ $noti->type }}</span>
-                                </td>
-                                <td><i class="bi bi-chat-text me-1 text-muted"></i>{{ Str::limit($noti->message, 60) }}</td>
-                                <td class="text-center">
-                                    @if ($noti->link_url)
-                                        <a href="{{ url($noti->link_url) }}" class="btn btn-sm btn-outline-primary" target="_blank">Xem</a>
-                                    @else
-                                        <span class="text-muted">Không có</span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ($noti->is_read)
-                                        <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Đã đọc</span>
-                                    @else
-                                        <span class="badge bg-secondary"><i class="bi bi-eye-slash"></i> Chưa đọc</span>
-                                    @endif
-                                </td>
-                                <td class="text-center text-muted">
-                                    {{ $noti->created_at->timezone(config('app.timezone'))->format('d/m/Y H:i') }}
-                                </td>
-                                <td class="text-center">
-                                    <div class="d-flex justify-content-center gap-2">
-                                       <button class="btn btn-sm btn-warning btn-edit" data-id="{{ $noti->id }}">Sửa</button>
-<button class="btn btn-sm btn-info text-white btn-view" data-id="{{ $noti->id }}">Chi Tiết</button>
-<button class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $noti->id }}">Xóa</button>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-3">Không có notifications nào.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center text-muted py-3">Không có thông báo nào.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="p-3 d-flex justify-content-end">
-                {{ $notifications->withQueryString()->links('pagination::bootstrap-5') }}
-            </div>
+        <!-- Phân trang -->
+        <div class="d-flex justify-content-center mt-3">
+            {{ $notifications->links() }}
         </div>
     </div>
-</div>
-<!-- Modal hiển thị nội dung hoặc form sửa -->
-<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="notificationModalLabel">Chi tiết</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-      </div>
-      <div class="modal-body" id="notificationModalBody">Đang tải...</div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal xác nhận xoá -->
-<div class="modal fade" id="globalAlertModal" tabindex="-1" aria-modal="true" role="dialog">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content text-center p-4" style="max-width: 440px; margin: auto; border-radius: 16px;">
-      <div class="fs-1 mb-3 modal-icon"><i class="bi bi-info-circle-fill"></i></div>
-      <h5 class="mb-2 fw-bold modal-title">Thông báo</h5>
-      <p class="text-muted mb-4 modal-body-message">Bạn có chắc chắn?</p>
-      <div class="d-flex justify-content-center gap-3">
-        <button type="button" class="btn btn-primary px-4" id="globalAlertModal-confirm-btn">Đồng ý</button>
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
-      </div>
-    </div>
-  </div>
-</div>
+    @section('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('searchInput');
+                const tableRows = document.querySelectorAll('#notificationTable tr');
 
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+
+                    tableRows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+            });
+        </script>
+    @endsection
+
+    <style>
+        .table th,
+        .table td {
+            padding: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .btn-group .btn {
+            margin: 0 2px;
+            border-radius: 4px;
+        }
+
+        .alert-success {
+            background-color: #e6f4ea;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-outline-warning {
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+
+        .btn-outline-warning:hover {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .btn-outline-danger {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .pagination .page-link {
+            color: #007bff;
+            margin: 0 2px;
+            border-radius: 4px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .table {
+            border-collapse: collapse;
+        }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+    </style>
 @endsection

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class NotificationsSeeder extends Seeder
 {
@@ -19,7 +18,7 @@ class NotificationsSeeder extends Seeder
 
         DB::table('notifications')->insert([
             [
-                'id' => (string) Str::uuid(),
+                // 'id' => (string) Str::uuid(), // Bỏ dòng này nếu dùng auto-increment ID
                 'type' => 'App\\Notifications\\Employer\\JobApprovedNotification',
                 'notifiable_type' => 'App\\Models\\User',
                 'notifiable_id' => $user->id,

@@ -101,5 +101,5 @@ Route::prefix('admin')
             Route::put('/{id}', [EmployerController::class, 'update'])->name('update');      // lưu sửa
             Route::delete('/{id}', [EmployerController::class, 'destroy'])->name('destroy'); // xóa mềm
         });
-
+        Route::resource('logos', App\Http\Controllers\Admin\LogoController::class)->names('logos');
     });

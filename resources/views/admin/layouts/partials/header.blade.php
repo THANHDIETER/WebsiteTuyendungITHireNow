@@ -7,7 +7,6 @@
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
 <meta name="csrf-token" content="{{ csrf_token() }}">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
 
 
 <title>{{ $title ?? 'Admin' }}</title>
