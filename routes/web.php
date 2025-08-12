@@ -35,8 +35,6 @@ Route::get('/test-notification', function (Request $request) {
     return "Đã gửi notification cho user #{$user->id} với nội dung: {$message}";
 });
 
-
-
 Route::get('/chatbot/history', [ChatBotController::class, 'history']);
 Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
@@ -73,10 +71,13 @@ Route::get('/job_seeker', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
+
 // ================= JOB =================
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/cong-viec/tim-kiem', [JobController::class, 'search'])->name('jobs.search'); // <--- Route search mới
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
 
 
 // ================= EMPLOYER =================
@@ -159,41 +160,20 @@ Route::get('/registration', function () {
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 
 
-
-Route::get('/admin/noti/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans()
-        ];
-    }));
-})->name('admin.notifications.latest');
-Route::get('/employer/noti/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans()
-        ];
-    }));
-})->name('employer.notifications.latest');
-
-Route::get('/seeker/notifications/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans(),
-        ];
-    }));
+// routes/web.php
+Route::get('/notifications/latest', function () {
+    $notis = auth()->user()
+        ->unreadNotifications()
+        ->orderBy('created_at', 'desc')
+        ->take(6)
+        ->get()
+        ->map(function ($noti) {
+            return [
+                'id' => $noti->id,
+                'message' => $noti->data['message'] ?? '',
+                'link_url' => $noti->data['link_url'] ?? '#',
+                'created_at' => $noti->created_at->diffForHumans(),
+            ];
+        });
+    return response()->json($notis);
 })->middleware('auth');
