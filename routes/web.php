@@ -35,8 +35,6 @@ Route::get('/test-notification', function (Request $request) {
     return "Đã gửi notification cho user #{$user->id} với nội dung: {$message}";
 });
 
-
-
 Route::get('/chatbot/history', [ChatBotController::class, 'history']);
 Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
