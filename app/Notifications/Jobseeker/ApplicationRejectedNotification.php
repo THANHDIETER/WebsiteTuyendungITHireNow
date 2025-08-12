@@ -4,9 +4,10 @@ namespace App\Notifications\Jobseeker;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class ApplicationRejectedNotification extends Notification implements ShouldBroadcast
+class ApplicationRejectedNotification extends Notification implements ShouldBroadcastNow
 {
     public function __construct(public $job) {}
 
@@ -19,7 +20,7 @@ class ApplicationRejectedNotification extends Notification implements ShouldBroa
     {
         return [
             'message' => "Đơn ứng tuyển của bạn vào vị trí '{$this->job->title}' đã bị từ chối.",
-            'link_url' => url('/job-seeker/notifications'),
+            'link_url' => route('notifications.index'),
         ];
     }
 

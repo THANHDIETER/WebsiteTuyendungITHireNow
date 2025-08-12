@@ -3,10 +3,11 @@
 namespace App\Notifications\Employer;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PackagePurchasedNotification extends Notification implements ShouldQueue
+class PackagePurchasedNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
 
@@ -28,7 +29,7 @@ class PackagePurchasedNotification extends Notification implements ShouldQueue
     {
         return [
             'message' => 'Bạn đã mua thành công gói "' . $this->packageName . '". Hạn sử dụng đến ngày ' . $this->expiresAt->format('d/m/Y') . '.',
-            'link_url' => route('employer.packages.index'),
+            'link_url' => route('notifications.index'),
         ];
     }
 }

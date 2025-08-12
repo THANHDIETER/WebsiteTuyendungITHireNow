@@ -4,9 +4,10 @@ namespace App\Notifications\Jobseeker;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class InterviewInvitationNotification extends Notification implements ShouldBroadcast
+class InterviewInvitationNotification extends Notification implements ShouldBroadcastNow
 {
     public function __construct(public $job, public $interviewDateTime, public $interviewId) {}
 
@@ -19,7 +20,7 @@ class InterviewInvitationNotification extends Notification implements ShouldBroa
     {
         return [
             'message' => "Bạn được mời phỏng vấn vị trí '{$this->job->title}' lúc {$this->formatTime($this->interviewDateTime)}.",
-            'link_url' => route('interviews.show', $this->interviewId),
+            'link_url' => route('notifications.index', $this->interviewId),
         ];
     }
 

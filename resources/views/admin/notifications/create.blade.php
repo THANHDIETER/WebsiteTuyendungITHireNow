@@ -1,64 +1,65 @@
 @extends('admin.layouts.default')
 
-@section('content')<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
+@section('content')
+    <div class="container">
+        <h1>Thêm Notification mới</h1>
 
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">📢 Gửi Thông Báo Hệ Thống</h4>
-                </div>
+        <form action="{{ route('admin.notifications.store') }}" method="POST">
+            @csrf
 
-                <div class="card-body">
-
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <form action="{{ route('admin.notifications.store') }}" method="POST">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Loại thông báo</label>
-                            <input type="text" class="form-control" id="type" name="type" placeholder="Ví dụ: new_job" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="user_id" class="form-label">Người nhận</label>
-                            <select class="form-select" name="user_id" required>
-                                <option value="all">Tất cả người dùng</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->email }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Nội dung</label>
-                            <textarea class="form-control" name="message" id="message" rows="4" placeholder="Nhập nội dung thông báo..." required></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="link_url" class="form-label">Liên kết (tuỳ chọn)</label>
-                            <input type="url" class="form-control" name="link_url" id="link_url" placeholder="VD: /jobs/123">
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success">
-                                Gửi Thông Báo
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="card-footer text-muted text-end">
-                    Hệ thống quản trị IT Hire Now
-                </div>
+            <div class="mb-3">
+                <label>Type</label>
+                <select name="type" class="form-select" required>
+                    <option value="">-- Chọn type --</option>
+                    <option value="App\Notifications\Employer\JobApprovedNotification"
+                        {{ old('type') == 'App\Notifications\Employer\JobApprovedNotification' ? 'selected' : '' }}>
+                        JobApprovedNotification</option>
+                    <option value="App\Notifications\Employer\JobRejectedNotification"
+                        {{ old('type') == 'App\Notifications\Employer\JobRejectedNotification' ? 'selected' : '' }}>
+                        JobRejectedNotification</option>
+                    <option value="App\Notifications\NewMessageNotification"
+                        {{ old('type') == 'App\Notifications\NewMessageNotification' ? 'selected' : '' }}>
+                        NewMessageNotification</option>
+                    <!-- Thêm type khác nếu muốn -->
+                </select>
+                @error('type')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
 
-        </div>
+            <div class="mb-3">
+                <label>Người nhận (User)</label>
+                <select name="notifiable_id" class="form-select" required>
+                    <option value="all" {{ old('notifiable_id') == 'all' ? 'selected' : '' }}>Tất cả người dùng</option>
+                    @foreach ($users as $user)
+                        <option value="{{ $user->id }}" {{ old('notifiable_id') == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }} (ID: {{ $user->id }})
+                        </option>
+                    @endforeach
+                </select>
+                @error('notifiable_id')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label>Data (JSON)</label>
+                <textarea name="data" class="form-control" rows="4" required>{{ old('data') ?? '{"message":""}' }}</textarea>
+                @error('data')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label>Read At (nullable)</label>
+                <input type="datetime-local" name="read_at" class="form-control" value="{{ old('read_at') }}">
+                @error('read_at')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-success">Lưu</button>
+            <a href="{{ route('admin.notifications.index') }}" class="btn btn-secondary">Hủy</a>
+        </form>
     </div>
-</div>
 @endsection
