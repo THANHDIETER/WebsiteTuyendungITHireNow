@@ -52,17 +52,17 @@
 <meta property="og:url" content="{{ url()->current() }}">
 <header class="page-header row justify-content-between align-items-center bg-white">
     <div class="logo-wrapper d-flex align-items-center col-4">
-   <a href="{{ route('home') }}">
+   {{-- <a href="{{ route('home') }}">
     @php
         $clientLogo = \App\Models\Logo::where('type', 'client')->where('is_active', true)->first();
     @endphp
 
-    <img 
+    <img
         src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
         alt="Client Logo"
-        style="height: 120px;" {{-- hoặc dùng class --}}
+        style="height: 120px;" hoặc dùng class
     >
-</a>
+</a> --}}
 
 
     <a class="close-btn" href="javascript:void(0)">
