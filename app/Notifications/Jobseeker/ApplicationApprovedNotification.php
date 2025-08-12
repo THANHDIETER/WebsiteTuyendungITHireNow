@@ -4,9 +4,10 @@ namespace App\Notifications\Jobseeker;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class ApplicationApprovedNotification extends Notification implements ShouldBroadcast
+class ApplicationApprovedNotification extends Notification implements ShouldBroadcastNow
 {
     public function __construct(public $job) {}
 
@@ -18,8 +19,8 @@ class ApplicationApprovedNotification extends Notification implements ShouldBroa
     public function toArray($notifiable)
     {
         return [
-            'message' => "Đơn ứng tuyển của bạn vào vị trí '{$this->job->title}' đã được duyệt.",
-            'link_url' => route('job_seeker.notifications.index'), // hoặc link tới job cụ thể
+            'message' => "Chúc mừng! Bạn đã trúng tuyển vào vị trí '{$this->job->title}'. Hãy kiểm tra email.",
+            'link_url' => route('notifications.index'), // hoặc link cụ thể đến job
         ];
     }
 

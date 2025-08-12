@@ -41,7 +41,9 @@ class Job extends Model
         'level_id',
         'job_type_id',
         'location_id',
-        ''
+        'employer_id',
+        'approved_by',
+        'ai_processed_at'
     ];
 
 

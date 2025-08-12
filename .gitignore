@@ -21,7 +21,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-
+et --hard ORIG_HEAD
 public/assets/
 public/clien/
 *.php text eol=lf

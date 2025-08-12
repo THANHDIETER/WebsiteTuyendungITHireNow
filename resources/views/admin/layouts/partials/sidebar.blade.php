@@ -4,7 +4,13 @@
         top: 24px;
         width: 250px;
         background: #fff;
+        min-height: 100vh;
+    }
 
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
     .sidebar-menu a {

@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('sender_id');
             $table->text('message');
             $table->timestamps();
-
+            $table->timestamp('read_at')->nullable();
             $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
         });
 

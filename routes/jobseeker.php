@@ -13,25 +13,20 @@ use App\Http\Controllers\InterviewResponseController;
 // 🔐 Route dành riêng cho JOB SEEKER
 
 
-// 🔐 Các route dành cho job seeker đã đăng nhập
-Route::middleware(['auth:sanctum', 'job_seeker'])
-    ->prefix('job_seeker')
-    ->name('job_seeker.')
-    ->group(function () {
-        // 📌 Thông báo
-        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-
-        // 📩 Xem chi tiết lời mời phỏng vấn
-        Route::get('/interviews/{interview}', [InterviewController::class, 'show'])
-            ->name('interviews.show');
-
-        // 📩 Phản hồi thư mời phỏng vấn
-        Route::post('/interviews/{interview}/respond', [InterviewResponseController::class, 'store'])
-            ->name('interviews.respond');
-    });
 
 // profile routes
 Route::middleware(['auth'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+
+    // 📩 Xem chi tiết lời mời phỏng vấn
+    Route::get('/interviews/{interview}', [InterviewController::class, 'show'])
+        ->name('interviews.show');
+
+    // 📩 Phản hồi thư mời phỏng vấn
+    Route::post('/interviews/{interview}/respond', [InterviewResponseController::class, 'store'])
+        ->name('interviews.respond');
+
     // Hiển thị và cập nhật hồ sơ
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
@@ -79,4 +74,3 @@ Route::middleware(['job_seeker'])->group(function () {
     Route::get('/chat/start/{userId}', [ChatController::class, 'start'])->name('chat.start');
     Route::post('/chat/{conversation}/typing', [ChatController::class, 'typing'])->name('chat.typing');
 });
-

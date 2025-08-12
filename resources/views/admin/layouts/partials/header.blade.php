@@ -6,7 +6,7 @@
 <meta name="keywords"
     content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
-<style>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 
 </style>
@@ -39,8 +39,7 @@
 <!-- Animation css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
 <!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
 <!-- Apex Chart css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
 <!-- Data Table css-->
@@ -62,21 +61,21 @@
 @endif
 <header class="page-header row justify-content-between align-items-center bg-white">
 
-    <div class="logo-wrapper d-flex align-items-center col-4" style="padding-left: 10px;">
-        <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 220px;">
+    <div class="logo-wrapper d-flex align-items-center col-4" style="padding-left: 80px; ">
+        <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 90px;">
             @php
                 $logo = \App\Models\Logo::where('type', 'admin')->where('is_active', true)->first();
             @endphp
 
             <a href="{{ route('home') }}">
                 <img src="{{ $logo ? asset('storage/' . $logo->image_path) : asset('images/default.png') }}"
-                    alt="Admin Logo" class="logo-img">
+                    alt="Admin Logo" class="logo-img" style="height:90px;">
             </a>
 
 
         </div>
 
-        <a class="close-btn ms-3" href="javascript:void(0)">
+        <a class="close-btn ms-4" href="javascript:void(0)">
             <div class="toggle-sidebar">
                 <div class="line"></div>
                 <div class="line"></div>
@@ -115,18 +114,16 @@
                     <div class="custom-menu notification-dropdown py-0 overflow-hidden">
                         <h5 class="title bg-primary-light">
                             Notifications
-                            <a href="{{ route('employer.notifications.index') }}">
+                            <a href="{{ route('admin.notifications.index') }}">
                                 <span class="font-primary">View</span>
                             </a>
                         </h5>
                         <ul class="activity-update" id="noti-list">
-
-
                             @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
                                 <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
                                     <div class="flex-grow-1">
                                         <span>{{ $noti->created_at->diffForHumans() }}</span>
-                                        <a href="{{ $noti->data['link_url'] }}">
+                                        <a href="">
                                             <h5>{{ $noti->data['message'] }}</h5>
                                         </a>
                                         <h6>{{ config('app.name') }}</h6>
@@ -144,48 +141,13 @@
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
                                     <a class="btn btn-secondary"
-                                        href="">AllNotification</a>
+                                        href="{{ route('admin.notifications.index') }}">AllNotification</a>
                                 </div>
                             </li>
-                            <script>
-                                setInterval(() => {
-                                    fetch('{{ route('admin.notifications.latest') }}')
-                                        .then(res => res.json())
-                                        .then(notis => {
-                                            const list = document.getElementById('noti-list');
-
-                                            notis.forEach(noti => {
-                                                if (!list.querySelector(`[data-id="${noti.id}"]`)) {
-                                                    const item = `
-                            <li class="d-flex align-items-center b-l-primary" data-id="${noti.id}">
-                                <div class="flex-grow-1">
-                                    <span>${noti.time}</span>
-                                    <a href="${noti.link_url}">
-                                        <h5>${noti.message}</h5>
-                                    </a>
-                                    <h6>{{ config('app.name') }}</h6>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <img class="b-r-15 img-40" src="/assets/images/avatar/default.jpg" alt="">
-                                </div>
-                            </li>
-                        `;
-                                                    list.insertAdjacentHTML('afterbegin', item);
-                                                }
-                                            });
-
-                                            // Cập nhật badge
-                                            const badge = document.getElementById('noti-count');
-                                            if (badge) {
-                                                badge.innerText = notis.length;
-                                                badge.classList.toggle('d-none', notis.length === 0);
-                                            }
-                                        });
-                                }, 5000);
-                            </script>
                         </ul>
                     </div>
                 </li>
+
 
                 <!-- Bookmark menu-->
                 <li class="custom-dropdown"><a href="javascript:void(0)">
@@ -584,3 +546,82 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
+<script>
+    // Dark Mode Toggle
+    document.addEventListener("DOMContentLoaded", function() {
+        const darkModeBtn = document.querySelector('.dark-mode');
+        if (darkModeBtn) {
+            darkModeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.documentElement.classList.toggle('dark');
+                // Lưu trạng thái vào localStorage để giữ trạng thái khi reload
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+        // Auto load theme nếu đã lưu
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    });
+
+    // Notification realtime Pusher + Echo
+    window.Pusher = Pusher;
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '1ea633f39dfb08c3c0c2',
+        cluster: 'ap1',
+        forceTLS: true,
+    });
+
+    const userId = {{ auth()->id() }};
+    if (userId && window.Echo) {
+        window.Echo.private(`App.Models.User.${userId}`)
+            .notification((notification) => {
+                // Tăng số badge
+                const notiCount = document.getElementById('noti-count');
+                if (notiCount) {
+                    let count = parseInt(notiCount.textContent) || 0;
+                    notiCount.textContent = count + 1;
+                    notiCount.style.display = 'inline-block';
+                }
+                // Thêm notification mới vào dropdown
+                const notiList = document.getElementById('noti-list');
+                if (notiList) {
+                    // Xoá dòng "Không có thông báo mới" nếu có
+                    let emptyLi = notiList.querySelector('.text-muted');
+                    if (emptyLi) notiList.removeChild(emptyLi);
+
+                    // Tạo thông báo mới
+                    const li = document.createElement('li');
+                    li.className = 'd-flex align-items-center b-l-primary';
+                    li.setAttribute('data-id', notification.id);
+                    li.innerHTML = `
+                        <div class="flex-grow-1">
+                            <span>Vừa xong</span>
+                            <a href="${notification.link_url}">
+                                <h5>${notification.message}</h5>
+                            </a>
+                            <h6>{{ config('app.name') }}</h6>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <img class="b-r-15 img-40" src="{{ asset('assets/images/avatar/default.jpg') }}" alt="">
+                        </div>
+                    `;
+                    // Chèn notification mới lên đầu
+                    notiList.insertBefore(li, notiList.firstChild);
+
+                    // Giữ tối đa 5 notification mới nhất (trước nút AllNotification)
+                    let notiItems = notiList.querySelectorAll('li[data-id]');
+                    if (notiItems.length > 5) {
+                        notiList.removeChild(notiItems[notiItems.length - 1]);
+                    }
+                }
+            });
+    }
+</script>

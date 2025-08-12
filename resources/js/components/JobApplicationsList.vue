@@ -1,260 +1,362 @@
 <template>
-    <div class="p-4 bg-white">
-        <h1 class="mb-4 fw-bold fs-2">Quản lý đơn ứng tuyển</h1>
+    <div class="p-4 bg-white rounded-3 shadow-sm">
+        <h1 class="mb-4 fw-bold fs-2 text-primary">
+            <i class="bi bi-file-earmark-person-fill me-2"></i> Quản lý đơn ứng tuyển
+        </h1>
 
         <!-- Thanh tìm kiếm và chọn số dòng/trang -->
-        <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-            <select v-model="filterStatus" @change="fetchList(1)" class="form-select form-select-sm" style="max-width: 240px; min-width: 240px;">
+        <div class="d-flex align-items-center gap-3 mb-4 flex-wrap" style="row-gap: 0.5rem;">
+            <select v-model="filterStatus" @change="fetchList(1)" class="form-select form-select-sm"
+                style="max-width: 240px; min-width: 240px;" aria-label="Lọc trạng thái">
                 <option value="">Tất cả trạng thái</option>
-                <option v-for="status in statusOptions" :key="status.value" :value="status.value">{{ status.label }}</option>
+                <option v-for="status in statusOptions" :key="status.value" :value="status.value">
+                    {{ status.label }}
+                </option>
             </select>
 
-            <input v-model="search" @keyup.enter="fetchList(1)" class="form-control form-control-sm"
-                placeholder="Tìm ứng viên, công việc, công ty..." style="max-width: 240px; min-width: 240px;" />
-            <button class="btn btn-outline-secondary btn-sm" @click="fetchList(1)">
-                <i class="bi bi-search"></i>
-            </button>
+            <div class="input-group" style="max-width: 320px; min-width: 240px;">
+                <input v-model="search" @keyup.enter="fetchList(1)" type="search" class="form-control form-control-sm"
+                    placeholder="Tìm ứng viên, công việc, công ty..." aria-label="Tìm kiếm" />
+                <button class="btn btn-outline-primary btn-sm" type="button" @click="fetchList(1)" aria-label="Tìm kiếm"
+                    title="Tìm kiếm">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
 
             <div class="ms-auto d-flex align-items-center gap-2">
-                <label class="mb-0 text-nowrap text-secondary fw-semibold">Số dòng/trang:</label>
-                <select v-model="perPage" @change="fetchList(1)" class="form-select form-select-sm" style="width: 80px;">
-                    <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">{{ n }}</option>
+                <label for="perPageSelect" class="mb-0 text-nowrap text-secondary fw-semibold">Số dòng/trang:</label>
+                <select id="perPageSelect" v-model="perPage" @change="fetchList(1)" class="form-select form-select-sm"
+                    style="width: 90px;" aria-label="Số dòng trên trang">
+                    <option v-for="n in [5, 10, 20, 50, 100, 500]" :key="n" :value="n">
+                        {{ n }}
+                    </option>
                 </select>
             </div>
         </div>
 
-        <button v-if="canCreate" @click="openForm()" class="mb-4 btn btn-primary">Tạo mới</button>
+        <button v-if="canCreate" @click="openForm()" class="mb-4 btn btn-primary d-flex align-items-center gap-2">
+            <i class="bi bi-plus-circle"></i> Tạo mới
+        </button>
 
         <!-- Table -->
-        <table class="table table-bordered mb-4 align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Ứng viên</th>
-                    <th>Công việc</th>
-                    <th>Công ty</th>
-                    <th>Trạng thái</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="app in jobApplications" :key="app.id">
-                    <td>{{ app.id }}</td>
-                    <td>{{ app.user?.name || app.full_name }}</td>
-                    <td>{{ app.job?.title }}</td>
-                    <td>{{ app.company?.name }}</td>
-                    <td><span :class="statusBadgeClass(app.status)">{{ statusLabel(app.status) }}</span></td>
-                    <td class="text-nowrap align-middle">
-                        <div class="d-flex justify-content-center align-items-center gap-2">
-                            <button @click="showDetail(app)" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
-                                <i class="bi bi-eye"></i> Xem
-                            </button>
-                            <button @click="openForm(app)" class="btn btn-sm btn-outline-warning d-flex align-items-center gap-1">
-                                <i class="bi bi-pencil-square"></i> Sửa
-                            </button>
-                            <button @click="remove(app.id)" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
-                                <i class="bi bi-trash"></i> Xoá
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr v-if="jobApplications.length === 0">
-                    <td colspan="6" class="text-center text-muted py-4">Không có dữ liệu</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle mb-4">
+                <thead class="table-light text-center">
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 20%;">Ứng viên</th>
+                        <th style="width: 20%;">Công việc</th>
+                        <th style="width: 20%;">Công ty</th>
+                        <th style="width: 15%;">Trạng thái</th>
+                        <th style="width: 20%;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="app in jobApplications" :key="app.id" class="align-middle">
+                        <td class="text-center">{{ app.id }}</td>
+                        <td>{{ app.user?.name || app.full_name }}</td>
+                        <td>{{ app.job?.title }}</td>
+                        <td>{{ app.company?.name }}</td>
+                        <td class="text-center">
+                            <span :class="statusBadgeClass(app.status)" class="text-uppercase">{{
+                                statusLabel(app.status) }}</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
+                                <button @click="showDetail(app)"
+                                    class="btn btn-sm btn-outline-info d-flex align-items-center gap-1"
+                                    title="Xem chi tiết" aria-label="Xem chi tiết">
+                                    <i class="bi bi-eye-fill"></i> Xem
+                                </button>
+                                <button @click="openForm(app)"
+                                    class="btn btn-sm btn-outline-warning d-flex align-items-center gap-1"
+                                    title="Sửa đơn" aria-label="Sửa đơn">
+                                    <i class="bi bi-pencil-square"></i> Sửa
+                                </button>
+                                <button @click="confirmRemove(app.id)"
+                                    class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+                                    title="Xoá đơn" aria-label="Xoá đơn">
+                                    <i class="bi bi-trash-fill"></i> Xoá
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-if="jobApplications.length === 0">
+                        <td colspan="6" class="text-center text-muted py-4">Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <!-- Pagination -->
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
-            <div class="text-secondary fw-semibold">
-                Tổng <span class="text-primary">{{ pagination.total || 0 }}</span> bản ghi | Trang
-                <span class="text-primary">{{ page }}</span> / <span class="text-primary">{{ pagination.last_page || 1 }}</span>
+            <div class="text-secondary fw-semibold" aria-live="polite" aria-atomic="true">
+                Tổng <span class="text-primary">{{ pagination.total || 0 }}</span> bản ghi |
+                Trang <span class="text-primary">{{ page }}</span> /
+                <span class="text-primary">{{ pagination.last_page || 1 }}</span>
             </div>
 
-            <nav aria-label="Page navigation">
-                <ul class="pagination pagination-sm mb-0">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-sm mb-0 flex-wrap gap-1">
                     <li class="page-item" :class="{ disabled: page <= 1 }">
-                        <button class="page-link" @click="changePage(1)" :disabled="page <= 1">«</button>
+                        <button class="page-link" @click="changePage(1)" :disabled="page <= 1" aria-label="Trang đầu"
+                            title="Trang đầu">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </button>
                     </li>
                     <li class="page-item" :class="{ disabled: page <= 1 }">
-                        <button class="page-link" @click="changePage(page - 1)" :disabled="page <= 1">←</button>
+                        <button class="page-link" @click="changePage(page - 1)" :disabled="page <= 1"
+                            aria-label="Trang trước" title="Trang trước">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
                     </li>
                     <li v-for="p in pageNumbers" :key="p" class="page-item" :class="{ active: p === page }">
-                        <button class="page-link" @click="changePage(p)">{{ p }}</button>
+                        <button class="page-link" @click="changePage(p)" :aria-current="p === page ? 'page' : null">
+                            {{ p }}
+                        </button>
                     </li>
                     <li class="page-item" :class="{ disabled: page >= pagination.last_page }">
-                        <button class="page-link" @click="changePage(page + 1)" :disabled="page >= pagination.last_page">→</button>
+                        <button class="page-link" @click="changePage(page + 1)" :disabled="page >= pagination.last_page"
+                            aria-label="Trang sau" title="Trang sau">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
                     </li>
                     <li class="page-item" :class="{ disabled: page >= pagination.last_page }">
-                        <button class="page-link" @click="changePage(pagination.last_page)" :disabled="page >= pagination.last_page">»</button>
+                        <button class="page-link" @click="changePage(pagination.last_page)"
+                            :disabled="page >= pagination.last_page" aria-label="Trang cuối" title="Trang cuối">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </button>
                     </li>
                 </ul>
             </nav>
         </div>
 
         <!-- Modal Form -->
-        <div v-if="formOpen" class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.5)">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div v-if="formOpen" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);"
+            role="dialog" aria-modal="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content shadow-lg border-0 rounded-4">
                     <div class="modal-header bg-primary text-white rounded-top-4">
                         <h5 class="modal-title">
                             {{ editApp ? 'Sửa' : 'Tạo mới' }} Đơn ứng tuyển
                             <span v-if="form.id" class="badge bg-warning text-dark ms-2">#{{ form.id }}</span>
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" @click="closeForm"></button>
+                        <button type="button" class="btn-close btn-close-white" @click="closeForm"
+                            aria-label="Đóng"></button>
                     </div>
-                    <form @submit.prevent="save">
+                    <form @submit.prevent="save" novalidate>
                         <div class="modal-body px-4 py-3">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Vị trí ứng tuyển</label>
-                                    <input v-model="form.job_id" type="hidden" />
-                                    <input v-model="form.job_title" type="text" class="form-control bg-light" readonly />
+                                    <label for="fullNameInput" class="form-label fw-semibold">Họ tên</label>
+                                    <input id="fullNameInput" v-model="form.full_name" type="text"
+                                        class="form-control bg-light" readonly />
                                 </div>
+
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Ứng viên</label>
-                                    <input v-model="form.user_id" type="hidden" />
-                                    <input v-model="form.user_name" type="text" class="form-control bg-light" readonly />
+                                    <label for="emailInput" class="form-label fw-semibold">Email</label>
+                                    <input id="emailInput" v-model="form.email" type="email"
+                                        class="form-control bg-light" readonly />
                                 </div>
+
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Công ty</label>
-                                    <input v-model="form.company_id" type="hidden" />
-                                    <input v-model="form.company_name" type="text" class="form-control bg-light" readonly />
+                                    <label for="phoneInput" class="form-label fw-semibold">Số điện thoại</label>
+                                    <input id="phoneInput" v-model="form.phone" type="text"
+                                        class="form-control bg-light" readonly />
                                 </div>
+
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Đường dẫn CV</label>
+                                    <label for="cvInput" class="form-label fw-semibold">Đường dẫn CV</label>
                                     <div class="input-group">
-                                        <input v-model="form.image" type="text" class="form-control bg-light" readonly />
-                                        <a v-if="form.image" :href="image(form.image)" class="btn btn-outline-secondary" target="_blank" title="Xem CV">
+                                        <input id="cvInput" v-model="form.image" type="text"
+                                            class="form-control bg-light" readonly />
+                                        <a v-if="form.image" :href="image(form.image)" class="btn btn-outline-secondary"
+                                            target="_blank" rel="noopener" title="Xem CV">
                                             <i class="bi bi-box-arrow-up-right"></i>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-12">
+
+                                <div class="col-md-12">
                                     <label class="form-label fw-semibold">Thư xin việc</label>
-                                    <textarea class="form-control bg-light" rows="3" :value="form.cover_letter || 'Không có'" readonly></textarea>
+                                    <textarea class="form-control bg-light" rows="3"
+                                        :value="form.cover_letter || 'Không có'" readonly></textarea>
                                 </div>
+
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Trạng thái</label>
-                                    <select v-model="form.status" class="form-select" :disabled="validStatusOptions.length === 1">
-                                        <option v-for="status in validStatusOptions" :key="status" :value="status">{{ statusLabel(status) }}</option>
-                                    </select>
+                                    <label class="form-label fw-semibold">Ngày ứng tuyển</label>
+                                    <input type="text" class="form-control bg-light"
+                                        :value="formatDate(form.applied_at)" readonly />
                                 </div>
-                                <div class="col-md-6 d-flex align-items-end">
-                                    <div class="form-check mt-3">
-                                        <input class="form-check-input" type="checkbox" v-model="form.is_shortlisted" id="shortlistedCheck" />
-                                        <label class="form-check-label" for="shortlistedCheck">Đã lọt vào danh sách</label>
+
+                                <div class="col-md-6">
+                                    <label for="statusSelect" class="form-label fw-semibold">Trạng thái</label>
+                                    <select id="statusSelect" v-model="form.status" class="form-select"
+                                        :disabled="validStatusOptions.length === 1" aria-describedby="statusHelp">
+                                        <option v-for="status in validStatusOptions" :key="status" :value="status">
+                                            {{ statusLabel(status) }}
+                                        </option>
+                                    </select>
+                                    <div id="statusHelp" class="form-text">
+                                        Chỉ cho phép chọn trạng thái hợp lệ theo luồng
                                     </div>
                                 </div>
+
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <div class="form-check mt-3">
+                                        <input class="form-check-input" type="checkbox" v-model="form.is_shortlisted"
+                                            id="shortlistedCheck" />
+                                        <label class="form-check-label" for="shortlistedCheck">Đã lọt vào danh
+                                            sách</label>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Nguồn ứng tuyển</label>
                                     <input v-model="form.source" type="text" class="form-control bg-light" readonly />
                                 </div>
+
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Ngày phỏng vấn (nếu có)</label>
+                                    <label for="interviewDateInput" class="form-label fw-semibold">Ngày phỏng vấn (nếu
+                                        có)</label>
                                     <div class="input-group">
-                                        <input v-model="form.interview_date" type="datetime-local" class="form-control" />
-                                        <span class="input-group-text bg-light text-muted" style="font-size: 0.875rem;">
-                                            <i class="bi bi-calendar-event me-1"></i>
-                                            {{ formatDateTime(form.interview_date) }}
-                                        </span>
+                                        <input id="interviewDateInput" v-model="form.interview_date"
+                                            type="datetime-local" class="form-control"
+                                            aria-describedby="interviewDatePreview" />
+                                        <span class="input-group-text bg-light text-muted" style="font-size: 0.875rem;"
+                                            id="interviewDatePreview"> <i class="bi bi-calendar-event me-1"></i>
+                                            {{ formatDateTime(form.interview_date) }}</span>
                                     </div>
                                 </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Ngày tạo đơn</label>
+                                    <input type="text" class="form-control bg-light"
+                                        :value="formatDateTime(form.created_at)" readonly />
+                                </div>
+
                                 <div class="col-md-12">
-                                    <label class="form-label fw-semibold">Ghi chú</label>
-                                    <textarea v-model="form.note" class="form-control" rows="5" placeholder="Ghi chú thêm (tuỳ chọn)"></textarea>
+                                    <label for="noteTextarea" class="form-label fw-semibold">Ghi chú</label>
+                                    <textarea id="noteTextarea" v-model="form.note" class="form-control" rows="3"
+                                        placeholder="Ghi chú thêm (tuỳ chọn)"></textarea>
                                 </div>
                             </div>
                         </div>
+
                         <div class="modal-footer bg-light rounded-bottom-4">
-                            <button type="button" class="btn btn-outline-secondary" @click="closeForm">Huỷ</button>
-                            <button type="submit" class="btn btn-success">{{ editApp ? 'Lưu thay đổi' : 'Tạo mới' }}</button>
+                            <button type="button" class="btn btn-outline-secondary" @click="closeForm" aria-label="Huỷ">
+                                Huỷ
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                {{ editApp ? 'Lưu thay đổi' : 'Tạo mới' }}
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Detail -->
-        <div v-if="detailApp" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.3)">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
+        <!-- Modal Detail (Giao diện đẹp hơn) -->
+        <div v-if="detailApp" class="modal d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.3);" role="dialog"
+            aria-modal="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document"
+                aria-label="Chi tiết đơn ứng tuyển">
                 <div class="modal-content shadow border-0 rounded-4">
                     <div class="modal-header bg-info text-white rounded-top-4">
-                        <h5 class="modal-title">
-                            <i class="bi bi-person-lines-fill me-2"></i> Chi tiết đơn ứng tuyển
-                            <span v-if="detailApp?.id" class="badge bg-warning text-dark ms-2">#{{ detailApp.id }}</span>
+                        <h5 class="modal-title d-flex align-items-center gap-2">
+                            <i class="bi bi-person-lines-fill"></i>
+                            Chi tiết đơn ứng tuyển
+                            <span v-if="detailApp.id" class="badge bg-warning text-dark ms-2">#{{ detailApp.id }}</span>
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" @click="detailApp = null"></button>
+                        <button type="button" class="btn-close btn-close-white" @click="detailApp = null"
+                            aria-label="Đóng"></button>
                     </div>
                     <div class="modal-body px-4 py-4">
-                        <div class="row g-4">
+                        <div class="row gy-4">
+
                             <div class="col-md-6">
-                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-person-fill me-2"></i>Thông tin ứng viên</h6>
-                                <p><i class="bi bi-person me-1 text-secondary"></i> Họ tên: <strong>{{ detailApp.full_name }}</strong></p>
-                                <p><i class="bi bi-envelope me-1 text-secondary"></i> Email: <strong>{{ detailApp.email }}</strong></p>
-                                <p><i class="bi bi-telephone me-1 text-secondary"></i> SĐT: <strong>{{ detailApp.phone }}</strong></p>
-                                <p><i class="bi bi-file-earmark-person me-1 text-secondary"></i> CV:
-                                    <a :href="image(detailApp.image)" target="_blank">
-                                        <i class="bi bi-box-arrow-up-right me-1"></i> Xem CV (PDF)
-                                    </a>
-                                </p>
+                                <div class="card border-info h-100">
+                                    <div class="card-header bg-info text-white fw-bold">Thông tin ứng viên</div>
+                                    <div class="card-body">
+                                        <p><strong>Họ tên:</strong> {{ detailApp.user?.name || detailApp.full_name }}
+                                        </p>
+                                        <p><strong>Email:</strong> {{ detailApp.email || detailApp.user?.email }}</p>
+                                        <p><strong>Số điện thoại:</strong> {{ detailApp.phone || detailApp.user?.phone
+                                            }}</p>
+
+                                        <!-- Phần CV dạng input group đẹp -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Đường dẫn CV</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" :value="detailApp.image || ''"
+                                                    readonly style="background-color: #f8f9fa;"
+                                                    aria-label="Đường dẫn CV" />
+                                                <a v-if="detailApp.image" :href="image(detailApp.image)" target="_blank"
+                                                    rel="noopener" class="btn btn-outline-secondary" title="Mở CV">
+                                                    <i class="bi bi-box-arrow-up-right"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <p><strong>Thư xin việc:</strong></p>
+                                        <p class="small text-muted" style="white-space: pre-wrap;">
+                                            {{ detailApp.cover_letter || 'Không có' }}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="col-md-6">
-                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-briefcase-fill me-2"></i>Thông tin ứng tuyển</h6>
-                                <p><i class="bi bi-briefcase me-1 text-secondary"></i> Vị trí: <strong>{{ detailApp.job?.title }}</strong></p>
-                                <p><i class="bi bi-building me-1 text-secondary"></i> Công ty: <strong>{{ detailApp.company?.name }}</strong></p>
-                                <p><i class="bi bi-calendar-check me-1 text-secondary"></i> Ngày ứng tuyển: <strong>{{ formatDate(detailApp.applied_at) }}</strong></p>
-                                <p><i class="bi bi-link-45deg me-1 text-secondary"></i> Nguồn: <strong>{{ detailApp.source || '—' }}</strong></p>
-                                <p><i class="bi bi-calendar-event me-1 text-secondary"></i> Ngày phỏng vấn: <strong>{{ formatDate(detailApp.interview_date) }}</strong></p>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="p-3 bg-light rounded border">
-                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-info-circle-fill me-2"></i>Trạng thái</h6>
-                                    <span :class="statusBadgeClass(detailApp.status)">{{ statusLabel(detailApp.status) }}</span>
-                                    <span v-if="detailApp.is_shortlisted" class="badge bg-primary ms-2">
-                                        <i class="bi bi-star-fill me-1"></i> Đã lọt DS
-                                    </span>
+                                <div class="card border-info h-100">
+                                    <div class="card-header bg-info text-white fw-bold">Thông tin đơn ứng tuyển</div>
+                                    <div class="card-body">
+                                        <p><strong>Công việc:</strong> {{ detailApp.job?.title }}</p>
+                                        <p><strong>Công ty:</strong> {{ detailApp.company?.name }}</p>
+                                        <p>
+                                            <strong>Trạng thái:</strong>
+                                            <span :class="statusBadgeClass(detailApp.status)"
+                                                class="text-uppercase px-2 py-1 rounded">
+                                                {{ statusLabel(detailApp.status) }}
+                                            </span>
+                                        </p>
+                                        <p><strong>Ngày ứng tuyển:</strong> {{ formatDate(detailApp.applied_at) }}</p>
+                                        <p><strong>Ngày phỏng vấn:</strong> {{ formatDateTime(detailApp.interview_date)
+                                            }}</p>
+                                        <p><strong>Nguồn ứng tuyển:</strong> {{ detailApp.source }}</p>
+                                        <p><strong>Ghi chú:</strong></p>
+                                        <p class="small text-muted" style="white-space: pre-wrap;">
+                                            {{ detailApp.note || 'Không có' }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <div class="p-3 bg-white border rounded shadow-sm">
-                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-envelope-paper-heart me-2"></i>Thư xin việc</h6>
-                                    <p class="mb-0">{{ detailApp.cover_letter || 'Không có' }}</p>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="p-3 bg-white border rounded shadow-sm">
-                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-journal-text me-2"></i>Ghi chú</h6>
-                                    <p class="mb-0">{{ detailApp.note || 'Không có ghi chú.' }}</p>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="p-3 bg-light rounded border">
-                                    <h6 class="fw-bold text-secondary mb-2"><i class="bi bi-clock-history me-2"></i>Thông tin hệ thống</h6>
-                                    <p class="mb-1">Tạo lúc: <strong>{{ formatDate(detailApp.created_at) }}</strong></p>
-                                    <p class="mb-1">Cập nhật: <strong>{{ formatDate(detailApp.updated_at) }}</strong></p>
-                                    <p v-if="detailApp.deleted_at" class="text-danger">Đã xoá: <strong>{{ formatDate(detailApp.deleted_at) }}</strong></p>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                     <div class="modal-footer bg-light rounded-bottom-4">
-                        <button type="button" class="btn btn-outline-secondary" @click="detailApp = null">Đóng</button>
+                        <button type="button" class="btn btn-outline-secondary" @click="detailApp = null"
+                            aria-label="Đóng chi tiết">
+                            Đóng
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
 </template>
-
 
 <script setup>
     import { ref, onMounted, computed } from 'vue'
     import axios from 'axios'
 
+    // Hàm showAlertModal đã import sẵn từ layout
+    // Bạn chỉ cần gọi như ví dụ bên dưới
+    // showAlertModal({ title, message, type, status, onConfirm })
+
     const token = localStorage.getItem('access_token')
     if (token) axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-
 
     const jobApplications = ref([])
     const pagination = ref({})
@@ -273,7 +375,6 @@
     const image = filePath =>
         filePath ? (filePath.startsWith('http') ? filePath : `/storage/${filePath}`) : '#'
 
-
     const statusFlow = [
         'pending',
         'viewed',
@@ -284,7 +385,6 @@
         'no_response',
         'rejected',
         'saved'
-
     ]
 
     const form = ref({
@@ -292,33 +392,34 @@
         job_id: '',
         user_id: '',
         company_id: '',
-        job_title: '',
-        user_name: '',
-        company_name: '',
+        full_name: '',
+        email: '',
+        phone: '',
         image: '',
         cover_letter: '',
+        applied_at: '',
         status: 'pending',
         is_shortlisted: false,
         source: '',
         interview_date: '',
-        note: ''
+        note: '',
+        created_at: '',
+        updated_at: '',
+        deleted_at: ''
     })
 
-    // Hàm tính valid status options theo trạng thái hiện tại (initialStatus)
     const validStatusOptions = computed(() => {
         const current = initialStatus.value
 
         if (current === 'pending') {
-            // Khi đang pending, chỉ cho chọn 3 trạng thái này
             return ['interview_scheduled', 'rejected', 'saved']
         }
 
         if (current === 'interview_scheduled') {
-            // Khi đang pending, chỉ cho chọn 3 trạng thái này
             return ['offered', 'no_response', 'rejected']
         }
 
-        if (['rejected', 'hired', 'offered', 'candidate_declined','no_response'].includes(current)) {
+        if (['rejected', 'hired', 'offered', 'candidate_declined', 'no_response'].includes(current)) {
             return [current]
         }
 
@@ -332,8 +433,7 @@
         return statusFlow.slice(idx)
     })
 
-
-    // Hàm hiển thị thông báo sử dụng showAlertModal
+    // Dùng showAlertModal cho các thông báo lỗi
     function showError(message) {
         showAlertModal({
             title: 'Lỗi',
@@ -344,7 +444,6 @@
         })
     }
 
-    // Hàm validate trạng thái trước khi gửi lên API
     function validateStatusChange(currentStatus, newStatus, interviewDate) {
         const statusOrder = statusFlow
 
@@ -391,19 +490,18 @@
 
         return true
     }
+
     const statusOptions = [
         { value: 'pending', label: 'Chờ xử lý' },
         { value: 'viewed', label: 'Đã xem' },
         { value: 'under_review', label: 'Đang đánh giá' },
         { value: 'contacting', label: 'Đang liên hệ' },
-        { value: 'interview_scheduled', label: 'Đã mời phỏng vấn' },
+        { value: 'interview_scheduled', label: 'Mời phỏng vấn' },
         { value: 'offered', label: 'Trúng tuyển' },
         { value: 'no_response', label: 'Không phản hồi' },
         { value: 'rejected', label: 'Đã loại' },
-        { value: 'saved', label: 'Lưu hồ sơ' },
-
+        { value: 'saved', label: 'Lưu hồ sơ' }
     ]
-
 
     const fetchList = async (gotoPage = 1) => {
         try {
@@ -435,24 +533,26 @@
                 job_id: app.job_id,
                 user_id: app.user_id,
                 company_id: app.company_id,
-                job_title: app.job?.title || '',
-                user_name: app.user?.name || app.full_name || '',
-                company_name: app.company?.name || '',
+                full_name: app.full_name || app.user?.name || '',
+                email: app.email || app.user?.email || '',
+                phone: app.phone || app.user?.phone || '',
                 image: app.image || '',
                 cover_letter: app.cover_letter || '',
+                applied_at: app.applied_at || '',
                 status: app.status || 'pending',
                 is_shortlisted: !!app.is_shortlisted,
                 source: app.source || '',
                 interview_date: app.interview_date ? app.interview_date.substring(0, 16) : '',
-                note: app.note || ''
+                note: app.note || '',
+                created_at: app.created_at || '',
+                updated_at: app.updated_at || '',
+                deleted_at: app.deleted_at || ''
             }
 
-            // Nếu trạng thái hiện tại không còn hợp lệ thì tự động chọn cái đầu tiên
             const validOptions = validStatusOptions.value
             if (!validOptions.includes(form.value.status)) {
                 form.value.status = validOptions[0]
             }
-
         } else {
             editApp.value = null
             initialStatus.value = 'pending'
@@ -464,27 +564,31 @@
                 job_id: '',
                 user_id: '',
                 company_id: '',
-                job_title: '',
-                user_name: '',
-                company_name: '',
+                full_name: '',
+                email: '',
+                phone: '',
                 image: '',
                 cover_letter: '',
-                status: validOptions[0], // set luôn status hợp lệ đầu tiên
+                applied_at: '',
+                status: validOptions[0],
                 is_shortlisted: false,
                 source: '',
                 interview_date: '',
-                note: ''
+                note: '',
+                created_at: '',
+                updated_at: '',
+                deleted_at: ''
             }
         }
         formOpen.value = true
     }
-
 
     const closeForm = () => {
         formOpen.value = false
         editApp.value = null
     }
 
+    // Sử dụng showAlertModal cho thông báo thành công
     const save = async () => {
         try {
             const currentStatus = initialStatus.value
@@ -501,7 +605,8 @@
                     title: 'Thành công',
                     message: `Cập nhật đơn #${editApp.value.id} thành công.`,
                     type: 'alert',
-                    status: 'success'
+                    status: 'success',
+                    onConfirm: () => { }
                 })
             } else {
                 await axios.post('/api/job-applications', form.value)
@@ -509,18 +614,20 @@
                     title: 'Thành công',
                     message: 'Tạo mới đơn ứng tuyển thành công.',
                     type: 'alert',
-                    status: 'success'
+                    status: 'success',
+                    onConfirm: () => { }
                 })
             }
 
             closeForm()
             fetchList(page.value)
         } catch (err) {
-            showError('Lỗi khi lưu: ' + (err.response?.data?.message || err.message || 'Lỗi không xác định'))
+            showError('Lỗi: ' + (err.response?.data?.message || err.message || 'Lỗi không xác định'))
         }
     }
 
-    const remove = id => {
+    // Dùng showAlertModal để hỏi xác nhận xóa
+    const confirmRemove = id => {
         showAlertModal({
             title: 'Xác nhận',
             message: `Bạn có chắc muốn xoá đơn #${id}?`,
@@ -533,7 +640,8 @@
                         title: 'Thành công',
                         message: `Đơn #${id} đã xoá.`,
                         type: 'alert',
-                        status: 'success'
+                        status: 'success',
+                        onConfirm: () => { }
                     })
                     fetchList(page.value)
                 } catch {
@@ -583,14 +691,34 @@
             case 'viewed': return 'Đã xem'
             case 'under_review': return 'Đang đánh giá'
             case 'contacting': return 'Đang liên hệ'
-            case 'interview_scheduled': return 'mời phỏng vấn'
+            case 'interview_scheduled': return 'Mời phỏng vấn'
             case 'offered': return 'Trúng tuyển'
             case 'no_response': return 'Không phản hồi'
-            case 'rejected': return 'loại'
+            case 'rejected': return 'Đã loại'
             case 'saved': return 'Lưu hồ sơ'
             default: return status
         }
     }
 
     onMounted(() => fetchList())
+
+    const pageNumbers = computed(() => {
+        const totalPages = pagination.value.last_page || 1
+        const currentPage = page.value
+        let start = Math.max(currentPage - 2, 1)
+        let end = Math.min(currentPage + 2, totalPages)
+
+        if (currentPage <= 3) {
+            end = Math.min(5, totalPages)
+        }
+        if (currentPage >= totalPages - 2) {
+            start = Math.max(totalPages - 4, 1)
+        }
+
+        const pages = []
+        for (let i = start; i <= end; i++) {
+            pages.push(i)
+        }
+        return pages
+    })
 </script>

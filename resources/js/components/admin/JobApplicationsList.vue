@@ -115,15 +115,7 @@
                     <span class="ms-1 d-none d-md-inline">Sửa</span>
                   </button>
 
-                  <button
-                    class="btn btn-danger btn-sm action-btn"
-                    @click="confirmDelete(app)"
-                    title="Xóa"
-                    type="button"
-                  >
-                    <i class="bi bi-trash"></i>
-                    <span class="ms-1 d-none d-md-inline">Xóa</span>
-                  </button>
+                
                 </div>
               </td>
             </tr>
@@ -378,6 +370,13 @@ const pageNumbersToShow = computed(() => {
   }
   return pages
 })
+axios.interceptors.request.use(config => {
+        const token = localStorage.getItem('access_token')
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
+        return config
+    })
 
 const openDetail = async (app) => {
   selectedApplication.value = null

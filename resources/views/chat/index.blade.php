@@ -90,33 +90,36 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         @forelse ($conversations as $conversation)
-                                        @php
-                                            $otherUser = $conversation->user_one === auth()->id() ? $conversation->userTwo : $conversation->userOne;
-                                            $isActive = isset($chatWith) && $chatWith->id === $otherUser->id;
-                                            $lastMsgTime = optional($conversation->latestMessage)->created_at
-                                                ? $conversation->latestMessage->created_at->diffForHumans()
-                                                : 'Chưa có tin nhắn';
-                                        @endphp
-                              <li
-                                            class="list-group-item p-2 {{ $isActive ? 'bg-light border-start border-4 border-primary' : '' }}">
-                                            <a href="{{ route('chat.show', $conversation->id) }}"
-                                                class="text-decoration-none d-flex align-items-center gap-2 {{ $isActive ? 'fw-bold text-dark' : 'text-muted' }}">
-                                                <img src="{{ $otherUser->avatar ?? asset('client/assets/img/banner/15.png') }}"
-                                                    class="rounded-circle" width="40" height="40" alt="avatar">
-                                                <div class="d-flex flex-column">
-                                                    <span>{{ $otherUser->name }}</span>
-                                                    <small class="text-muted">
-                                                        <i class="fa-regular fa-clock me-1"></i>
-                                                        {{ $lastMsgTime }}
-                                                    </small>
-                                                </div>
-                                                @if($conversation->unread_count > 0)
-                                                    <span class="badge bg-danger ms-auto align-self-center">
-                                                        {{ $conversation->unread_count }}
-                                                    </span>
-                                                @endif
-                                            </a>
-                                        </li>
+                            @php
+                                $otherUser =
+                                    $conversation->user_one === auth()->id()
+                                        ? $conversation->userTwo
+                                        : $conversation->userOne;
+                                $isActive = isset($chatWith) && $chatWith->id === $otherUser->id;
+                                $lastMsgTime = optional($conversation->latestMessage)->created_at
+                                    ? $conversation->latestMessage->created_at->diffForHumans()
+                                    : 'Chưa có tin nhắn';
+                            @endphp
+                            <li
+                                class="list-group-item p-2 {{ $isActive ? 'bg-light border-start border-4 border-primary' : '' }}">
+                                <a href="{{ route('chat.show', $conversation->id) }}"
+                                    class="text-decoration-none d-flex align-items-center gap-2 {{ $isActive ? 'fw-bold text-dark' : 'text-muted' }}">
+                                    <img src="{{ $otherUser->avatar ?? asset('client/assets/img/banner/15.png') }}"
+                                        class="rounded-circle" width="40" height="40" alt="avatar">
+                                    <div class="d-flex flex-column">
+                                        <span>{{ $otherUser->name }}</span>
+                                        <small class="text-muted">
+                                            <i class="fa-regular fa-clock me-1"></i>
+                                            {{ $lastMsgTime }}
+                                        </small>
+                                    </div>
+                                    @if ($conversation->unread_count > 0)
+                                        <span class="badge bg-danger ms-auto align-self-center">
+                                            {{ $conversation->unread_count }}
+                                        </span>
+                                    @endif
+                                </a>
+                            </li>
 
                         @empty
                             <li class="list-group-item text-muted">Không có cuộc trò chuyện nào.</li>
@@ -201,7 +204,7 @@
             }
 
             // Gửi typing event (debounce ~1.2s)
-            messageInput?.addEventListener('input', function () {
+            messageInput?.addEventListener('input', function() {
                 if (!conversationId || !typingUrl) return;
                 if (Date.now() - lastTyped > 1200) {
                     fetch(typingUrl, {
@@ -216,19 +219,21 @@
             });
 
             // Gửi message
-            chatForm?.addEventListener('submit', function (e) {
+            chatForm?.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const message = messageInput.value.trim();
                 if (message === '' || !sendUrl) return;
                 fetch(sendUrl, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({ message })
-                })
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message
+                        })
+                    })
                     .then(res => res.json())
                     .then(data => {
                         appendMessage(true, message);
@@ -276,3 +281,39 @@
         });
     </script>
 @endpush
+
+<script>
+    if (typeof window.Echo !== 'undefined') {
+        console.log('Echo loaded, lắng nghe thông báo toàn cục...');
+
+        window.Echo.channel('global-notification')
+            .listen('GlobalNotificationEvent', function(data) { // <-- SỬA LẠI CHỖ NÀY!
+                console.log('Đã nhận sự kiện toàn cục:', data);
+                showGlobalNotification(data.message, data.link);
+            });
+    } else {
+        console.error('Echo chưa được khởi tạo hoặc chưa kết nối Pusher!');
+    }
+
+
+    function showGlobalNotification(message, link) {
+        // Loại bỏ toast cũ (nếu có)
+        $('#global-toast').remove();
+
+        // Tạo popup/toast
+        let html = `<div id="global-toast" style="
+            position:fixed;top:24px;right:24px;z-index:99999;
+            background:#232323;color:#fff;padding:16px 32px;
+            border-radius:8px;font-size:1.1rem;box-shadow:0 2px 12px #0006;
+            display:flex;align-items:center;
+        ">
+            <span>${message}</span>
+            ${link ? `<a href="${link}" style="color:#ffd700;text-decoration:underline;margin-left:12px;">Xem</a>` : ''}
+            <span style="cursor:pointer;float:right;font-weight:bold;margin-left:16px;" onclick="$('#global-toast').fadeOut()">×</span>
+        </div>`;
+        $('body').append(html);
+        setTimeout(() => {
+            $('#global-toast').fadeOut();
+        }, 10000);
+    }
+</script>

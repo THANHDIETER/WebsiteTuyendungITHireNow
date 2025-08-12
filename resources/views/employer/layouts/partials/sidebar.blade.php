@@ -130,7 +130,7 @@
 </aside>
 <style>
     .page-sidebar {
-        top: 74px;
+        top: 70px;
         width: 250px;
         background: #fff;
         color: #212529;
