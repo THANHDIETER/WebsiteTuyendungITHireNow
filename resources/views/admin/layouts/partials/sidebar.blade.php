@@ -1,9 +1,8 @@
 <style>
     /* Default (Light Mode) */
     .page-sidebar {
-        top: 20px;
+        top: 22px;
         width: 250px;
-        background: #fff;
         min-height: 100vh;
     }
 
@@ -79,6 +78,7 @@
         background-color: #495057;
         color: #0d6efd !important;
     }
+
 </style>
 
 <aside class="page-sidebar">
