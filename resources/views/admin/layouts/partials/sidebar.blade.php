@@ -1,7 +1,7 @@
 <style>
     /* Default (Light Mode) */
     .page-sidebar {
-        top: 24px;
+        top: 20px;
         width: 250px;
         background: #fff;
         min-height: 100vh;
@@ -79,7 +79,6 @@
         background-color: #495057;
         color: #0d6efd !important;
     }
-
 </style>
 
 <aside class="page-sidebar">
@@ -130,8 +129,8 @@
         </li>
 
         <li class="sidebar-list">
-            <a class="sidebar-link" href="{{ route('admin.employers.index') }}">
-                <i class="bi bi-journal-arrow-down sidebar-icon"></i> Nhà tuyển dụng
+            <a class="sidebar-link" href="{{ route('admin.blogs.index') }}">
+                <i class="bi bi-journal-text sidebar-icon"></i> Quản lý Blog
             </a>
         </li>
 

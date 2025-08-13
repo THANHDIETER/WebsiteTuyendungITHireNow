@@ -12,7 +12,8 @@ use App\Http\Controllers\Admin\{
     NotificationController,
     ServicePackageController,
     BankAccountControlle,
-    EmployerController
+    EmployerController,
+    BlogController
 };
 use App\Http\Controllers\Admin\SeekerProfileController;
 
@@ -102,4 +103,14 @@ Route::prefix('admin')
             Route::delete('/{id}', [EmployerController::class, 'destroy'])->name('destroy'); // xóa mềm
         });
         Route::resource('logos', App\Http\Controllers\Admin\LogoController::class)->names('logos');
+
+        Route::prefix('blogs')->name('blogs.')->controller(BlogController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('{blog}', 'show')->name('show');
+            Route::get('{blog}/edit', 'edit')->name('edit');
+            Route::put('{blog}', 'update')->name('update');
+            Route::delete('{blog}', 'destroy')->name('destroy');
+        });
     });
