@@ -70,8 +70,8 @@ class LogoController extends Controller
 
         if ($request->hasFile('image')) {
             // Xoá ảnh cũ nếu có
-            if ($logo->image_path && \Storage::disk('public')->exists($logo->image_path)) {
-                \Storage::disk('public')->delete($logo->image_path);
+            if ($logo->image_path && Storage::disk('public')->exists($logo->image_path)) {
+                Storage::disk('public')->delete($logo->image_path);
             }
             $data['image_path'] = $request->file('image')->store('logos', 'public');
         }

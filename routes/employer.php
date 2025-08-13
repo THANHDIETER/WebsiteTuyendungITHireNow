@@ -102,7 +102,7 @@ Route::prefix('employer/companies')
     ->name('employer.companies.')
     ->group(function () {
         Route::resource('/', CompanyController::class)->parameters(['' => 'id']);
-    });
+    })->name('employer.companies');
 
 
 Route::middleware(['auth:sanctum', 'employer'])
@@ -111,5 +111,5 @@ Route::middleware(['auth:sanctum', 'employer'])
     ->group(function () {
         // 📌 Notifications
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-       
+
     });

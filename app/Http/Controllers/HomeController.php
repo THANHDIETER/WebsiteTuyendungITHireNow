@@ -20,33 +20,32 @@ class HomeController extends Controller
                 ->where('status', 'published')
                 ->when($locationId, fn ($q) => $q->where('location_id', $locationId));
 
-            // Top lượt xem
+            // Việc có trả phí (ưu tiên hiển thị đầu tiên)
+            $paidJobs = (clone $baseQuery)
+                ->where('is_paid', true)
+                ->inRandomOrder()
+                ->take(2)
+                ->get();
+
+            // Top lượt xem, tránh trùng với paidJobs
             $topViewed = (clone $baseQuery)
+                ->whereNotIn('id', $paidJobs->pluck('id'))
                 ->orderByDesc('views')
                 ->take(2)
                 ->get();
 
-            // Việc có trả phí, tránh trùng với topViewed
-            $paidJobs = (clone $baseQuery)
-                ->where('is_paid', true)
-                ->whereNotIn('id', $topViewed->pluck('id'))
-                ->inRandomOrder()
-                ->take(2)
-                ->get();
-
-            // Random hot khác, tránh trùng với topViewed + paidJobs
+            // Random hot khác, tránh trùng với paidJobs + topViewed
             $randomHot = (clone $baseQuery)
-                ->whereNotIn('id', $topViewed->pluck('id')->merge($paidJobs->pluck('id')))
+                ->whereNotIn('id', $paidJobs->pluck('id')->merge($topViewed->pluck('id')))
                 ->inRandomOrder()
                 ->take(2)
                 ->get();
 
-            // Gộp tất cả lại, giới hạn 4 job nổi bật
-            $featuredJobs = $topViewed
-                ->merge($paidJobs)
+            // Gộp theo thứ tự: paidJobs -> topViewed -> randomHot
+            $featuredJobs = $paidJobs
+                ->merge($topViewed)
                 ->merge($randomHot)
-                ->unique('id')
-                ->take(4);
+                ->unique('id');
         }
 
         // Việc làm gần đây

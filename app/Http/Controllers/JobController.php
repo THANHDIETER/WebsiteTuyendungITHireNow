@@ -231,9 +231,8 @@ class JobController extends Controller
                 ->latest()
                 ->take(6) // bạn có thể điều chỉnh số lượng
                 ->get();
-        }   
+        }
 
         return view('website.jobs.job-details', compact('job', 'relatedJobs'));
     }
-
 }

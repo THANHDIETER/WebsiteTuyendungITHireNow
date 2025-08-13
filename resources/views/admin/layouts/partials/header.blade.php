@@ -142,6 +142,9 @@
                         </h5>
                         <ul class="activity-update" id="noti-list">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> abfb8d075c352e766a382fa475eeecc19bf049e4
                             @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
                                 <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
                                     <div class="flex-grow-1">
@@ -165,12 +168,15 @@
                                 <div class="button-group">
                                     <a class="btn btn-secondary"
                                         href="{{ route('admin.notifications.index') }}">AllNotification</a>
+<<<<<<< HEAD
 =======
                             <li class="mt-3 d-flex justify-content-center">
                                 <div class="button-group">
                                     <a class="btn btn-secondary"
                                         href="">AllNotification</a>
 >>>>>>> c8b30a6ac3180805bf89b8e2eeb850f52f3c1891
+=======
+>>>>>>> abfb8d075c352e766a382fa475eeecc19bf049e4
                                 </div>
                             </li>
                         </ul>
