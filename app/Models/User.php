@@ -60,9 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Resume::class);
     }
-    public function company()
+    public function companies()
     {
-        return $this->hasOne(Company::class, 'user_id', 'id');
+        return $this->hasMany(Company::class, 'user_id', 'id');
     }
     public function messages()
     {

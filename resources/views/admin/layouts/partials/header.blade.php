@@ -9,7 +9,6 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-</style>
 <title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -46,11 +45,6 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <!-- App css-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
 <meta property="og:url" content="{{ url()->current() }}">
@@ -81,10 +75,24 @@
                 <div class="line"></div>
                 <div class="line"></div>
             </div>
-        </a>
-    </div>
-    <div class="page-main-header d-flex align-items-center col-auto">
-
+        </a></div>
+    <div class="page-main-header col">
+        <div class="header-left d-lg-block d-none">
+            <form class="search-form mb-0">
+                <div class="input-group"><span class="input-group-text pe-0">
+                        <!-- Icon Search -->
+                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <input class="form-control" type="text" placeholder="Search anything...">
+                </div>
+            </form>
+        </div>
         <div class="nav-right">
             <ul class="header-right">
                 <li class="modes d-flex"><a class="dark-mode">
@@ -95,6 +103,20 @@
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a></li>
+                <li class="serchinput d-lg-none d-flex"><a class="search-mode">
+                        <!-- Icon Search -->
+                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                    <div class="form-group search-form">
+                        <input type="text" placeholder="Search here...">
+                    </div>
+                </li>
                 <!-- Notification menu -->
                 <li class="custom-dropdown">
                     <a href="javascript:void(0)" id="notification-toggle">
@@ -119,6 +141,7 @@
                             </a>
                         </h5>
                         <ul class="activity-update" id="noti-list">
+<<<<<<< HEAD
                             @forelse(auth()->user()->unreadNotifications->take(5) as $noti)
                                 <li class="d-flex align-items-center b-l-primary" data-id="{{ $noti->id }}">
                                     <div class="flex-grow-1">
@@ -142,6 +165,12 @@
                                 <div class="button-group">
                                     <a class="btn btn-secondary"
                                         href="{{ route('admin.notifications.index') }}">AllNotification</a>
+=======
+                            <li class="mt-3 d-flex justify-content-center">
+                                <div class="button-group">
+                                    <a class="btn btn-secondary"
+                                        href="">AllNotification</a>
+>>>>>>> c8b30a6ac3180805bf89b8e2eeb850f52f3c1891
                                 </div>
                             </li>
                         </ul>

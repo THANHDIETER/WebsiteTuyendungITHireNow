@@ -22,11 +22,21 @@ class DashboardController extends Controller
     /**
      * API: Thống kê số lượng user theo vai trò (admin, employer, seeker)
      */
-    public function userStats()
+    public function userStats(Request $request)
     {
+        $query = User::query();
+
+        // Lọc theo thời gian nếu có
+        if ($request->filled('dateFrom') && $request->filled('dateTo')) {
+            $dateFrom = Carbon::parse($request->dateFrom)->startOfDay();
+            $dateTo = Carbon::parse($request->dateTo)->endOfDay();
+
+            $query->whereBetween('created_at', [$dateFrom, $dateTo]);
+        }
+
         $roles = ['admin', 'employer', 'job_seeker'];
 
-        $users = User::whereIn('role', $roles)
+        $users = $query->whereIn('role', $roles)
             ->selectRaw('role, COUNT(*) as total')
             ->groupBy('role')
             ->pluck('total', 'role');
@@ -41,12 +51,22 @@ class DashboardController extends Controller
     /**
      * API: Thống kê job theo trạng thái (active hoặc closed dựa vào deadline)
      */
-    public function jobStats()
+    public function jobStats(Request $request)
     {
+        $query = Job::query();
+
+        // Lọc theo thời gian nếu có
+        if ($request->filled('dateFrom') && $request->filled('dateTo')) {
+            $dateFrom = Carbon::parse($request->dateFrom)->startOfDay();
+            $dateTo = Carbon::parse($request->dateTo)->endOfDay();
+
+            $query->whereBetween('created_at', [$dateFrom, $dateTo]);
+        }
+
         $today = now()->startOfDay();
 
-        $active = Job::whereDate('deadline', '>=', $today)->count();
-        $closed = Job::whereDate('deadline', '<', $today)->count();
+        $active = (clone $query)->whereDate('deadline', '>=', $today)->count();
+        $closed = (clone $query)->whereDate('deadline', '<', $today)->count();
 
         return response()->json([
             'active' => $active,
@@ -54,19 +74,29 @@ class DashboardController extends Controller
         ]);
     }
 
-
     /**
      * API: Thống kê lượt ứng tuyển theo tuần hoặc tháng
      */
     public function applicationStats(Request $request)
     {
-        $type = $request->input('type', 'weekly');
+        $type = $request->input('type', 'monthly');
 
-        $start = Carbon::now()->startOfYear();
-        $end = Carbon::now()->endOfYear();
+        $query = Application::query();
 
-        $applications = Application::query()
-            ->whereBetween('created_at', [$start, $end])
+        // Lọc theo thời gian nếu có
+        if ($request->filled('dateFrom') && $request->filled('dateTo')) {
+            $dateFrom = Carbon::parse($request->dateFrom)->startOfDay();
+            $dateTo = Carbon::parse($request->dateTo)->endOfDay();
+
+            $query->whereBetween('created_at', [$dateFrom, $dateTo]);
+        } else {
+            // Mặc định lấy dữ liệu trong năm hiện tại
+            $start = Carbon::now()->startOfYear();
+            $end = Carbon::now()->endOfYear();
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        $applications = $query
             ->when($type === 'weekly', function ($query) {
                 return $query->selectRaw('WEEK(created_at, 1) as period, COUNT(*) as total')
                     ->groupBy('period');

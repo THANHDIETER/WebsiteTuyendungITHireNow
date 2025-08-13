@@ -281,125 +281,95 @@
         </section>
 
         <style>
-            .job-card {
-                transition: box-shadow 0.3s ease, transform 0.3s ease;
-                background: #fff;
-                border: none;
-                padding: 1.5rem;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
+            .job-featured-card {
+                border: 3px solid;
+                border-image: linear-gradient(135deg, #ffd700 10%, #ff8177 40%, #b721ff 80%, #21d4fd 100%) 1;
+                box-shadow: 0 0 32px 2px #ffd70055, 0 6px 25px rgba(0, 0, 0, 0.10);
+                background: linear-gradient(120deg, #fffbe9 0%, #e9faff 100%);
+                position: relative;
+                z-index: 2;
+                animation: cardGlow 2.5s infinite alternate;
             }
 
-            .job-card:hover {
-                box-shadow: 0 10px 25px rgb(0 0 0 / 0.1);
-                transform: translateY(-5px);
+            @keyframes cardGlow {
+                0% {
+                    box-shadow: 0 0 12px 1px #ffd70066;
+                }
+
+                100% {
+                    box-shadow: 0 0 38px 8px #ffd700aa;
+                }
             }
 
             .featured-ribbon {
                 position: absolute;
-                top: 15px;
-                left: -40px;
-                background: #ffd700;
+                left: -32px;
+                top: 18px;
+                background: linear-gradient(90deg, #ffd700 60%, #ff8177 100%);
                 color: #333;
-                font-weight: 600;
-                padding: 6px 50px 6px 20px;
-                transform: rotate(-22deg);
-                box-shadow: 0 2px 6px rgba(255, 215, 0, 0.6);
-                border-radius: 6px;
-                user-select: none;
-                pointer-events: none;
-                font-size: 0.9rem;
-                z-index: 10;
-            }
-
-            .job-title a {
-                color: #222;
                 font-weight: 700;
-            }
-
-            .job-title a:hover {
-                color: #0d6efd;
-                text-decoration: underline;
-            }
-
-            .skills-tags .badge {
-                border-radius: 20px;
-                font-weight: 600;
-            }
-
-            .badge-top {
-                background-color: #198754;
-                /* Bootstrap green */
-                color: white;
-                font-weight: 600;
-                padding: 4px 12px;
-                border-radius: 999px;
-                font-size: 0.75rem;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-            }
-
-            .badge-hot {
-                background: linear-gradient(to right, #ff8a00, #e52e71);
-                color: white;
-                font-weight: 600;
-                padding: 4px 12px;
-                border-radius: 999px;
-                font-size: 0.75rem;
-                box-shadow: 0 0 12px rgba(255, 122, 0, 0.5);
-            }
-
-            .job-card-custom {
-                transition: all 0.3s ease;
-                line-height: 1.6;
-                background-color: #fff;
-                border: 1px solid #eee;
-            }
-
-            .job-card-custom:hover {
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-                transform: translateY(-3px);
-            }
-
-            /* Badge HOT */
-            .badge-hot {
-                background: linear-gradient(90deg, #ff7e00, #ff3d00);
-                color: white;
-                font-weight: bold;
-                border-radius: 999px;
-                padding: 4px 12px;
-                font-size: 0.75rem;
-                box-shadow: 0 0 12px rgba(255, 100, 0, 0.5);
-            }
-
-            /* Badge TOP */
-            .badge-top {
-                background-color: #28a745;
-                color: white;
-                font-weight: bold;
-                border-radius: 999px;
-                padding: 4px 12px;
-                font-size: 0.75rem;
-                box-shadow: 0 0 6px rgba(40, 167, 69, 0.4);
-            }
-
-            .active-skill {
-                background: #eaf3fa !important;
-                color: #1976d2 !important;
-                border: 1.5px solid #1976d2 !important;
-                font-weight: 600;
-            }
-
-            .btn-outline-primary.rounded-pill.btn-sm {
-                border-radius: 30px;
-                padding: 0.3rem 1.1rem;
                 font-size: 1rem;
-                transition: 0.18s;
+                letter-spacing: 1px;
+                padding: 8px 38px 8px 30px;
+                transform: rotate(-24deg);
+                box-shadow: 0 2px 6px 0 #ffd70044;
+                border-radius: 6px;
+                z-index: 10;
+                animation: ribbonGlow 2s infinite alternate;
             }
 
-            .btn-outline-primary.rounded-pill.btn-sm:hover,
-            .active-skill:hover {
-                background: #d0e6fb !important;
-                color: #1976d2 !important;
+            @keyframes ribbonGlow {
+                0% {
+                    box-shadow: 0 2px 10px 0 #ffd70033;
+                }
+
+                100% {
+                    box-shadow: 0 4px 20px 4px #ff817799;
+                }
+            }
+
+            .job-card {
+                position: relative;
+                overflow: hidden;
+                background: linear-gradient(135deg, #e3f2fd 0%, #f1f8e9 100%);
+                border: 1px solid #dee2e6;
+                transition: all 0.3s ease;
+            }
+
+            .job-card:hover {
+                transform: translateY(-7px) scale(1.015);
+                box-shadow: 0 12px 40px 2px #b0b8d944, 0 8px 30px rgba(0, 0, 0, 0.10);
+            }
+
+            .hover-scale {
+                transition: all 0.3s ease;
+            }
+
+            .hover-scale:hover {
+                transform: scale(1.07);
+            }
+
+            @media (max-width: 768px) {
+                .job-card {
+                    min-height: 300px;
+                    margin-bottom: 1.5rem;
+                }
+
+                .salary-info h5 {
+                    font-size: 1.1rem;
+                }
+
+                .btn-primary {
+                    padding: 0.5rem 1rem;
+                }
+
+                .featured-ribbon {
+                    font-size: 0.9rem;
+                    left: -20px;
+                    top: 10px;
+                    padding: 7px 28px 7px 18px;
+                }
             }
         </style>
+    </main>
+@endsection

@@ -281,39 +281,3 @@
         });
     </script>
 @endpush
-
-<script>
-    if (typeof window.Echo !== 'undefined') {
-        console.log('Echo loaded, lắng nghe thông báo toàn cục...');
-
-        window.Echo.channel('global-notification')
-            .listen('GlobalNotificationEvent', function(data) { // <-- SỬA LẠI CHỖ NÀY!
-                console.log('Đã nhận sự kiện toàn cục:', data);
-                showGlobalNotification(data.message, data.link);
-            });
-    } else {
-        console.error('Echo chưa được khởi tạo hoặc chưa kết nối Pusher!');
-    }
-
-
-    function showGlobalNotification(message, link) {
-        // Loại bỏ toast cũ (nếu có)
-        $('#global-toast').remove();
-
-        // Tạo popup/toast
-        let html = `<div id="global-toast" style="
-            position:fixed;top:24px;right:24px;z-index:99999;
-            background:#232323;color:#fff;padding:16px 32px;
-            border-radius:8px;font-size:1.1rem;box-shadow:0 2px 12px #0006;
-            display:flex;align-items:center;
-        ">
-            <span>${message}</span>
-            ${link ? `<a href="${link}" style="color:#ffd700;text-decoration:underline;margin-left:12px;">Xem</a>` : ''}
-            <span style="cursor:pointer;float:right;font-weight:bold;margin-left:16px;" onclick="$('#global-toast').fadeOut()">×</span>
-        </div>`;
-        $('body').append(html);
-        setTimeout(() => {
-            $('#global-toast').fadeOut();
-        }, 10000);
-    }
-</script>

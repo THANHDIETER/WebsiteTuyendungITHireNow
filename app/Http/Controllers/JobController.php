@@ -166,20 +166,36 @@ class JobController extends Controller
             $query->where('is_featured', 1);
         }
 
-        // Sắp xếp
-        $sort = $request->input('sort', 'newest');
-        switch ($sort) {
-            case 'views':
-                $query->orderByDesc('views');
-                break;
-            case 'salary':
-                $query->orderByDesc('salary_min');
-                break;
-            default:
-                $query->orderByDesc('created_at');
-        }
+        // Lấy danh sách việc làm
+        $jobs = Job::with('company')
+            ->where('status', 'published')
+            ->orderByDesc('is_featured')
+            ->orderByDesc('views')
+            ->paginate(9);
 
-        return $query;
+        // Dữ liệu lọc cho form
+        $categories = Category::all();
+        $companies = Company::all();
+        $skills = Skill::all();
+        $locations = Location::all();
+        $jobTypes = JobType::all();
+
+        // Việc làm nổi bật gợi ý
+        $topJobs = (clone $query)
+            ->orderByDesc('is_featured')
+            ->orderByDesc('salary_min')
+            ->limit(3)
+            ->get();
+
+        return view('website.jobs.job', compact(
+            'jobs',
+            'categories',
+            'companies',
+            'skills',
+            'locations',
+            'jobTypes',
+            'topJobs'
+        ));
     }
 
     /**
@@ -219,4 +235,5 @@ class JobController extends Controller
 
         return view('website.jobs.job-details', compact('job', 'relatedJobs'));
     }
+
 }

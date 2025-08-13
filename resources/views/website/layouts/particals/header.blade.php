@@ -244,14 +244,14 @@
         forceTLS: true,
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const authId = {{ auth()->id() }};
         const notiCount = document.getElementById('notification-count');
         const notiList = document.getElementById('notification-list-items');
 
         if (window.Echo && authId) {
             window.Echo.private('App.Models.User.' + authId)
-                .notification(function(notification) {
+                .notification(function (notification) {
                     // 1. Cập nhật badge
                     if (notiCount) {
                         let count = parseInt(notiCount.innerText) || 0;
@@ -313,5 +313,4 @@
         }
     });
 </script>
-
 </header>
