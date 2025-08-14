@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employers\JobController;
+use App\Http\Controllers\Employers\StatsController;
 use App\Http\Controllers\Employers\CompanyController;
 use App\Http\Controllers\Employers\PackageController;
 use App\Http\Controllers\Employers\PaymentController;
@@ -25,9 +26,10 @@ Route::middleware(['auth:sanctum', 'employer'])
     ->name('employer.')
     ->group(function () {
 
-        // Danh sách việc làm của nhà tuyển dụng
-    
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/dashboard', [StatsController::class, 'index'])->name('dashboard');                        
+        Route::get('/dashboard/filter', [StatsController::class, 'filter'])->name('dashboard.filter');
+        Route::get('/stats/filter/data', [StatsController::class, 'filterData'])->name('stats.filter.data');
 
         Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
 
@@ -72,9 +74,9 @@ Route::middleware(['auth:sanctum', 'employer'])
         Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
         Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
 
-
-
+        # Danh sách việc làm của nhà tuyển dụng
         Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
+    
     });
 
 

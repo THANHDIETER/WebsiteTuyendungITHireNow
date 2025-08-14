@@ -10,11 +10,11 @@
 
 <title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
 <!-- Bootstrap JS Bundle (kèm Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> -->
 
 <!-- Favicon icon-->
 <link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
@@ -25,13 +25,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
     rel="stylesheet">
 <!-- Font awesome icon css -->
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css') }}"> -->
+<!-- <link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/brands.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/solid.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/regular.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/vendors/%40fortawesome/fontawesome-free/css/regular.css') }}"> -->
 <!-- Ico Icon css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}"> -->
 <!-- Flag Icon css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css') }}">
 <!-- Themify Icon css -->
@@ -42,7 +42,7 @@
 <!-- Whether Icon css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
 <!-- Apex Chart css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}"> -->
 <!-- Data Table css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
@@ -67,7 +67,7 @@
         @endphp
 
             <a href="{{ route('home') }}">
-                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
+                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : "" }}"
                     alt="Client Logo" style="height: 120px;" {{-- hoặc dùng class --}}>
             </a>
         </div>
@@ -96,12 +96,14 @@
                         <i class="bi bi-house-door-fill svg-color fs-5 svg-color"></i>
                     </a>
                 </li>
-                <!-- Trang quản trị -->
-                <li class="modes d-flex">
-                    <a href="{{ route('admin.dashboard') }}" class="text-dark" title="Trang quản trị">
-                        <i class="bi bi-speedometer2 svg-color fs-5"></i>
-                    </a>
-                </li>
+                @if (auth()->check() && auth()->user()->role === 'admin')
+                    <!-- Trang quản trị -->
+                    <li class="modes d-flex">
+                        <a href="{{ route('admin.dashboard') }}" class="text-dark" title="Trang quản trị">
+                            <i class="bi bi-speedometer2 svg-color fs-5"></i>
+                        </a>
+                    </li>
+                @endif
 
                 <!-- Notification menu -->
                 <li class="custom-dropdown">

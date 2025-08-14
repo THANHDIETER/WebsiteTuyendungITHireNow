@@ -11,12 +11,12 @@
 
 <title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
 <!-- Bootstrap JS Bundle (kèm Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+ -->
 
 <!-- Favicon icon-->
 <link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
@@ -29,21 +29,20 @@
 <!-- Font awesome icon css -->
 
 <!-- Ico Icon css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}"> -->
 <!-- Flag Icon css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css') }}"> -->
 <!-- Themify Icon css -->
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/css/vendors/themify-icons/themify-icons/css/themify.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify-icons/themify-icons/css/themify.css') }}"> -->
 <!-- Animation css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}"> -->
 <!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}"> -->
 <!-- Apex Chart css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}"> -->
 <!-- Data Table css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}"> -->
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}"> -->
 <!-- App css-->
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
@@ -70,7 +69,7 @@
             @endphp
 
             <a href="{{ route('home') }}">
-                <img src="{{ $logo ? asset('storage/' . $logo->image_path) : asset('images/default.png') }}"
+                <img src="{{ $logo ? asset('storage/' . $logo->image_path) : "" }}"
                     alt="Admin Logo" class="logo-img" style="height:120px;">
             </a>
         </div>
@@ -103,12 +102,10 @@
 
                 <!-- Nhà tuyển dụng -->
                 <li class="modes d-flex">
-                    <a href="{{ route('employer') }}" class="text-dark" title="Nhà tuyển dụng">
+                    <a href="{{ route('employer.dashboard') }}" class="text-dark" title="Nhà tuyển dụng">
                         <i class="bi bi-person-badge svg-color fs-5"></i>
                     </a>
                 </li>
-
-
 
                 <!-- Profile dropdown -->
                 <li class="profile-dropdown custom-dropdown position-relative">

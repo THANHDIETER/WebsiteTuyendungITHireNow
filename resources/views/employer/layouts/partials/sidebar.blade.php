@@ -39,13 +39,13 @@
     }
 
     .sidebar-submenu {
-        padding-left: 24px;
+        margin-right: 24px;
     }
-
-    .sidebar-submenu li a {
+/* 
+    /* .sidebar-submenu li a {
         font-size: 13px;
         padding: 6px 10px;
-    }
+    } */ */
 
     .badge-primary {
         background-color: #0d6efd;
@@ -79,9 +79,7 @@
         background-color: #495057;
         color: #0d6efd !important;
     }
-
 </style>
-
 
 <aside class="page-sidebar" data-sidebar-layout="stroke-svg">
     <!-- Mũi tên trái -->
@@ -89,16 +87,27 @@
         <i class="bi bi-chevron-left"></i>
     </div>
     <div id="sidebar-menu">
+        <li class="sidebar-main-title text-center">Chung</li>
         <ul class="sidebar-menu" id="simple-bar">
-            <li class="sidebar-main-title">Chung</li>
-
             <li class="sidebar-list">
-                <a class="sidebar-link" href="{{ route('employer.jobs.applications') }}">
-                    <i class="bi bi-people"></i>
-                    <span>Quản lý ứng viên</span>
+                <a class="sidebar-link" href="#">
+                    <i class="bi bi-briefcase"></i>
+                    <span>Quản lý thống kê</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('employer.dashboard') }}">
+                            <i class="bi bi-bar-chart-line me-2"></i> Thống kê v1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('employer.dashboard.filter') }}">
+                            <i class="bi bi-graph-up-arrow me-2"></i> Thống kê v2
+                        </a>
+                    </li>
+                </ul>
             </li>
-
             <li class="sidebar-list">
                 <a class="sidebar-link" href="#">
                     <i class="bi bi-briefcase"></i>
@@ -106,10 +115,29 @@
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul class="sidebar-submenu">
-                    <li><a href="{{ route('employer.jobs.create') }}">Tạo tin tuyển dụng</a></li>
-                    <li><a href="{{ route('employer.jobs.index') }}">Danh sách tin đã đăng</a></li>
+                    <li>
+                        <a href="{{ route('employer.jobs.create') }}">
+                            <!-- <i class="bi bi-plus-circle me-2"></i>  -->
+                            Tạo tin tuyển dụng
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('employer.jobs.index') }}">
+                            <!-- <i class="bi bi-list-ul me-2"></i>  -->
+                            Danh sách tin đã đăng
+                        </a>
+                    </li>
                 </ul>
             </li>
+            <li class="sidebar-list">
+                <a class="sidebar-link" href="{{ route('employer.jobs.applications') }}">
+                    <i class="bi bi-people"></i>
+                    <span>Quản lý ứng viên</span>
+                </a>
+            </li>
+
+
+
 
             <li class="sidebar-list">
                 <a class="sidebar-link" href="{{ route('employer.packages.index') }}">
@@ -128,4 +156,3 @@
     </div>
 
 </aside>
-
