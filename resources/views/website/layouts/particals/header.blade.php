@@ -2,22 +2,19 @@
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
             <div class="col-12">
-                <div class="header-align " style="align-items: center; height: 80px;">
+                <div class="header-align" style="align-items:center; height:80px;">
+                    {{-- Logo --}}
                     <div class="header-align-start">
                         <div class="header-logo-area">
                             <a href="{{ route('home') }}">
-                                @php
-                                    $clientLogo = \App\Models\Logo::where('type', 'client')
-                                        ->where('is_active', true)
-                                        ->first();
-                                @endphp
-
+                                @php $clientLogo = \App\Models\Logo::where('type','client')->where('is_active',true)->first(); @endphp
                                 <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
-                                    alt="Client Logo" style="height: 120px;" {{-- hoặc dùng class --}}>
+                                    alt="Client Logo" style="height:120px;">
                             </a>
-
                         </div>
                     </div>
+
+                    {{-- Nav --}}
                     <div class="header-align-center me-3">
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
@@ -52,78 +49,126 @@
                             </ul>
                         </div>
                     </div>
+
+                    {{-- Actions --}}
                     <div class="header-align-end">
                         <div class="header-action-area">
                             @guest
-                                <a class="btn-registration" href="{{ route('showLoginForm') }}">
-                                    Đăng Nhập
-                                </a>
+                                <a class="btn-registration" href="{{ route('showLoginForm') }}">Đăng Nhập</a>
                             @else
                                 <div class="row align-items-center">
+                                    {{-- 🔔 Notifications --}}
                                     <div class="col-auto">
                                         <div class="dropdown me-3 notification-dropdown-wrapper">
                                             <a href="#" id="notification-bell-btn"
                                                 class="btn btn-icon position-relative p-0 bg-transparent border-0"
                                                 data-bs-toggle="dropdown" aria-expanded="false" aria-label="Thông báo">
                                                 <i class="bi bi-bell fs-4 text-white"></i>
+                                                @php $unreadCount = auth()->user()->unreadNotifications()->count(); @endphp
                                                 <span id="notification-count"
-                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__bounce"
-                                                    style="display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'inline-block' : 'none' }}; font-size: 0.75rem;">
-                                                    {{ auth()->user()->unreadNotifications->count() }}
+                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                    style="display: {{ $unreadCount > 0 ? 'inline-block' : 'none' }}; font-size:.75rem;">
+                                                    {{ $unreadCount > 99 ? '99+' : $unreadCount }}
                                                 </span>
                                             </a>
-                                            <ul class="dropdown-menu dropdown-menu-end shadow p-0"
-                                                style="width: 340px; max-height: 420px; overflow-y: auto;"
+
+                                            @php
+                                                $notifications = auth()
+                                                    ->user()
+                                                    ->notifications()
+                                                    ->latest()
+                                                    ->take(30)
+                                                    ->get();
+                                            @endphp
+
+                                            <div class="dropdown-menu dropdown-menu-end p-0 noti-card"
                                                 aria-labelledby="notification-bell-btn">
-                                                <li
-                                                    class="dropdown-header bg-primary text-white px-3 py-2 d-flex justify-content-between align-items-center">
-                                                    <span>Thông báo</span>
+                                                {{-- Header --}}
+                                                <div
+                                                    class="noti-card__header d-flex align-items-center justify-content-between">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div
+                                                            class="noti-card__chip d-flex align-items-center justify-content-center">
+                                                            <i class="bi bi-bell-fill"></i>
+                                                        </div>
+                                                        <div class="fw-semibold">Thông báo</div>
+                                                    </div>
                                                     <a href="{{ route('notifications.index') }}"
-                                                        class="text-white-50 small">Xem tất cả</a>
-                                                </li>
-                                                <!-- Danh sách thông báo realtime -->
-                                                <ul id="notification-list-items" class="list-unstyled mb-0">
-                                                    @php $notis = auth()->user()->unreadNotifications->take(6); @endphp
-                                                    @if ($notis->count())
-                                                        @foreach ($notis as $noti)
-                                                            <li class="border-bottom px-3 py-2 small notification-item"
-                                                                data-id="{{ $noti->id }}">
-                                                                <div>
-                                                                    <a href="{{ $noti->data['link_url'] ?? '#' }}"
-                                                                        class="text-decoration-none fw-semibold">
-                                                                        {{ $noti->data['message'] ?? 'Có thông báo mới!' }}
+                                                        class="noti-card__link">Xem tất cả</a>
+                                                </div>
+
+                                                {{-- Scroll list (luôn chỉ cao = 3 item) --}}
+                                                <div id="noti-scroll" class="noti-card__list">
+                                                    <ul id="notification-list-items" class="list-unstyled m-0">
+                                                        @if ($notifications->count())
+                                                            @foreach ($notifications as $noti)
+                                                                @php
+                                                                    $data = $noti->data ?? [];
+                                                                    $msg = is_string(data_get($data, 'message'))
+                                                                        ? data_get($data, 'message')
+                                                                        : (data_get($data, 'message')
+                                                                            ? json_encode(
+                                                                                data_get($data, 'message'),
+                                                                                JSON_UNESCAPED_UNICODE,
+                                                                            )
+                                                                            : (data_get($data, 'title') ?:
+                                                                            'Có thông báo mới!'));
+                                                                    $link = data_get($data, 'link_url', '#');
+                                                                    $isRead = !is_null($noti->read_at);
+                                                                @endphp
+                                                                <li class="noti-item {{ $isRead ? 'is-read' : '' }}"
+                                                                    data-id="{{ $noti->id }}"
+                                                                    data-read="{{ $isRead ? '1' : '0' }}">
+                                                                    <a class="noti-item__inner" href="{{ $link }}">
+                                                                        <div class="noti-item__avatar"><i
+                                                                                class="bi bi-bell"></i></div>
+                                                                        <div class="noti-item__body">
+                                                                            <div class="noti-item__title">
+                                                                                {{ $msg }}</div>
+                                                                            <div class="noti-item__meta">
+                                                                                {{ $noti->created_at->diffForHumans() }}
+                                                                            </div>
+                                                                        </div>
+                                                                        <span class="noti-item__dot"
+                                                                            aria-hidden="true"></span>
                                                                     </a>
-                                                                    <div class="text-muted" style="font-size: 0.8em;">
-                                                                        {{ $noti->created_at->diffForHumans() }}
-                                                                    </div>
-                                                                </div>
+                                                                </li>
+                                                            @endforeach
+                                                        @else
+                                                            <li class="noti-empty empty-row">
+                                                                <div class="noti-empty__icon"><i
+                                                                        class="bi bi-bell-slash"></i></div>
+                                                                <div class="noti-empty__text">Chưa có thông báo</div>
                                                             </li>
-                                                        @endforeach
-                                                    @else
-                                                        <li class="text-center text-muted py-3">Không có thông báo mới</li>
-                                                    @endif
-                                                </ul>
-                                                <li class="dropdown-footer p-2 text-center bg-light">
+                                                        @endif
+                                                    </ul>
+                                                </div>
+
+                                                {{-- Footer sticky --}}
+                                                <div class="noti-card__footer">
+                                                    <form id="read-all-form" action="{{ route('notifications.readAll') }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-secondary">Đánh
+                                                            dấu tất cả đã đọc</button>
+                                                    </form>
                                                     <a href="{{ route('notifications.index') }}"
-                                                        class="text-secondary small">Xem tất cả thông báo</a>
-                                                </li>
-                                            </ul>
+                                                        class="btn btn-sm btn-link text-secondary">Xem tất cả</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-
-
-                                    <!--icon chat nhắn tin  -->
+                                    {{-- 💬 Chat --}}
                                     <div class="col-auto">
                                         <div class="dropdown me-3">
                                             <a class="btn btn-icon position-relative p-0 bg-transparent border-0"
                                                 href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
                                                 <i id="chat-bubble" class="bi bi-chat-dots fs-4 text-white"></i>
-
                                                 @if (isset($totalUnread) && $totalUnread > 0)
                                                     <span id="chat-dot"
                                                         class="position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow"
-                                                        style="font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;">
+                                                        style="font-size:10px; min-width:18px; height:18px; padding:0 4px; border:2px solid #fff;">
                                                         {{ $totalUnread > 99 ? '99+' : $totalUnread }}
                                                     </span>
                                                 @endif
@@ -131,84 +176,51 @@
                                         </div>
                                     </div>
 
+                                    {{-- 👤 User --}}
                                     <div class="col">
-                                        {{-- 👤 Menu người dùng --}}
                                         <div class="user-info dropdown me-3">
                                             <a href="#" class="user-info-toggle d-flex align-items-center"
                                                 data-bs-toggle="dropdown">
                                                 <span class="user-avatar me-2"><i class="icofont-user-alt-3"></i></span>
-                                                {{-- <span class="user-role">{{ Auth::user()->role }}</span> --}}
                                                 <i class="icofont-caret-down ms-1"></i>
                                             </a>
-                                            <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
-                                                {{-- Tổng quan --}}
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active text-primary' : '' }}"
-                                                        href="{{ route('profile.dashboard') }}">
-                                                        <i class="fa-solid fa-house me-2"></i> Tổng quan
-                                                    </a>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width:200px;">
+                                                <li><a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active text-primary' : '' }}"
+                                                        href="{{ route('profile.dashboard') }}"><i
+                                                            class="fa-solid fa-house me-2"></i> Tổng quan</a></li>
+                                                <li><a class="dropdown-item d-flex align-items-center {{ request()->is('profile/show') ? 'active text-primary' : '' }}"
+                                                        href="{{ route('profile.show') }}"><i
+                                                            class="fa-solid fa-file-lines me-2"></i> Hồ sơ HireNow</a></li>
+                                                <li><a class="dropdown-item d-flex align-items-center {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}"
+                                                        href="{{ route('profile.my-jobs') }}"><i
+                                                            class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi</a>
                                                 </li>
-                                                {{-- Hồ sơ --}}
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/show') ? 'active text-primary' : '' }}"
-                                                        href="{{ route('profile.show') }}">
-                                                        <i class="fa-solid fa-file-lines me-2"></i> Hồ sơ HireNow
-                                                    </a>
-                                                </li>
-                                                {{-- Việc làm của tôi --}}
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}"
-                                                        href="{{ route('profile.my-jobs') }}">
-                                                        <i class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi
-                                                    </a>
-                                                </li>
-                                                {{-- Admin --}}
                                                 @if (Auth::user()->role === 'admin')
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center"
-                                                            href="{{ route('admin.dashboard') }}">
-                                                            <i class="fa-solid fa-user-shield me-2 text-danger"></i> Trang
-                                                            quản
-                                                            trị
-                                                        </a>
-                                                    </li>
+                                                    <li><a class="dropdown-item d-flex align-items-center"
+                                                            href="{{ route('admin.dashboard') }}"><i
+                                                                class="fa-solid fa-user-shield me-2 text-danger"></i> Trang
+                                                            quản trị</a></li>
                                                 @endif
-
-                                                {{-- Nhà tuyển dụng --}}
                                                 @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center"
-                                                            href="{{ route('employer.dashboard') }}">
-                                                            <i class="fa-solid fa-building me-2 text-success"></i> Trang
-                                                            nhà
-                                                            tuyển dụng
-                                                        </a>
-                                                    </li>
+                                                    <li><a class="dropdown-item d-flex align-items-center"
+                                                            href="{{ route('employer.dashboard') }}"><i
+                                                                class="fa-solid fa-building me-2 text-success"></i> Trang
+                                                            nhà tuyển dụng</a></li>
                                                 @endif
                                                 @if (Auth::user()->role === 'employer')
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center"
-                                                            href="{{ route('employer.details') }}">
-                                                            <i class="icofont-building-alt me-1"></i> Quản lý nhà tuyển
-                                                            dụng
-                                                        </a>
-                                                    </li>
+                                                    <li><a class="dropdown-item d-flex align-items-center"
+                                                            href="{{ route('employer.details') }}"><i
+                                                                class="icofont-building-alt me-1"></i> Quản lý nhà tuyển
+                                                            dụng</a></li>
                                                 @endif
-
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center"
-                                                        href="{{ route('profile.settings') }}">
-                                                        <i class="fa-solid fa-gear me-2"></i> Cài đặt
-                                                    </a>
-                                                </li>
+                                                <li><a class="dropdown-item d-flex align-items-center"
+                                                        href="{{ route('profile.settings') }}"><i
+                                                            class="fa-solid fa-gear me-2"></i> Cài đặt</a></li>
                                                 <li>
                                                     <hr class="dropdown-divider">
                                                 </li>
-                                                <li>
-                                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}">
-                                                        <i class="icofont-logout me-1"></i> Đăng xuất
-                                                    </a>
-                                                </li>
+                                                <li><a class="dropdown-item text-danger" href="{{ route('logout') }}"><i
+                                                            class="icofont-logout me-1"></i> Đăng xuất</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -221,102 +233,405 @@
                             </button>
                         </div>
                     </div>
+                    {{-- /Actions --}}
                 </div>
             </div>
         </div>
     </div>
 </header>
+
 @if (session('access_token'))
     <script>
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
-<!-- Nhúng các thư viện cần thiết -->
+
+<!-- Libs -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
+
 <script>
+    // Echo init
     window.Pusher = Pusher;
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: '1ea633f39dfb08c3c0c2',
+        key: '1ea633f39dfb08c3c0c2', // thay env nếu cần
         cluster: 'ap1',
         forceTLS: true,
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const authId = {{ auth()->id() }};
-        const notiCount = document.getElementById('notification-count');
-        const notiList = document.getElementById('notification-list-items');
+    // Template URL chi tiết notification (để resolve payload nếu thiếu)
+    const NOTI_DETAIL_URL_TMPL = "{{ url('/notifications') }}/__ID__/json";
 
-        if (window.Echo && authId) {
+    // Luôn set chiều cao = đúng 3 item đầu (gọi khi dropdown mở)
+    function setNotiScrollHeight() {
+        const scroll = document.getElementById('noti-scroll');
+        const list = document.getElementById('notification-list-items');
+        if (!scroll || !list) return;
+
+        const items = list.querySelectorAll('.noti-item');
+        if (items.length === 0) {
+            scroll.style.maxHeight = '0px';
+            return;
+        }
+
+        const firstRect = items[0].getBoundingClientRect();
+        const target = items[Math.min(2, items.length - 1)];
+        const targetRect = target.getBoundingClientRect();
+        const visibleH = Math.max(0, targetRect.bottom - firstRect.top) + 10;
+
+        scroll.style.maxHeight = visibleH + 'px';
+        scroll.style.overflowY = 'auto';
+    }
+
+    // Nếu payload realtime thiếu message/link -> fetch JSON chi tiết
+    async function resolveNotificationPayload(evt) {
+        const d = evt?.data || {};
+        let message = (typeof d.message === 'string' && d.message.trim() !== '') ? d.message : null;
+        let link = (typeof d.link_url === 'string' && d.link_url.trim() !== '') ? d.link_url : null;
+
+        if (message && link) return {
+            message,
+            link
+        };
+
+        try {
+            const url = NOTI_DETAIL_URL_TMPL.replace('__ID__', evt.id);
+            const res = await fetch(url, {
+                headers: {
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
+            });
+            if (res.ok) {
+                const j = await res.json();
+                return {
+                    message: (j.message && j.message.trim() !== '') ? j.message : (message || d.title ||
+                        'Có thông báo mới!'),
+                    link: (j.link_url && j.link_url.trim() !== '') ? j.link_url : (link || '#'),
+                };
+            }
+        } catch (_) {}
+
+        return {
+            message: message || d.title || 'Có thông báo mới!',
+            link: link || '#'
+        };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const badge = document.getElementById('notification-count');
+        const list = document.getElementById('notification-list-items');
+        const scrollBox = document.getElementById('noti-scroll');
+        const trigger = document.getElementById('notification-bell-btn');
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        if (trigger) trigger.addEventListener('shown.bs.dropdown', setNotiScrollHeight);
+        window.addEventListener('resize', setNotiScrollHeight);
+
+        // Chỉ cuộn trong dropdown, không cuộn trang
+        if (scrollBox) {
+            scrollBox.addEventListener('wheel', function(e) {
+                const atTop = this.scrollTop === 0;
+                const atBottom = Math.ceil(this.scrollTop + this.clientHeight) >= this.scrollHeight;
+                if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) e.preventDefault();
+            }, {
+                passive: false
+            });
+        }
+
+        // Recalc khi list thay đổi và dropdown đang mở
+        if (list) {
+            new MutationObserver(() => {
+                const menu = trigger?.nextElementSibling;
+                if (menu?.classList.contains('show')) setNotiScrollHeight();
+            }).observe(list, {
+                childList: true
+            });
+        }
+
+        // Realtime: push item mới (đã resolve message/link)
+        const authId = {{ auth()->id() ?? 'null' }};
+        if (authId && window.Echo) {
             window.Echo.private('App.Models.User.' + authId)
-                .notification(function(notification) {
-                    // 1. Cập nhật badge
-                    if (notiCount) {
-                        let count = parseInt(notiCount.innerText) || 0;
-                        count = isNaN(count) ? 0 : count;
-                        notiCount.innerText = (count + 1) > 99 ? '99+' : (count + 1);
-                        notiCount.style.display = 'inline-block';
+                .notification(async function(evt) {
+                    // Badge
+                    if (badge) {
+                        let raw = (badge.textContent || '').trim();
+                        let c = (raw === '99+') ? 99 : parseInt(raw) || 0;
+                        c = isNaN(c) ? 0 : c + 1;
+                        badge.textContent = c > 99 ? '99+' : c;
+                        badge.style.display = 'inline-block';
                     }
-                    // 2. Chèn vào dropdown (luôn realtime)
-                    if (notiList) {
-                        // Xoá thông báo "Không có thông báo mới" nếu có
-                        let empty = notiList.querySelector('.text-muted');
-                        if (empty) notiList.removeChild(empty);
 
-                        // Nội dung notification
-                        let html = `
-                        <li class="border-bottom px-3 py-2 small notification-item" data-id="${notification.id}">
-                            <div>
-                                <a href="${notification.data.link_url || '#'}" class="text-decoration-none fw-semibold">${notification.data.message || 'Có thông báo mới!'}</a>
-                                <div class="text-muted" style="font-size: 0.8em;">Vừa xong</div>
-                            </div>
-                        </li>
-                    `;
-                        notiList.insertAdjacentHTML('afterbegin', html);
+                    const payload = await resolveNotificationPayload(evt);
 
-                        // Giữ tối đa 6 thông báo mới nhất
-                        let items = notiList.querySelectorAll('li.notification-item');
-                        if (items.length > 6) {
-                            notiList.removeChild(items[items.length - 1]);
-                        }
-                    }
-                });
+                    // List
+                    if (list) {
+                        list.querySelectorAll('.empty-row').forEach(el => el.remove());
 
-            // Chat badge giữ nguyên (nếu dùng)
-            window.Echo.private('user.' + authId)
-                .listen('MessageNotification', (e) => {
-                    const chatDot = document.getElementById('chat-dot');
-                    const unread = e.unread_total;
-                    if (chatDot) {
-                        if (unread > 0) {
-                            chatDot.innerText = unread > 99 ? '99+' : unread;
-                            chatDot.style.display = 'flex';
-                        } else {
-                            chatDot.style.display = 'none';
-                        }
-                    } else {
-                        const aTag = document.getElementById('chatDropdown');
-                        if (aTag) {
-                            const badge = document.createElement('span');
-                            badge.id = 'chat-dot';
-                            badge.className =
-                                'position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow';
-                            badge.style =
-                                'font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;';
-                            badge.innerText = unread > 99 ? '99+' : unread;
-                            aTag.appendChild(badge);
-                        }
+                        const li = document.createElement('li');
+                        li.className = 'noti-item';
+                        li.setAttribute('data-id', evt.id || '');
+                        li.setAttribute('data-read', '0');
+                        li.innerHTML = `
+              <a class="noti-item__inner" href="${payload.link}">
+                <div class="noti-item__avatar"><i class="bi bi-bell"></i></div>
+                <div class="noti-item__body">
+                  <div class="noti-item__title">${payload.message}</div>
+                  <div class="noti-item__meta">Vừa xong</div>
+                </div>
+                <span class="noti-item__dot" aria-hidden="true"></span>
+              </a>
+            `;
+
+                        const first = list.querySelector('.noti-item');
+                        if (first) list.insertBefore(li, first);
+                        else list.prepend(li);
+
+                        // Giới hạn ~50 item
+                        const items = list.querySelectorAll('.noti-item');
+                        if (items.length > 50)
+                            for (let i = 50; i < items.length; i++) items[i].remove();
                     }
                 });
+        }
+
+        // Click => mark-as-read => đổi style + điều hướng
+        if (list) {
+            list.addEventListener('click', async function(e) {
+                const anchor = e.target.closest('a.noti-item__inner');
+                const li = e.target.closest('.noti-item[data-id]');
+                if (!anchor || !li) return;
+                if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+
+                const id = li.getAttribute('data-id');
+                const href = anchor.getAttribute('href') || '#';
+
+                try {
+                    const res = await fetch(`{{ url('/notifications') }}/${id}/read`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({})
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (badge) {
+                            const c = parseInt(data.unread_count ?? 0);
+                            badge.textContent = c > 99 ? '99+' : c;
+                            badge.style.display = c > 0 ? 'inline-block' : 'none';
+                        }
+                        li.classList.add('is-read');
+                        li.setAttribute('data-read', '1');
+                    }
+                } catch (err) {
+                    console.error('Mark-as-read error:', err);
+                } finally {
+                    if (href && href !== '#') window.location.href = href;
+                }
+            });
+        }
+
+        // Đánh dấu tất cả đã đọc
+        const readAllForm = document.getElementById('read-all-form');
+        if (readAllForm) {
+            readAllForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                try {
+                    const res = await fetch(this.action, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({})
+                    });
+                    if (res.ok) {
+                        if (badge) {
+                            badge.textContent = '0';
+                            badge.style.display = 'none';
+                        }
+                        document.querySelectorAll('#notification-list-items .noti-item')
+                            .forEach(el => {
+                                el.classList.add('is-read');
+                                el.setAttribute('data-read', '1');
+                            });
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            });
         }
     });
 </script>
 
+<style>
+    .noti-card {
+        width: 360px;
+        border: none;
+        border-radius: 14px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .16), 0 2px 4px rgba(0, 0, 0, .08);
+        overflow: hidden;
+    }
 
+    .noti-card__header {
+        padding: 10px 14px;
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+        color: #fff;
+    }
 
+    .noti-card__chip {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .18);
+        backdrop-filter: blur(6px);
+        font-size: 16px;
+    }
 
+    .noti-card__link {
+        color: rgba(255, 255, 255, .9);
+        text-decoration: none;
+        font-size: .9rem;
+    }
 
+    .noti-card__link:hover {
+        text-decoration: underline;
+    }
 
-</header>
+    .noti-card__list {
+        padding: 6px 0;
+        background: var(--noti-bg, #fff);
+        max-height: 320px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .noti-card__footer {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        gap: .5rem;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: linear-gradient(180deg, rgba(0, 0, 0, .02), rgba(0, 0, 0, .06));
+        backdrop-filter: blur(6px);
+    }
+
+    .noti-item {
+        list-style: none;
+    }
+
+    .noti-item+.noti-item {
+        border-top: 1px solid rgba(0, 0, 0, .05);
+    }
+
+    .noti-item__inner {
+        display: grid;
+        grid-template-columns: 36px 1fr auto;
+        gap: 10px;
+        align-items: start;
+        padding: 10px 14px;
+        text-decoration: none;
+        transition: background .15s ease, transform .06s ease;
+    }
+
+    .noti-item__inner:hover {
+        background: rgba(0, 0, 0, .04);
+    }
+
+    .noti-item__inner:active {
+        transform: scale(.996);
+    }
+
+    .noti-item__avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #eef2ff;
+        color: #4f46e5;
+        display: grid;
+        place-items: center;
+        font-size: 18px;
+    }
+
+    .noti-item__body {
+        min-width: 0;
+    }
+
+    .noti-item__title {
+        font-size: .95rem;
+        line-height: 1.3;
+        color: #111827;
+        font-weight: 600;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .noti-item__meta {
+        font-size: .8rem;
+        color: #6b7280;
+        margin-top: 2px;
+    }
+
+    .noti-item__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ef4444;
+        margin-top: 4px;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, .18);
+    }
+
+    .noti-item.is-read .noti-item__title {
+        font-weight: 500;
+        color: #374151;
+    }
+
+    .noti-item.is-read .noti-item__dot {
+        visibility: hidden;
+    }
+
+    .noti-empty {
+        padding: 24px 12px;
+        text-align: center;
+        color: #6b7280;
+    }
+
+    .noti-empty__icon {
+        font-size: 28px;
+        opacity: .5;
+        margin-bottom: 6px;
+    }
+
+    html.dark .noti-card__list {
+        --noti-bg: #0b1220;
+    }
+
+    html.dark .noti-item__inner:hover {
+        background: rgba(255, 255, 255, .06);
+    }
+
+    html.dark .noti-item__title {
+        color: #e5e7eb;
+    }
+
+    html.dark .noti-item__meta {
+        color: #9ca3af;
+    }
+
+    html.dark .noti-item.is-read .noti-item__title {
+        color: #cbd5e1;
+    }
+</style>
