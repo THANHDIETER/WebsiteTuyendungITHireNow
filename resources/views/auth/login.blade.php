@@ -63,10 +63,22 @@
             <div class="col-12 p-0">
                 <div class="login-card login-dark">
                     <div>
-                        <div><a class="logo" href="index.html"><img class="img-fluid for-light"
-                                    src="{{ asset('../assets/images/logo/logo.png') }}" alt="looginpage"><img
-                                    class="img-fluid for-dark m-auto" src="../assets/images/logo/dark-logo.png"
-                                    alt="logo"></a></div>
+                        <div
+                            style="align-items: center;
+                                display: flex;
+                                justify-content: center;
+                                height: 100px;">
+                            <a href="{{ route('home') }}">
+                                @php
+                                    $clientLogo = \App\Models\Logo::where('type', 'client')
+                                        ->where('is_active', true)
+                                        ->first();
+                                @endphp
+
+                                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
+                                    alt="Client Logo" style="height: 120px; " {{-- hoặc dùng class --}}>
+                            </a>
+                        </div>
                         <div class="login-main">
                             <form class="theme-form" method="POST" action="{{ route('post-login') }}">
                                 @csrf
@@ -84,7 +96,8 @@
                                 @endif
                                 <div class="form-group">
                                     <label class="col-form-label">Email Address</label>
-                                    <input class="form-control" type="email" name="email" placeholder="Email Address">
+                                    <input class="form-control" type="email" name="email"
+                                        placeholder="Email Address">
                                     @error('email')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -92,9 +105,11 @@
                                 <div class="form-group">
                                     <label class="col-form-label mt-3">Password</label>
                                     <div class="form-input position-relative">
-                                        <input class="form-control" type="password" id="login[password]" name="password"
+                                        <input class="form-control" type="password" id="password" name="password"
                                             placeholder="*********">
-                                        <div class="show-hide"><span class="show"> </span></div>
+                                        <div class="show-hide" onclick="togglePassword()">
+                                            <span class="show">👁️</span> {{-- bạn có thể thay bằng icon FontAwesome hoặc Bootstrap Icons --}}
+                                        </div>
                                     </div>
                                     @error('password')
                                         <span class="text-danger">{{ $message }}</span>
@@ -114,7 +129,8 @@
                                                     class="fa-brands fa-google"></i></a></li>
                                     </ul>
                                 </div>
-                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">
+                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn"
+                                    data-theme="dark">
                                 </div>
                                 <p class="mt-4 mb-0 text-center">Don't have account?<a class="ms-2"
                                         href="{{ route('register') }}">Create Account</a></p>
@@ -135,6 +151,31 @@
         <!-- customizer-->
         <!-- custom script -->
         <script src="{{ asset('../assets/js/script.js') }}"></script>
+        <script>
+            function togglePassword() {
+                const input = document.getElementById('password');
+                const showHideIcon = document.querySelector('.show-hide span');
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    showHideIcon.textContent = '🙈'; // đổi biểu tượng nếu muốn
+                } else {
+                    input.type = 'password';
+                    showHideIcon.textContent = '👁️';
+                }
+            }
+        </script>
+
+        <style>
+            .show-hide {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                user-select: none;
+            }
+        </style>
     </div>
 </body>
 
