@@ -57,7 +57,7 @@
 <header class="page-header row justify-content-between align-items-center bg-white">
 
     <div class="logo-wrapper d-flex align-items-center col-4" style="padding-left: 80px; ">
-        <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 90px;">
+        {{-- <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 90px;">
             @php
                 $logo = \App\Models\Logo::where('type', 'admin')->where('is_active', true)->first();
             @endphp
@@ -68,7 +68,7 @@
             </a>
 
 
-        </div>
+        </div> --}}
 
         <a class="close-btn ms-4" href="javascript:void(0)">
             <div class="toggle-sidebar">
