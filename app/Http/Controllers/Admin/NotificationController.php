@@ -43,7 +43,7 @@ class NotificationController extends Controller
         Notification::create([
             'id' => Str::uuid(),
             'type' => $request->type,
-            'notifiable_type' => 'App\Models\User',
+            'notifiable_type' => 'system',
             'notifiable_id' => 0,
             'data' => json_decode($request->data, true),
             'read_at' => null,
