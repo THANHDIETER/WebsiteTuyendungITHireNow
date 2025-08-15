@@ -1,119 +1,64 @@
-@extends('admin.layouts.default')
+<form id="editNotificationForm" action="{{ route('admin.notifications.update', $notification->id) }}" method="POST">
+    @csrf
+    @method('PUT')
 
-@section('content')
-    <div class="container my-4">
-        <!-- Tiêu đề -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h2 class="fw-semibold text-dark">Sửa Notification</h2>
-            </div>
-        </div>
-
-        <!-- Thông báo thành công hoặc lỗi -->
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
-            </div>
-        @endif
-
-        <!-- Form chỉnh sửa -->
-        <form action="{{ route('admin.notifications.update', $notification->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Loại</label>
-                    <input type="text" name="type" class="form-control" value="{{ old('type', $notification->type) }}"
-                        required>
-                    @error('type')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Kiểu đối tượng</label>
-                    <input type="text" name="notifiable_type" class="form-control"
-                        value="{{ old('notifiable_type', $notification->notifiable_type) }}" required>
-                    @error('notifiable_type')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">ID đối tượng</label>
-                    <input type="number" name="notifiable_id" class="form-control"
-                        value="{{ old('notifiable_id', $notification->notifiable_id) }}" required>
-                    @error('notifiable_id')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Đã đọc</label>
-                    <input type="datetime-local" name="read_at" class="form-control"
-                        value="{{ old('read_at', $notification->read_at ? $notification->read_at->format('Y-m-d\TH:i') : '') }}">
-                    @error('read_at')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Nội dung (JSON)</label>
-                <textarea name="data" class="form-control" rows="6" required style="font-size: 0.85rem; line-height: 1.4;">{{ old('data', json_encode($notification->data, JSON_PRETTY_PRINT)) }}</textarea>
-                @error('data')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-            </div>
-
-            <div class="row mt-3">
-                <div class="col-12 d-flex justify-content-between">
-                    <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-1"></i> Hủy
-                    </a>
-                    <button type="submit" class="btn btn-outline-primary">
-                        <i class="bi bi-save me-1"></i> Cập nhật
-                    </button>
-                </div>
-            </div>
-        </form>
+    <!-- Loại thông báo -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Loại thông báo <span class="text-danger">*</span></label>
+        <select name="type" class="form-select" required>
+            <option value="">-- Chọn loại --</option>
+            <option value="App\Notifications\System\GeneralNotification"
+                {{ old('type', $notification->type) == 'App\Notifications\System\GeneralNotification' ? 'selected' : '' }}>
+                GeneralNotification
+            </option>
+            <option value="App\Notifications\System\MaintenanceNotification"
+                {{ old('type', $notification->type) == 'App\Notifications\System\MaintenanceNotification' ? 'selected' : '' }}>
+                MaintenanceNotification
+            </option>
+        </select>
     </div>
 
-    <style>
-        .form-control,
-        .form-control:focus {
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
+    <!-- Nội dung JSON -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Nội dung (JSON) <span class="text-danger">*</span></label>
+        <textarea name="data" class="form-control font-monospace" rows="5" required>{{ old('data', json_encode($notification->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) }}</textarea>
+        <div class="form-text">
+            Ví dụ: <code>{"message": "Thông báo nội dung ở đây"}</code>
+        </div>
+    </div>
 
-        .form-label {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
+    <!-- Nút -->
+    <div class="text-end">
+        <button type="submit" class="btn btn-warning text-dark">
+            <i class="bi bi-save me-1"></i> Cập nhật
+        </button>
+    </div>
+</form>
 
-        .btn-outline-primary,
-        .btn-outline-secondary {
-            margin: 0 2px;
-            border-radius: 4px;
-        }
+<script>
+document.getElementById('editNotificationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
 
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: #fff;
-        }
+    fetch(this.action, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(resp => {
+        alert(resp.message);
+        location.reload();
+    });
+});
+</script>
 
-        .btn-outline-secondary:hover {
-            background-color: #6c757d;
-            color: #fff;
-        }
-
-        .alert-success {
-            background-color: #e6f4ea;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-    </style>
-@endsection
+<style>
+    .form-label { font-size: 0.9rem; }
+    textarea { font-size: 0.85rem; line-height: 1.4; }
+    code {
+        background-color: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+</style>

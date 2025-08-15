@@ -1,6 +1,6 @@
 <footer class="footer bg-light border-top py-3 mt-auto">
   <div class="container-fluid text-center text-muted small">
-    Copyright {{ date('Y') }} © by ITHireNow.
+    Copyright 2024 © by ITHireNow.
   </div>
 </footer>
 

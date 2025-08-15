@@ -91,8 +91,9 @@ Route::prefix('admin')
         });
 
         // 🔔 Quản lý thông báo hệ thống
+        Route::get('notifications/{id}/json', [NotificationController::class, 'getJson'])
+                ->name('notifications.json');
         Route::resource('notifications', NotificationController::class);
-
         Route::prefix('employers')->name('employers.')->group(function () {
             Route::get('/', [EmployerController::class, 'index'])->name('index');           // danh sách
             Route::get('/create', [EmployerController::class, 'create'])->name('create');    // form thêm

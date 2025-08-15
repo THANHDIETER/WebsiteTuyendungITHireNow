@@ -7,8 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     protected $table = 'notifications';
+
+    public $incrementing = false; // vì id là UUID, không phải auto increment
     protected $keyType = 'string';
-    public $incrementing = false;
+
+    protected $fillable = [
+        'id',
+        'type',
+        'notifiable_type',
+        'notifiable_id',
+        'data',
+        'read_at',
+        'created_at',
+        'updated_at',
+    ];
 
     protected $casts = [
         'data' => 'array',
@@ -17,12 +29,8 @@ class Notification extends Model
         'updated_at' => 'datetime',
     ];
 
-    protected $fillable = [
-        'id', 'type', 'notifiable_type', 'notifiable_id', 'data', 'read_at'
-    ];
-
-     public function user()
+    public function notifiable()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 }

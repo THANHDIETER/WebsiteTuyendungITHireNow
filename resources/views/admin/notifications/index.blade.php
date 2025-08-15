@@ -1,187 +1,270 @@
 @extends('admin.layouts.default')
 
 @section('content')
-    <div class="container my-4">
-        <!-- Tiêu đề -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h2 class="fw-semibold text-dark">Danh sách Notifications</h2>
-            </div>
-        </div>
+<div class="container my-4">
+    <h2 class="fw-semibold text-dark mb-3">Danh sách Thông báo Hệ thống</h2>
 
-        <!-- Thanh tìm kiếm và nút Thêm mới -->
-        <div class="row mb-3 align-items-center">
-            <div class="col-md-8 col-lg-6">
-                <input type="text" class="form-control" placeholder="Tìm kiếm notifications..." id="searchInput">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-3" style="min-height: 70vh;">
+            <!-- Thanh tìm kiếm + nút thêm -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm..." id="searchInput">
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-primary" id="btn-add">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm mới
+                    </button>
+                </div>
             </div>
-            <div class="col-md-4 col-lg-6 text-end">
-                <a href="{{ route('admin.notifications.create') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-1"></i> Thêm mới
-                </a>
-            </div>
-        </div>
 
-        <!-- Thông báo thành công -->
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
-            </div>
-        @endif
-
-        <!-- Bảng dữ liệu -->
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered align-middle text-center">
-                <thead class="table-light">
-                    <tr>
-                        <th style="width: 5%;">ID</th>
-                        <th style="width: 15%;">Loại</th>
-                        <th style="width: 15%;">Kiểu đối tượng</th>
-                        <th style="width: 10%;">ID đối tượng</th>
-                        <th style="width: 25%;">Nội dung</th>
-                        <th style="width: 10%;">Đã đọc</th>
-                        <th style="width: 15%;">Ngày tạo</th>
-                        <th style="width: 15%;">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody id="notificationTable">
-                    @forelse ($notifications as $notification)
+            <!-- Bảng danh sách -->
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle text-center mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <td title="{{ $notification->id }}">{{ $notification->id }}</td>
-                            <td>{{ $notification->type }}</td>
-                            <td>{{ $notification->notifiable_type }}</td>
-                            <td>{{ $notification->notifiable_id }}</td>
-                            <td>{{ $notification->data['message'] ?? '-' }}</td>
+                            <th>ID</th>
+                            <th>Loại</th>
+                            <th>Nội dung</th>
+                            <th>Đã đọc</th>
+                            <th>Ngày tạo</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="notificationTable">
+                        @forelse ($notifications as $n)
+                        <tr data-id="{{ $n->id }}">
+                            <td class="fw-medium">{{ Str::limit($n->id, 8, '...') }}</td>
                             <td>
-                                @if ($notification->read_at)
+                                @if(Str::contains($n->type, 'GeneralNotification'))
+                                    <span class="badge bg-primary">Hệ thống</span>
+                                @elseif(Str::contains($n->type, 'MaintenanceNotification'))
+                                    <span class="badge bg-warning text-dark">Bảo trì</span>
+                                @else
+                                    <span class="badge bg-secondary">Khác</span>
+                                @endif
+                                <div class="small text-muted">{{ $n->type }}</div>
+                            </td>
+                            <td class="text-truncate" style="max-width: 250px;">{{ $n->data['message'] ?? '-' }}</td>
+                            <td>
+                                @if($n->read_at)
                                     <span class="badge bg-success">Đã đọc</span>
-                                    <div class="text-muted small">{{ $notification->read_at->format('d/m/Y H:i') }}</div>
                                 @else
                                     <span class="badge bg-warning text-dark">Chưa đọc</span>
                                 @endif
                             </td>
-                            <td>{{ $notification->created_at->format('d/m/Y H:i') }}</td>
+                            <td>{{ $n->created_at->format('d/m/Y H:i') }}</td>
                             <td>
-                                <div class="btn-group" role="group" aria-label="Thao tác">
-                                    <a href="{{ route('admin.notifications.show', $notification->id) }}"
-                                        class="btn btn-sm btn-outline-primary" title="Xem">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ route('admin.notifications.edit', $notification->id) }}"
-                                        class="btn btn-sm btn-outline-warning" title="Sửa">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('admin.notifications.destroy', $notification->id) }}"
-                                        method="POST" onsubmit="return confirm('Bạn chắc chắn muốn xóa?')"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                                <button class="btn btn-sm btn-outline-primary btn-view"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-warning btn-edit"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-danger btn-delete"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
-                    @empty
+                        @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted py-3">Không có notifications nào.</td>
+                            <td colspan="6" class="text-muted py-5">Không có thông báo nào</td>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Phân trang -->
-        <div class="d-flex justify-content-center mt-3">
-            {{ $notifications->links() }}
+            <div class="mt-3">
+                {{ $notifications->links() }}
+            </div>
         </div>
     </div>
+</div>
 
-    @section('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const searchInput = document.getElementById('searchInput');
-                const tableRows = document.querySelectorAll('#notificationTable tr');
+<!-- Modal xem/chỉnh -->
+<div class="modal fade" id="mainModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+</div>
 
-                searchInput.addEventListener('input', function(e) {
-                    const searchTerm = e.target.value.toLowerCase();
+<style>
+    body.dark-mode .table thead {
+        background-color: #1e1e1e !important;
+        color: #f1f1f1;
+    }
+    body.dark-mode .table tbody tr {
+        background-color: #2a2a2a;
+        color: #ddd;
+    }
+    body.dark-mode .form-control {
+        background-color: #2a2a2a;
+        color: #fff;
+        border-color: #444;
+    }
+    .badge {
+        font-size: 0.8rem;
+    }
+</style>
+@endsection
 
-                    tableRows.forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = new bootstrap.Modal(document.getElementById('mainModal'));
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+
+    // Search filter
+    document.getElementById('searchInput').addEventListener('input', function (e) {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('#notificationTable tr').forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
+        });
+    });
+
+    // View
+    document.querySelectorAll('.btn-view').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.closest('tr').dataset.id;
+            fetch(`/admin/notifications/${id}/json`)
+                .then(res => res.json())
+                .then(data => {
+                    let typeFriendly = '';
+                    if (data.type.includes('GeneralNotification')) {
+                        typeFriendly = 'Thông báo hệ thống';
+                    } else if (data.type.includes('MaintenanceNotification')) {
+                        typeFriendly = 'Thông báo bảo trì';
+                    } else {
+                        typeFriendly = 'Khác';
+                    }
+
+                    modalTitle.textContent = 'Chi tiết thông báo';
+                    modalBody.innerHTML = `
+                        <p><strong>ID:</strong> ${data.id}</p>
+                        <p><strong>Loại:</strong> ${typeFriendly} <br><small class="text-muted">${data.type}</small></p>
+                        <p><strong>Ngày tạo:</strong> ${data.created_at}</p>
+                        <pre class="bg-light p-2 rounded">${JSON.stringify(data.data, null, 4)}</pre>
+                    `;
+                    modal.show();
+                })
+                .catch(() => {
+                    showAlertModal({
+                        title: 'Lỗi',
+                        message: 'Không thể tải dữ liệu thông báo.',
+                        status: 'danger'
                     });
                 });
+        });
+    });
+
+    // Add
+    document.getElementById('btn-add').addEventListener('click', function () {
+        fetch(`/admin/notifications/create`)
+            .then(res => res.text())
+            .then(html => {
+                modalTitle.textContent = 'Thêm thông báo';
+                modalBody.innerHTML = html;
+                modal.show();
+            })
+            .catch(() => {
+                showAlertModal({
+                    title: 'Lỗi',
+                    message: 'Không thể tải form thêm thông báo.',
+                    status: 'danger'
+                });
             });
-        </script>
-    @endsection
+    });
 
-    <style>
-        .table th,
-        .table td {
-            padding: 0.5rem;
-            vertical-align: middle;
-        }
+    // Edit
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.closest('tr').dataset.id;
+            fetch(`/admin/notifications/${id}/edit`)
+                .then(res => res.text())
+                .then(html => {
+                    modalTitle.textContent = 'Sửa thông báo';
+                    modalBody.innerHTML = html;
+                    modal.show();
+                })
+                .catch(() => {
+                    showAlertModal({
+                        title: 'Lỗi',
+                        message: 'Không thể tải form sửa thông báo.',
+                        status: 'danger'
+                    });
+                });
+        });
+    });
 
-        .btn-group .btn {
-            margin: 0 2px;
-            border-radius: 4px;
-        }
+    // Delete
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.closest('tr').dataset.id;
 
-        .alert-success {
-            background-color: #e6f4ea;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
+            showAlertModal({
+                title: 'Xác nhận xóa',
+                message: 'Bạn có chắc muốn xóa thông báo này?',
+                type: 'confirm',
+                status: 'warning',
+                onConfirm: () => {
+                    fetch(`/admin/notifications/${id}`, {
+                        method: 'POST',
+                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        body: new URLSearchParams({ _method: 'DELETE' })
+                    })
+                    .then(res => res.json())
+                    .then(resp => {
+                        showAlertModal({
+                            title: 'Thành công',
+                            message: resp.message || 'Xóa thành công.',
+                            status: 'success',
+                            onConfirm: () => location.reload()
+                        });
+                    })
+                    .catch(() => {
+                        showAlertModal({
+                            title: 'Lỗi',
+                            message: 'Không thể xóa thông báo.',
+                            status: 'danger'
+                        });
+                    });
+                }
+            });
+        });
+    });
 
-        .btn-outline-primary {
-            border-color: #007bff;
-            color: #007bff;
-        }
+    // Lắng nghe submit form thêm/sửa trong modal
+    document.getElementById('mainModal').addEventListener('submit', function (e) {
+        if (e.target.tagName.toLowerCase() === 'form') {
+            e.preventDefault();
+            const form = e.target;
 
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: #fff;
+            fetch(form.action, {
+                method: form.method,
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: new FormData(form)
+            })
+            .then(res => res.json())
+            .then(resp => {
+                showAlertModal({
+                    title: 'Thành công',
+                    message: resp.message || 'Thao tác thành công.',
+                    status: 'success',
+                    onConfirm: () => location.reload()
+                });
+            })
+            .catch(() => {
+                showAlertModal({
+                    title: 'Lỗi',
+                    message: 'Không thể thực hiện thao tác.',
+                    status: 'danger'
+                });
+            });
         }
+    });
+});
+</script>
+@endpush
 
-        .btn-outline-warning {
-            border-color: #ffc107;
-            color: #ffc107;
-        }
-
-        .btn-outline-warning:hover {
-            background-color: #ffc107;
-            color: #000;
-        }
-
-        .btn-outline-danger {
-            border-color: #dc3545;
-            color: #dc3545;
-        }
-
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: #fff;
-        }
-
-        .pagination .page-link {
-            color: #007bff;
-            margin: 0 2px;
-            border-radius: 4px;
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .table {
-            border-collapse: collapse;
-        }
-
-        .table-bordered th,
-        .table-bordered td {
-            border: 1px solid #dee2e6;
-        }
-    </style>
-@endsection
