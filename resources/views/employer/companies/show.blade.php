@@ -10,18 +10,20 @@
                     {{-- Dark overlay for better contrast --}}
                     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
                     {{-- Logo Overlay --}}
-                    <div class="position-absolute top-100 start-50 translate-middle" style="margin-top:-150px;">
-                        @if ($company->logo_url)
-                            <img src="{{ asset('storage/' . $company->logo_url) }}" alt="Logo {{ $company->name }}"
+                   <div class="position-absolute top-100 start-50 translate-middle" style="margin-top: -150px;">
+                        @if ($company?->logo_url)
+                            <img src="{{ $company->logo_url }}"
+                                alt="Logo {{ $company->name }}"
                                 class="rounded-circle border border-white shadow"
-                                style="width:250px; height:250px; object-fit:cover; background-color:#fff;">
+                                style="width: 250px; height: 250px; object-fit: cover; background-color: #fff;">
                         @else
                             <div class="rounded-circle bg-light border border-white d-flex align-items-center justify-content-center shadow"
-                                style="width:250px; height:250px;">
+                                style="width: 250px; height: 250px;">
                                 <i class="bi bi-building fs-2 text-muted"></i>
                             </div>
                         @endif
                     </div>
+
                 </div>
             @endif
 

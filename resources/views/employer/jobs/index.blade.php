@@ -35,21 +35,25 @@
                         <div class="card h-100 shadow-sm border">
 
                             {{-- HEADER --}}
-                            <div class="d-flex align-items-center p-3 border-bottom" style="min-height: 85px;">
-                                <img src="{{ $job->company && $job->company->logo_url ? Storage::url($job->company->logo_url) : asset('assets/img/default-logo.png') }}"
-                                    alt="{{ $job->company->name ?? 'Company' }}" class="rounded border me-3"
-                                    style="width: 56px; height: 56px; object-fit: cover;">
+<div class="d-flex align-items-center p-3 border-bottom" style="min-height: 85px;">
+    <img src="{{ $job->company?->logo_url }}"
+        alt="{{ $job->company->name ?? 'Company' }}"
+        class="rounded border me-3 bg-white shadow-sm"
+        style="width: 56px; height: 56px; object-fit: contain;">
 
-                                <div class="flex-grow-1">
-                                    <h6 class="fw-bold mb-1 text-truncate">
-                                        <a href="#" class="text-dark">{{ optional($job->company)->name }}</a>
-                                    </h6>
-                                    <small class="text-muted">
-                                        <i class="bi bi-geo-alt"></i>
-                                        {{ $job->address ?? 'Chưa cập nhật' }}
-                                    </small>
-                                </div>
-                            </div>
+    <div class="flex-grow-1">
+        <h6 class="fw-bold mb-1 text-truncate">
+            <a href="#" class="text-dark">
+                {{ $job->company->name ?? 'Công ty chưa cập nhật' }}
+            </a>
+        </h6>
+        <small class="text-muted">
+            <i class="bi bi-geo-alt"></i>
+            {{ $job->address ?? 'Chưa cập nhật' }}
+        </small>
+    </div>
+</div>
+
 
                             {{-- BODY --}}
                             <div class="card-body pb-2">
@@ -69,7 +73,7 @@
                                     {{-- NẾU CÓ NỔI BẬT --}}
 
                                     @if ($job->is_featured)
-                                        <span class="badge bg-danger ms-1">Nổi bật</span>
+                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2">Nổi bật</span>
                                     @endif
                                 </h4>
 

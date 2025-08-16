@@ -168,9 +168,9 @@ class JobController extends Controller
     $validated['status'] = 'pending';
     $validated['is_approved'] = false;
     $validated['views'] = 0;
-    $validated['is_featured'] = false;
-    $validated['search_index'] = $request->boolean('search_index', false);
     $validated['is_paid'] = $selectedPackage !== null;
+    $validated['is_featured'] = $validated['is_paid']; // Nếu có dùng gói => là nổi bật
+    $validated['search_index'] = $request->boolean('search_index', false);
     $validated['category_id'] = $validated['categories'][0];
     $validated['job_type'] = $request->input('job_type') ?? 'full-time';
 
