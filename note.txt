@@ -49,6 +49,8 @@ http://127.0.0.1:8000/api/check-pending-payments?token=ABC123
 api check log bank
 http://127.0.0.1:8000/api/sync-bank?token=ABC123
 
+http://127.0.0.1:8000/api/jobs?token=ABC123
+
 check ip my 
 https://www.whatismyip.com/
 search -> thêm ip my 

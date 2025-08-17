@@ -8,7 +8,7 @@
       rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- Bootstrap Bundle with Popper -->
@@ -16,10 +16,10 @@
 
 
   <!--== Bootstrap CSS ==-->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
   <!--== Icofont Icon CSS ==-->
-  <link href="{{ asset('client/assets/css/icofont.css') }}" rel="stylesheet" />
+  <!-- <link href="{{ asset('client/assets/css/icofont.css') }}" rel="stylesheet" /> -->
   <!--== Swiper CSS ==-->
   <link href="{{ asset('client/assets/css/swiper.min.css') }}" rel="stylesheet" />
   <!--== Fancybox Min CSS ==-->

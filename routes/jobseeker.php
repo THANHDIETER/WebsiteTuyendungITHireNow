@@ -6,7 +6,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\NotificationController;
-
 use App\Http\Controllers\JobSeeker\ResumeController;
 use App\Http\Controllers\InterviewResponseController;
 

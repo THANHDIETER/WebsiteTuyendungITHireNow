@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable
 {
 
-    use HasApiTokens, Notifiable, HasRoles, HasFactory,SoftDeletes;
+    use HasApiTokens, Notifiable, HasRoles, HasFactory, SoftDeletes;
     protected $fillable = [
         'email',
         'password',
@@ -40,11 +40,11 @@ class User extends Authenticatable
     public $timestamps = true;
 
     public function favoriteJobs()
-{
-    return $this->belongsToMany(\App\Models\Job::class, 'favorites', 'user_id', 'job_id')
-        ->withPivot('note')
-        ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(\App\Models\Job::class, 'favorites', 'user_id', 'job_id')
+            ->withPivot('note')
+            ->withTimestamps();
+    }
 
 
     public function getAuthPassword()
@@ -60,10 +60,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Resume::class);
     }
+    public function companies()
+    {
+        return $this->hasMany(Company::class, 'user_id', 'id');
+    }
     public function company()
     {
-        return $this->hasOne(Company::class, 'user_id', 'id');
+        return $this->hasOne(Company::class, 'user_id');
     }
+
     public function messages()
     {
         return $this->hasMany(Message::class, 'sender_id');
@@ -143,15 +148,14 @@ class User extends Authenticatable
         return "<span class=\"badge bg-{$color}\">{$label}</span>";
     }
     public function unreadMessagesCount()
-{
-    return \App\Models\Conversation::where(function ($q) {
-        $q->where('user_one', $this->id)->orWhere('user_two', $this->id);
-    })->get()->sum(function ($conv) {
-        return $conv->messages()
-            ->where('sender_id', '!=', $this->id)
-            ->whereNull('read_at')
-            ->count();
-    });
-}
-
+    {
+        return \App\Models\Conversation::where(function ($q) {
+            $q->where('user_one', $this->id)->orWhere('user_two', $this->id);
+        })->get()->sum(function ($conv) {
+            return $conv->messages()
+                ->where('sender_id', '!=', $this->id)
+                ->whereNull('read_at')
+                ->count();
+        });
+    }
 }

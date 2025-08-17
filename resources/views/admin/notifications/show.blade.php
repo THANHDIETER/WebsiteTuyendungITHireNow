@@ -1,72 +1,73 @@
+<div class="container my-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-semibold"><i class="bi bi-info-circle me-2"></i> Chi tiết Thông báo Hệ thống</h5>
+            <a href="{{ route('admin.notifications.index') }}" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Quay lại
+            </a>
+        </div>
 
-<style>
-    footer {
-        display: none !important;
-    }
-</style>
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card shadow border-0">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">
-                        <i class="bi bi-info-circle-fill me-2"></i>Chi Tiết Thông Báo #{{ $notification->id }}
-                    </h5>
+        <div class="card-body p-4">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
+            @endif
 
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Người nhận:</div>
-                        <div class="col-sm-8">{{ $notification->user->email ?? 'Tất cả người dùng' }}</div>
-                    </div>
+            <table class="table table-bordered table-striped align-middle">
+                <tr>
+                    <th style="width: 20%;">ID</th>
+                    <td>{{ $notification->id }}</td>
+                </tr>
+                <tr>
+                    <th>Loại</th>
+                    <td>{{ $notification->type }}</td>
+                </tr>
+                <tr>
+                    <th>Nội dung</th>
+                    <td class="text-start">
+<pre class="bg-light p-3 rounded mb-0" style="max-height: 300px; overflow: auto;">
+{{ json_encode($notification->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
+</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Trạng thái</th>
+                    <td>
+                        @if ($notification->read_at)
+                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Đã đọc</span>
+                            <div class="text-muted small mt-1">{{ $notification->read_at->format('d/m/Y H:i') }}</div>
+                        @else
+                            <span class="badge bg-warning text-dark"><i class="bi bi-eye-slash me-1"></i> Chưa đọc</span>
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <th>Ngày tạo</th>
+                    <td>{{ $notification->created_at->format('d/m/Y H:i') }}</td>
+                </tr>
+            </table>
 
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Loại thông báo:</div>
-                        <div class="col-sm-8">
-                            <span class="badge bg-info text-dark text-uppercase">{{ $notification->type }}</span>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Nội dung:</div>
-                        <div class="col-sm-8">{{ $notification->message }}</div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Link đính kèm:</div>
-                        <div class="col-sm-8">
-                            @if ($notification->link_url)
-                                <a href="{{ url($notification->link_url) }}" target="_blank">{{ $notification->link_url }}</a>
-                            @else
-                                <span class="text-muted">Không có</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Trạng thái:</div>
-                        <div class="col-sm-8">
-                            @if ($notification->is_read)
-                                <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Đã đọc</span>
-                            @else
-                                <span class="badge bg-secondary"><i class="bi bi-eye-slash"></i> Chưa đọc</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Thời gian gửi:</div>
-                        <div class="col-sm-8">{{ $notification->created_at->timezone(config('app.timezone'))->format('d/m/Y H:i') }}</div>
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ route('admin.notifications.edit', $notification->id) }}" class="btn btn-warning">
-                            <i class="bi bi-pencil-square"></i> Chỉnh sửa
-                        </a>
-                      
-                    </div>
-                </div>
+            <div class="d-flex justify-content-end mt-3 gap-2">
+                <a href="{{ route('admin.notifications.edit', $notification->id) }}" class="btn btn-warning text-dark">
+                    <i class="bi bi-pencil me-1"></i> Sửa
+                </a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    pre {
+        font-size: 0.85rem;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        line-height: 1.4;
+        margin: 0;
+    }
+    .badge {
+        font-size: 0.85rem;
+        padding: 0.4em 0.65em;
+    }
+</style>

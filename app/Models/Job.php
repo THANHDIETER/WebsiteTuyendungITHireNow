@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\JobApplication;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Job extends Model
 {
+     protected $table = 'jobs';  
     use HasFactory, SoftDeletes;
-
+    
     protected $fillable = [
         'title',
         'description',
@@ -41,9 +44,17 @@ class Job extends Model
         'level_id',
         'job_type_id',
         'location_id',
-          'employer_id'
+        'employer_id',
+        'approved_by',
+        'ai_processed_at'
     ];
-
+     public function applications(): HasMany
+    {
+        // Model liên quan là JobApplication
+        // Bảng mặc định: job_applications
+        // Khóa ngoại mặc định: job_id
+        return $this->hasMany(JobApplication::class, 'job_id');
+    }
 
     protected $casts = [
         'salary_negotiable' => 'boolean',

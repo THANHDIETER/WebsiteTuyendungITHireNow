@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use App\Events\MessageSent;
 use App\Events\TypingEvent;
-use App\Events\MessageNotification;
 
 class ChatController extends Controller
 {
@@ -107,17 +106,6 @@ class ChatController extends Controller
         ]);
 
         broadcast(new MessageSent($msg))->toOthers();
-
-        // Xác định người nhận
-        $receiverId = $conversation->user_one === $userId ? $conversation->user_two : $conversation->user_one;
-
-        // Tính lại tổng số tin chưa đọc
-        $receiver = User::find($receiverId);
-        $unread = $receiver->unreadMessagesCount();
-
-        // Gửi event thông báo
-        broadcast(new MessageNotification($receiverId, $unread));
-
 
         if ($request->expectsJson()) {
             return response()->json(['status' => 'success', 'message' => $msg]);

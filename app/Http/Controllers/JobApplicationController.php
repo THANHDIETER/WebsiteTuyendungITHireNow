@@ -51,7 +51,7 @@ class JobApplicationController extends Controller
                 'full_name' => $request->full_name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'image' => $cvPath, 
+                'image' => $cvPath,
                 'cover_letter' => $request->cover_letter,
                 'status' => 'pending',
                 'applied_at' => now(),
@@ -93,10 +93,4 @@ class JobApplicationController extends Controller
                 ->withInput();
         }
     }
-
-
-
-    
-
-
 }

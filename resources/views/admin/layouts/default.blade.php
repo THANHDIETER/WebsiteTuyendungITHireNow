@@ -23,7 +23,6 @@
                     @yield('content')
                 </div>
 
-                @stack('scripts')
             </div>
         </main>
     </div>
@@ -41,6 +40,8 @@
         };
         window.APP_NAME = "{{ config('app.name') }}";
     </script> -->
+    @stack('scripts')
+
 </body>
 
 </html>

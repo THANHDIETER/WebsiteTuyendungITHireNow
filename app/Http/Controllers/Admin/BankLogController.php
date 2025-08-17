@@ -10,8 +10,7 @@ class BankLogController extends Controller
 {
     public function index(Request $request)
     {
-       $title = 'Danh sách giao dịch ngân hàng';
-       return view('admin.bank_logs.index', compact('title'));
-       
+        $title = 'Danh sách giao dịch ngân hàng';
+        return view('admin.bank_logs.index', compact('title'));
     }
 }

@@ -36,7 +36,7 @@ class JobEditedNotification extends Notification implements ShouldBroadcastNow
     {
         return [
             'message' => "Tin tuyển dụng {$this->job->title} vừa được nhà tuyển dụng cập nhật lại thông tin. Vui lòng kiểm tra để đảm bảo các thay đổi phù hợp với tiêu chuẩn của hệ thống.",
-            'link_url' => route('notifications.index'),
+            // 'link_url' => route('admin.jobs', $this->job->id),
         ];
     }
 

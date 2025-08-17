@@ -9,9 +9,8 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-
     @vite(['resources/js/app.js'])
-
+    
     <!-- Navbar -->
     @include('employer.layouts.partials.navbar')
 

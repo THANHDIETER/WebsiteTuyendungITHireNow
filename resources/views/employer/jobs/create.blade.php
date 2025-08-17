@@ -271,22 +271,121 @@
                         </div>
                     </div>
                 </div>
-                {{-- Chọn gói dịch vụ nếu có --}}
-                @if ($activePackages->count())
-                    <div class="mb-3">
-                        <label for="selected_package" class="form-label fw-semibold">Chọn gói dịch vụ muốn sử dụng</label>
-                        <select name="selected_package_id" id="selected_package" class="form-select">
-                            <option value="">-- Tự động chọn gói đầu tiên còn lượt --</option>
-                            @foreach ($activePackages as $pkg)
-                                <option value="{{ $pkg->id }}">
-                                    {{ $pkg->package->name }} ({{ $pkg->post_limit - $pkg->posts_used }} lượt còn lại, hết
-                                    hạn {{ \Carbon\Carbon::parse($pkg->end_date)->format('d/m/Y') }})
-                                </option>
-                            @endforeach
-                        </select>
-                        <small class="text-muted">Nếu không chọn, hệ thống sẽ chọn gói đầu tiên còn lượt.</small>
-                    </div>
-                @endif
+{{-- Chọn gói dịch vụ nếu có --}}
+@if ($activePackages->count())
+    <div class="mb-3">
+        <label class="form-label fw-semibold d-block">Chọn gói dịch vụ muốn sử dụng</label>
+
+        <div class="d-flex flex-wrap gap-3">
+            @foreach ($activePackages as $pkg)
+                <div class="package-wrapper" style="position: relative; min-width:280px; max-width:320px; flex:1;">
+                    {{-- Radio ẩn --}}
+                    <input type="radio" name="selected_package_id" 
+                           id="pkg{{ $pkg->id }}" value="{{ $pkg->id }}" 
+                           {{ old('selected_package_id') == $pkg->id ? 'checked' : '' }}
+                           class="package-radio">
+
+                    {{-- Card --}}
+                    <label for="pkg{{ $pkg->id }}" 
+                           class="package-card card shadow-sm p-3 w-100">
+
+                        {{-- Vòng tròn hiển thị trong card --}}
+                        <span class="radio-circle"></span>
+
+                        <h5 class="card-title text-primary mb-1">{{ $pkg->package->name }}</h5>
+                        <h6 class="text-success mb-2">{{ number_format($pkg->package->price, 0, ',', '.') }} VNĐ</h6>
+
+                        <ul class="list-unstyled mb-2 small">
+                            <li><strong>Thời hạn:</strong> {{ $pkg->package->duration }} ngày</li>
+                            <li><strong>Số lượt đăng:</strong> {{ $pkg->package->post_limit }}</li>
+                            <li><strong>Nổi bật:</strong> {{ $pkg->package->highlight_days }} ngày</li>
+                            <li><strong>Lượt xem CV:</strong> {{ $pkg->package->cv_views }}</li>
+                            <li><strong>Hỗ trợ:</strong> {{ $pkg->package->support_level }}</li>
+                        </ul>
+
+                        @if (!empty($pkg->package->description))
+                            <p class="text-muted small">{{ $pkg->package->description }}</p>
+                        @endif
+                    </label>
+                </div>
+            @endforeach
+        </div>
+
+        <small class="text-muted d-block mt-2">
+            Nếu không chọn, hệ thống sẽ tự động chọn gói đầu tiên còn lượt.
+        </small>
+    </div>
+@else
+    <div class="alert alert-info">
+        Bạn chưa có gói dịch vụ nào. 
+        <a href="{{ route('employer.packages.index') }}" class="btn btn-primary btn-sm ms-2">
+            Mua gói dịch vụ
+        </a>
+    </div>
+@endif
+
+
+{{-- CSS --}}
+@push('styles')
+<style>
+.package-radio {
+    display: none; /* Ẩn radio mặc định */
+}
+
+.package-card {
+    border: 2px solid transparent;
+    transition: all 0.25s ease;
+    position: relative;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+/* Vòng tròn góc phải */
+.radio-circle {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    background: #fff;
+    pointer-events: none;
+    transition: all 0.2s;
+}
+
+/* Khi chọn → vòng tròn xanh + dấu tick */
+.package-radio:checked + .package-card .radio-circle {
+    background: #007bff;
+}
+.package-radio:checked + .package-card .radio-circle::after {
+    content: "✓";
+    color: #fff;
+    font-size: 14px;
+    position: absolute;
+    top: -2px;
+    left: 4px;
+}
+
+/* Khi chọn card */
+.package-radio:checked + .package-card {
+    border-color: #007bff;
+    background: #f8fbff;
+    box-shadow: 0 0 15px rgba(0,123,255,0.25);
+    transform: scale(1.02);
+}
+
+/* Hover */
+.package-card:hover {
+    border-color: #80bdff;
+    background: #f9fcff;
+}
+</style>
+@endpush
+
+
+
+
 
                 {{-- Submit --}}
                 <div class="text-end">

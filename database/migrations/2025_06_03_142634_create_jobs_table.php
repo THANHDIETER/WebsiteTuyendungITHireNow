@@ -54,14 +54,20 @@ class CreateJobsTable extends Migration
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_paid')->default(false);
 
+            // Trường bổ sung
+            $table->string('apply_url')->nullable();
+            $table->string('remote_policy', 100)->nullable();
+            $table->string('language', 50)->nullable();
+
             // SEO
             $table->string('meta_title', 150)->nullable();
             $table->text('meta_description')->nullable();
             $table->string('keyword')->nullable();
+
             $table->boolean('search_index')->default(true);
 
             $table->timestamps();
-            $table->softDeletes();
+            $table->softDeletes(); // deleted_at
         });
     }
 

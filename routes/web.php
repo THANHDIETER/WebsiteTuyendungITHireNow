@@ -11,7 +11,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
+// Load các route tách riêng
 require __DIR__ . '/admin.php';
 require __DIR__ . '/employer.php';
 require __DIR__ . '/jobseeker.php';
@@ -35,20 +38,24 @@ Route::get('/test-notification', function (Request $request) {
     return "Đã gửi notification cho user #{$user->id} với nội dung: {$message}";
 });
 
-
-
 Route::get('/chatbot/history', [ChatBotController::class, 'history']);
 Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
 Route::get('/register/employer', [RegisterController::class, 'showRegisterEmployerForm'])->name('showRegisterEmployerForm');
 Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('registerEmployer');
 
 Route::get('/showLoginForm', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
+
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
@@ -73,10 +80,13 @@ Route::get('/job_seeker', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
+
 // ================= JOB =================
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/cong-viec/tim-kiem', [JobController::class, 'search'])->name('jobs.search'); // <--- Route search mới
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
 
 
 // ================= EMPLOYER =================
@@ -129,14 +139,13 @@ Route::get('/chi-tiet-ung-vien', function () {
     return view('website.candidate.candidate-details');
 })->name('chi-tiet-ung-vien');
 
-
-// ================= BLOG =================
 Route::get('/blog', function () {
     return view('website.blog.blog');
 })->name('blog');
 
-Route::get('/blog', [BlogController::class, 'index'])->name('blog');
-
+Route::get('/blog-details', function () {
+    return view('website.blog.blog-details');
+})->name('blog-details');
 
 Route::get('/blog-grid', function () {
 
@@ -147,19 +156,11 @@ Route::get('/blog-right-sidebar', function () {
     return view('website.blog.blog-right-sidebar');
 })->name('blog-right-sidebar');
 
-Route::get('/contact', function () {
-    return view('website.pages.contact');
-})->name('contact');
-
-Route::get('/404', function () {
-    return view('website.pages.404');
-})->name('404');
-
 
 // ================= LOGIN / REGISTER UI =================
 Route::get('/login', function () {
     return view('website.login-register.login');
-})->name('login');
+});
 
 Route::get('/registration', function () {
     return view('website.login-register.registration');
@@ -168,41 +169,20 @@ Route::get('/registration', function () {
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 
 
-
-Route::get('/admin/noti/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans()
-        ];
-    }));
-})->name('admin.notifications.latest');
-Route::get('/employer/noti/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans()
-        ];
-    }));
-})->name('employer.notifications.latest');
-
-Route::get('/seeker/notifications/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans(),
-        ];
-    }));
+// routes/web.php
+Route::get('/notifications/latest', function () {
+    $notis = auth()->user()
+        ->unreadNotifications()
+        ->orderBy('created_at', 'desc')
+        ->take(6)
+        ->get()
+        ->map(function ($noti) {
+            return [
+                'id' => $noti->id,
+                'message' => $noti->data['message'] ?? '',
+                'link_url' => $noti->data['link_url'] ?? '#',
+                'created_at' => $noti->created_at->diffForHumans(),
+            ];
+        });
+    return response()->json($notis);
 })->middleware('auth');

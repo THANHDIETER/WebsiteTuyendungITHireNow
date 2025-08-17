@@ -12,9 +12,8 @@ use App\Http\Controllers\Admin\{
     NotificationController,
     ServicePackageController,
     BankAccountControlle,
-    LogoController,
-    BankAccountController,
-    JobApplications
+    EmployerController,
+    BlogController
 };
 use App\Http\Controllers\Admin\SeekerProfileController;
 
@@ -58,7 +57,7 @@ Route::prefix('admin')
             Route::put('{service_package}', 'update')->name('update');
             Route::delete('{service_package}', 'destroy')->name('destroy');
         });
-        
+
         // 👤 Quản lý người dùng
         Route::prefix('users')->name('users.')->controller(UserController::class)->group(function () {
             Route::get('/', 'index')->name('index');
@@ -77,9 +76,6 @@ Route::prefix('admin')
         Route::prefix('seekerprofile')->controller(SeekerProfileController::class)->group(function () {
             Route::get('/', 'index')->name('seekerprofile.index');
         });
-        Route::prefix('job-application')->controller(JobApplications::class)->group(function () {
-            Route::get('/', 'index')->name('job-application.index');
-        });
 
         // 💳 Thanh toán & tài khoản ngân hàng
         Route::prefix('payment')->controller(PaymentController::class)->group(function () {
@@ -95,16 +91,27 @@ Route::prefix('admin')
         });
 
         // 🔔 Quản lý thông báo hệ thống
-        Route::prefix('notifications')->name('notifications.')->controller(NotificationController::class)->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/create', 'create')->name('create');
-            Route::post('/', 'store')->name('store');
-            Route::get('{id}', 'show')->name('show');
-            Route::get('{id}/edit', 'edit')->name('edit');
-            Route::put('{id}', 'update')->name('update');
-            Route::delete('{id}', 'destroy')->name('destroy');
+        Route::get('notifications/{id}/json', [NotificationController::class, 'getJson'])
+                ->name('notifications.json');
+        Route::resource('notifications', NotificationController::class);
+        Route::prefix('employers')->name('employers.')->group(function () {
+            Route::get('/', [EmployerController::class, 'index'])->name('index');           // danh sách
+            Route::get('/create', [EmployerController::class, 'create'])->name('create');    // form thêm
+            Route::post('/', [EmployerController::class, 'store'])->name('store');           // lưu thêm
+            Route::get('/{id}', [EmployerController::class, 'show'])->name('show');          // xem chi tiết
+            Route::get('/{id}/edit', [EmployerController::class, 'edit'])->name('edit');     // form sửa
+            Route::put('/{id}', [EmployerController::class, 'update'])->name('update');      // lưu sửa
+            Route::delete('/{id}', [EmployerController::class, 'destroy'])->name('destroy'); // xóa mềm
         });
         Route::resource('logos', App\Http\Controllers\Admin\LogoController::class)->names('logos');
 
-        
+        Route::prefix('blogs')->name('blogs.')->controller(BlogController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('{blog}', 'show')->name('show');
+            Route::get('{blog}/edit', 'edit')->name('edit');
+            Route::put('{blog}', 'update')->name('update');
+            Route::delete('{blog}', 'destroy')->name('destroy');
+        });
     });

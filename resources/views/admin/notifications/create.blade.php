@@ -1,64 +1,57 @@
-@extends('admin.layouts.default')
+<form id="createNotificationForm" action="{{ route('admin.notifications.store') }}" method="POST">
+    @csrf
 
-@section('content')<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
+    <!-- Loại thông báo -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Loại thông báo <span class="text-danger">*</span></label>
+        <select name="type" class="form-select" required>
+            <option value="">-- Chọn loại --</option>
+            <option value="App\Notifications\System\GeneralNotification">GeneralNotification</option>
+            <option value="App\Notifications\System\MaintenanceNotification">MaintenanceNotification</option>
+        </select>
+    </div>
 
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">📢 Gửi Thông Báo Hệ Thống</h4>
-                </div>
-
-                <div class="card-body">
-
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <form action="{{ route('admin.notifications.store') }}" method="POST">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Loại thông báo</label>
-                            <input type="text" class="form-control" id="type" name="type" placeholder="Ví dụ: new_job" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="user_id" class="form-label">Người nhận</label>
-                            <select class="form-select" name="user_id" required>
-                                <option value="all">Tất cả người dùng</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->email }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Nội dung</label>
-                            <textarea class="form-control" name="message" id="message" rows="4" placeholder="Nhập nội dung thông báo..." required></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="link_url" class="form-label">Liên kết (tuỳ chọn)</label>
-                            <input type="url" class="form-control" name="link_url" id="link_url" placeholder="VD: /jobs/123">
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success">
-                                Gửi Thông Báo
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="card-footer text-muted text-end">
-                    Hệ thống quản trị IT Hire Now
-                </div>
-            </div>
-
+    <!-- Nội dung JSON -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Nội dung (JSON) <span class="text-danger">*</span></label>
+        <textarea name="data" class="form-control font-monospace" rows="5" required>{"message":""}</textarea>
+        <div class="form-text">
+            Ví dụ: <code>{"message": "Thông báo nội dung ở đây"}</code>
         </div>
     </div>
-</div>
-@endsection
+
+    <!-- Nút -->
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save me-1"></i> Lưu
+        </button>
+    </div>
+</form>
+
+<script>
+document.getElementById('createNotificationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(resp => {
+        alert(resp.message);
+        location.reload();
+    });
+});
+</script>
+
+<style>
+    .form-label { font-size: 0.9rem; }
+    textarea { font-size: 0.85rem; line-height: 1.4; }
+    code {
+        background-color: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+</style>

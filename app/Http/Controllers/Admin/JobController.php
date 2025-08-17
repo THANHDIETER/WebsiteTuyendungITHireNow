@@ -19,8 +19,6 @@ class JobController extends Controller
 
         if ($request->has('is_approved')) {
             $query->where('is_approved', $request->is_approved);
-        } else {
-            $query->where('is_approved', false);
         }
 
         if ($request->filled('category')) {
@@ -38,20 +36,28 @@ class JobController extends Controller
     }
 
     public function show($id)
-    {
-        $job = Job::with([
-            'company',
-            'categories',
-            'skills',
-            'jobType',
-            'level',
-            'experience',
-            'language',
-            'remotePolicy',
-            'location',
+
+{
+    $job = Job::with([
+        'company',
+        'categories',
+        'skills',
+        'jobType',
+        'level',
+        'experience',
+        'language',
+        'remotePolicy',
+        'location',
 
 
-        ])->find($id);
+    ])->find($id);
+
+   if (!$job) {
+    return response()->json([
+        'success' => false,
+        'message' => 'Tin tuyển dụng không tồn tại.',
+    ], 404);
+}
 
         if (!$job) {
             return response()->json([
@@ -63,10 +69,9 @@ class JobController extends Controller
         return view('admin.jobs.show', compact('job'));
     }
 
-
     public function approve(Request $request, $id)
     {
-        // kiểm tra xem job có tồn tại không 
+        // kiểm tra xem job có tồn tại không
         $job = Job::find($id);
 
         if (!$job) {
@@ -100,7 +105,6 @@ class JobController extends Controller
         ]);
     }
 
-
     public function reject(Request $request, Job $job)
     {
         if ($job->status !== 'pending') {
@@ -125,12 +129,6 @@ class JobController extends Controller
         ]);
     }
 
-
-
-
-
-
-
     public function destroy($id)
     {
         $job = Job::find($id);
@@ -149,7 +147,6 @@ class JobController extends Controller
             'message' => 'Tin tuyển dụng đã được xoá.'
         ]);
     }
-
 
     public function revertToPending(Request $request, $id)
     {

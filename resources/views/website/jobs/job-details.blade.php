@@ -9,7 +9,7 @@
                     <div class="col-12">
                         <div class="col-12">
                             <div class="job-search-wrap">
-                                <div class="job-search-form">
+                                {{-- <div class="job-search-form">
                                     <form action="index.html#">
                                         <div class="row row-gutter-10">
                                             <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
@@ -50,7 +50,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

@@ -8,23 +8,98 @@ use App\Models\Company;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\JobType;
+use App\Models\Level;
+use App\Models\JobExperience;
+use App\Models\JobLanguage;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    /**
+     * Trang danh sách việc làm mặc định (không lọc nâng cao)
+     */
     public function index(Request $request)
     {
+        // Lấy danh sách job mới nhất (không filter nâng cao)
+        $jobs = Job::with(['company', 'skills', 'jobType', 'location', 'level', 'experience', 'language'])
+            ->where('status', 'published')
+            ->orderByDesc('created_at')
+            ->paginate(9);
 
-        $query = Job::with(['company', 'skills', 'jobType', 'location'])
+        // Các dữ liệu filter cho form
+        $categories  = Category::all();
+        $companies   = Company::all();
+        $skills      = Skill::all();
+        $locations   = Location::all();
+        $jobTypes    = JobType::all();
+        $levels      = Level::all();
+        $experiences = JobExperience::all();
+        $languages   = JobLanguage::all();
+
+        // Gợi ý top jobs nổi bật
+        $topJobs = Job::where('is_featured', 1)
+            ->orderByDesc('salary_min')
+            ->limit(3)
+            ->get();
+
+        return view('website.jobs.job', compact(
+            'jobs', 'categories', 'companies', 'skills', 'locations',
+            'jobTypes', 'levels', 'experiences', 'languages', 'topJobs'
+        ));
+    }
+
+    /**
+     * Trang search việc làm (lọc nâng cao)
+     */
+    public function search(Request $request)
+    {
+        $query = $this->buildSearchQuery($request);
+
+        $jobs = $query->paginate(9)->appends($request->except('page'));
+
+        // Dữ liệu filter cho form
+        $categories  = Category::all();
+        $companies   = Company::all();
+        $skills      = Skill::all();
+        $locations   = Location::all();
+        $jobTypes    = JobType::all();
+        $levels      = Level::all();
+        $experiences = JobExperience::all();
+        $languages   = JobLanguage::all();
+
+        // Gợi ý top jobs nổi bật theo query filter
+        $topJobs = (clone $query)
+            ->orderByDesc('is_featured')
+            ->orderByDesc('salary_min')
+            ->limit(3)
+            ->get();
+
+        return view('website.jobs.job', compact(
+            'jobs', 'categories', 'companies', 'skills', 'locations',
+            'jobTypes', 'levels', 'experiences', 'languages', 'topJobs'
+        ));
+    }
+
+    /**
+     * Hàm build query search dùng chung cho cả index và search
+     */
+    private function buildSearchQuery(Request $request)
+    {
+        $query = Job::with(['company', 'skills', 'jobType', 'location', 'level', 'experience', 'language'])
             ->where('status', 'published');
 
         // Từ khóa
         if ($request->filled('q')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->q . '%')
-                    ->orWhere('description', 'like', '%' . $request->q . '%');
+            $q = $request->q;
+            $query->where(function ($sub) use ($q) {
+                $sub->where('title', 'like', "%$q%")
+                    ->orWhere('description', 'like', "%$q%")
+                    ->orWhere('requirements', 'like', "%$q%")
+                    ->orWhere('benefits', 'like', "%$q%")
+                    ->orWhere('meta_title', 'like', "%$q%")
+                    ->orWhere('meta_description', 'like', "%$q%")
+                    ->orWhere('keyword', 'like', "%$q%");
             });
-
         }
 
         // Địa điểm
@@ -48,20 +123,29 @@ class JobController extends Controller
         }
 
         // Cấp bậc
-        if ($request->filled('level')) {
-            $query->where('level_id', $request->level);
+        if ($request->filled('level_id')) {
+            $query->where('level_id', $request->level_id);
         }
 
         // Kinh nghiệm
-        if ($request->filled('experience')) {
-            $query->where('experience_id', $request->experience);
+        if ($request->filled('experience_id')) {
+            $query->where('experience_id', $request->experience_id);
         }
 
-        // Khoảng lương
+        // Ngôn ngữ
+        if ($request->filled('language_id')) {
+            $query->where('language_id', $request->language_id);
+        }
+
+        // Hình thức remote
+        if ($request->filled('remote_policy_id')) {
+            $query->where('remote_policy_id', $request->remote_policy_id);
+        }
+
+        // Lọc lương
         if ($request->filled('min_salary')) {
             $query->where('salary_max', '>=', $request->min_salary);
         }
-
         if ($request->filled('max_salary')) {
             $query->where('salary_min', '<=', $request->max_salary);
         }
@@ -69,18 +153,25 @@ class JobController extends Controller
         // Kỹ năng
         if ($request->filled('skills')) {
             $skills = $request->input('skills');
+            if (is_string($skills)) {
+                $skills = explode(',', $skills);
+            }
             $query->whereHas('skills', function ($q) use ($skills) {
-                $q->whereIn('name', $skills);
+                $q->whereIn('skills.id', $skills);
             });
         }
 
-        // Việc làm nổi bật
+        // Nổi bật
         if ($request->filled('is_featured')) {
             $query->where('is_featured', 1);
         }
 
-        $jobs = $query->orderBy('views', 'desc')->paginate(9)->appends($request->except('page'));
-
+        // Lấy danh sách việc làm
+        $jobs = Job::with('company')
+            ->where('status', 'published')
+            ->orderByDesc('is_featured')
+            ->orderByDesc('views')
+            ->paginate(9);
 
         // Dữ liệu lọc cho form
         $categories = Category::all();
@@ -107,6 +198,9 @@ class JobController extends Controller
         ));
     }
 
+    /**
+     * Trang chi tiết việc làm
+     */
     public function show($slug)
     {
         $job = Job::with([
@@ -114,7 +208,7 @@ class JobController extends Controller
             'skills',
             'jobType',
             'location',
-            'categories',
+            'category',
             'level',
             'experience',
             'language',
@@ -124,7 +218,7 @@ class JobController extends Controller
             ->where('status', 'published')
             ->firstOrFail();
 
-        // Lấy các công việc liên quan cùng danh mục (nếu có)
+      // Lấy các công việc liên quan cùng danh mục (nếu có)
         $relatedJobs = collect();
 
         if ($job->categories->isNotEmpty()) {
@@ -141,5 +235,4 @@ class JobController extends Controller
 
         return view('website.jobs.job-details', compact('job', 'relatedJobs'));
     }
-
 }
