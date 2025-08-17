@@ -21,7 +21,9 @@ class JobApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = JobApplication::with(['job', 'user', 'company']);
+        $companies = Auth::user()->companies;
+        $query = JobApplication::with(['job', 'user', 'company'])
+            ->whereIn('company_id', $companies->pluck('id'));
 
         if ($request->search) {
             $query->where(function ($q) use ($request) {
@@ -206,7 +208,7 @@ class JobApplicationController extends Controller
                     Carbon::parse($data['interview_date'])
                 ));
             }
-            
+
             // mail gửi thông báo từ chối phỏng vấn
             if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
                 $rejectionReason = $data['note'] ?? null;

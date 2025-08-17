@@ -13,7 +13,7 @@
                                         ->first();
                                 @endphp
                                 <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : '' }}"
-                                     alt="Client Logo" style="height: 120px;">
+                                    alt="Client Logo" style="height: 60px; width: auto;">
                             </a>
                         </div>
                     </div>
@@ -23,7 +23,8 @@
                         <div class="header-navigation-area position-relative">
                             <ul class="main-menu nav">
                                 <li><a href="{{ route('home') }}"><span>Trang Chủ</span></a></li>
-                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a></li>
+                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm Việc
+                                            Làm</span></a></li>
                                 <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
                                 <li class="has-submenu">
                                     <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
@@ -66,22 +67,23 @@
                                     <div class="col-auto">
                                         <div class="dropdown me-3 notification-dropdown-wrapper">
                                             <a href="#" id="notification-bell-btn"
-                                               class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                               data-bs-toggle="dropdown" aria-expanded="false" aria-label="Thông báo">
+                                                class="btn btn-icon position-relative p-0 bg-transparent border-0"
+                                                data-bs-toggle="dropdown" aria-expanded="false" aria-label="Thông báo">
                                                 <i class="bi bi-bell fs-4 text-white"></i>
                                                 <span id="notification-count"
-                                                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__bounce"
-                                                      style="display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'inline-block' : 'none' }}; font-size: 0.75rem;">
+                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__bounce"
+                                                    style="display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'inline-block' : 'none' }}; font-size: 0.75rem;">
                                                     {{ auth()->user()->unreadNotifications->count() }}
                                                 </span>
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end shadow p-0"
                                                 style="width: 340px; max-height: 420px; overflow-y: auto;"
                                                 aria-labelledby="notification-bell-btn">
-                                                <li class="dropdown-header bg-primary text-white px-3 py-2 d-flex justify-content-between align-items-center">
+                                                <li
+                                                    class="dropdown-header bg-primary text-white px-3 py-2 d-flex justify-content-between align-items-center">
                                                     <span>Thông báo</span>
                                                     <a href="{{ route('notifications.index') }}"
-                                                       class="text-white-50 small">Xem tất cả</a>
+                                                        class="text-white-50 small">Xem tất cả</a>
                                                 </li>
                                                 <ul id="notification-list-items" class="list-unstyled mb-0">
                                                     @php $notis = auth()->user()->unreadNotifications->take(6); @endphp
@@ -91,7 +93,7 @@
                                                                 data-id="{{ $noti->id }}">
                                                                 <div>
                                                                     <a href="{{ $noti->data['link_url'] ?? '#' }}"
-                                                                       class="text-decoration-none fw-semibold">
+                                                                        class="text-decoration-none fw-semibold">
                                                                         {{ $noti->data['message'] ?? 'Có thông báo mới!' }}
                                                                     </a>
                                                                     <div class="text-muted" style="font-size: 0.8em;">
@@ -106,7 +108,7 @@
                                                 </ul>
                                                 <li class="dropdown-footer p-2 text-center bg-light">
                                                     <a href="{{ route('notifications.index') }}"
-                                                       class="text-secondary small">Xem tất cả thông báo</a>
+                                                        class="text-secondary small">Xem tất cả thông báo</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -116,12 +118,12 @@
                                     <div class="col-auto">
                                         <div class="dropdown me-3">
                                             <a class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                               href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
+                                                href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
                                                 <i id="chat-bubble" class="bi bi-chat-dots fs-4 text-white"></i>
                                                 @if (isset($totalUnread) && $totalUnread > 0)
                                                     <span id="chat-dot"
-                                                          class="position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow"
-                                                          style="font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;">
+                                                        class="position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow"
+                                                        style="font-size: 10px; min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid #fff;">
                                                         {{ $totalUnread > 99 ? '99+' : $totalUnread }}
                                                     </span>
                                                 @endif
@@ -133,33 +135,29 @@
                                     <div class="col">
                                         <div class="user-info dropdown me-3">
                                             <a href="#" class="user-info-toggle d-flex align-items-center"
-                                               data-bs-toggle="dropdown">
+                                                data-bs-toggle="dropdown">
                                                 <span class="user-avatar me-2"><i class="bi bi-person-circle"></i></span>
                                                 <i class="bi bi-caret-down-fill ms-1"></i>
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
                                                 <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active text-primary' : '' }}"
-                                                       href="{{ route('profile.dashboard') }}">
+                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active' : '' }}"
+                                                        href="{{ route('profile.dashboard') }}">
                                                         <i class="bi bi-house-door me-2"></i> Tổng quan
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/show') ? 'active text-primary' : '' }}"
-                                                       href="{{ route('profile.show') }}">
-                                                        <i class="bi bi-file-earmark-text me-2"></i> Hồ sơ HireNow
+                                                    <a class="dropdown-item d-flex align-items-center {{ request()->routeIs('favorites.index') ? 'active' : '' }}"
+                                                        href="{{ route('favorites.index') }}">
+                                                        <i class="bi bi-bookmark-heart-fill text-danger me-2"></i> Việc làm
+                                                        yêu thích
                                                     </a>
                                                 </li>
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('profile/my-jobs') ? 'active text-primary' : '' }}"
-                                                       href="{{ route('profile.my-jobs') }}">
-                                                        <i class="bi bi-briefcase me-2"></i> Việc làm của tôi
-                                                    </a>
-                                                </li>
+
                                                 @if (Auth::user()->role === 'admin')
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
-                                                           href="{{ route('admin.dashboard') }}">
+                                                            href="{{ route('admin.dashboard') }}">
                                                             <i class="bi bi-shield-lock me-2 text-danger"></i> Trang quản trị
                                                         </a>
                                                     </li>
@@ -167,26 +165,29 @@
                                                 @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
-                                                           href="{{ route('employer.dashboard') }}">
-                                                            <i class="bi bi-building me-2 text-success"></i> Trang nhà tuyển dụng
+                                                            href="{{ route('employer.dashboard') }}">
+                                                            <i class="bi bi-building me-2 text-success"></i> Trang nhà tuyển
+                                                            dụng
                                                         </a>
                                                     </li>
                                                 @endif
                                                 @if (Auth::user()->role === 'employer')
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
-                                                           href="{{ route('employer.details') }}">
+                                                            href="{{ route('employer.details') }}">
                                                             <i class="bi bi-building-gear me-2"></i> Quản lý nhà tuyển dụng
                                                         </a>
                                                     </li>
                                                 @endif
                                                 <li>
                                                     <a class="dropdown-item d-flex align-items-center"
-                                                       href="{{ route('profile.settings') }}">
+                                                        href="{{ route('profile.settings') }}">
                                                         <i class="bi bi-gear me-2"></i> Cài đặt
                                                     </a>
                                                 </li>
-                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
                                                 <li>
                                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                                         <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
@@ -200,7 +201,7 @@
 
                             <!-- Mobile Menu -->
                             <button class="btn-menu" type="button" data-bs-toggle="offcanvas"
-                                    data-bs-target="#AsideOffcanvasMenu">
+                                data-bs-target="#AsideOffcanvasMenu">
                                 <i class="bi bi-list"></i>
                             </button>
                         </div>

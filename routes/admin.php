@@ -13,7 +13,8 @@ use App\Http\Controllers\Admin\{
     ServicePackageController,
     BankAccountControlle,
     EmployerController,
-    BlogController
+    BlogController,
+    LogoController
 };
 use App\Http\Controllers\Admin\SeekerProfileController;
 
@@ -103,7 +104,8 @@ Route::prefix('admin')
             Route::put('/{id}', [EmployerController::class, 'update'])->name('update');      // lưu sửa
             Route::delete('/{id}', [EmployerController::class, 'destroy'])->name('destroy'); // xóa mềm
         });
-        Route::resource('logos', App\Http\Controllers\Admin\LogoController::class)->names('logos');
+        Route::get('logos', [LogoController::class, 'index'])->name('logos.index');
+        Route::post('logos/update/{type}', [LogoController::class, 'updateSingle'])->name('logos.updateSingle');
 
         Route::prefix('blogs')->name('blogs.')->controller(BlogController::class)->group(function () {
             Route::get('/', 'index')->name('index');

@@ -144,7 +144,7 @@
 
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.settings.index') }}">
-                <i class="bi bi-gear sidebar-icon"></i> Cài đặt hệ thống
+                <i class="bi bi-gear sidebar-icon"></i> Cài đặt
             </a>
         </li>
 
@@ -157,11 +157,6 @@
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.bank_log.index') }}">
                 <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
-            </a>
-        </li>
-        <li class="sidebar-list">
-            <a class="sidebar-link" href="{{ route('admin.logos.index') }}">
-                <i class="bi bi-image sidebar-icon"></i> Logo
             </a>
         </li>
     </ul>

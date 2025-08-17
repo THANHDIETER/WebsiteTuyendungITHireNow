@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('logos', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable(); // Tên mô tả logo
-            $table->enum('type', ['header', 'footer', 'client', 'admin'])->default('header'); // Phân loại logo
+            $table->enum('type', ['site','header', 'footer', 'client', 'admin'])->default('header'); // Phân loại logo
             $table->string('image_path'); // Đường dẫn logo (trong storage/public)
             $table->boolean('is_active')->default(true); // Có đang được sử dụng không
             $table->timestamps();

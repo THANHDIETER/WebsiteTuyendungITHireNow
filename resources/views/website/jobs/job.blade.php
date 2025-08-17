@@ -4,19 +4,11 @@
     <main class="main-content">
 
         <!--== Bắt đầu header trang ==-->
-        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
-            <div class="container pt--0 pb--0">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="job-search-wrap">
-                            <div class="job-search-form">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
+        data-bg-img="{{ asset('client/assets/img/banner/15.png') }}"
+        style="max-height: 80px; height: 80px; padding: 0 !important;">
+        &nbsp;
+    </div>
         <form action="{{ route('jobs.search') }}" method="GET" class="search-job-form p-5 bg-white shadow-lg rounded-4">
             <div class="row g-3 align-items-end">
                 {{-- Từ khóa --}}

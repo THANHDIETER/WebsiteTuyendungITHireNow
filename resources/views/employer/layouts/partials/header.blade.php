@@ -7,6 +7,11 @@
     content="admin template, Edmin admin template, best javascript admin, dashboard template,  admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
 <meta name="csrf-token" content="{{ csrf_token() }}">
+@if($favicon)
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('storage/' . $favicon->image_path) }}?v={{ $favicon->updated_at->timestamp }}">
+    <link rel="shortcut icon" href="{{ asset('storage/' . $favicon->image_path) }}?v={{ $favicon->updated_at->timestamp }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('storage/' . $favicon->image_path) }}?v={{ $favicon->updated_at->timestamp }}">
+@endif
 
 <title>{{ $title ?? 'Admin' }}</title>
 <!-- Bootstrap CSS -->
@@ -17,8 +22,6 @@
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> -->
 
 <!-- Favicon icon-->
-<link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
 <!-- Google font-->
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -67,8 +70,8 @@
         @endphp
 
             <a href="{{ route('home') }}">
-                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : "" }}"
-                    alt="Client Logo" style="height: 120px;" {{-- hoặc dùng class --}}>
+                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : "" }}" alt="Client Logo"
+                    style="height: 60px; width: auto;">
             </a>
         </div>
 

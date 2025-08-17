@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ChatBotController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\JobApplicationController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\ResetPasswordController;
 
 // Load các route tách riêng
 require __DIR__ . '/admin.php';
@@ -21,9 +21,10 @@ require __DIR__ . '/jobseeker.php';
 require __DIR__ . '/notification.php';
 require __DIR__ . '/channels.php';
 
-use App\Models\User;
+use App\Http\Controllers\JobApplicationController;
 use App\Notifications\NewJobSubmittedNotification;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 Route::get('/test-notification', function (Request $request) {
     $user = User::find(2); // user id = 2
@@ -43,7 +44,7 @@ Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 Route::get('/register/employer', [RegisterController::class, 'showRegisterEmployerForm'])->name('showRegisterEmployerForm');
 Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('registerEmployer');
@@ -65,6 +66,12 @@ Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 Route::middleware('auth')->post('/favorites/{job}', [FavoriteController::class, 'store']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/{job}', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites/{job}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+    Route::get('/favorites/job/{id}', [FavoriteController::class, 'show'])->name('favorites.show');
+});
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');

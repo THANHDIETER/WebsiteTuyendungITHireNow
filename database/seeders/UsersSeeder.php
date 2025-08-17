@@ -37,5 +37,59 @@ class UsersSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        // Admin cố định
+        User::updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'password' => Hash::make('password'),
+                'name' => 'Super Admin',
+                'phone_number' => '0900000000',
+                'role' => 'admin',
+                'status' => 'active',
+                'is_blocked' => false,
+                'email_verified_at' => now(),
+                'last_login_at' => now(),
+                'referral_code' => strtoupper(Str::random(6)),
+                'referred_by' => null,
+                'ip_address' => '127.0.0.1',
+            ]
+        );
+
+        // Employer cố định
+        User::updateOrCreate(
+            ['email' => 'employer@example.com'],
+            [
+                'password' => Hash::make('password'),
+                'name' => 'Default Employer',
+                'phone_number' => '0911111111',
+                'role' => 'employer',
+                'status' => 'active',
+                'is_blocked' => false,
+                'email_verified_at' => now(),
+                'last_login_at' => now(),
+                'referral_code' => strtoupper(Str::random(6)),
+                'referred_by' => null,
+                'ip_address' => '127.0.0.1',
+            ]
+        );
+
+        // Job seeker cố định
+        User::updateOrCreate(
+            ['email' => 'jobseeker@example.com'],
+            [
+                'password' => Hash::make('password'),
+                'name' => 'Default Job Seeker',
+                'phone_number' => '0922222222',
+                'role' => 'job_seeker',
+                'status' => 'active',
+                'is_blocked' => false,
+                'email_verified_at' => now(),
+                'last_login_at' => now(),
+                'referral_code' => strtoupper(Str::random(6)),
+                'referred_by' => null,
+                'ip_address' => '127.0.0.1',
+            ]
+        );
     }   
 }

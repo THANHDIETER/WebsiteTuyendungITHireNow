@@ -142,10 +142,17 @@ class Job extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function language()
+  
+   public function language()
     {
-        return $this->belongsTo(JobLanguage::class);
+        return $this->belongsTo(JobLanguage::class, 'language_id', 'id');
     }
+    public function jobLanguage()
+    {
+        return $this->belongsTo(JobLanguage::class, 'language_id', 'id');
+    }
+
+
 
     public function remotePolicy()
     {

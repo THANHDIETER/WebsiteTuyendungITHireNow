@@ -46,7 +46,7 @@
                         </div>
                         <p class="desc">HireNow - Nền tảng tuyển dụng IT chất lượng tại Việt Nam. Kết nối nhà tuyển dụng
                             với nhân tài công nghệ.</p>
-                        <div class="social-icons d-flex gap-2">
+                        <div class="social-icons d-flex gap-2 mb-3">
                             <!-- target="_blank" -->
                             <a href="#" rel="noopener">
                                 <img src="https://dvpro.vn/uploads/23-09-2024/provider/d7c36c77-793d-4d4f-84f6-899477c69e7e.gif"

@@ -125,7 +125,7 @@
                 <div class="card-body">
                     <h5 class="fw-semibold mb-3"><i class="bi bi-gift me-2 text-success"></i> Quyền lợi</h5>
                     @php
-                        $benefitsArray = $job->benefits ? json_decode($job->benefits, true) : null;
+                        $benefitsArray = $job->benefits  ?? null;
                     @endphp
 
                     <div>

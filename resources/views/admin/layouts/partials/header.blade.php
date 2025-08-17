@@ -19,13 +19,18 @@
  -->
 
 <!-- Favicon icon-->
-<link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
 <!-- Google font-->
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
     rel="stylesheet">
+    
+@if($favicon)
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('storage/' . $favicon->image_path) }}?v={{ $favicon->updated_at->timestamp }}">
+    <link rel="shortcut icon" href="{{ asset('storage/' . $favicon->image_path) }}?v={{ $favicon->updated_at->timestamp }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('storage/' . $favicon->image_path) }}?v={{ $favicon->updated_at->timestamp }}">
+@endif
+
 <!-- Font awesome icon css -->
 
 <!-- Ico Icon css -->
@@ -70,7 +75,7 @@
 
             <a href="{{ route('home') }}">
                 <img src="{{ $logo ? asset('storage/' . $logo->image_path) : "" }}"
-                    alt="Admin Logo" class="logo-img" style="height:120px;">
+                    alt="Admin Logo" class="logo-img" style="height:60px; width: auto;">
             </a>
         </div>
 

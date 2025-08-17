@@ -84,7 +84,7 @@ class JobApplicationController extends Controller
 
             return redirect()->back()->with('success', 'Đơn ứng tuyển của bạn đã được gửi thành công!');
         } catch (\Exception $e) {
-            if (isset($cvPath) && Storage::disk('public')->exists($cvPath)) {
+            if (isset($cvPath) && Storage::disk(name: 'public')->exists($cvPath)) {
                 Storage::disk('public')->delete($cvPath);
             }
 
