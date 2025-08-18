@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\DB;
 
 class JobApplicationController extends Controller
 {
+    public function showApplyForm(Job $job)
+    {
+        $user = Auth::user();
+        $profile = $user->profile;
+
+        // Lấy danh sách CV của ứng viên
+        $cvs = $profile ? $profile->cvs : collect();
+
+        return view('jobs.apply', compact('job', 'cvs'));
+    }
+
     public function store(Request $request, Job $job)
     {
         $request->validate([

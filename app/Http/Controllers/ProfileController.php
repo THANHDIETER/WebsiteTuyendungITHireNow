@@ -101,7 +101,7 @@ class ProfileController extends Controller
         $profile = $user->profile;
 
         $appliedJobs = $user->jobApplications()
-        ->with([
+            ->with([
                 'job.company.user',
                 'job.location'
             ])
@@ -323,12 +323,22 @@ class ProfileController extends Controller
     public function uploadCVs(Request $request)
     {
         $request->validate([
-            'cv_files'   => 'required',
+            'cv_files' => 'required',
             'cv_files.*' => 'mimes:pdf|max:2048',
         ]);
 
         $user = Auth::user();
+        if (!$user) {
+            return back()->withErrors(['error' => 'Bạn cần đăng nhập để tải lên CV.']);
+        }
         $profile = $user->profile;
+
+        if (!$profile) {
+            $profile = $user->profile()->create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+            ]);
+        }
 
         foreach ($request->file('cv_files') as $file) {
             $path = $file->store('cvs', 'public');
@@ -342,4 +352,23 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Upload nhiều CV thành công!');
     }
+
+    public function deleteCV($id)
+{
+    $cv = SeekerCV::findOrFail($id);
+
+    // Kiểm tra CV có thuộc profile user đang đăng nhập không
+    if ($cv->profile->user_id !== Auth::id()) {
+        return back()->with('error', 'Bạn không có quyền xoá CV này.');
+    }
+
+    // Xoá file vật lý trong storage
+    if (\Storage::disk('public')->exists($cv->file_path)) {
+        \Storage::disk('public')->delete($cv->file_path);
+    }
+
+    $cv->delete();
+
+    return back()->with('success', 'Xoá CV thành công!');
+}
 }

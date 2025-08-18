@@ -20,17 +20,17 @@
                     </ul>
                 </li>
 
-                <li><a href="{{ route('chi-tiet-nhan-vien') }}"><i class="bi bi-building me-2"></i>Chi tiết nhà tuyển dụng</a></li>
-
+                <!-- <li><a href="{{ route('chi-tiet-nhan-vien') }}"><i class="bi bi-building me-2"></i>Chi tiết nhà tuyển dụng</a></li> -->
+<!-- 
                 <li>
                     <a href="{{ route('ung-vien') }}"><i class="bi bi-person-lines-fill me-2"></i>Ứng viên</a>
                     <ul class="sub-menu list-unstyled ms-3">
                         <li><a href="{{ route('ung-vien') }}"><i class="bi bi-people me-2"></i>Danh sách ứng viên</a></li>
                         <li><a href="{{ route('chi-tiet-ung-vien') }}"><i class="bi bi-person-vcard me-2"></i>Chi tiết ứng viên</a></li>
                     </ul>
-                </li>
+                </li> -->
 
-                <li>
+                <!-- <li>
                     <a href="{{ route('blog') }}"><i class="bi bi-newspaper me-2"></i>Tin tức</a>
                     <ul class="sub-menu list-unstyled ms-3">
                         <li><a href="{{ route('blog') }}"><i class="bi bi-grid-3x3-gap me-2"></i>Lưới tin tức</a></li>
@@ -38,15 +38,15 @@
                         <li><a href="{{ route('blog-right-sidebar') }}"><i class="bi bi-layout-sidebar-reverse me-2"></i>Blog (sidebar phải)</a></li>
                         <li><a href="{{ route('blog-details', ['id' => $id ?? null]) }}"><i class="bi bi-file-text me-2"></i>Chi tiết bài viết</a></li>
                     </ul>
-                </li>
+                </li> -->
 
                 <li>
-                    <a href="#"><i class="bi bi-layers me-2"></i>Trang khác</a>
+                    <!-- <a href="#"><i class="bi bi-layers me-2"></i>Trang khác</a>
                     <ul class="sub-menu list-unstyled ms-3">
                         <li><a href="{{ route('about-us') }}"><i class="bi bi-info-circle me-2"></i>Giới thiệu</a></li>
                         <li><a href="{{ route('404') }}"><i class="bi bi-exclamation-triangle me-2"></i>Không tìm thấy trang</a></li>
                     </ul>
-                </li>
+                </li> -->
 
                 <li><a href="{{ route('contact') }}"><i class="bi bi-telephone me-2"></i>Liên hệ</a></li>
             </ul>

@@ -12,6 +12,7 @@ use App\Models\Level;
 use App\Models\JobExperience;
 use App\Models\JobLanguage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -217,7 +218,11 @@ class JobController extends Controller
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
+        $user = Auth::user();
+        $profile = $user->profile;
 
+        // Lấy danh sách CV của ứng viên
+        $cvs = $profile ? $profile->cvs : collect();
       // Lấy các công việc liên quan cùng danh mục (nếu có)
         $relatedJobs = collect();
 
@@ -233,6 +238,6 @@ class JobController extends Controller
                 ->get();
         }
 
-        return view('website.jobs.job-details', compact('job', 'relatedJobs'));
+        return view('website.jobs.job-details', compact('job', 'relatedJobs','cvs','profile'));
     }
 }

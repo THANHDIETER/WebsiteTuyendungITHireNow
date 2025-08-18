@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SeekerCV extends Model
 {
+    protected $table = 'seeker_cvs'; 
     protected $fillable = ['seeker_profile_id', 'file_path', 'title'];
 
     public function profile(): BelongsTo

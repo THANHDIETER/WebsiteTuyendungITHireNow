@@ -92,6 +92,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/cong-viec/tim-kiem', [JobController::class, 'search'])->name('jobs.search'); // <--- Route search mới
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
+
+// Route::get('/jobs/{job}/apply', [JobApplicationController::class, 'show'])
+//         ->name('jobs.showApply');
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 
 
@@ -172,8 +175,6 @@ Route::get('/login', function () {
 Route::get('/registration', function () {
     return view('website.login-register.registration');
 });
-
-Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 
 
 // routes/web.php

@@ -25,15 +25,15 @@
                                 <li><a href="{{ route('home') }}"><span>Trang Chủ</span></a></li>
                                 <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm Việc
                                             Làm</span></a></li>
-                                <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li>
-                                <li class="has-submenu">
+                                <!-- <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li> -->
+                                <!-- <li class="has-submenu">
                                     <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('ung-vien') }}">Ứng Cử Viên</a></li>
                                         <li><a href="{{ route('chi-tiet-ung-vien') }}">Chi Tiết Ứng Viên</a></li>
                                     </ul>
-                                </li>
-                                <li class="has-submenu">
+                                </li> -->
+                                <!-- <li class="has-submenu">
                                     <a href="{{ route('blog') }}"><span>Blog</span></a>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('blog') }}">Blog Grid</a></li>
@@ -41,15 +41,15 @@
                                         <li><a href="{{ route('blog-right-sidebar') }}">Blog Right Sidebar</a></li>
                                         <li><a href="">Chi Tiết Bài Viết</a></li>
                                     </ul>
-                                </li>
+                                </li> -->
                                 <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
-                                <li class="has-submenu">
+                                <!-- <li class="has-submenu">
                                     <a href="#"><span>Trang Khác</span></a>
                                     <ul class="submenu-nav">
                                         <li><a href="{{ route('about-us') }}">Thông Tin</a></li>
                                         <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
                                     </ul>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </div>
