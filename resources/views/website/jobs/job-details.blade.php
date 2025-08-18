@@ -1,16 +1,16 @@
 @extends('website.layouts.master')
 
 @section('content')
-<div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
-    data-bg-img="{{ asset('client/assets/img/banner/15.png') }}"
-    style="max-height: 80px; height: 80px; padding: 0 !important;">
-    &nbsp;
-</div>
-
+ <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
+        data-bg-img="{{ asset('client/assets/img/banner/15.png') }}"
+        style="max-height: 80px; height: 80px; padding: 0 !important;">
+        &nbsp;
+    </div>
 <main class="main-content">
-    {{-- Thông báo --}}
+    <!--== Kết thúc header trang ==-->
     @if (session('success'))
-    <div class="alert alert-success alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show" role="alert">
+    <div class="alert alert-success alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show"
+        role="alert">
         <i class="bi bi-check-circle-fill me-2 fs-5"></i>
         <div>{{ session('success') }}</div>
         <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Đóng"></button>
@@ -18,89 +18,74 @@
     @endif
 
     @if (session('error'))
-    <div class="alert alert-danger alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show" role="alert">
+    <div class="alert alert-danger alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show"
+        role="alert">
         <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
         <div>{{ session('error') }}</div>
         <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Đóng"></button>
     </div>
     @endif
 
-    {{-- Chi tiết công việc --}}
+    <!--== Bắt đầu chi tiết công việc ==-->
     <section class="job-details-area">
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="job-details-wrap d-flex justify-content-between align-items-center flex-wrap border-0 p-4">
-                        {{-- Logo + tiêu đề --}}
+                    <div
+                        class="job-details-wrap d-flex justify-content-between align-items-center flex-wrap border rounded p-4 shadow-sm">
+                        {{-- Logo công ty --}}
                         <div class="job-details-info d-flex align-items-center">
                             <div class="thumb me-4">
                                 <img src="{{ $job->company->logo_url ?? asset('client/assets/img/companies/default-logo.webp') }}"
-                                    width="120" height="120"
-                                    alt="Logo {{ $job->company->name ?? 'Công ty' }}">
+                                    width="130" height="130" alt="Logo {{ $job->company->name ?? 'Công ty' }}">
                             </div>
 
+                            {{-- Tiêu đề + công ty + thông tin --}}
                             <div class="content">
                                 <h4 class="title mb-1">{{ $job->title }}</h4>
-                                <h5 class="sub-title mb-2 text-secondary fw-semibold">
-                                    {{ $job->company->name ?? 'Tên công ty' }}
-                                </h5>
-                                <ul class="info-list list-unstyled d-flex flex-wrap gap-3 mb-0">
-                                    <li class="d-flex align-items-center">
-                                        <i class="icofont-location-pin me-2"></i>
-                                        <span>{{ optional($job->location)->name ?? 'N/A' }}</span>
+                                <h5 class="sub-title mb-2">{{ $job->company->name ?? 'Tên công ty' }}</h5>
+                                <ul class="info-list list-unstyled d-flex flex-wrap gap-3">
+                                    <li><i class="icofont-location-pin me-1"></i>
+                                        {{ optional($job->location)->name ?? 'N/A' }}
                                     </li>
-                                    <li class="d-flex align-items-center">
-                                        <i class="icofont-phone me-2"></i>
-                                        <span>{{ $job->company->phone ?? 'N/A' }}</span>
-                                    </li>
-                                    @if($job->deadline)
-                                    <li class="d-flex align-items-center">
-                                        <i class="icofont-calendar me-2"></i>
-                                        <span>Hạn: {{ $job->deadline->format('d/m/Y') }}</span>
-                                    </li>
-                                    @endif
+                                    <li><i class="icofont-phone me-1"></i> {{ $job->company->phone ?? 'N/A' }}</li>
                                 </ul>
                             </div>
                         </div>
 
-                        {{-- Mức lương + hình thức --}}
+                        {{-- Mức lương + hình thức làm việc --}}
                         <div class="job-details-price text-end mt-3 mt-md-0">
-                            @php
-                            $curr = strtoupper($job->currency ?? 'VND');
-                            @endphp
                             @if ($job->salary_min && $job->salary_max)
-                            <h4 class="fw-bold mb-1 text-gradient">
-                                {{ number_format($job->salary_min, 0, '.', ',') }} - {{ number_format($job->salary_max, 0, '.', ',') }}
-                                <span class="text-uppercase">{{ $curr }}</span>
+                            <h4 class="fw-bold mb-1" style="color: #0d6efd;">
+                                {{ number_format($job->salary_min, 0, '.', ',') }} -
+                                {{ number_format($job->salary_max, 0, '.', ',') }}
+                                <span style="text-transform: uppercase">{{ $job->currency }}</span>
                                 <small class="text-muted fs-6">/tháng</small>
                             </h4>
-                            @elseif ($job->salary_min)
-                            <h4 class="fw-bold mb-1 text-gradient">Từ {{ number_format($job->salary_min, 0, '.', ',') }} <span class="text-uppercase">{{ $curr }}</span></h4>
-                            @elseif ($job->salary_max)
-                            <h4 class="fw-bold mb-1 text-gradient">Lên đến {{ number_format($job->salary_max, 0, '.', ',') }} <span class="text-uppercase">{{ $curr }}</span></h4>
                             @else
                             <h4 class="text-muted mb-1">Lương thỏa thuận</h4>
                             @endif
 
                             @if ($job->jobType)
                             <p class="text-muted mb-0 d-flex align-items-center justify-content-end">
-                                <i class="icofont-briefcase me-2 fs-5 text-secondary"></i>
-                                <span class="badge bg-light text-dark rounded-pill px-3 py-2">{{ $job->jobType->name }}</span>
+                                <i class="icofont-briefcase me-1 fs-5 text-secondary"></i>
+                                <span>{{ $job->jobType->name }}</span>
                             </p>
                             @endif
 
-                            <button type="button" class="btn btn-apply-now btn-success mt-3 d-inline-flex align-items-center gap-2"
-                                data-bs-toggle="modal" data-bs-target="#applyModal" aria-label="Mở form ứng tuyển">
-                                <i class="bi bi-send-fill"></i>
+                            <button type="button" class="btn btn-apply-now btn-success mt-3" data-bs-toggle="modal"
+                                data-bs-target="#applyModal">
                                 Ứng tuyển ngay
                             </button>
                         </div>
+
+
+
                     </div>
                 </div>
             </div>
 
-            {{-- Nội dung trái + sidebar --}}
-            <div class="row mt-4 g-4">
+            <div class="row">
                 <div class="col-lg-7 col-xl-8">
                     <div class="job-details-content">
                         <div class="content">
@@ -117,15 +102,19 @@
                             </div>
                         </div>
 
+
+
                         <div class="content">
                             <h4 class="title">Phúc lợi</h4>
                             <div class="desc job-content">
                                 @php
                                 $benefits = [];
+
                                 if (!empty($job->benefits)) {
                                 if (is_array($job->benefits)) {
                                 $benefits = $job->benefits;
                                 } elseif (is_string($job->benefits)) {
+                                // Tách theo dòng \r\n hoặc \n
                                 $benefits = preg_split('/\r\n|\n|\r/', $job->benefits);
                                 }
                                 }
@@ -144,19 +133,17 @@
                                 @endif
                             </div>
                         </div>
+
                     </div>
                 </div>
-
-                {{-- Sidebar --}}
                 <div class="col-lg-5 col-xl-4">
                     <div class="job-sidebar">
                         <div class="widget-item">
-                            <div class="widget-title d-flex align-items-center justify-content-between">
-                                <h3 class="title mb-0">Thông tin</h3>
-                                <span class="badge bg-primary-subtle text-primary rounded-pill">Chi tiết</span>
+                            <div class="widget-title">
+                                <h3 class="title">Thông tin</h3>
                             </div>
-                            <div class="summery-info mt-3">
-                                <table class="table align-middle">
+                            <div class="summery-info">
+                                <table class="table">
                                     <tbody>
                                         <tr>
                                             <td class="table-name">Loại công việc</td>
@@ -168,11 +155,15 @@
                                             <td class="dotted">:</td>
                                             <td>
                                                 @if ($job->salary_min && $job->salary_max)
-                                                {{ number_format($job->salary_min) }} - {{ number_format($job->salary_max) }} {{ $curr }}
+                                                {{ number_format($job->salary_min) }} -
+                                                {{ number_format($job->salary_max) }}
+                                                {{ $job->currency ?? 'VND' }}
                                                 @elseif ($job->salary_min)
-                                                Từ {{ number_format($job->salary_min) }} {{ $curr }}
+                                                Từ {{ number_format($job->salary_min) }}
+                                                {{ $job->currency ?? 'VND' }}
                                                 @elseif ($job->salary_max)
-                                                Lên đến {{ number_format($job->salary_max) }} {{ $curr }}
+                                                Lên đến {{ number_format($job->salary_max) }}
+                                                {{ $job->currency ?? 'VND' }}
                                                 @else
                                                 Thỏa thuận
                                                 @endif
@@ -184,7 +175,7 @@
                                             <td>{{ $job->address ?? '-' }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="table-name">Làm việc từ xa</td>
+                                            <td class="table-name">Chính sách làm việc từ xa</td>
                                             <td class="dotted">:</td>
                                             <td>{{ $job->remotePolicy->name ?? '-' }}</td>
                                         </tr>
@@ -209,40 +200,30 @@
                                             <td>{{ $job->created_at ? $job->created_at->format('d/m/Y') : '-' }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="table-name">Hạn nộp</td>
+                                            <td class="table-name">Hạn nộp hồ sơ</td>
                                             <td class="dotted">:</td>
                                             <td>{{ $job->deadline ? $job->deadline->format('d/m/Y') : '-' }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
 
-                        {{-- CTA phụ --}}
-                        <div class="widget-item mt-3">
-                            <div class="p-3 rounded-4 bg-gradient-info d-flex align-items-start gap-3">
-                                <i class="bi bi-info-circle fs-4"></i>
-                                <div>
-                                    <div class="fw-semibold">Mẹo:</div>
-                                    <div class="small">Hồ sơ có thư giới thiệu sẽ tăng cơ hội được phản hồi.</div>
-                                </div>
                             </div>
                         </div>
                     </div>
-                </div> {{-- /sidebar --}}
+                </div>
             </div>
         </div>
     </section>
+    <!--== Kết thúc chi tiết công việc ==-->
 
-    {{-- Công việc liên quan --}}
-    <section class="related-jobs-area">
+    <!--== Bắt đầu công việc liên quan ==-->
+    <section class="related-jobs-area " style="background: linear-gradient(135deg, #f0f4ff, #e8f0fe);">
         <div class="container">
             <div class="row mb-4">
                 <div class="col-12 text-center">
                     <h3 class="title section-title border-bottom pb-2 d-inline-block">Công việc liên quan</h3>
                 </div>
             </div>
-
             @if ($relatedJobs->count() > 0)
             <div id="relatedJobsCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
@@ -251,12 +232,12 @@
                         <div class="row g-4">
                             @foreach ($chunk as $relatedJob)
                             <div class="col-md-6">
-                                <div class="card h-100 border-0 shadow rounded-4 overflow-hidden bg-white job-card">
-                                    <a href="{{ route('jobs.show', $relatedJob) }}" class="stretched-link" aria-label="Xem chi tiết {{ $relatedJob->title }}"></a>
+                                <div class="card h-100 border-0 shadow rounded-4 overflow-hidden bg-white">
                                     <div class="row g-0 align-items-center">
                                         <div class="col-auto">
                                             <img src="{{ $relatedJob->thumbnail ? asset('storage/' . $relatedJob->thumbnail) : asset('client/assets/img/default-thumbnail.jpg') }}"
-                                                alt="{{ $relatedJob->title }}" width="100" height="100"
+                                                alt="{{ $relatedJob->title }}" width="100"
+                                                height="100"
                                                 class="img-fluid rounded-start object-fit-cover m-3">
                                         </div>
                                         <div class="col">
@@ -265,61 +246,62 @@
                                                     {{ $relatedJob->title }}
                                                 </h5>
                                                 <p class="mb-1 text-muted small fw-semibold">
-                                                    {{ $relatedJob->company->name ?? 'Công ty' }}
+                                                    {{ $relatedJob->company->name }}
                                                 </p>
                                                 <ul class="list-unstyled small text-muted mb-0">
-                                                    <li class="d-flex align-items-center">
-                                                        <i class="icofont-location-pin me-2"></i>
-                                                        <span>{{ optional($relatedJob->location)->name ?? 'N/A' }}</span>
+                                                    <li><i
+                                                            class="icofont-location-pin me-1"></i>{{ $relatedJob->location ?? 'N/A' }}
                                                     </li>
-                                                    <li class="d-flex align-items-center">
-                                                        <i class="icofont-money-bag me-2"></i>
-                                                        <span>
-                                                            @php
-                                                            $relCurr = strtoupper($relatedJob->currency ?? 'VND');
-                                                            @endphp
-                                                            {{ number_format($relatedJob->salary_min) }} - {{ number_format($relatedJob->salary_max) }} {{ $relCurr }}
-                                                        </span>
+                                                    <li><i
+                                                            class="icofont-money-bag me-1"></i>{{ number_format($relatedJob->salary_min) }}
+                                                        - {{ number_format($relatedJob->salary_max) }}đ
                                                     </li>
-                                                    <li class="d-flex align-items-center">
-                                                        <i class="icofont-briefcase me-2"></i>
-                                                        <span>{{ $relatedJob->jobType->name ?? ucfirst($relatedJob->job_type ?? '-') }}</span>
+                                                    <li><i
+                                                            class="icofont-clock-time me-1"></i>{{ ucfirst($relatedJob->job_type) }}
                                                     </li>
-                                                    <li class="d-flex align-items-center">
-                                                        <i class="icofont-calendar me-2"></i>
-                                                        <span>Hạn: {{ optional($relatedJob->deadline)->format('d/m/Y') }}</span>
+                                                    <li><i class="icofont-calendar me-1"></i>Hạn nộp:
+                                                        {{ optional($relatedJob->deadline)->format('d/m/Y') }}
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                </div> {{-- /card --}}
+                                </div>
                             </div>
                             @endforeach
                         </div>
                     </div>
                     @endforeach
                 </div>
-
                 @if ($relatedJobs->count() > 2)
-                <button class="carousel-control-prev rounded-circle" type="button" data-bs-target="#relatedJobsCarousel" data-bs-slide="prev" aria-label="Trước">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <button class="carousel-control-prev" type="button" data-bs-target="#relatedJobsCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"
+                        aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next rounded-circle" type="button" data-bs-target="#relatedJobsCarousel" data-bs-slide="next" aria-label="Sau">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <button class="carousel-control-next" type="button" data-bs-target="#relatedJobsCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-dark rounded-circle p-2"
+                        aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
                 </button>
                 @endif
             </div>
             @else
-            <div class="alert alert-info text-center mb-0">
+            <div class="alert alert-info text-center">
                 Không có công việc liên quan nào.
             </div>
             @endif
         </div>
     </section>
+
+
+
+    <!--== Kết thúc công việc liên quan ==-->
 </main>
 
-{{-- Modal Nộp CV --}}
+<!-- Modal Form Nộp CV -->
 <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
@@ -336,13 +318,13 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                <form action="{{ route('jobs.apply', $job) }}" method="POST" enctype="multipart/form-data" id="applyForm">
+                <form action="{{ route('jobs.apply', $job) }}" method="POST" enctype="multipart/form-data"
+                    id="applyForm">
                     @csrf
                     <div class="mb-3">
                         <label for="full_name" class="form-label">Họ và tên <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('full_name') is-invalid @enderror"
-                            id="full_name" name="full_name"
-                            value="{{ old('full_name', Auth::user()->name ?? '') }}" required>
+                        <input type="text" class="form-control @error('full_name') is-invalid @enderror" id="full_name"
+                            name="full_name" value="{{ old('full_name', Auth::user()->name ?? '') }}" required>
                         @error('full_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -350,9 +332,8 @@
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror"
-                            id="email" name="email"
-                            value="{{ old('email', Auth::user()->email ?? '') }}" required>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                            name="email" value="{{ old('email', Auth::user()->email ?? '') }}" required>
                         @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -360,9 +341,8 @@
 
                     <div class="mb-3">
                         <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                        <input type="tel" class="form-control @error('phone') is-invalid @enderror"
-                            id="phone" name="phone"
-                            value="{{ old('phone', Auth::user()->phone_number ?? '') }}" required>
+                        <input type="tel" class="form-control @error('phone') is-invalid @enderror" id="phone"
+                            name="phone" value="{{ old('phone', Auth::user()->phone_number ?? '') }}" required>
                         @error('phone')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -376,11 +356,13 @@
                         {{-- Radio chọn cách nộp --}}
                         <div class="d-flex gap-4 mb-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_saved" value="saved" checked>
+                                <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_saved"
+                                    value="saved" checked>
                                 <label class="form-check-label" for="cv_choice_saved">Dùng CV đã lưu</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_upload" value="upload">
+                                <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_upload"
+                                    value="upload">
                                 <label class="form-check-label" for="cv_choice_upload">Tải CV mới</label>
                             </div>
                         </div>
@@ -393,19 +375,21 @@
                                 <option value="{{ $cv->id }}">{{ $cv->title ?? basename($cv->file_path) }}</option>
                                 @endforeach
                             </select>
-                            <div class="form-text">Hệ thống sẽ gửi CV này cho nhà tuyển dụng.</div>
                         </div>
 
                         {{-- Nhóm upload file (ẩn mặc định) --}}
                         <div id="cv_upload_group" class="mb-2 d-none">
-                            <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf">
+                            <input type="file" name="cv_file" id="cv_file" class="form-control"
+                                accept="application/pdf">
                             <div class="form-text">Tải file PDF (tối đa 2MB).</div>
                         </div>
                         @else
                         {{-- Không có CV trong hệ thống -> bắt buộc upload --}}
                         <input type="hidden" name="cv_choice" value="upload">
-                        <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf" required>
-                        <div class="form-text">Bạn chưa có CV trong hệ thống, vui lòng upload file PDF (tối đa 2MB).</div>
+                        <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf"
+                            required>
+                        <div class="form-text">Bạn chưa có CV trong hệ thống, vui lòng upload file PDF (tối đa 2MB).
+                        </div>
                         @endif
 
                     </div>
@@ -413,8 +397,8 @@
 
                     <div class="mb-3">
                         <label for="cover_letter" class="form-label">Thư giới thiệu (không bắt buộc)</label>
-                        <textarea class="form-control @error('cover_letter') is-invalid @enderror"
-                            id="cover_letter" name="cover_letter" rows="4"
+                        <textarea class="form-control @error('cover_letter') is-invalid @enderror" id="cover_letter"
+                            name="cover_letter" rows="4"
                             placeholder="Giới thiệu ngắn gọn về kinh nghiệm, thành tích và lý do phù hợp với vị trí này...">{{ old('cover_letter') }}</textarea>
                         @error('cover_letter')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -433,66 +417,152 @@
     </div>
 </div>
 
-{{-- Styles --}}
 <style>
     body {
         background-color: #f8f9fa;
-        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* Header */
-    .job-details-wrap {
-        background: linear-gradient(135deg, #ffffff, #f9fbff);
-        border-radius: 16px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        transition: transform .3s ease, box-shadow .3s ease;
+    .related-jobs-area {
+        margin-top: -30px;
+        padding-top: 0;
+        background: #f8f9fa;
+        padding-bottom: 50px;
     }
 
-    .job-details-wrap:hover {
-        transform: translateY(-4px);
+    .section-title {
+        margin-bottom: 25px;
     }
 
-    .job-details-info img {
-        border-radius: 12px;
-        border: 2px solid #f0f0f0;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    .section-title .title {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #0da1f0;
+        display: inline-block;
+    }
+
+    .job-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+
+    .job-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .job-card-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .company-logo {
+        margin-right: 15px;
+    }
+
+    .company-logo img {
+        border-radius: 8px;
         object-fit: cover;
     }
 
-    .job-details-wrap .title {
-        color: #0d6efd;
-        font-weight: 700;
+    .job-info {
+        flex: 1;
     }
 
-    .job-details-wrap .info-list i {
+    .job-title {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+
+    .job-title a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .job-title a:hover {
         color: #0da1f0;
     }
 
-    .text-gradient {
-        background: linear-gradient(45deg, #0d6efd, #00b894);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .company-name {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
     }
 
-    /* Content blocks */
-    .job-details-content .content {
-        margin-bottom: 28px;
+
+    .widget-item {
+        margin-left: 20px;
     }
 
-    .job-details-content .title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        margin-bottom: 12px;
-        color: #0d6efd;
+    .job-card-body {
+        margin-bottom: 15px;
     }
 
-    .job-content {
-        padding: 16px 16px 8px 16px;
-        border-left: 3px solid #0d6efd;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(13, 110, 253, 0.06);
-        line-height: 1.8;
+    .job-meta {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .job-meta li {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    .job-meta li i {
+        color: #0da1f0;
+        margin-right: 8px;
+    }
+
+    .job-card-footer {
+        text-align: right;
+        margin-top: auto;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background: #007bff;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.8;
+    }
+
+    .carousel-control-prev {
+        left: -20px;
+    }
+
+    .carousel-control-next {
+        right: -20px;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        opacity: 1;
+    }
+
+    .carousel-inner {
+        padding: 10px 0;
+    }
+
+    .carousel-item {
+        padding: 10px 0;
+    }
+
+    .row {
+        margin: 0 -10px;
+    }
+
+    .col-md-6 {
+        padding: 0 10px;
     }
 
     .job-content p b,
@@ -500,7 +570,7 @@
     .job-content h5 {
         display: block;
         margin-left: 2ch;
-        font-weight: 700;
+        font-weight: bold;
     }
 
     .job-content ul {
@@ -509,154 +579,32 @@
     }
 
     .job-content ul li {
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
     }
 
-    /* Sidebar */
-    .job-sidebar .widget-item {
-        margin-left: 0;
-        margin-bottom: 18px;
-    }
-
-    .widget-title .title {
-        font-size: 1.05rem;
-        font-weight: 700;
-    }
-
-    .summery-info .table {
-        --bs-table-bg: #fff;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-
-    .summery-info table td {
-        padding: .6rem .5rem;
-        vertical-align: middle;
-    }
-
-    .summery-info table td.table-name {
+    .job-details-wrap .title {
+        color: #0da1f0;
         font-weight: 600;
-        color: #0d6efd;
-        width: 36%;
     }
 
-    .summery-info table td.dotted {
-        color: #b5b5b5;
-        width: 4%;
+
+
+    .job-details-wrap .info-list i {
+        color: #0da1f0;
     }
 
-    .bg-gradient-info {
-        background: linear-gradient(135deg, #eef6ff, #f2fbff);
-        color: #0d6efd;
-    }
-
-    /* Apply now button */
-    .btn-apply-now {
-        background: linear-gradient(45deg, #0d6efd, #00b894);
+    .btn-theme {
+        background-color: #0da1f0;
         border: none;
-        padding: 12px 20px;
-        font-weight: 600;
         color: #fff;
-        transition: transform .2s ease, opacity .2s ease;
-        border-radius: 12px;
+        transition: all 0.3s ease;
     }
 
-    .btn-apply-now:hover {
-        transform: translateY(-2px);
-        opacity: .95;
-    }
-
-    /* Related jobs */
-    .related-jobs-area {
-        background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
-    }
-
-    .related-jobs-area .card {
-        border-radius: 18px;
-        transition: all .3s ease;
-    }
-
-    .related-jobs-area .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-
-    .carousel-control-prev,
-    .carousel-control-next {
-        width: 44px;
-        height: 44px;
-        background: #0d6efd;
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: .9;
-    }
-
-    .carousel-control-prev {
-        left: -16px;
-    }
-
-    .carousel-control-next {
-        right: -16px;
-    }
-
-    .carousel-control-prev:hover,
-    .carousel-control-next:hover {
-        opacity: 1;
-    }
-
-    /* Modal + Form */
-    .modal-content {
-        border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    .form-control,
-    .form-select {
-        border-radius: 12px;
-        padding: 12px;
-    }
-
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #0d6efd;
-        box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .15);
-    }
-
-    /* Small tweaks */
-    .section-title {
-        margin-bottom: 0;
-    }
-
-    .row {
-        margin: 0;
-    }
-
-    .job-details-list {
-        padding-left: 1.2rem;
-        margin-bottom: 0;
-    }
-
-    .job-details-list li {
-        margin-bottom: .4rem;
-    }
-
-    .job-details-list i {
-        color: #10b981;
-        margin-right: .5rem;
-    }
-
-    @media (max-width: 991.98px) {
-        .carousel-control-prev {
-            left: 4px;
-        }
-
-        .carousel-control-next {
-            right: 4px;
-        }
+    .btn-theme:hover {
+        background-color: #0da1f0;
     }
 </style>
-
 @endsection
 
 @push('scripts')

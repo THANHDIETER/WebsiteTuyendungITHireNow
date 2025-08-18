@@ -27,37 +27,49 @@
                                                         <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
                                                             <div class="form-group">
                                                                 <input type="text" name="q" class="form-control"
-                                                                    placeholder="Tiêu đề việc làm hoặc từ khóa">
+                                                                    placeholder="Tiêu đề việc làm hoặc từ khóa"
+                                                                    value="{{ request('q') }}"
+                                                                    aria-label="Tìm theo tiêu đề việc làm hoặc từ khóa">
                                                             </div>
                                                         </div>
+
                                                         <!-- Địa điểm -->
                                                         <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
                                                             <div class="form-group">
-                                                                <select name="location_id" class="form-control">
+                                                                <select name="location_id" class="form-control"
+                                                                    aria-label="Chọn Thành Phố">
                                                                     <option value="">Chọn Thành Phố</option>
-                                                                    @foreach (\App\Models\Location::all() as $location)
-                                                                        <option value="{{ $location->id }}">
-                                                                            {{ $location->name }}</option>
+                                                                    @foreach (\App\Models\Location::orderBy('name')->get() as $location)
+                                                                        <option value="{{ $location->id }}"
+                                                                            @selected((string) request('location_id') === (string) $location->id)>
+                                                                            {{ $location->name }}
+                                                                        </option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
+
                                                         <!-- Loại công việc -->
                                                         <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
                                                             <div class="form-group">
-                                                                <select name="job_type_id" class="form-control">
+                                                                <select name="job_type_id" class="form-control"
+                                                                    aria-label="Chọn Loại Công Việc">
                                                                     <option value="">Loại Công Việc</option>
-                                                                    @foreach (\App\Models\JobType::all() as $type)
-                                                                        <option value="{{ $type->id }}">
-                                                                            {{ $type->name }}</option>
+                                                                    @foreach (\App\Models\JobType::orderBy('name')->get() as $type)
+                                                                        <option value="{{ $type->id }}"
+                                                                            @selected((string) request('job_type_id') === (string) $type->id)>
+                                                                            {{ $type->name }}
+                                                                        </option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
+
                                                         <!-- Nút tìm kiếm -->
                                                         <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
                                                             <div class="form-group">
-                                                                <button type="submit" class="btn-form-search">
+                                                                <button type="submit" class="btn-form-search"
+                                                                    aria-label="Tìm kiếm">
                                                                     <i class="icofont-search-1"></i>
                                                                 </button>
                                                             </div>
