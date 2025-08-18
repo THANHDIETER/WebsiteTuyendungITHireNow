@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use App\Models\JobApplication;
-use App\Models\SeekerProfile;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use App\Models\SeekerCV;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\SeekerProfile;
+use App\Models\JobApplication;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -317,5 +318,28 @@ class ProfileController extends Controller
         ]);
 
         return back()->with('success', 'Đã thêm ngoại ngữ thành công!');
+    }
+
+    public function uploadCVs(Request $request)
+    {
+        $request->validate([
+            'cv_files'   => 'required',
+            'cv_files.*' => 'mimes:pdf|max:2048',
+        ]);
+
+        $user = Auth::user();
+        $profile = $user->profile;
+
+        foreach ($request->file('cv_files') as $file) {
+            $path = $file->store('cvs', 'public');
+
+            SeekerCV::create([
+                'seeker_profile_id' => $profile->id,
+                'file_path' => $path,
+                'title' => $file->getClientOriginalName(),
+            ]);
+        }
+
+        return back()->with('success', 'Upload nhiều CV thành công!');
     }
 }

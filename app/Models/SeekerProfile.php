@@ -46,12 +46,14 @@ class SeekerProfile extends Model
         'years_of_experience' => 'integer',
     ];
 
-    /**
-     * Mối quan hệ: Hồ sơ này thuộc về người dùng.
-     */
+    
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function cvs()
+    {
+        return $this->hasMany(SeekerCV::class, 'seeker_profile_id');
     }
 
     /**
