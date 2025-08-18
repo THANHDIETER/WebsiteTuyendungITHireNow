@@ -23,6 +23,9 @@ class JobApplicationController extends Controller
 
         // Xác định lựa chọn CV
         $cvChoice = $request->input('cv_choice', 'saved');
+        if (!$cvChoice && !$request->has('cv_id')) {
+            $cvChoice = 'upload';
+        }
 
         // Rule chung
         $rules = [
@@ -111,6 +114,5 @@ class JobApplicationController extends Controller
             return redirect()->back()
                 ->with('error', 'Có lỗi xảy ra khi gửi đơn ứng tuyển. Vui lòng thử lại sau.');
         }
-
     }
 }
