@@ -60,7 +60,7 @@
                     {{-- Edit Profile Button --}}
                     <button type="button" class="btn btn-sm btn-light border position-absolute top-0 end-0 m-3"
                         data-bs-toggle="modal" data-bs-target="#editProfileModal" title="Chỉnh sửa hồ sơ">
-                        <i class="fa-solid fa-pencil-alt text-danger"></i>
+                        <i class="bi bi-plus-circle text-danger"></i>
                     </button>
 
                     {{-- Avatar and Information --}}
@@ -124,7 +124,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#aboutMeModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#educationModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#workExperienceModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -166,7 +166,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#skillModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#languageModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -194,7 +194,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#projectModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -208,7 +208,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#certificateModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -222,7 +222,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#awardModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
