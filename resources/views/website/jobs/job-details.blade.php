@@ -368,45 +368,45 @@
                             @enderror
                         </div>
 
-{{-- Chọn CV --}}
-<div class="mb-3">
-    <label class="form-label d-block">Chọn CV</label>
+            {{-- Chọn CV --}}
+            <div class="mb-3">
+                <label class="form-label d-block">Chọn CV</label>
 
-    @if($cvs->count() > 0)
-        {{-- Radio chọn cách nộp --}}
-        <div class="d-flex gap-4 mb-2">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_saved" value="saved" checked>
-                <label class="form-check-label" for="cv_choice_saved">Dùng CV đã lưu</label>
+                @if($cvs->count() > 0)
+                    {{-- Radio chọn cách nộp --}}
+                    <div class="d-flex gap-4 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_saved" value="saved" checked>
+                            <label class="form-check-label" for="cv_choice_saved">Dùng CV đã lưu</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_upload" value="upload">
+                            <label class="form-check-label" for="cv_choice_upload">Tải CV mới</label>
+                        </div>
+                    </div>
+
+                    {{-- Nhóm select CV đã có --}}
+                    <div id="cv_saved_group" class="mb-2">
+                        <select name="cv_id" id="cv_id" class="form-select">
+                            <option value="">-- Chọn CV từ hồ sơ của bạn --</option>
+                            @foreach($cvs as $cv)
+                                <option value="{{ $cv->id }}">{{ $cv->title ?? basename($cv->file_path) }}</option>
+                            @endforeach
+                        </select>
+                        <div class="form-text">Hệ thống sẽ gửi CV này cho nhà tuyển dụng.</div>
+                    </div>
+
+                    {{-- Nhóm upload file (ẩn mặc định) --}}
+                    <div id="cv_upload_group" class="mb-2 d-none">
+                        <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf">
+                        <div class="form-text">Tải file PDF (tối đa 2MB).</div>
+                    </div>
+                @else
+                    {{-- Không có CV trong hệ thống -> bắt buộc upload --}}
+                    <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf" required>
+                    <div class="form-text">Bạn chưa có CV trong hệ thống, vui lòng upload file PDF (tối đa 2MB).</div>
+                @endif
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_upload" value="upload">
-                <label class="form-check-label" for="cv_choice_upload">Tải CV mới</label>
-            </div>
-        </div>
-
-        {{-- Nhóm select CV đã có --}}
-        <div id="cv_saved_group" class="mb-2">
-            <select name="cv_id" id="cv_id" class="form-select">
-                <option value="">-- Chọn CV từ hồ sơ của bạn --</option>
-                @foreach($cvs as $cv)
-                    <option value="{{ $cv->id }}">{{ $cv->title ?? basename($cv->file_path) }}</option>
-                @endforeach
-            </select>
-            <div class="form-text">Hệ thống sẽ gửi CV này cho nhà tuyển dụng.</div>
-        </div>
-
-        {{-- Nhóm upload file (ẩn mặc định) --}}
-        <div id="cv_upload_group" class="mb-2 d-none">
-            <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf">
-            <div class="form-text">Tải file PDF (tối đa 2MB).</div>
-        </div>
-    @else
-        {{-- Không có CV trong hệ thống -> bắt buộc upload --}}
-        <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf" required>
-        <div class="form-text">Bạn chưa có CV trong hệ thống, vui lòng upload file PDF (tối đa 2MB).</div>
-    @endif
-</div>
 
 
                         <div class="mb-3">
@@ -565,6 +565,7 @@
 
 @push('scripts')
 <script>
+document.addEventListener('DOMContentLoaded', function () {
     // Reset form khi đóng modal
     const applyModal = document.getElementById('applyModal');
     if (applyModal) {
@@ -574,27 +575,41 @@
         });
     }
 
-    // Nếu chọn CV từ hệ thống -> không bắt buộc upload; nếu không chọn -> upload có thể required (tùy trạng thái có CV hay không)
-    const cvSelect = document.getElementById('cv_id');
-    const cvFile   = document.getElementById('cv_file');
-    if (cvSelect && cvFile) {
-        const toggleFileRequired = () => {
-            if (cvSelect.value) {
-                cvFile.removeAttribute('required');
-            } else {
-                // Chỉ required nếu người dùng không có CV sẵn trong hệ thống
-                @if(!$cvs->count())
-                    cvFile.setAttribute('required', 'required');
-                @endif
+    const savedRadio   = document.getElementById('cv_choice_saved');
+    const uploadRadio  = document.getElementById('cv_choice_upload');
+    const savedGroup   = document.getElementById('cv_saved_group');
+    const uploadGroup  = document.getElementById('cv_upload_group');
+    const cvSelect     = document.getElementById('cv_id');
+    const cvFile       = document.getElementById('cv_file');
+
+    function toggleCVInput() {
+        if (savedRadio && savedRadio.checked) {
+            // Hiện select CV đã lưu
+            savedGroup.classList.remove('d-none');
+            uploadGroup.classList.add('d-none');
+
+            if (cvSelect) cvSelect.setAttribute('required', 'required');
+            if (cvFile)   cvFile.removeAttribute('required');
+        } else if (uploadRadio && uploadRadio.checked) {
+            // Hiện upload CV mới
+            savedGroup.classList.add('d-none');
+            uploadGroup.classList.remove('d-none');
+
+            if (cvSelect) { 
+                cvSelect.removeAttribute('required'); 
+                cvSelect.value = ''; 
             }
-        };
-        cvSelect.addEventListener('change', toggleFileRequired);
-        toggleFileRequired();
+            if (cvFile) cvFile.setAttribute('required', 'required');
+        }
     }
+
+    if (savedRadio) savedRadio.addEventListener('change', toggleCVInput);
+    if (uploadRadio) uploadRadio.addEventListener('change', toggleCVInput);
+    toggleCVInput(); // chạy lần đầu
 
     // Giới hạn file 2MB
     if (cvFile) {
-        cvFile.addEventListener('change', function() {
+        cvFile.addEventListener('change', function () {
             const f = this.files?.[0];
             if (f && f.size > 2 * 1024 * 1024) {
                 alert('File quá lớn (tối đa 2MB). Vui lòng chọn file khác.');
@@ -619,45 +634,7 @@
             }
         });
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-    const savedRadio   = document.getElementById('cv_choice_saved');
-    const uploadRadio  = document.getElementById('cv_choice_upload');
-    const savedGroup   = document.getElementById('cv_saved_group');
-    const uploadGroup  = document.getElementById('cv_upload_group');
-    const cvSelect     = document.getElementById('cv_id');
-    const cvFile       = document.getElementById('cv_file');
-
-    function toggleCVInput() {
-        if (savedRadio && savedRadio.checked) {
-            savedGroup.classList.remove('d-none');
-            uploadGroup.classList.add('d-none');
-            if (cvSelect) cvSelect.setAttribute('required', 'required');
-            if (cvFile) cvFile.removeAttribute('required');
-        } else if (uploadRadio && uploadRadio.checked) {
-            savedGroup.classList.add('d-none');
-            uploadGroup.classList.remove('d-none');
-            if (cvSelect) { cvSelect.removeAttribute('required'); cvSelect.value = ''; }
-            if (cvFile) cvFile.setAttribute('required', 'required');
-        }
-    }
-
-    if (savedRadio) savedRadio.addEventListener('change', toggleCVInput);
-    if (uploadRadio) uploadRadio.addEventListener('change', toggleCVInput);
-    toggleCVInput();
-
-    // Giới hạn file 2MB
-    if (cvFile) {
-        cvFile.addEventListener('change', function () {
-            const f = this.files?.[0];
-            if (f && f.size > 2 * 1024 * 1024) {
-                alert('File quá lớn (tối đa 2MB). Vui lòng chọn file khác.');
-                this.value = '';
-            }
-        });
-    }
 });
-
 </script>
-
 @endpush
+

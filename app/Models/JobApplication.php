@@ -9,10 +9,14 @@ class JobApplication extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
+     protected $fillable = [
         'job_id',
         'user_id',
         'company_id',
+        'full_name',       // thêm
+        'email',           // thêm
+        'phone',           // thêm
+        'image',           // thêm
         'cv_url',
         'cover_letter',
         'applied_at',

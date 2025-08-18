@@ -41,7 +41,7 @@
         <!-- Table -->
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle mb-4">
-                <thead class="table-light text-center">
+                <thead class="table-dark text-center">
                     <tr>
                         <th style="width: 5%;">ID</th>
                         <th style="width: 20%;">Ứng viên</th>
