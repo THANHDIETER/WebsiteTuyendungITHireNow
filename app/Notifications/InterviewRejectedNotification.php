@@ -3,10 +3,11 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue; // 👈 thêm
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class InterviewRejectedNotification extends Notification
+class InterviewRejectedNotification extends Notification implements ShouldQueue // 👈 implements ShouldQueue
 {
     use Queueable;
 
@@ -32,7 +33,7 @@ class InterviewRejectedNotification extends Notification
             ->line('Chúng tôi rất tiếc thông báo rằng bạn đã không được chọn cho vị trí "' . $this->job->title . '".');
 
         if ($this->rejectionReason) {
-            $mail->line('Lý do: ' . $this->rejectionReason ?? 'Không có lý do cụ thể được cung cấp.');
+            $mail->line('Lý do: ' . $this->rejectionReason);
         }
 
         $mail->line('Cảm ơn bạn đã quan tâm và dành thời gian tham gia phỏng vấn.');

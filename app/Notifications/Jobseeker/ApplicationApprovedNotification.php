@@ -4,12 +4,13 @@ namespace App\Notifications\Jobseeker;
 
 use App\Models\Job;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class ApplicationApprovedNotification extends Notification implements ShouldBroadcastNow
+class ApplicationApprovedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -44,7 +45,6 @@ class ApplicationApprovedNotification extends Notification implements ShouldBroa
             // Thông tin tham chiếu
             'job_id'    => $this->job->id,
             'job_title' => $jobTitle,
-
             // Điều hướng
             'link_url'  => $link,
         ];

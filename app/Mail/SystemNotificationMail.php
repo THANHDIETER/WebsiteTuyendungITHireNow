@@ -5,8 +5,9 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue; 
 
-class SystemNotificationMail extends Mailable
+class SystemNotificationMail extends Mailable implements ShouldQueue 
 {
     use Queueable, SerializesModels;
 
@@ -21,7 +22,6 @@ class SystemNotificationMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Thông báo hệ thống')
-                    ->view('emails.system_notification');
+        return $this->subject('Thông báo hệ thống')->view('emails.system_notification');
     }
 }

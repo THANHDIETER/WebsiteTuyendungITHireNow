@@ -4,248 +4,225 @@
             <div class="col-12">
                 <div class="header-align" style="align-items: center; height: 80px;">
                     <!-- Logo -->
-                    <div class="header-align-start">
-                        <div class="header-logo-area">
+                    <div class="header-align-start d-flex align-items-center">
+                        <!-- Logo -->
+                        <div class="header-logo-area me-3">
                             <a href="{{ route('home') }}">
                                 @php
-                                    $clientLogo = \App\Models\Logo::where('type', 'client')
-                                        ->where('is_active', true)
-                                        ->first();
+                                $clientLogo = \App\Models\Logo::where('type', 'client')
+                                ->where('is_active', true)
+                                ->first();
                                 @endphp
                                 <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : '' }}"
                                     alt="Client Logo" style="height: 60px; width: auto;">
                             </a>
                         </div>
-                    </div>
 
-                    <!-- Menu -->
-                    <div class="header-align-center me-3">
-                        <div class="header-navigation-area position-relative">
+                        <!-- Menu -->
+                        <div class="header-navigation-area position-relative ms-4">
                             <ul class="main-menu nav">
                                 <li><a href="{{ route('home') }}"><span>Trang Chủ</span></a></li>
-                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm Việc
-                                            Làm</span></a></li>
-                                <!-- <li><a href="{{ route('chi-tiet-nhan-vien') }}">Chi Tiết Nhà Tuyển Dụng</a></li> -->
-                                <!-- <li class="has-submenu">
-                                    <a href="{{ route('ung-vien') }}">Ứng Cử Viên</a>
-                                    <ul class="submenu-nav">
-                                        <li><a href="{{ route('ung-vien') }}">Ứng Cử Viên</a></li>
-                                        <li><a href="{{ route('chi-tiet-ung-vien') }}">Chi Tiết Ứng Viên</a></li>
-                                    </ul>
-                                </li> -->
-                                <!-- <li class="has-submenu">
-                                    <a href="{{ route('blog') }}"><span>Blog</span></a>
-                                    <ul class="submenu-nav">
-                                        <li><a href="{{ route('blog') }}">Blog Grid</a></li>
-                                        <li><a href="{{ route('blog-grid') }}">Blog Left Sidebar</a></li>
-                                        <li><a href="{{ route('blog-right-sidebar') }}">Blog Right Sidebar</a></li>
-                                        <li><a href="">Chi Tiết Bài Viết</a></li>
-                                    </ul>
-                                </li> -->
+                                <li class="has-submenu"><a href="{{ route('jobs.index') }}"><span>Tìm Việc Làm</span></a></li>
                                 <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
-                                <!-- <li class="has-submenu">
-                                    <a href="#"><span>Trang Khác</span></a>
-                                    <ul class="submenu-nav">
-                                        <li><a href="{{ route('about-us') }}">Thông Tin</a></li>
-                                        <li><a href="{{ route('404') }}">Không tìm thấy trang</a></li>
-                                    </ul>
-                                </li> -->
                             </ul>
                         </div>
                     </div>
+
+
 
                     <!-- Action -->
                     <div class="header-align-end">
                         <div class="header-action-area">
                             @guest
-                                <a class="btn-registration" href="{{ route('showLoginForm') }}">Đăng Nhập</a>
+                            <a class="btn-registration" href="{{ route('showLoginForm') }}">Đăng Nhập</a>
                             @else
-                                <div class="row align-items-center">
-                                    <!-- Notification -->
-                                    <div class="col-auto">
-                                        <div class="dropdown me-3 notification-dropdown-wrapper">
-                                            <a href="#" id="notification-bell-btn"
-                                                class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                                data-bs-toggle="dropdown" aria-expanded="false" aria-label="Thông báo">
-                                                <i class="bi bi-bell fs-4 text-white"></i>
-                                                @php $unreadCount = auth()->user()->unreadNotifications()->count(); @endphp
-                                                <span id="notification-count"
-                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                                    style="display: {{ $unreadCount > 0 ? 'inline-block' : 'none' }}; font-size:.75rem;">
-                                                    {{ $unreadCount > 99 ? '99+' : $unreadCount }}
-                                                </span>
-                                            </a>
+                            <div class="row align-items-center">
+                                <!-- Notification -->
+                                <div class="col-auto">
+                                    <div class="dropdown me-3 notification-dropdown-wrapper">
+                                        <a href="#" id="notification-bell-btn"
+                                            class="btn btn-icon position-relative p-0 bg-transparent border-0"
+                                            data-bs-toggle="dropdown" aria-expanded="false" aria-label="Thông báo">
+                                            <i class="bi bi-bell fs-4 text-white"></i>
+                                            @php $unreadCount = auth()->user()->unreadNotifications()->count(); @endphp
+                                            <span id="notification-count"
+                                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                style="display: {{ $unreadCount > 0 ? 'inline-block' : 'none' }}; font-size:.75rem;">
+                                                {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                                            </span>
+                                        </a>
 
-                                            @php
-                                                $notifications = auth()
-                                                    ->user()
-                                                    ->notifications()
-                                                    ->latest()
-                                                    ->take(30)
-                                                    ->get();
-                                            @endphp
+                                        @php
+                                        $notifications = auth()
+                                        ->user()
+                                        ->notifications()
+                                        ->latest()
+                                        ->take(30)
+                                        ->get();
+                                        @endphp
 
-                                            <div class="dropdown-menu dropdown-menu-end p-0 noti-card"
-                                                aria-labelledby="notification-bell-btn">
-                                                {{-- Header --}}
-                                                <div
-                                                    class="noti-card__header d-flex align-items-center justify-content-between">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div
-                                                            class="noti-card__chip d-flex align-items-center justify-content-center">
-                                                            <i class="bi bi-bell-fill"></i>
-                                                        </div>
-                                                        <div class="fw-semibold">Thông báo</div>
+                                        <div class="dropdown-menu dropdown-menu-end p-0 noti-card"
+                                            aria-labelledby="notification-bell-btn">
+                                            {{-- Header --}}
+                                            <div
+                                                class="noti-card__header d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div
+                                                        class="noti-card__chip d-flex align-items-center justify-content-center">
+                                                        <i class="bi bi-bell-fill"></i>
                                                     </div>
-                                                    <a href="{{ route('notifications.index') }}"
-                                                        class="noti-card__link">Xem tất cả</a>
+                                                    <div class="fw-semibold">Thông báo</div>
                                                 </div>
+                                                <a href="{{ route('notifications.index') }}"
+                                                    class="noti-card__link">Xem tất cả</a>
+                                            </div>
 
-                                                {{-- Scroll list (luôn chỉ cao = 3 item) --}}
-                                                <div id="noti-scroll" class="noti-card__list">
-                                                    <ul id="notification-list-items" class="list-unstyled m-0">
-                                                        @if ($notifications->count())
-                                                            @foreach ($notifications as $noti)
-                                                                @php
-                                                                    $data = $noti->data ?? [];
-                                                                    $msg = is_string(data_get($data, 'message'))
-                                                                        ? data_get($data, 'message')
-                                                                        : (data_get($data, 'message')
-                                                                            ? json_encode(
-                                                                                data_get($data, 'message'),
-                                                                                JSON_UNESCAPED_UNICODE,
-                                                                            )
-                                                                            : (data_get($data, 'title') ?:
-                                                                            'Có thông báo mới!'));
-                                                                    $link = data_get($data, 'link_url', '#');
-                                                                    $isRead = !is_null($noti->read_at);
-                                                                @endphp
-                                                                <li class="noti-item {{ $isRead ? 'is-read' : '' }}"
-                                                                    data-id="{{ $noti->id }}"
-                                                                    data-read="{{ $isRead ? '1' : '0' }}">
-                                                                    <a class="noti-item__inner" href="{{ $link }}">
-                                                                        <div class="noti-item__avatar"><i
-                                                                                class="bi bi-bell"></i></div>
-                                                                        <div class="noti-item__body">
-                                                                            <div class="noti-item__title">
-                                                                                {{ $msg }}</div>
-                                                                            <div class="noti-item__meta">
-                                                                                {{ $noti->created_at->diffForHumans() }}
-                                                                            </div>
-                                                                        </div>
-                                                                        <span class="noti-item__dot"
-                                                                            aria-hidden="true"></span>
-                                                                    </a>
-                                                                </li>
-                                                            @endforeach
-                                                        @else
-                                                            <li class="noti-empty empty-row">
-                                                                <div class="noti-empty__icon"><i
-                                                                        class="bi bi-bell-slash"></i></div>
-                                                                <div class="noti-empty__text">Chưa có thông báo</div>
-                                                            </li>
-                                                        @endif
-                                                    </ul>
-                                                </div>
+                                            {{-- Scroll list (luôn chỉ cao = 3 item) --}}
+                                            <div id="noti-scroll" class="noti-card__list">
+                                                <ul id="notification-list-items" class="list-unstyled m-0">
+                                                    @if ($notifications->count())
+                                                    @foreach ($notifications as $noti)
+                                                    @php
+                                                    $data = $noti->data ?? [];
+                                                    $msg = is_string(data_get($data, 'message'))
+                                                    ? data_get($data, 'message')
+                                                    : (data_get($data, 'message')
+                                                    ? json_encode(
+                                                    data_get($data, 'message'),
+                                                    JSON_UNESCAPED_UNICODE,
+                                                    )
+                                                    : (data_get($data, 'title') ?:
+                                                    'Có thông báo mới!'));
+                                                    $link = data_get($data, 'link_url', '#');
+                                                    $isRead = !is_null($noti->read_at);
+                                                    @endphp
+                                                    <li class="noti-item {{ $isRead ? 'is-read' : '' }}"
+                                                        data-id="{{ $noti->id }}"
+                                                        data-read="{{ $isRead ? '1' : '0' }}">
+                                                        <a class="noti-item__inner" href="{{ $link }}">
+                                                            <div class="noti-item__avatar"><i
+                                                                    class="bi bi-bell"></i></div>
+                                                            <div class="noti-item__body">
+                                                                <div class="noti-item__title">
+                                                                    {{ $msg }}
+                                                                </div>
+                                                                <div class="noti-item__meta">
+                                                                    {{ $noti->created_at->diffForHumans() }}
+                                                                </div>
+                                                            </div>
+                                                            <span class="noti-item__dot"
+                                                                aria-hidden="true"></span>
+                                                        </a>
+                                                    </li>
+                                                    @endforeach
+                                                    @else
+                                                    <li class="noti-empty empty-row">
+                                                        <div class="noti-empty__icon"><i
+                                                                class="bi bi-bell-slash"></i></div>
+                                                        <div class="noti-empty__text">Chưa có thông báo</div>
+                                                    </li>
+                                                    @endif
+                                                </ul>
+                                            </div>
 
-                                                {{-- Footer sticky --}}
-                                                <div class="noti-card__footer">
-                                                    <form id="read-all-form" action="{{ route('notifications.readAll') }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-sm btn-outline-secondary">Đánh
-                                                            dấu tất cả đã đọc</button>
-                                                    </form>
-                                                    <a href="{{ route('notifications.index') }}"
-                                                        class="btn btn-sm btn-link text-secondary">Xem tất cả</a>
-                                                </div>
+                                            {{-- Footer sticky --}}
+                                            <div class="noti-card__footer">
+                                                <form id="read-all-form" action="{{ route('notifications.readAll') }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Đánh
+                                                        dấu tất cả đã đọc</button>
+                                                </form>
+                                                <a href="{{ route('notifications.index') }}"
+                                                    class="btn btn-sm btn-link text-secondary">Xem tất cả</a>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <!-- Chat -->
-                                    <div class="col-auto">
-                                        <div class="dropdown me-3">
-                                            <a class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                                href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
-                                                <i id="chat-bubble" class="bi bi-chat-dots fs-4 text-white"></i>
-                                                @if (isset($totalUnread) && $totalUnread > 0)
-                                                    <span id="chat-dot"
-                                                        class="position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow"
-                                                        style="font-size:10px; min-width:18px; height:18px; padding:0 4px; border:2px solid #fff;">
-                                                        {{ $totalUnread > 99 ? '99+' : $totalUnread }}
-                                                    </span>
-                                                @endif
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <!-- User Menu -->
-                                    <div class="col">
-                                        <div class="user-info dropdown me-3">
-                                            <a href="#" class="user-info-toggle d-flex align-items-center"
-                                                data-bs-toggle="dropdown">
-                                                <span class="user-avatar me-2"><i class="bi bi-person-circle"></i></span>
-                                                <i class="bi bi-caret-down-fill ms-1"></i>
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active' : '' }}"
-                                                        href="{{ route('profile.dashboard') }}">
-                                                        <i class="bi bi-house-door me-2"></i> Tổng quan
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->routeIs('favorites.index') ? 'active' : '' }}"
-                                                        href="{{ route('favorites.index') }}">
-                                                        <i class="bi bi-bookmark-heart-fill text-danger me-2"></i> Việc làm
-                                                        yêu thích
-                                                    </a>
-                                                </li>
-
-                                                @if (Auth::user()->role === 'admin')
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center"
-                                                            href="{{ route('admin.dashboard') }}">
-                                                            <i class="bi bi-shield-lock me-2 text-danger"></i> Trang quản trị
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center"
-                                                            href="{{ route('employer.dashboard') }}">
-                                                            <i class="bi bi-building me-2 text-success"></i> Trang nhà tuyển
-                                                            dụng
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                @if (Auth::user()->role === 'employer')
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center"
-                                                            href="{{ route('employer.details') }}">
-                                                            <i class="bi bi-building-gear me-2"></i> Quản lý nhà tuyển dụng
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center"
-                                                        href="{{ route('profile.settings') }}">
-                                                        <i class="bi bi-gear me-2"></i> Cài đặt
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}">
-                                                        <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                <!-- Chat -->
+                                <div class="col-auto">
+                                    <div class="dropdown me-3">
+                                        <a class="btn btn-icon position-relative p-0 bg-transparent border-0"
+                                            href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
+                                            <i id="chat-bubble" class="bi bi-chat-dots fs-4 text-white"></i>
+                                            @if (isset($totalUnread) && $totalUnread > 0)
+                                            <span id="chat-dot"
+                                                class="position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow"
+                                                style="font-size:10px; min-width:18px; height:18px; padding:0 4px; border:2px solid #fff;">
+                                                {{ $totalUnread > 99 ? '99+' : $totalUnread }}
+                                            </span>
+                                            @endif
+                                        </a>
                                     </div>
                                 </div>
+
+                                <!-- User Menu -->
+                                <div class="col">
+                                    <div class="user-info dropdown me-3">
+                                        <a href="#" class="user-info-toggle d-flex align-items-center"
+                                            data-bs-toggle="dropdown">
+                                            <span class="user-avatar me-2"><i class="bi bi-person-circle"></i></span>
+                                            <i class="bi bi-caret-down-fill ms-1"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active' : '' }}"
+                                                    href="{{ route('profile.dashboard') }}">
+                                                    <i class="bi bi-house-door me-2"></i> Tổng quan
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center {{ request()->routeIs('favorites.index') ? 'active' : '' }}"
+                                                    href="{{ route('favorites.index') }}">
+                                                    <i class="bi bi-bookmark-heart-fill text-danger me-2"></i> Việc làm
+                                                    yêu thích
+                                                </a>
+                                            </li>
+
+                                            @if (Auth::user()->role === 'admin')
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('admin.dashboard') }}">
+                                                    <i class="bi bi-shield-lock me-2 text-danger"></i> Trang quản trị
+                                                </a>
+                                            </li>
+                                            @endif
+                                            @if (Auth::user()->role === 'employer' || Auth::user()->role === 'admin')
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('employer.dashboard') }}">
+                                                    <i class="bi bi-building me-2 text-success"></i> Trang nhà tuyển
+                                                    dụng
+                                                </a>
+                                            </li>
+                                            @endif
+                                            @if (Auth::user()->role === 'employer')
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('employer.details') }}">
+                                                    <i class="bi bi-building-gear me-2"></i> Quản lý nhà tuyển dụng
+                                                </a>
+                                            </li>
+                                            @endif
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('profile.settings') }}">
+                                                    <i class="bi bi-gear me-2"></i> Cài đặt
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="{{ route('logout') }}">
+                                                    <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                             @endguest
 
                             <!-- Mobile Menu -->
@@ -263,9 +240,9 @@
 </header>
 
 @if (session('access_token'))
-    <script>
-        localStorage.setItem('access_token', "{{ session('access_token') }}");
-    </script>
+<script>
+    localStorage.setItem('access_token', "{{ session('access_token') }}");
+</script>
 @endif
 
 <!-- Scripts -->
@@ -374,7 +351,11 @@
         }
 
         // Realtime: push item mới (đã resolve message/link)
-        const authId = {{ auth()->id() ?? 'null' }};
+        const authId = {
+            {
+                auth() - > id() ?? 'null'
+            }
+        };
         if (authId && window.Echo) {
             window.Echo.private('App.Models.User.' + authId)
                 .notification(async function(evt) {

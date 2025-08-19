@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use App\Models\Logo;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
             ->where('is_active', true)
             ->first();
         $view->with('favicon', $favicon);
+        
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     });
     }
 }

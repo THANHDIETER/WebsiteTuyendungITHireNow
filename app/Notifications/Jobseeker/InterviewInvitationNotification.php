@@ -7,9 +7,10 @@ use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class InterviewInvitationNotification extends Notification implements ShouldBroadcastNow
+class InterviewInvitationNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

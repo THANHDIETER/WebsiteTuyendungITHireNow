@@ -3,11 +3,12 @@
 namespace App\Notifications\Admin;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class NewJobSubmittedNotification extends Notification implements ShouldBroadcastNow
+class NewJobSubmittedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

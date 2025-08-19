@@ -13,7 +13,6 @@ class UsersSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        // Tạo danh sách referral codes trước để có thể sử dụng cho referred_by
         $referralCodes = [];
 
         for ($i = 1; $i <= 10; $i++) {
@@ -74,6 +73,23 @@ class UsersSeeder extends Seeder
             ]
         );
 
+        User::updateOrCreate(
+            ['email' => 'employerPackage@example.com'],
+            [
+                'password' => Hash::make('password'),
+                'name' => 'Default Employer Package',
+                'phone_number' => '0911222233',
+                'role' => 'employer',
+                'status' => 'active',
+                'is_blocked' => false,
+                'email_verified_at' => now(),
+                'last_login_at' => now(),
+                'referral_code' => strtoupper(Str::random(6)),
+                'referred_by' => null,
+                'ip_address' => '127.0.0.1',
+            ]
+        );
+
         // Job seeker cố định
         User::updateOrCreate(
             ['email' => 'jobseeker@example.com'],
@@ -91,5 +107,5 @@ class UsersSeeder extends Seeder
                 'ip_address' => '127.0.0.1',
             ]
         );
-    }   
+    }
 }

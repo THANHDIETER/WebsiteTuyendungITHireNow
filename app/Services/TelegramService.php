@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TelegramService
+class TelegramService implements ShouldQueue
 {
     protected $botToken;
     protected $chatId;

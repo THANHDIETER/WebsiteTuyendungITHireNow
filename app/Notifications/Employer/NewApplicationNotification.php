@@ -5,12 +5,12 @@ namespace App\Notifications\Employer;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Support\Facades\Route;
 
-class NewApplicationNotification extends Notification implements ShouldBroadcastNow
+class NewApplicationNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

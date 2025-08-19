@@ -10,6 +10,7 @@ use App\Models\JobApplication;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\offeredScheduledNotification;
 use App\Notifications\InterviewRejectedNotification;
 use App\Notifications\InterviewScheduledNotification;
 use App\Notifications\Jobseeker\ApplicationApprovedNotification;
@@ -217,6 +218,15 @@ class JobApplicationController extends Controller
                     $rejectionReason
                 ));
             }
+            if ($currentStatus !== 'offered' && $newStatus === 'offered') {
+                // TH trúng tuyển
+                $offerDetails = $data['note'] ?? null; // có thể truyền mức lương, ngày đi làm...
+                $jobseeker->notify(new offeredScheduledNotification(
+                    $job,
+                    $offerDetails
+                ));
+            }
+            
 
             if (
                 !empty($data['interview_date']) &&

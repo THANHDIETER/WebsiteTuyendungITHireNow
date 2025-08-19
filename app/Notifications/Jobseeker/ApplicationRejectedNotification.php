@@ -4,12 +4,13 @@ namespace App\Notifications\Jobseeker;
 
 use App\Models\Job;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Support\Facades\Route;
 
-class ApplicationRejectedNotification extends Notification implements ShouldBroadcastNow
+class ApplicationRejectedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
