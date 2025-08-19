@@ -53,7 +53,17 @@ Route::middleware(['auth', 'employer'])
 
         # Danh sách việc làm của nhà tuyển dụng
         Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
-    
+         // 🔹 Đọc tất cả (nút "Đánh dấu tất cả đã đọc")
+        Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
+            ->name('notifications.readAll');
+
+        // 🔹 Đọc 1 thông báo
+        Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
+            ->name('notifications.read');
+
+        // ✅ JSON chi tiết 1 notification (fallback realtime)
+        Route::get('/notifications/{id}/json', [NotificationController::class, 'showJson'])
+            ->name('notifications.json');
     });
 
 

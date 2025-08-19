@@ -70,7 +70,7 @@
                                                             <div class="form-group">
                                                                 <button type="submit" class="btn-form-search"
                                                                     aria-label="Tìm kiếm">
-                                                                    <i class="icofont-search-1"></i>
+                                                                    <i class="bi bi-search"></i>
                                                                 </button>
                                                             </div>
                                                         </div>

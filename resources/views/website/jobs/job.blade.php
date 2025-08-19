@@ -404,7 +404,6 @@
             @else
             <div class="vstack gap-5">
                 @forelse($jobs as $job)
-                <?php var_dump($job) ?>
                 <div class="job-row card border-2 border-success shadow-sm rounded-4 p-4 animate__animated animate__fadeInUp">
                     <div class="row g-4 align-items-center">
                         <div class="col-sm-3">

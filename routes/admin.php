@@ -90,18 +90,25 @@ Route::prefix('admin')
         });
 
         // 🔔 Quản lý thông báo hệ thống
-        Route::get('notifications/{id}/json', [NotificationController::class, 'getJson'])
-                ->name('notifications.json');
-        Route::resource('notifications', NotificationController::class);
-        Route::prefix('employers')->name('employers.')->group(function () {
-            Route::get('/', [EmployerController::class, 'index'])->name('index');           // danh sách
-            Route::get('/create', [EmployerController::class, 'create'])->name('create');    // form thêm
-            Route::post('/', [EmployerController::class, 'store'])->name('store');           // lưu thêm
-            Route::get('/{id}', [EmployerController::class, 'show'])->name('show');          // xem chi tiết
-            Route::get('/{id}/edit', [EmployerController::class, 'edit'])->name('edit');     // form sửa
-            Route::put('/{id}', [EmployerController::class, 'update'])->name('update');      // lưu sửa
-            Route::delete('/{id}', [EmployerController::class, 'destroy'])->name('destroy'); // xóa mềm
+         Route::prefix('notifications')->name('notifications.')->controller(NotificationController::class)->group(function () {
+            // ✅ JSON detail cho DatabaseNotification (đặt TRƯỚC '{id}')
+            Route::get('{id}/json', 'json')->name('json');
+
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('{id}', 'show')->name('show');
+            Route::get('{id}/edit', 'edit')->name('edit');
+            Route::put('{id}', 'update')->name('update');
+            Route::delete('{id}', 'destroy')->name('destroy');
+
+            // ✅ Mark one DatabaseNotification as read (dropdown click)
+            Route::post('{id}/read', 'markRead')->name('read');
+
+            // ✅ Mark ALL DatabaseNotifications as read (nút "Đánh dấu tất cả đã đọc")
+            Route::post('read-all', 'markAllRead')->name('readAll');
         });
+
         Route::get('logos', [LogoController::class, 'index'])->name('logos.index');
         Route::post('logos/update/{type}', [LogoController::class, 'updateSingle'])->name('logos.updateSingle');
 
