@@ -1,4 +1,4 @@
-<form id="createNotificationForm" action="{{ route('admin.notifications.store') }}" method="POST">
+<form id="createNotificationForm" action="{{ secure_url(route('admin.notifications.store', [], false)) }}" method="POST">
     @csrf
 
     <!-- Loại thông báo -->

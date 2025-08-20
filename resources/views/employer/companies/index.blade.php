@@ -69,6 +69,7 @@
                                                 class="btn btn-circle btn-edit" data-bs-toggle="tooltip" title="Sửa">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
+                                                @if(false)
                                                 <button type="button"
                                                         class="btn btn-circle btn-delete delete-btn"
                                                         data-bs-toggle="tooltip" title="Xóa"
@@ -77,6 +78,7 @@
                                                         data-action="{{ route('employer.companies.destroy', $company) }}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

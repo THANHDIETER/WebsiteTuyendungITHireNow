@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\{
     DashboardController,
     NotificationController,
     ServicePackageController,
-    BankAccountControlle,
+    BankAccountController,
     EmployerController,
     BlogController,
     LogoController
@@ -82,7 +82,7 @@ Route::prefix('admin')
         Route::prefix('payment')->controller(PaymentController::class)->group(function () {
             Route::get('/', 'index')->name('payment.index');
         });
-        Route::prefix('bank_account')->controller(BankAccountControlle::class)->group(function () {
+        Route::prefix('bank_account')->controller(BankAccountController::class)->group(function () {
             Route::get('/', 'index')->name('bank_account.index');
         });
         Route::prefix('bank_log')->controller(BankLogController::class)->group(function () {
@@ -120,5 +120,15 @@ Route::prefix('admin')
             Route::get('{blog}/edit', 'edit')->name('edit');
             Route::put('{blog}', 'update')->name('update');
             Route::delete('{blog}', 'destroy')->name('destroy');
+        });
+
+        Route::prefix('employers')->name('employers.')->group(function () {
+            Route::get('/', [EmployerController::class, 'index'])->name('index');           // danh sách
+            Route::get('/create', [EmployerController::class, 'create'])->name('create');    // form thêm
+            Route::post('/', [EmployerController::class, 'store'])->name('store');           // lưu thêm
+            Route::get('/{id}', [EmployerController::class, 'show'])->name('show');          // xem chi tiết
+            Route::get('/{id}/edit', [EmployerController::class, 'edit'])->name('edit');     // form sửa
+            Route::put('/{id}', [EmployerController::class, 'update'])->name('update');      // lưu sửa
+            Route::delete('/{id}', [EmployerController::class, 'destroy'])->name('destroy'); // xóa mềm
         });
     });

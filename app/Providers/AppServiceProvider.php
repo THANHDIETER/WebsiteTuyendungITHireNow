@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Providers;
-
+use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use App\Models\Logo;
@@ -22,16 +24,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Paginator::useBootstrapFive(); // or Paginator::useTailwind();
-         view()->composer('*', function ($view) {
-        $favicon = Logo::where('type', 'site')
-            ->where('is_active', true)
-            ->first();
-        $view->with('favicon', $favicon);
-        
         if (app()->environment('production')) {
-            URL::forceScheme('https');
+                URL::forceScheme('https');
         }
-    });
+        Paginator::useBootstrapFive(); 
+        view()->composer('*', function ($view) {
+            $favicon = Logo::where('type', 'site')
+                ->where('is_active', true)
+                ->first();
+            $view->with('favicon', $favicon);
+            View::composer('employer.layouts.*', function ($view) {
+                if (Auth::check()) {
+                    $company = Company::where('user_id', Auth::id())->first();
+                    $view->with('employerCompany', $company);
+                }
+            });
+            
+        });
     }
 }

@@ -18,14 +18,14 @@ class EmployerPackageLog extends Model
         'used_at' => 'datetime',
     ];
 
-    public function order()
-    {
-        return $this->belongsTo(EmployerPackageOrder::class, 'order_id');
-    }
+   public function order()
+{
+    return $this->belongsTo(EmployerPackageOrder::class, 'order_id');
+}
 
-    public function job()
-    {
-        return $this->belongsTo(Job::class);
-    }
+public function job()
+{
+    return $this->belongsTo(Job::class, 'job_id');
+}
 }
 

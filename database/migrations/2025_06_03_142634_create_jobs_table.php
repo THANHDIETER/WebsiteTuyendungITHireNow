@@ -57,7 +57,6 @@ class CreateJobsTable extends Migration
             // Trường bổ sung
             $table->string('apply_url')->nullable();
             $table->string('remote_policy', 100)->nullable();
-            $table->string('language', 50)->nullable();
 
             // SEO
             $table->string('meta_title', 150)->nullable();

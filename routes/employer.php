@@ -7,6 +7,7 @@ use App\Http\Controllers\Employers\CompanyController;
 use App\Http\Controllers\Employers\PackageController;
 use App\Http\Controllers\Employers\PaymentController;
 use App\Http\Controllers\Employers\DashboardController;
+use App\Http\Controllers\Employers\PackageLogController;
 use App\Http\Controllers\Employers\NotificationController;
 use App\Http\Controllers\Employers\SubscriptionController;
 use App\Http\Controllers\Employers\JobApplicationController;
@@ -44,8 +45,18 @@ Route::middleware(['auth', 'employer'])
         Route::delete('/payments/{payment}', [PaymentController::class, 'cancel'])->name('payments.cancel');
 
         // Companies
-        Route::resource('/companies', CompanyController::class)->parameters(['companies' => 'id']);
-
+        Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
+        // Tạo mới
+        Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create');
+        Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
+        // Chi tiết
+        Route::get('/companies/{id}', [CompanyController::class, 'show'])->name('companies.show');
+        // Sửa
+        Route::get('/companies/{id}/edit', [CompanyController::class, 'edit'])->name('companies.edit');
+        Route::put('/companies/{id}', [CompanyController::class, 'update'])->name('companies.update');
+        // Xóa
+        Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('companies.destroy');
+        
         // (Tuỳ chọn) Cập nhật hoặc xoá tin
         Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
         Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
@@ -64,6 +75,8 @@ Route::middleware(['auth', 'employer'])
         // ✅ JSON chi tiết 1 notification (fallback realtime)
         Route::get('/notifications/{id}/json', [NotificationController::class, 'showJson'])
             ->name('notifications.json');
+        Route::get('/package-logs', [PackageLogController::class, 'index'])
+        ->name('package.logs.index');
     });
 
 
@@ -86,12 +99,7 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
     Route::get('/{id}', [PackageController::class, 'show'])->name('employer.packages.show'); // tuỳ chọn
 });
 
-Route::prefix('employer/companies')
-    ->middleware(['auth', 'employer'])
-    ->name('employer.companies.')
-    ->group(function () {
-        Route::resource('/', CompanyController::class)->parameters(['' => 'id']);
-    })->name('employer.companies');
+
 
 
 Route::middleware(['auth:sanctum', 'employer'])

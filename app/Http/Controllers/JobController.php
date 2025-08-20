@@ -22,7 +22,7 @@ class JobController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->sanitizePerPage($request->input('per_page', 9));
-        $view    = $request->input('view', 'grid');
+        $view = $request->input('view', 'grid');
         $base = Job::with(['company', 'skills', 'jobType', 'location', 'level', 'experience', 'language'])
             ->where('status', 'published');
 
@@ -53,29 +53,29 @@ class JobController extends Controller
     /** Trang tìm kiếm (lọc nâng cao) */
     public function search(Request $request)
     {
-        $perPage    = $this->sanitizePerPage($request->input('per_page', 9));
-        $skills     = $this->parseSkills($request->input('skills'));
+        $perPage = $this->sanitizePerPage($request->input('per_page', 9));
+        $skills = $this->parseSkills($request->input('skills'));
         $skillsMode = strtolower($request->input('skills_mode', 'any')); // any|all
-        $sort       = $request->input('sort', $request->filled('q') ? 'relevance' : 'newest');
+        $sort = $request->input('sort', $request->filled('q') ? 'relevance' : 'newest');
 
         $query = $this->buildQuery($request, $skills, $skillsMode);
-        $jobs  = $this->applySort($query, $sort, $request->input('q'))
+        $jobs = $this->applySort($query, $sort, $request->input('q'))
             ->paginate($perPage)
             ->appends($request->except('page'));
 
         [$categories, $companies, $skillsList, $locations, $jobTypes, $levels, $experiences, $languages, $currencies] = $this->filtersData();
 
         return view('website.jobs.job', [
-            'jobs'        => $jobs,
-            'categories'  => $categories,
-            'companies'   => $companies,
-            'skills'      => $skillsList,
-            'locations'   => $locations,
-            'jobTypes'    => $jobTypes,
-            'levels'      => $levels,
+            'jobs' => $jobs,
+            'categories' => $categories,
+            'companies' => $companies,
+            'skills' => $skillsList,
+            'locations' => $locations,
+            'jobTypes' => $jobTypes,
+            'levels' => $levels,
             'experiences' => $experiences,
-            'languages'   => $languages,
-            'currencies'  => $currencies,
+            'languages' => $languages,
+            'currencies' => $currencies,
         ]);
     }
 
@@ -93,11 +93,9 @@ class JobController extends Controller
             'language',
             'remotePolicy',
         ])->where('slug', $slug)->where('status', 'published')->firstOrFail();
-
         $relatedJobs = collect();
         $user = Auth::user();
         $profile = $user->profile;
-
         // Lấy danh sách CV của ứng viên
         $cvs = $profile ? $profile->cvs : collect();
         // Lấy các công việc liên quan cùng danh mục (nếu có)
@@ -129,11 +127,15 @@ class JobController extends Controller
 
         // Category: hỗ trợ 1-n (jobs.category_id) và many-to-many (jobs<->categories)
         $categoryIds = [];
-        if ($request->filled('category_id')) $categoryIds[] = (int)$request->input('category_id');
+        if ($request->filled('category_id'))
+            $categoryIds[] = (int) $request->input('category_id');
         if ($request->filled('categories')) {
             $raw = $request->input('categories');
-            if (is_string($raw)) $raw = explode(',', $raw);
-            foreach ((array)$raw as $cid) if ((int)$cid) $categoryIds[] = (int)$cid;
+            if (is_string($raw))
+                $raw = explode(',', $raw);
+            foreach ((array) $raw as $cid)
+                if ((int) $cid)
+                    $categoryIds[] = (int) $cid;
         }
         $categoryIds = array_values(array_unique(array_filter($categoryIds)));
 
@@ -149,7 +151,8 @@ class JobController extends Controller
 
         // Filter ID khác (trên bảng jobs)
         foreach (['location_id', 'company_id', 'job_type_id', 'level_id', 'experience_id', 'language_id', 'remote_policy_id'] as $col) {
-            if ($request->filled($col)) $q->where($col, $request->input($col));
+            if ($request->filled($col))
+                $q->where($col, $request->input($col));
         }
 
         // Tiền tệ
@@ -158,8 +161,8 @@ class JobController extends Controller
         }
 
         // Lương: khoảng giao nhau
-        $min = (int)$request->input('min_salary');
-        $max = (int)$request->input('max_salary');
+        $min = (int) $request->input('min_salary');
+        $max = (int) $request->input('max_salary');
         if ($min || $max) {
             $q->where(function (Builder $w) use ($min, $max) {
                 if ($min && $max) {
@@ -188,7 +191,8 @@ class JobController extends Controller
         }
 
         // Nổi bật
-        if ($request->boolean('is_featured')) $q->where('is_featured', 1);
+        if ($request->boolean('is_featured'))
+            $q->where('is_featured', 1);
 
         return $q;
     }
@@ -213,29 +217,33 @@ class JobController extends Controller
         }
 
         return match ($sort) {
-            'views'  => $query->orderByDesc('views'),
+            'views' => $query->orderByDesc('views'),
             'salary' => $query->orderByDesc('salary_min')->orderByDesc('salary_max'),
-            default  => $query->orderByDesc('created_at'),
+            default => $query->orderByDesc('created_at'),
         };
     }
 
     private function sanitizePerPage($val): int
     {
-        $pp = (int)$val;
+        $pp = (int) $val;
         return max(6, min(50, $pp ?: 9));
     }
 
     private function parseSkills($skills): array
     {
-        if (is_array($skills))  return array_values(array_filter($skills, fn($v) => trim($v) !== ''));
-        if (is_string($skills)) return array_values(array_filter(array_map('trim', explode(',', $skills))));
+        if (is_array($skills))
+            return array_values(array_filter($skills, fn($v) => trim($v) !== ''));
+        if (is_string($skills))
+            return array_values(array_filter(array_map('trim', explode(',', $skills))));
         return [];
     }
 
     /** cột order an toàn */
     private function pickOrderable(string $table, array $candidates, string $fallback = 'id'): string
     {
-        foreach ($candidates as $col) if (Schema::hasColumn($table, $col)) return $col;
+        foreach ($candidates as $col)
+            if (Schema::hasColumn($table, $col))
+                return $col;
         return $fallback;
     }
 
@@ -250,24 +258,24 @@ class JobController extends Controller
     /** dữ liệu filter */
     private function filtersData(): array
     {
-        $categoriesOrder  = $this->pickOrderable('categories',  ['name', 'slug', 'category_name']);
-        $companiesOrder   = $this->pickOrderable('companies',   ['name', 'company_name', 'slug']);
-        $skillsOrder      = $this->pickOrderable('skills',      ['skill_name', 'name', 'slug']);
-        $locationsOrder   = $this->pickOrderable('locations',   ['name', 'city', 'slug']);
-        $jobTypesOrder    = $this->pickOrderable('job_types',   ['name', 'type_name', 'slug']);
-        $levelsOrder      = $this->pickOrderable('levels',      ['name', 'level_name']);
-        $expOrder         = $this->pickOrderable('job_experiences', ['name']);
-        $langOrder        = $this->pickOrderable('job_languages',   ['name', 'language_name']);
+        $categoriesOrder = $this->pickOrderable('categories', ['name', 'slug', 'category_name']);
+        $companiesOrder = $this->pickOrderable('companies', ['name', 'company_name', 'slug']);
+        $skillsOrder = $this->pickOrderable('skills', ['skill_name', 'name', 'slug']);
+        $locationsOrder = $this->pickOrderable('locations', ['name', 'city', 'slug']);
+        $jobTypesOrder = $this->pickOrderable('job_types', ['name', 'type_name', 'slug']);
+        $levelsOrder = $this->pickOrderable('levels', ['name', 'level_name']);
+        $expOrder = $this->pickOrderable('job_experiences', ['name']);
+        $langOrder = $this->pickOrderable('job_languages', ['name', 'language_name']);
 
-        $categories  = Category::orderBy($categoriesOrder)->get();
-        $companies   = Company::orderBy($companiesOrder)->get();
-        $skills      = Skill::orderBy($skillsOrder)->get();
-        $locations   = Location::orderBy($locationsOrder)->get();
-        $jobTypes    = JobType::orderBy($jobTypesOrder)->get();
-        $levels      = Level::orderBy($levelsOrder)->get();
+        $categories = Category::orderBy($categoriesOrder)->get();
+        $companies = Company::orderBy($companiesOrder)->get();
+        $skills = Skill::orderBy($skillsOrder)->get();
+        $locations = Location::orderBy($locationsOrder)->get();
+        $jobTypes = JobType::orderBy($jobTypesOrder)->get();
+        $levels = Level::orderBy($levelsOrder)->get();
         $experiences = JobExperience::orderBy($expOrder)->get();
-        $languages   = JobLanguage::orderBy($langOrder)->get();
-        $currencies  = $this->currenciesList();
+        $languages = JobLanguage::orderBy($langOrder)->get();
+        $currencies = $this->currenciesList();
 
         return [$categories, $companies, $skills, $locations, $jobTypes, $levels, $experiences, $languages, $currencies];
     }

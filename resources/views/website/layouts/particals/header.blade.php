@@ -197,14 +197,7 @@
                                                 </a>
                                             </li>
                                             @endif
-                                            @if (Auth::user()->role === 'employer')
-                                            <li>
-                                                <a class="dropdown-item d-flex align-items-center"
-                                                    href="{{ route('employer.details') }}">
-                                                    <i class="bi bi-building-gear me-2"></i> Quản lý nhà tuyển dụng
-                                                </a>
-                                            </li>
-                                            @endif
+                                           
                                             <li>
                                                 <a class="dropdown-item d-flex align-items-center"
                                                     href="{{ route('profile.settings') }}">

@@ -88,12 +88,22 @@
         <div class="nav-right">
             <ul class="header-right">
                 <li class="modes d-flex">
-                    <a class="dark-mode" aria-label="Đổi chế độ tối/sáng">
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                    <a href="#" class="dark-mode text-dark" title="Chế độ tối">
+                        <i class="bi bi-moon-fill svg-color fs-5"></i>
+                    </a>
+                </li>
+
+                <!-- Trang chủ -->
+                <li class="modes d-flex">
+                    <a href="{{ route('home') }}" class="text-dark" title="Trang chủ">
+                        <i class="bi bi-house-door-fill svg-color fs-5"></i>
+                    </a>
+                </li>
+
+                <!-- Nhà tuyển dụng -->
+                <li class="modes d-flex">
+                    <a href="{{ route('employer.dashboard') }}" class="text-dark" title="Nhà tuyển dụng">
+                        <i class="bi bi-person-badge svg-color fs-5"></i>
                     </a>
                 </li>
 

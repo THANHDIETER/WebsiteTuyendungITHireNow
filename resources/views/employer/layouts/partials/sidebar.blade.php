@@ -41,13 +41,13 @@
     .sidebar-submenu {
         margin-right: 24px;
     }
-/* 
+
+    /* 
     /* .sidebar-submenu li a {
         font-size: 13px;
         padding: 6px 10px;
-    } */ */
-
-    .badge-primary {
+    } */
+    */ .badge-primary {
         background-color: #0d6efd;
         color: #fff;
         font-size: 10px;
@@ -136,9 +136,6 @@
                 </a>
             </li>
 
-
-
-
             <li class="sidebar-list">
                 <a class="sidebar-link" href="{{ route('employer.packages.index') }}">
                     <i class="bi bi-box-seam"></i>
@@ -147,9 +144,16 @@
             </li>
 
             <li class="sidebar-list">
-                <a class="sidebar-link" href="{{ route('employer.companies.index') }}">
+                <a class="sidebar-link" href="{{ route('employer.companies.show', $employerCompany->id) }}">
                     <i class="bi bi-people"></i>
                     <span>Quản lý công ty</span>
+                </a>
+            </li>
+
+            <li class="sidebar-list">
+                <a class="sidebar-link" href="{{ route('employer.package.logs.index') }}">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Lịch sử gói dịch vụ</span>
                 </a>
             </li>
         </ul>

@@ -83,9 +83,8 @@
                                     </button>
 
                                     <!-- Xóa nhà tuyển dụng -->
-                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-circle"
-                                        title="Xóa" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal{{ $employer->id }}">
+                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-circle" title="Xóa"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal{{ $employer->id }}">
                                         <i class="bi bi-trash-fill"></i>
                                     </button>
                                 </div>
@@ -115,10 +114,8 @@
                                                 @foreach ($employer->companies as $company)
                                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                                         {{ $toText($company->name) }}
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-outline-primary company-btn"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#showCompanyModal{{ $company->id }}"
+                                                        <button type="button" class="btn btn-sm btn-outline-primary company-btn"
+                                                            data-bs-toggle="modal" data-bs-target="#showCompanyModal{{ $company->id }}"
                                                             data-employer-modal="#showEmployerModal{{ $employer->id }}">
                                                             Xem công ty
                                                         </button>
@@ -148,8 +145,7 @@
                                         <p class="fw-bold text-danger">{{ $toText($employer->name) }}</p>
                                     </div>
                                     <div class="modal-footer justify-content-center border-0">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Hủy</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                                         <form action="{{ route('admin.employers.destroy', $employer->id) }}" method="POST"
                                             class="d-inline">
                                             @csrf
@@ -171,7 +167,7 @@
         </div>
 
         <div class="mt-4 d-flex justify-content-end">
-            {{ $employers->withQueryString()->links('vendor.pagination.bootstrap-5') }}
+            {{ $employers->withQueryString()->links('pagination::bootstrap-5') }}
         </div>
     </div>
 
@@ -218,7 +214,6 @@
     @endforeach
 
     <!-- Bootstrap JS bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         // Khi mở modal công ty, ẩn modal nhà tuyển dụng để tránh lỗi

@@ -47,11 +47,10 @@ class Company extends Model
     ];
 
     // Chủ sở hữu công ty
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
+   public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
     // Danh sách việc làm của công ty
     public function jobs()
     {
@@ -151,24 +150,5 @@ class Company extends Model
         return $this->user();
     }
 
-    public function getLogoUrlAttribute()
-    {
-        $logo = $this->attributes['logo_url'] ?? null;
-
-        if (!$logo) {
-            return asset('assets/img/default-logo.png');
-        }
-
-        // Nếu là URL thì trả thẳng
-        if (filter_var($logo, FILTER_VALIDATE_URL)) {
-            return $logo;
-        }
-
-        // Nếu là đường dẫn trong storage
-        if (\Storage::disk('public')->exists($logo)) {
-            return asset('storage/' . $logo);
-        }
-
-        return asset('assets/img/default-logo.png');
-    }
+    
 }

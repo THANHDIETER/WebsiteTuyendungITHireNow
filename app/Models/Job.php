@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Job extends Model
 {
-     protected $table = 'jobs';  
+    protected $table = 'jobs';
     use HasFactory, SoftDeletes;
-    
+
     protected $fillable = [
         'title',
         'description',
@@ -48,7 +48,7 @@ class Job extends Model
         'approved_by',
         'ai_processed_at'
     ];
-     public function applications(): HasMany
+    public function applications(): HasMany
     {
         // Model liên quan là JobApplication
         // Bảng mặc định: job_applications
@@ -142,11 +142,12 @@ class Job extends Model
         return $this->belongsTo(Category::class);
     }
 
-  
-   public function language()
+
+    public function language()
     {
-        return $this->belongsTo(JobLanguage::class, 'language_id', 'id');
+        return $this->belongsTo(JobLanguage::class, 'language_id');
     }
+
     public function jobLanguage()
     {
         return $this->belongsTo(JobLanguage::class, 'language_id', 'id');
@@ -164,9 +165,9 @@ class Job extends Model
         return $this->belongsTo(Location::class);
     }
     public function recruiter()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function interviews()
     {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Employers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -13,40 +12,35 @@ use Illuminate\Support\Facades\Auth;
 class CompanyController extends Controller
 {
     /**
-     * Hiển thị danh sách công ty.
+     * Danh sách công ty của user hiện tại.
      */
     public function index()
     {
         $companies = Company::with('user')
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->latest('created_at')
             ->paginate(10);
 
         return view('employer.companies.index', compact('companies'));
     }
 
-
     /**
-     * Hiển thị chi tiết một công ty.
+     * Trang chi tiết công ty (thuần ID).
      */
     public function show($id)
     {
-        $company = Company::with('user')->findOrFail($id);
-        $job = Job::findOrFail($id);
+        $company = Company::with('user')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        // Nếu cần jobs thì lấy theo company_id (KHÔNG dùng Job::findOrFail($id))
+        // $jobs = Job::where('company_id', $company->id)->latest()->paginate(10);
+
         return view('employer.companies.show', compact('company'));
     }
 
     /**
-     * Hiển thị form sửa thông tin công ty.
-     */
-    public function edit($id)
-    {
-        $company = Company::findOrFail($id);
-        return view('employer.companies.edit', compact('company'));
-    }
-
-    /**
-     * Hiển thị form TẠO MỚI công ty.
+     * Form tạo mới.
      */
     public function create()
     {
@@ -54,45 +48,44 @@ class CompanyController extends Controller
     }
 
     /**
-     * Xử lý lưu công ty mới.
+     * Lưu công ty mới.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255',
-            'website' => 'nullable|url|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:500',
-            'logo_url' => 'nullable|string|max:255',
-            'cover_image_url' => 'nullable|string|max:5020',
-            'city' => 'nullable|string|max:255',
-            'company_size' => 'nullable|string|max:255',
-            'founded_year' => 'nullable|integer|min:1900|max:' . date('Y'),
-            'industry' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:3000',
-            'benefits' => 'nullable|string|max:3000',
-            'is_active' => 'nullable|boolean',
-            'status' => 'nullable|string|max:255',
-            'free_post_quota' => 'nullable|integer|min:0',
+            'name'           => 'required|string|max:255',
+            'website'        => 'nullable|url|max:255',
+            'email'          => 'nullable|email|max:255',
+            'phone'          => 'nullable|string|max:20',
+            'address'        => 'nullable|string|max:500',
+            'city'           => 'nullable|string|max:255',
+            'company_size'   => 'nullable|string|max:255',
+            'founded_year'   => 'nullable|integer|min:1900|max:' . date('Y'),
+            'industry'       => 'nullable|string|max:255',
+            'description'    => 'nullable|string|max:3000',
+            'benefits'       => 'nullable|string|max:3000',
+            'status'         => 'nullable|in:active,inactive,banned',
+            'free_post_quota'=> 'nullable|integer|min:0',
             'free_post_quota_expired_at' => 'nullable|date',
-            'free_post_quota_used' => 'nullable|integer|min:0',
+            'free_post_quota_used'       => 'nullable|integer|min:0',
+            // file upload
+            'logo'           => 'nullable|image|max:5120',
+            'cover_image'    => 'nullable|image|max:5120',
         ]);
 
-        $validated['user_id'] = Auth::id();
-        $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
+        $data = $validated;
+        $data['user_id'] = Auth::id();
+        // Nếu bạn cần slug cho nơi khác, vẫn có thể tạo nhưng route dùng ID nên không phụ thuộc slug
+        $data['slug'] = Str::slug($data['name']) . '-' . uniqid();
 
         if ($request->hasFile('logo')) {
-            $validated['logo_url'] = $request->file('logo')
-                ->store('companies/logos', 'public');
+            $data['logo_url'] = $request->file('logo')->store('companies/logos', 'public');
         }
         if ($request->hasFile('cover_image')) {
-            $validated['cover_image_url'] = $request->file('cover_image')
-                ->store('companies/covers', 'public');
+            $data['cover_image_url'] = $request->file('cover_image')->store('companies/covers', 'public');
         }
 
-        Company::create($validated);
+        Company::create($data);
 
         return redirect()
             ->route('employer.companies.index')
@@ -100,57 +93,67 @@ class CompanyController extends Controller
     }
 
     /**
-     * Xử lý lưu thông tin công ty sau khi sửa.
+     * Form sửa.
+     */
+    public function edit($id)
+    {
+        $company = Company::where('user_id', Auth::id())->findOrFail($id);
+        return view('employer.companies.edit', compact('company'));
+    }
+
+    /**
+     * Cập nhật công ty.
      */
     public function update(Request $request, $id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::where('user_id', Auth::id())->findOrFail($id);
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'website' => 'nullable|url|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:500',
-            'city' => 'nullable|string|max:255',
-            'company_size' => 'nullable|string|max:255',
-            'founded_year' => 'nullable|integer|min:1900|max:' . date('Y'),
-            'industry' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:3000',
-            'benefits' => 'nullable|string|max:3000',
-            'status' => 'nullable|in:active,inactive,banned',
-            'logo' => 'nullable|image|max:5020',
-            'cover_image' => 'nullable|image|max:5020',
-
+            'name'           => 'required|string|max:255',
+            'website'        => 'nullable|url|max:255',
+            'email'          => 'nullable|email|max:255',
+            'phone'          => 'nullable|string|max:20',
+            'address'        => 'nullable|string|max:500',
+            'city'           => 'nullable|string|max:255',
+            'company_size'   => 'nullable|string|max:255',
+            'founded_year'   => 'nullable|integer|min:1900|max:' . date('Y'),
+            'industry'       => 'nullable|string|max:255',
+            'description'    => 'nullable|string|max:3000',
+            'benefits'       => 'nullable|string|max:3000',
+            'status'         => 'nullable|in:active,inactive,banned',
+            // file upload
+            'logo'           => 'nullable|image|max:5120',
+            'cover_image'    => 'nullable|image|max:5120',
         ]);
 
-        // Cập nhật các trường thường
+        // Không thay slug để URL/SEO (nếu bạn có dùng) ổn định
         $company->fill([
-            'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
-            'website' => $validated['website'] ?? null,
-            'email' => $validated['email'] ?? null,
-            'phone' => $validated['phone'] ?? null,
-            'address' => $validated['address'] ?? null,
-            'city' => $validated['city'] ?? null,
+            'name'         => $validated['name'],
+            'website'      => $validated['website'] ?? null,
+            'email'        => $validated['email'] ?? null,
+            'phone'        => $validated['phone'] ?? null,
+            'address'      => $validated['address'] ?? null,
+            'city'         => $validated['city'] ?? null,
             'company_size' => $validated['company_size'] ?? null,
             'founded_year' => $validated['founded_year'] ?? null,
-            'industry' => $validated['industry'] ?? null,
-            'description' => $validated['description'] ?? null,
-            'benefits' => $validated['benefits'] ?? null,
-            'status' => $validated['status'] ?? 'inactive',
+            'industry'     => $validated['industry'] ?? null,
+            'description'  => $validated['description'] ?? null,
+            'benefits'     => $validated['benefits'] ?? null,
+            'status'       => $validated['status'] ?? 'inactive',
         ]);
 
         if ($request->hasFile('logo')) {
-            Storage::disk('public')->delete($company->logo_url);
-            $company->logo_url = $request->file('logo')
-                ->store('companies/logos', 'public');
+            if ($company->logo_url) {
+                Storage::disk('public')->delete($company->logo_url);
+            }
+            $company->logo_url = $request->file('logo')->store('companies/logos', 'public');
         }
 
         if ($request->hasFile('cover_image')) {
-            Storage::disk('public')->delete($company->cover_image_url);
-            $company->cover_image_url = $request->file('cover_image')
-                ->store('companies/covers', 'public');
+            if ($company->cover_image_url) {
+                Storage::disk('public')->delete($company->cover_image_url);
+            }
+            $company->cover_image_url = $request->file('cover_image')->store('companies/covers', 'public');
         }
 
         $company->save();
@@ -161,12 +164,21 @@ class CompanyController extends Controller
     }
 
     /**
-     * Xóa một công ty.
+     * Xóa công ty.
      */
     public function destroy($id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::where('user_id', Auth::id())->findOrFail($id);
         $name = $company->name;
+
+        // (Tùy chọn) Xóa file kèm theo
+        if ($company->logo_url) {
+            Storage::disk('public')->delete($company->logo_url);
+        }
+        if ($company->cover_image_url) {
+            Storage::disk('public')->delete($company->cover_image_url);
+        }
+
         $company->delete();
 
         return redirect()

@@ -12,7 +12,7 @@
                     {{-- Logo Overlay --}}
                    <div class="position-absolute top-100 start-50 translate-middle" style="margin-top: -150px;">
                         @if ($company?->logo_url)
-                            <img src="{{ $company->logo_url }}"
+                            <img src="{{ asset('storage/' . $company->logo_url) }}"
                                 alt="Logo {{ $company->name }}"
                                 class="rounded-circle border border-white shadow"
                                 style="width: 250px; height: 250px; object-fit: cover; background-color: #fff;">
@@ -159,7 +159,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="border-bottom">
+                                    <!-- <tr class="border-bottom">
                                         <th class="text-muted fw-semibold">
                                             <i class="bi bi-box-seam me-2 text-secondary"></i>Quota miễn phí
                                         </th>
@@ -172,7 +172,7 @@
                                                 {{ $company->free_post_quota_expired_at ? $company->free_post_quota_expired_at->format('d/m/Y') : '—' }}
                                             </small>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <tr class="border-bottom">
                                         <th class="text-muted fw-semibold">
                                             <i class="bi bi-clock-history me-2 text-secondary"></i>Ngày tạo

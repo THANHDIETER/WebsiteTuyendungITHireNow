@@ -97,7 +97,11 @@
                 <i class="bi bi-briefcase sidebar-icon"></i> Duyệt tin tuyển dụng
             </a>
         </li>
-
+         <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.employers.index') }}">
+                <i class="bi bi-journal-arrow-down sidebar-icon"></i> Nhà tuyển dụng
+            </a>
+        </li>
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.seekerprofile.index') }}">
                 <i class="bi bi-person-lines-fill sidebar-icon"></i> Duyệt CV ứng viên

@@ -244,7 +244,7 @@
                     </div>
                 </div>
                 {{-- SEO --}}
-                <div class="card mb-4 shadow-sm border-0 rounded-3">
+                <!-- <div class="card mb-4 shadow-sm border-0 rounded-3">
                     <div class="card-header bg-primary text-white fw-semibold">SEO & Tìm kiếm</div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -270,7 +270,7 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div> -->
 {{-- Chọn gói dịch vụ nếu có --}}
 @if ($activePackages->count())
     <div class="mb-3">

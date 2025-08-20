@@ -8,7 +8,7 @@ class Notification extends Model
 {
     protected $table = 'notifications';
 
-    public $incrementing = false; // vì id là UUID, không phải auto increment
+    public $incrementing = false; // id là UUID (string)
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -23,12 +23,15 @@ class Notification extends Model
     ];
 
     protected $casts = [
-        'data' => 'array',
-        'read_at' => 'datetime',
+        'data'       => 'array',
+        'read_at'    => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
+    /**
+     * Quan hệ tới User (hoặc model khác) thông qua notifiable
+     */
     public function notifiable()
     {
         return $this->morphTo();

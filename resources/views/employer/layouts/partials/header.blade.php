@@ -84,15 +84,26 @@
     <div class="page-main-header d-flex align-items-center col-auto">
         <div class="nav-right">
             <ul class="header-right">
+               <!-- Dark mode toggle -->
                 <li class="modes d-flex">
-                    <a class="dark-mode">
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                    <a href="#" class="dark-mode text-primary" title="Chế độ tối">
+                        <i class="bi bi-moon-fill fs-5 svg-color"></i>
                     </a>
                 </li>
+                <!-- Trang chủ -->
+                <li class="modes d-flex">
+                    <a href="{{ route('home') }}" class="text-dark" title="Trang chủ">
+                        <i class="bi bi-house-door-fill svg-color fs-5 svg-color"></i>
+                    </a>
+                </li>
+                @if (auth()->check() && auth()->user()->role === 'admin')
+                    <!-- Trang quản trị -->
+                    <li class="modes d-flex">
+                        <a href="{{ route('admin.dashboard') }}" class="text-dark" title="Trang quản trị">
+                            <i class="bi bi-speedometer2 svg-color fs-5"></i>
+                        </a>
+                    </li>
+                @endif
 
                 {{-- 🔔 Notifications: 3 item đầu + cuộn + nút "Đánh dấu tất cả đã đọc" --}}
                 <li class="custom-dropdown" id="employer-noti-dropdown">
@@ -179,123 +190,6 @@
                             <a href="{{ route('employer.notifications.index') }}"
                                 class="btn btn-sm btn-link text-secondary">Xem tất cả</a>
                         </div>
-                    </div>
-                </li>
-
-                {{-- CART giữ nguyên --}}
-                <li class="custom-dropdown">
-                    <a href="javascript:void(0)">
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 2l3 0a3 3 0 016 0l3 0a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"
-                                stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none" />
-                            <path d="M6 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        </svg>
-                    </a>
-                    <div class="custom-menu cart-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Cart<span>Total : <span
-                                    class="font-primary">4350.9</span></span></h5>
-                        <ul>
-                            <li class="cartbox d-flex bg-light-primary">
-                                <div class="flex-shrink-0 border-primary">
-                                    <img loading="lazy" src="{{ asset('assets/images/dashboard2/product/1.png') }}"
-                                        alt="">
-                                </div>
-                                <div class="touchpin-details">
-                                    <a href="">
-                                        <h5>Apple Computers</h5>
-                                    </a><span>$2600.00</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-primary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="cartbox d-flex bg-light-secondary">
-                                <div class="flex-shrink-0 border-secondary">
-                                    <img loading="lazy" src="{{ asset('assets/images/dashboard2/product/2.png') }}"
-                                        alt="">
-                                </div>
-                                <div class="touchpin-details">
-                                    <a href="">
-                                        <h5>Microwave</h5>
-                                    </a><span>$1450.45</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-secondary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="cartbox d-flex bg-light-tertiary">
-                                <div class="flex-shrink-0 border-tertiary">
-                                    <img loading="lazy" src="{{ asset('assets/images/dashboard2/product/3.png') }}"
-                                        alt="">
-                                </div>
-                                <div class="touchpin-details">
-                                    <a href="">
-                                        <h5>Mackup Kit</h5>
-                                    </a><span>$300.45</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-tertiary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="mt-3 p-0 d-flex justify-content-center">
-                                <div><a class="btn btn-secondary" href="">Checkout</a></div>
-                            </li>
-                        </ul>
                     </div>
                 </li>
 
