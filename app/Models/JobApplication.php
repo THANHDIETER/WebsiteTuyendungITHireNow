@@ -9,7 +9,7 @@ class JobApplication extends Model
 {
     use SoftDeletes;
 
-     protected $fillable = [
+    protected $fillable = [
         'job_id',
         'user_id',
         'company_id',
@@ -37,16 +37,17 @@ class JobApplication extends Model
     // Relationships
     public function job()
     {
-        return $this->belongsTo(Job::class);
+        return $this->belongsTo(Job::class, 'job_id');
     }
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
-    
+
+
 }

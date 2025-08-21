@@ -18,7 +18,7 @@
 
                     <a href="{{ route('admin.ai-configs.index') }}"
                         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->routeIs('admin.ai-configs.index') ? 'active' : '' }}">
-                        <i class="bi bi-cpu me-2"></i> AI Configs Cron job
+                        <i class="bi bi-cpu me-2"></i> OPENAI Configs Job
                     </a>
                 </div>
             </div>

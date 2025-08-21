@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue; // 👈 thêm dòng này
+use App\Mail\SystemNotificationMail;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Queue\ShouldQueue; // 👈 thêm dòng này
 
 class InterviewScheduledNotification extends Notification implements ShouldQueue // 👈 implements ShouldQueue
 {
@@ -27,12 +28,11 @@ class InterviewScheduledNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->subject('Thư mời phỏng vấn cho vị trí ' . $this->job->title)
-            ->greeting('Xin chào ' . $notifiable->name . ',')
-            ->line('Bạn đã được mời phỏng vấn cho vị trí "' . $this->job->title . '".')
-            ->line('⏰ Thời gian phỏng vấn: ' . $this->interviewDate->format('d/m/Y H:i'))
-            ->line('Vui lòng chuẩn bị kỹ và tham gia đúng giờ.')
-            ->line('Cảm ơn bạn đã quan tâm đến vị trí này!');
+        $message = "Bạn đã được mời phỏng vấn cho vị trí \"{$this->job->title}\".\n"
+             . "⏰ Thời gian phỏng vấn: " . $this->interviewDate->format('d/m/Y H:i') . "\n"
+             . "Vui lòng chuẩn bị kỹ và tham gia đúng giờ.\n"
+             . "Cảm ơn bạn đã quan tâm đến vị trí này!";
+    
+        return (new SystemNotificationMail($message));
     }
-}
+}   

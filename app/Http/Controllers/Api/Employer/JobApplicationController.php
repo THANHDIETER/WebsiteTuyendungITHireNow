@@ -24,7 +24,12 @@ class JobApplicationController extends Controller
     {
         $companies = Auth::user()->companies;
         $query = JobApplication::with(['job', 'user', 'company'])
-            ->whereIn('company_id', $companies->pluck('id'));
+            ->whereIn('company_id', $companies->pluck('id'))
+            ->whereHas('job', function ($q) {
+                $q->whereNull('deleted_at');
+            });
+
+
 
         if ($request->search) {
             $query->where(function ($q) use ($request) {
@@ -65,6 +70,7 @@ class JobApplicationController extends Controller
 
     public function update(Request $request, JobApplication $jobApplication)
     {
+
         $data = $request->validate([
             'status' => [
                 'required',
@@ -184,8 +190,14 @@ class JobApplicationController extends Controller
         // ✅ Lấy các model liên quan
         $jobseeker = $jobApplication->user;
         $job = $jobApplication->job;
+
+        if (!$job) {
+            return response()->json(['message' => 'Không tìm thấy công việc hoặc công ty liên quan'], 422);
+        }
+
         $company = $job->company;
-        $employerId = $company->user_id ?? null;
+        $employerId = $company->user_id;
+
 
         if (!$employerId) {
             return response()->json(['message' => 'Không tìm thấy nhà tuyển dụng.'], 422);
@@ -226,7 +238,7 @@ class JobApplicationController extends Controller
                     $offerDetails
                 ));
             }
-            
+
 
             if (
                 !empty($data['interview_date']) &&

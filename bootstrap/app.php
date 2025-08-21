@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         // Đăng ký middleware toàn cục (nếu cần)
+        $middleware->append(\App\Http\Middleware\TrustProxies::class);
         $middleware->alias([
             'admin' => AdminMiddleware::class,
             'employer' => \App\Http\Middleware\EmployerMiddleware::class,

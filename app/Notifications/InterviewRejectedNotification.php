@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue; // 👈 thêm
+use App\Mail\SystemNotificationMail;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Queue\ShouldQueue; // 👈 thêm
 
 class InterviewRejectedNotification extends Notification implements ShouldQueue // 👈 implements ShouldQueue
 {
@@ -27,17 +28,15 @@ class InterviewRejectedNotification extends Notification implements ShouldQueue 
 
     public function toMail($notifiable)
     {
-        $mail = (new MailMessage)
-            ->subject('Thông báo từ chối phỏng vấn vị trí ' . $this->job->title)
-            ->greeting('Xin chào ' . $notifiable->name . ',')
-            ->line('Chúng tôi rất tiếc thông báo rằng bạn đã không được chọn cho vị trí "' . $this->job->title . '".');
+        $messageText = 'Chúng tôi rất tiếc thông báo rằng bạn đã không được chọn cho vị trí "' . $this->job->title . '".';
 
         if ($this->rejectionReason) {
-            $mail->line('Lý do: ' . $this->rejectionReason);
+            $messageText .= "\nLý do: " . $this->rejectionReason;
         }
 
-        $mail->line('Cảm ơn bạn đã quan tâm và dành thời gian tham gia phỏng vấn.');
+        $messageText .= "\nCảm ơn bạn đã quan tâm và dành thời gian tham gia phỏng vấn.";
 
-        return $mail;
+        return new SystemNotificationMail($messageText);
     }
+
 }
