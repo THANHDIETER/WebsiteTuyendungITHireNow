@@ -18,7 +18,7 @@ class ApiPaymentController extends Controller
 {
     public function handlePending(Request $request)
     {
-        if ($request->query('token') !== config('app.payment_check_token')) {
+        if ($request->query('token') !== Setting::getValue('token_cron')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

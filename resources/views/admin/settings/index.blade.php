@@ -1,11 +1,6 @@
 @extends('admin.settings.layout')
 
 @section('settings-content')
-    <h2 class="mb-4 fw-bold text-primary">
-        <i class="bi bi-sliders me-2"></i> Quản lý Cấu hình hệ thống
-    </h2>
-
-    {{-- Form thêm cấu hình --}}
     <div class="card shadow-sm mb-4 border-0">
         <div class="card-header bg-primary text-white fw-semibold">
             <i class="bi bi-plus-circle me-2"></i> Thêm hoặc cập nhật cấu hình
@@ -37,16 +32,14 @@
         </div>
     </div>
 
-    {{-- Danh sách cấu hình --}}
     <div class="card shadow-sm border-0">
         <div class="card-header bg-light fw-semibold d-flex justify-content-between align-items-center">
             <div>
                 <i class="bi bi-database me-2 text-warning"></i> Danh sách cấu hình
             </div>
 
-            <form method="POST" action="{{ route('admin.settings.defaults') }}"
-                  class="d-inline needs-confirm-restore"
-                  data-message="Khôi phục tất cả cấu hình về mặc định?">
+            <form method="POST" action="{{ route('admin.settings.defaults') }}" class="d-inline needs-confirm-restore"
+                data-message="Khôi phục tất cả cấu hình về mặc định?">
                 @csrf
                 <button class="btn btn-outline-secondary btn-sm">
                     <i class="bi bi-arrow-counterclockwise me-1"></i> Khôi phục mặc định
@@ -75,7 +68,7 @@
                                     @csrf
                                     <input type="hidden" name="key" value="{{ $setting->key }}">
                                     <input type="text" name="name" value="{{ $setting->name }}"
-                                           class="form-control form-control-sm">
+                                        class="form-control form-control-sm">
                             </td>
                             <td class="text-muted"><code>{{ $setting->key }}</code></td>
                             <td>
@@ -83,14 +76,15 @@
                                     <select name="value" class="form-select form-select-sm">
                                         <option value="alpha" {{ $setting->value === 'alpha' ? 'selected' : '' }}>Chỉ chữ</option>
                                         <option value="num" {{ $setting->value === 'num' ? 'selected' : '' }}>Chỉ số</option>
-                                        <option value="alphanum" {{ $setting->value === 'alphanum' ? 'selected' : '' }}>Chữ + Số</option>
+                                        <option value="alphanum" {{ $setting->value === 'alphanum' ? 'selected' : '' }}>Chữ + Số
+                                        </option>
                                     </select>
                                 @elseif($setting->key === 'random_length')
                                     <input type="number" name="value" value="{{ $setting->value }}"
-                                           class="form-control form-control-sm" min="6" max="20" required>
+                                        class="form-control form-control-sm" min="6" max="20" required>
                                 @else
                                     <input type="text" name="value" value="{{ $setting->value }}"
-                                           class="form-control form-control-sm">
+                                        class="form-control form-control-sm">
                                 @endif
                             </td>
                             <td class="text-center">
@@ -101,8 +95,8 @@
                             </td>
                             <td class="text-center">
                                 <form action="{{ route('admin.settings.delete', $setting->id) }}" method="POST"
-                                      class="d-inline needs-confirm-delete"
-                                      data-message="Bạn có chắc muốn xoá cấu hình '{{ $setting->name }}'?">
+                                    class="d-inline needs-confirm-delete"
+                                    data-message="Bạn có chắc muốn xoá cấu hình '{{ $setting->name }}'?">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger">

@@ -14,7 +14,8 @@ use App\Http\Controllers\Admin\{
     BankAccountController,
     EmployerController,
     BlogController,
-    LogoController
+    LogoController,
+    AiConfigController
 };
 use App\Http\Controllers\Admin\SeekerProfileController;
 
@@ -111,6 +112,7 @@ Route::prefix('admin')
 
         Route::get('logos', [LogoController::class, 'index'])->name('logos.index');
         Route::post('logos/update/{type}', [LogoController::class, 'updateSingle'])->name('logos.updateSingle');
+        Route::post('/logos/update-all', [LogoController::class, 'updateAll'])->name('logos.updateAll');
 
         Route::prefix('blogs')->name('blogs.')->controller(BlogController::class)->group(function () {
             Route::get('/', 'index')->name('index');
@@ -131,4 +133,6 @@ Route::prefix('admin')
             Route::put('/{id}', [EmployerController::class, 'update'])->name('update');      // lưu sửa
             Route::delete('/{id}', [EmployerController::class, 'destroy'])->name('destroy'); // xóa mềm
         });
+         Route::get('ai-configs', [AiConfigController::class, 'index'])->name('ai-configs.index');
+        Route::post('ai-configs/update-all', [AiConfigController::class, 'updateAll'])->name('ai-configs.updateAll');
     });

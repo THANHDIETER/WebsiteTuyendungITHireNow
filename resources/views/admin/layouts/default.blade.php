@@ -41,6 +41,7 @@
         window.APP_NAME = "{{ config('app.name') }}";
     </script> -->
     @stack('scripts')
+    @yield('scripts')
 
 </body>
 

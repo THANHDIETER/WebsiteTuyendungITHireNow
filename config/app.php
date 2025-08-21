@@ -14,8 +14,6 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'payment_check_token' => env('PAYMENT_CHECK_TOKEN', 'default_token'),
-
 
     /*
     |--------------------------------------------------------------------------

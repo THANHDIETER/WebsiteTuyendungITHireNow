@@ -2,39 +2,37 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Models\Job;
+use App\Models\Setting;
+use App\Models\AiConfig;
+use Illuminate\Http\Request;
 use App\Services\OpenAIService;
+use App\Jobs\SendTelegramMessage;
 use App\Services\TelegramService;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class JobApprovalController extends Controller
 {
     public function sync(Request $request)
     {
-        if ($request->query('token') !== config('app.payment_check_token')) {
+        if ($request->query('token') !== Setting::getValue('token_cron')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $openAI = app(OpenAIService::class);
-        $telegram = app(TelegramService::class);
 
-        $blacklist = [
-            'đm',
-            'con chó',
-            'loại từ tục tĩu khác',
-            'bậy bạ',
-            'spam',
-            'xxx',
-        ];
+        $blacklist = json_decode(AiConfig::getValue('ai_blacklist', '[]'), true);
+        if (!is_array($blacklist)) {
+            $blacklist = [];
+        }
+        $aiPrompt = AiConfig::getValue('ai_prompt', "Tiêu đề: {{title}}\nMô tả: {{description}}\nYêu cầu: {{requirements}}\nQuyền lợi: {{benefits}}");
 
         $jobs = Job::where('status', 'pending')
             ->whereNull('ai_processed_at')
             ->orderBy('created_at', 'asc')
             ->limit(10)
             ->get();
-
         $approvedCount = 0;
         $rejectedCount = 0;
 
@@ -94,6 +92,13 @@ class JobApprovalController extends Controller
                 $fieldErrors[] = 'Thiếu phần yêu cầu ứng viên (requirements).';
             } elseif (mb_strlen($requirements) < 30) {
                 $fieldErrors[] = 'Phần yêu cầu ứng viên quá ngắn.';
+            } else {
+                foreach ($blacklist as $badWord) {
+                    if (stripos($requirements, $badWord) !== false) {
+                        $fieldErrors[] = "Phần yêu cầu chứa từ không phù hợp: '{$badWord}'.";
+                        break;
+                    }
+                }
             }
 
             // 4. Kiểm tra quyền lợi (benefits)
@@ -111,6 +116,13 @@ class JobApprovalController extends Controller
                 $fieldErrors[] = 'Thiếu phần quyền lợi (benefits).';
             } elseif (mb_strlen($benefits) < 30) {
                 $fieldErrors[] = 'Phần quyền lợi quá ngắn.';
+            } else {
+                foreach ($blacklist as $badWord) {
+                    if (stripos($benefits, $badWord) !== false) {
+                        $fieldErrors[] = "Phần quyền lợi chứa từ không phù hợp: '{$badWord}'.";
+                        break;
+                    }
+                }
             }
 
             // 5. Lương
@@ -181,7 +193,7 @@ class JobApprovalController extends Controller
                     . "Lý do: " . implode(' | ', $fieldErrors);
 
                 try {
-                    $telegram->sendMessage($message);
+                    SendTelegramMessage::dispatch($message);
                 } catch (\Exception $e) {
                     Log::error('Gửi Telegram thất bại: ' . $e->getMessage());
                 }
@@ -191,8 +203,35 @@ class JobApprovalController extends Controller
             }
 
             // Gọi AI đánh giá tổng thể tiêu đề + mô tả + yêu cầu + quyền lợi
-            $fullContent = "Tiêu đề: {$job->title}\nMô tả: {$plainDescription}\nYêu cầu: {$requirements}\nQuyền lợi: {$benefits}";
-            // dd($fullContent);
+            $fullContent = str_replace(
+                [
+                    '{{title}}',
+                    '{{description}}',
+                    '{{requirements}}',
+                    '{{benefits}}',
+                    '{{salary_min}}',
+                    '{{salary_max}}',
+                    '{{currency}}',
+                    '{{job_type}}',
+                    '{{experience}}',
+                    '{{jobLanguage}}',
+                ],
+                [
+                    $job->title,
+                    $plainDescription,
+                    $requirements,
+                    $benefits,
+                    $job->salary_min,
+                    $job->salary_max,
+                    $job->currency,
+                    $job->jobType->name,
+                    $job->experience->name,
+                    $job->jobLanguage->name,
+
+                ],
+                $aiPrompt
+            );
+
             $result = $openAI->analyzeJobDescription($fullContent);
 
             if ($result['ok']) {
@@ -207,7 +246,7 @@ class JobApprovalController extends Controller
                     . "Tin ID: {$job->id}";
 
                 try {
-                    $telegram->sendMessage($message);
+                    SendTelegramMessage::dispatch($message);
                 } catch (\Exception $e) {
                     Log::error('Gửi Telegram thất bại: ' . $e->getMessage());
                 }
@@ -215,7 +254,7 @@ class JobApprovalController extends Controller
                 $approvedCount++;
             } else {
                 $job->status = 'pending';  // sửa lại từ 'pending' thành 'rejected'
-                // $job->ai_processed_at = now();
+                $job->ai_processed_at = now();
                 $job->save();
 
                 $message = "⚠️ Bài tuyển dụng không được duyệt (AI đánh giá):\n"
@@ -225,7 +264,7 @@ class JobApprovalController extends Controller
                     . "Lý do: {$result['reason']}";
 
                 try {
-                    $telegram->sendMessage($message);
+                    SendTelegramMessage::dispatch($message);
                 } catch (\Exception $e) {
                     Log::error('Gửi Telegram thất bại: ' . $e->getMessage());
                 }

@@ -34,12 +34,22 @@ class Setting extends Model
             ],
             'payment_timeout_minutes' => [
                 'name' => 'Thời gian Show nạp tiền',
-                'value' => '6'
+                'value' => '10'
+            ],
+            'token_cron' => [
+                'name' => 'Token Cron',
+                'value' => 'ABC123',
+            ],
+            'telegram_bot_token' => [
+                'name' => 'Telegram Bot Token',
+                'value' => ''
+            ],
+            'telegram_chat_id' => [
+                'name' => 'Telegram Chat ID',
+                'value' => ''
             ],
         ];
     }
-
-
 
     public static function generateTransactionId(): string
     {

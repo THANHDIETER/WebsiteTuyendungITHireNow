@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
+use App\Models\BankLog;
+use App\Models\Setting;
+use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\BankAccount;
-use App\Models\BankLog;
 use Illuminate\Support\Facades\Http;
-use Carbon\Carbon;
 
 class BankSyncController extends Controller
 {
     public function sync(Request $request)
     {
-         if ($request->query('token') !== config('app.payment_check_token')) {
+        if ($request->query('token') !== Setting::getValue('token_cron')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
