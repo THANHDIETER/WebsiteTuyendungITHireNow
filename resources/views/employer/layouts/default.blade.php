@@ -8,9 +8,9 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-        @vite(['resources/js/app.js'])
+    @vite(['resources/js/app.js'])
 
-    @include('admin.layouts.partials.header')
+    @include('employer.layouts.partials.header')
 
     <!-- Navbar -->
     @include('employer.layouts.partials.navbar')

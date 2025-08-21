@@ -36,7 +36,10 @@ class InterviewRejectedNotification extends Notification implements ShouldQueue 
 
         $messageText .= "\nCảm ơn bạn đã quan tâm và dành thời gian tham gia phỏng vấn.";
 
-        return new SystemNotificationMail($messageText);
+        $mail = new SystemNotificationMail($messageText);
+        $mail->to($notifiable->email);
+
+        return $mail;   
     }
 
 }

@@ -41,10 +41,7 @@
                 {{ $job->meta_description ?? '-' }}</div>
         </div>
 
-        <div class="col-md-6">
-    <i class="fa-solid fa-folder-open me-1"></i><strong>Danh mục: </strong>
-    {{ $job->categories->isNotEmpty() ? $job->categories->pluck('name')->join(', ') : '-' }}
-</div>
+        <hr>
 
         <div class="mb-4">
             <h6 class="fw-bold mb-2"><i class="fa-solid fa-file-lines me-1"></i>Mô tả công việc</h6>
@@ -80,7 +77,6 @@
             @endif
         @endif
 
-
         <hr>
 
         <div class="mb-4">
@@ -95,43 +91,5 @@
         <div class="text-end text-muted small mt-3">
             <i class="fa-solid fa-clock me-1"></i>Ngày tạo: {{ $job->created_at->format('d/m/Y H:i') }}
         </div>
-    </div>
-
-    <hr class="my-4">
-
-    <div class="mb-3">
-        <h6 class="fw-bold"><i class="fa-solid fa-file-lines me-1"></i>Mô tả công việc</h6>
-        <p class="white-space-pre-line">{!! $job->description !!}</p>
-    </div>
-    <hr>
-    <div class="mb-3">
-        <h6 class="fw-bold"><i class="fa-solid fa-thumbtack me-1"></i>Yêu cầu công việc</h6>
-        <p class="white-space-pre-line">{!! $job->requirements !!}</p>
-    </div>
-    <hr>
-
-    @if (!empty($job->benefits))
-        <div class="mb-3">
-            <h6 class="fw-bold"><i class="fa-solid fa-gift me-1"></i>Quyền lợi</h6>
-            <ul class="ps-3">
-                @foreach (is_array($job->benefits) ? $job->benefits : (json_decode($job->benefits, true) ?? []) as $benefit)
-                    <li>{{ $benefit }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <hr>
-    <div class="mb-2">
-        <h6 class="fw-bold"><i class="fa-solid fa-screwdriver-wrench me-1"></i>Kỹ năng</h6>
-        @forelse ($job->skills as $skill)
-            <span class="badge bg-primary me-1">{{ $skill->name }}{{ $skill->pivot->required ? ' (*)' : '' }}</span>
-        @empty
-            <span class="text-muted">Không có kỹ năng</span>
-        @endforelse
-    </div>
-
-    <div class="text-end text-muted small mt-3">
-        <i class="fa-solid fa-clock me-1"></i>Ngày tạo: {{ $job->created_at->format('d/m/Y H:i') }}
     </div>
 </div>

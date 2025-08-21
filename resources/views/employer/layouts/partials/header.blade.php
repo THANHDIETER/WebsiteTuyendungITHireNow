@@ -76,7 +76,7 @@
                                   </div>
                                   <div class="fw-semibold">Thông báo</div>
                               </div>
-                              <a href="{{ route('employer.notifications.index') }}" class="noti-card__link">Xem tất
+                              <a href="{{ route('notifications.index') }}" class="noti-card__link">Xem tất
                                   cả</a>
                           </div>
 
@@ -132,7 +132,8 @@
                           </div>
                       </div>
                   </li>
-
+    
+                    {{-- MESSAGES --}}
                   {{-- CHAT --}}
                   <li class="custom-dropdown">
                       <a href="{{ route('chat.index') }}">
@@ -499,11 +500,7 @@
       // ====== Chat badge ======
       document.addEventListener('DOMContentLoaded', function() {
           const chatDot = document.getElementById('chat-dot');
-          const authId = {
-              {
-                  auth() - > id() ?? 'null'
-              }
-          };
+          const authId = {{auth() -> id() ?? 'null'}};
           if (window.Echo && authId) {
               window.Echo.private('user.' + authId)
                   .listen('MessageNotification', (e) => {

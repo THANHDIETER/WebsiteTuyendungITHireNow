@@ -175,8 +175,8 @@
 @push('scripts')
     <script>
         const conversationId = {{ $conversationId ? $conversationId : 'null' }};
-        const typingUrl = {!! $conversationId ? '"' . secure_url("chat/$conversationId/typing") . '"' : 'null' !!};
-        const sendUrl = {!! $conversationId ? '"' . secure_url("chat/$conversationId") . '"' : 'null' !!};
+        const typingUrl = {!! $conversationId ? '"' . route('chat.typing', $conversationId) . '"' : 'null' !!};
+        const sendUrl = {!! $conversationId ? '"' . route('chat.send', $conversationId) . '"' : 'null' !!};
         const authId = {{ auth()->id() }};
         const chatForm = document.getElementById('chat-form');
         const messageInput = document.getElementById('message-input');

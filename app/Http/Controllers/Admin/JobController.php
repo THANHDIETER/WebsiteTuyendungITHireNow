@@ -36,28 +36,27 @@ class JobController extends Controller
     }
 
     public function show($id)
+    {
+        $job = Job::with([
+            'company',
+            'categories',
+            'skills',
+            'jobType',
+            'level',
+            'experience',
+            'language',
+            'remotePolicy',
+            'location',
 
-{
-    $job = Job::with([
-        'company',
-        'categories',
-        'skills',
-        'jobType',
-        'level',
-        'experience',
-        'language',
-        'remotePolicy',
-        'location',
 
+        ])->find($id);
 
-    ])->find($id);
-
-   if (!$job) {
-    return response()->json([
-        'success' => false,
-        'message' => 'Tin tuyển dụng không tồn tại.',
-    ], 404);
-}
+        if (!$job) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tin tuyển dụng không tồn tại.',
+            ], 404);
+        }
 
         if (!$job) {
             return response()->json([
@@ -96,8 +95,7 @@ class JobController extends Controller
         // Gửi notification cho nhà tuyển dụng
         $employer = $job->company->user;
         $employer->notify(new JobApprovedNotification($job));
-        event(new GlobalNotificationEvent("Tin tuyển dụng '{$job->title}' đã được duyệt!"));
-
+        // event(new GlobalNotificationEvent("Tin tuyển dụng '{$job->title}' đã được duyệt!"));
         return response()->json([
             'success' => true,
             'message' => 'Tin đã được duyệt.',

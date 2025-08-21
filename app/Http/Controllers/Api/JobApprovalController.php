@@ -8,12 +8,42 @@ use App\Models\AiConfig;
 use Illuminate\Http\Request;
 use App\Services\OpenAIService;
 use App\Jobs\SendTelegramMessage;
-use App\Services\TelegramService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Events\GlobalNotificationEvent;
+use App\Notifications\Employer\JobApprovedNotification;
+use App\Notifications\Employer\JobRejectedNotification;
 
 class JobApprovalController extends Controller
 {
+    /**
+     * Làm sạch text đầu vào
+     */
+    private function sanitizeText($raw): string
+    {
+        if (is_array($raw)) {
+            $raw = json_encode($raw);
+        }
+        $text = strip_tags((string) $raw);
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = str_replace(["\u{A0}", "\xc2\xa0"], ' ', $text);
+        $text = preg_replace('/\s+/', ' ', $text);
+        return trim($text);
+    }
+
+    /**
+     * Kiểm tra blacklist trong text
+     */
+    private function checkBlacklist(string $text, array $blacklist): ?string
+    {
+        foreach ($blacklist as $word) {
+            if (stripos($text, $word) !== false) {
+                return $word;
+            }
+        }
+        return null;
+    }
+
     public function sync(Request $request)
     {
         if ($request->query('token') !== Setting::getValue('token_cron')) {
@@ -22,10 +52,13 @@ class JobApprovalController extends Controller
 
         $openAI = app(OpenAIService::class);
 
-        $blacklist = json_decode(AiConfig::getValue('ai_blacklist', '[]'), true);
-        if (!is_array($blacklist)) {
-            $blacklist = [];
-        }
+        // Lấy blacklist và ép về array string
+        $blacklistRaw = json_decode(AiConfig::getValue('ai_blacklist', '[]'), true) ?: [];
+        $blacklist = array_map(function ($item) {
+            return is_array($item) && isset($item['value']) ? (string) $item['value'] : (string) $item;
+        }, $blacklistRaw);
+        $blacklist = array_filter($blacklist, fn($w) => trim($w) !== '');
+
         $aiPrompt = AiConfig::getValue('ai_prompt', "Tiêu đề: {{title}}\nMô tả: {{description}}\nYêu cầu: {{requirements}}\nQuyền lợi: {{benefits}}");
 
         $jobs = Job::where('status', 'pending')
@@ -33,99 +66,52 @@ class JobApprovalController extends Controller
             ->orderBy('created_at', 'asc')
             ->limit(10)
             ->get();
+
         $approvedCount = 0;
         $rejectedCount = 0;
 
         foreach ($jobs as $job) {
             $fieldErrors = [];
 
-            // 1. Kiểm tra tiêu đề
+            /** 1. Tiêu đề */
             $title = trim($job->title);
             if (empty($title)) {
                 $fieldErrors[] = 'Tiêu đề tuyển dụng bị trống.';
-            } else {
-                foreach ($blacklist as $badWord) {
-                    if (stripos($title, $badWord) !== false) {
-                        $fieldErrors[] = "Tiêu đề chứa từ không phù hợp: '{$badWord}'.";
-                        break;
-                    }
-                }
+            } elseif ($bad = $this->checkBlacklist($title, $blacklist)) {
+                $fieldErrors[] = "Tiêu đề chứa từ không phù hợp: '{$bad}'.";
             }
 
-            // 2. Kiểm tra mô tả
-            $descriptionRaw = $job->description;
-            if (is_array($descriptionRaw)) {
-                $descriptionRaw = json_encode($descriptionRaw);
-            }
-
-            $plainDescription = strip_tags((string) $descriptionRaw);
-            $plainDescription = html_entity_decode($plainDescription, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $plainDescription = str_replace(["\u{A0}", "\xc2\xa0"], ' ', $plainDescription);
-            $plainDescription = preg_replace('/\s+/', ' ', $plainDescription);
-            $plainDescription = trim($plainDescription);
-
+            /** 2. Mô tả */
+            $plainDescription = $this->sanitizeText($job->description);
             if (empty($plainDescription)) {
                 $fieldErrors[] = 'Mô tả tuyển dụng bị trống hoặc không rõ ràng.';
             } elseif (mb_strlen($plainDescription) < 30) {
                 $fieldErrors[] = 'Mô tả tuyển dụng quá ngắn, cần chi tiết hơn.';
-            } else {
-                foreach ($blacklist as $badWord) {
-                    if (stripos($plainDescription, $badWord) !== false) {
-                        $fieldErrors[] = "Mô tả chứa từ không phù hợp: '{$badWord}'.";
-                        break;
-                    }
-                }
+            } elseif ($bad = $this->checkBlacklist($plainDescription, $blacklist)) {
+                $fieldErrors[] = "Mô tả chứa từ không phù hợp: '{$bad}'.";
             }
 
-            // 3. Kiểm tra yêu cầu (requirements)
-            $requirementsRaw = $job->requirements;
-            if (is_array($requirementsRaw)) {
-                $requirementsRaw = json_encode($requirementsRaw);
-            }
-            $requirements = strip_tags((string) $requirementsRaw);
-            $requirements = html_entity_decode($requirements, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $requirements = str_replace(["\u{A0}", "\xc2\xa0"], ' ', $requirements);
-            $requirements = preg_replace('/\s+/', ' ', $requirements);
-            $requirements = trim($requirements);
-
+            /** 3. Yêu cầu */
+            $requirements = $this->sanitizeText($job->requirements);
             if (empty($requirements)) {
                 $fieldErrors[] = 'Thiếu phần yêu cầu ứng viên (requirements).';
             } elseif (mb_strlen($requirements) < 30) {
                 $fieldErrors[] = 'Phần yêu cầu ứng viên quá ngắn.';
-            } else {
-                foreach ($blacklist as $badWord) {
-                    if (stripos($requirements, $badWord) !== false) {
-                        $fieldErrors[] = "Phần yêu cầu chứa từ không phù hợp: '{$badWord}'.";
-                        break;
-                    }
-                }
+            } elseif ($bad = $this->checkBlacklist($requirements, $blacklist)) {
+                $fieldErrors[] = "Phần yêu cầu chứa từ không phù hợp: '{$bad}'.";
             }
 
-            // 4. Kiểm tra quyền lợi (benefits)
-            $benefitsRaw = $job->benefits;
-            if (is_array($benefitsRaw)) {
-                $benefitsRaw = json_encode($benefitsRaw);
-            }
-            $benefits = strip_tags((string) $benefitsRaw);
-            $benefits = html_entity_decode($benefits, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $benefits = str_replace(["\u{A0}", "\xc2\xa0"], ' ', $benefits);
-            $benefits = preg_replace('/\s+/', ' ', $benefits);
-            $benefits = trim($benefits);
-
+            /** 4. Quyền lợi */
+            $benefits = $this->sanitizeText($job->benefits);
             if (empty($benefits)) {
                 $fieldErrors[] = 'Thiếu phần quyền lợi (benefits).';
             } elseif (mb_strlen($benefits) < 30) {
                 $fieldErrors[] = 'Phần quyền lợi quá ngắn.';
-            } else {
-                foreach ($blacklist as $badWord) {
-                    if (stripos($benefits, $badWord) !== false) {
-                        $fieldErrors[] = "Phần quyền lợi chứa từ không phù hợp: '{$badWord}'.";
-                        break;
-                    }
-                }
+            } elseif ($bad = $this->checkBlacklist($benefits, $blacklist)) {
+                $fieldErrors[] = "Phần quyền lợi chứa từ không phù hợp: '{$bad}'.";
             }
 
-            // 5. Lương
+            /** 5. Lương */
             if (!$job->salary_negotiable) {
                 if (empty($job->salary_min) && empty($job->salary_max)) {
                     $fieldErrors[] = 'Mức lương chưa được cung cấp hoặc không có thông báo thương lượng.';
@@ -139,14 +125,13 @@ class JobApprovalController extends Controller
                 }
             }
 
+            /** 6. Các trường khác */
             if (empty($job->currency)) {
                 $fieldErrors[] = 'Đơn vị tiền tệ chưa được chỉ định.';
             }
-
             if (empty($job->location_id) && empty($job->address) && empty($job->remote_policy_id)) {
                 $fieldErrors[] = 'Chưa xác định địa điểm làm việc hoặc chính sách làm việc từ xa.';
             }
-
             if (empty($job->deadline)) {
                 $fieldErrors[] = 'Hạn nộp hồ sơ chưa được cung cấp.';
             } else {
@@ -159,7 +144,6 @@ class JobApprovalController extends Controller
                     $fieldErrors[] = 'Hạn nộp hồ sơ không được vượt quá 1 năm.';
                 }
             }
-
             if (empty($job->company_id)) {
                 $fieldErrors[] = 'Công ty đăng tin không hợp lệ.';
             }
@@ -175,12 +159,11 @@ class JobApprovalController extends Controller
             if (empty($job->language_id)) {
                 $fieldErrors[] = 'Ngôn ngữ yêu cầu chưa được chỉ định.';
             }
-
             if ($job->status !== 'pending') {
                 $fieldErrors[] = 'Tin tuyển dụng không ở trạng thái chờ duyệt.';
             }
 
-            // Nếu có lỗi dữ liệu thì reject ngay
+            /** Nếu có lỗi thì reject ngay */
             if (!empty($fieldErrors)) {
                 $job->status = 'rejected';
                 $job->ai_processed_at = now();
@@ -191,7 +174,9 @@ class JobApprovalController extends Controller
                     . "Công ty ID: {$job->company_id}\n"
                     . "Tin ID: {$job->id}\n"
                     . "Lý do: " . implode(' | ', $fieldErrors);
-
+                    
+                $employer = $job->company->user;
+                $employer->notify(new JobRejectedNotification($job));
                 try {
                     SendTelegramMessage::dispatch($message);
                 } catch (\Exception $e) {
@@ -202,7 +187,7 @@ class JobApprovalController extends Controller
                 continue;
             }
 
-            // Gọi AI đánh giá tổng thể tiêu đề + mô tả + yêu cầu + quyền lợi
+            /** Gọi AI đánh giá tổng thể */
             $fullContent = str_replace(
                 [
                     '{{title}}',
@@ -227,7 +212,6 @@ class JobApprovalController extends Controller
                     $job->jobType->name,
                     $job->experience->name,
                     $job->jobLanguage->name,
-
                 ],
                 $aiPrompt
             );
@@ -250,10 +234,13 @@ class JobApprovalController extends Controller
                 } catch (\Exception $e) {
                     Log::error('Gửi Telegram thất bại: ' . $e->getMessage());
                 }
-
+                $employer = $job->company->user;
+                $employer->notify(new JobApprovedNotification($job));
+                // event(new GlobalNotificationEvent("Tin tuyển dụng '{$job->title}' đã được duyệt!"));
+                // return $employer;
                 $approvedCount++;
             } else {
-                $job->status = 'pending';  // sửa lại từ 'pending' thành 'rejected'
+                $job->status = 'pending'; // đã sửa lại cho đúng
                 $job->ai_processed_at = now();
                 $job->save();
 
@@ -263,6 +250,8 @@ class JobApprovalController extends Controller
                     . "Tin ID: {$job->id}\n"
                     . "Lý do: {$result['reason']}";
 
+                $employer = $job->company->user;
+                $employer->notify(new JobRejectedNotification($job));
                 try {
                     SendTelegramMessage::dispatch($message);
                 } catch (\Exception $e) {
@@ -274,7 +263,7 @@ class JobApprovalController extends Controller
         }
 
         return response()->json([
-            'message' => 'Hoàn thành xử lý tin tuyển dụng',
+            'message'  => 'Hoàn thành xử lý tin tuyển dụng',
             'approved' => $approvedCount,
             'rejected' => $rejectedCount,
         ], 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

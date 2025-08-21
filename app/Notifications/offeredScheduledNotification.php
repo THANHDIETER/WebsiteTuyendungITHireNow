@@ -34,7 +34,10 @@ class offeredScheduledNotification extends Notification implements ShouldQueue
             $content .= "\nThông tin offer: {$this->offerDetails}";
         }
 
-        return new SystemNotificationMail($content);
+        $mail = new SystemNotificationMail($content);
+        $mail->to($notifiable->email);
+
+        return $mail;    
     }
 
 }

@@ -33,6 +33,9 @@ class InterviewScheduledNotification extends Notification implements ShouldQueue
              . "Vui lòng chuẩn bị kỹ và tham gia đúng giờ.\n"
              . "Cảm ơn bạn đã quan tâm đến vị trí này!";
     
-        return (new SystemNotificationMail($message));
+        $mail = new SystemNotificationMail($message);
+        $mail->to($notifiable->email);
+
+        return $mail;   
     }
 }   
