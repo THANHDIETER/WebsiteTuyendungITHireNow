@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Logo;
 use App\Models\Company;
+use App\Models\SeoSetting;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator;
-use App\Models\Logo;
-use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,21 +26,34 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (app()->environment('production')) {
-                URL::forceScheme('https');
+            URL::forceScheme('https');
         }
-        Paginator::useBootstrapFive(); 
+
+        Paginator::useBootstrapFive();
+
+        // Composer cho toàn bộ view
         view()->composer('*', function ($view) {
+            // favicon
             $favicon = Logo::where('type', 'site')
                 ->where('is_active', true)
                 ->first();
-            $view->with('favicon', $favicon);
-            View::composer('employer.layouts.*', function ($view) {
-                if (Auth::check()) {
-                    $company = Company::where('user_id', Auth::id())->first();
-                    $view->with('employerCompany', $company);
-                }
-            });
-            
+
+            // seo
+            $seo = SeoSetting::first();
+
+            $view->with([
+                'favicon' => $favicon,
+                'seo' => $seo,
+            ]);
+        });
+
+        // Composer riêng cho layout employer
+        View::composer('employer.layouts.*', function ($view) {
+            if (Auth::check()) {
+                $company = Company::where('user_id', Auth::id())->first();
+                $view->with('employerCompany', $company);
+            }
         });
     }
+
 }

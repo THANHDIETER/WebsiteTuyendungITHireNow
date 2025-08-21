@@ -1,7 +1,7 @@
 @extends('admin.layouts.default')
 
 @section('content')
-    <div class="container-fluid py-4">
+    <div class="container-fluid">
         <div class="row">
             {{-- Sidebar trái --}}
             <div class="col-md-3">
@@ -19,6 +19,10 @@
                     <a href="{{ route('admin.ai-configs.index') }}"
                         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->routeIs('admin.ai-configs.index') ? 'active' : '' }}">
                         <i class="bi bi-cpu me-2"></i> OPENAI Configs Job
+                    </a>
+                     <a href="{{ route('admin.seo.index') }}"
+                        class="list-group-item list-group-item-action d-flex align-items-center {{ request()->routeIs('admin.seo.index') ? 'active' : '' }}">
+                        <i class="bi bi-globe"></i> Seo 
                     </a>
                 </div>
             </div>

@@ -15,7 +15,8 @@ use App\Http\Controllers\Admin\{
     EmployerController,
     BlogController,
     LogoController,
-    AiConfigController
+    AiConfigController,
+    SeoSettingController,
 };
 use App\Http\Controllers\Admin\SeekerProfileController;
 
@@ -135,4 +136,8 @@ Route::prefix('admin')
         });
          Route::get('ai-configs', [AiConfigController::class, 'index'])->name('ai-configs.index');
         Route::post('ai-configs/update-all', [AiConfigController::class, 'updateAll'])->name('ai-configs.updateAll');
+        Route::get('/seo-setting', [SeoSettingController::class, 'index'])->name('seo.index');
+        Route::post('/seo-setting', [SeoSettingController::class, 'update'])->name('seo.update');
+    
+    
     });
