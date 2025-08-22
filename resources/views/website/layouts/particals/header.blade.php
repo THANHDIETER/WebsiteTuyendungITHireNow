@@ -462,6 +462,36 @@
             });
         }
     });
+    document.addEventListener('DOMContentLoaded', function () {
+        const authId = {{ auth()->id() ?? 'null' }};
+
+        if (window.Echo && authId) {
+            window.Echo.private('user.' + authId)
+                .listen('MessageNotification', (e) => {
+                    console.log('New message notification:', e);
+                    const unread = e.unread_total;
+                    let chatDot = document.getElementById('chat-dot');
+
+                    if (unread > 0) {
+                        if (!chatDot) {
+                            // Nếu chưa có badge -> tạo mới
+                            const link = document.getElementById('chatDropdown');
+                            chatDot = document.createElement('span');
+                            chatDot.id = 'chat-dot';
+                            chatDot.className =
+                                'position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow';
+                            chatDot.style.cssText =
+                                'font-size:10px; min-width:18px; height:18px; padding:0 4px; border:2px solid #fff;';
+                            link.appendChild(chatDot);
+                        }
+                        chatDot.innerText = unread > 99 ? '99+' : unread;
+                        chatDot.style.display = 'flex';
+                    } else {
+                        if (chatDot) chatDot.remove(); // ẩn = xoá khỏi DOM
+                    }
+                });
+        }
+    });
 </script>
 
 <style>

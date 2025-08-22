@@ -44,7 +44,7 @@
                             <th>Danh mục</th>
                             <th>Hình thức</th>
                             <th>Mức lương</th>
-                            <th>Hạn nộp</th>
+                            <!-- <th>Hạn nộp</th> -->
                             <th>Nổi bật</th>
                             <th>Trạng thái</th>
                             <th>Ngày tạo</th>
@@ -64,7 +64,7 @@
                                 </td>
                                 <td>{{ $job->jobType?->name ?? '-' }}</td>
                                 <td>{{ $job->salary_range }}</td>
-                                <td>{{ optional($job->deadline)?->format('d/m/Y') ?? '-' }}</td>
+                                <!-- <td>{{ optional($job->deadline)?->format('d/m/Y') ?? '-' }}</td> -->
                                 <td>{!! $job->featured_badge !!}</td>
                                 <td class="job-status">{!! $job->status_badge !!}</td>
                                 <td>{{ $job->created_at->format('d/m/Y') }}</td>
@@ -136,7 +136,7 @@
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Chi tiết tin tuyển dụng</h5>
+                    <h5 class="modal-title">Trang tiết tin tuyển dụng </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 </div>
                 <div class="modal-body" id="jobDetailContent">

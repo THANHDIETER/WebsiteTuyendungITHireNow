@@ -146,6 +146,17 @@
                               <span>{{ auth()->check() ? auth()->user()->email : 'Chưa đăng nhập' }}</span>
                           </div>
                       </div>
+                      <div class="custom-menu overflow-hidden">
+                          <ul class="list-unstyled m-0 p-0">
+                              <li>
+                                  <a href="{{ route('logout') }}"
+                                      class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                 
+                                      </svg><span>Log Out</span>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
                   </li>
 
               </ul>

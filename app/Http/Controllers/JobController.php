@@ -95,7 +95,7 @@ class JobController extends Controller
         ])->where('slug', $slug)->where('status', 'published')->firstOrFail();
         $relatedJobs = collect();
         $user = Auth::user();
-        $profile = $user->profile;
+        $profile = $user->profile ?? null;
         // Lấy danh sách CV của ứng viên
         $cvs = $profile ? $profile->cvs : collect();
         // Lấy các công việc liên quan cùng danh mục (nếu có)

@@ -40,20 +40,16 @@
                             <div class="col-12 col-sm-auto text-center mt-4">
                                 @php
                                     $company = optional($job->company);
-                                    $logo = $company->logo_url ?: asset('client/assets/img/companies/default-logo.webp');
-                                    $companyName = $company->name ?: 'Công ty';
                                 @endphp
-                                <img src="{{ $logo }}" alt="Logo {{ $companyName }}"
+                                <img src="{{ asset('storage/' . $company->logo_url) }}" alt="{{ $company->name ?? ''}}"
                                     class="img-fluid rounded border bg-light"
-                                    style="width: 110px; height: 110px; object-fit: contain;" loading="lazy"
-                                    decoding="async"
-                                    onerror="this.onerror=null;this.src='{{ asset('client/assets/img/companies/default-logo.webp') }}';">
+                                    style="width: 110px; height: 110px; object-fit: contain;" loading="lazy">
                             </div>
 
                             {{-- Title + meta --}}
                             <div class="col-12 col-sm">
                                 <h1 class="h5 h4-md mb-1 text-wrap">{{ $job->title }}</h1>
-                                <p class="h6 text-muted mb-2">{{ $companyName }}</p>
+                                <p class="h6 text-muted mb-2">{{ $company->name ?? ''}} </p>
                                 <ul class="list-unstyled d-flex flex-wrap gap-3 small mb-0">
                                     <li class="d-inline-flex align-items-center">
                                         <i class="icofont-location-pin me-1"></i>
@@ -103,12 +99,27 @@
                                         </div>
                                     @endif
 
-                                    <div class="d-none d-sm-block">
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#applyModal">
-                                            Ứng tuyển ngay
-                                        </button>
-                                    </div>
+                                    {{-- Nếu đã đăng nhập và là ứng viên --}}
+                                    @auth
+                                        @if (auth()->user()->role === 'job_seeker')
+                                            <div class="d-none d-sm-block">
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                                    data-bs-target="#applyModal">
+                                                    Ứng tuyển ngay
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endauth
+
+                                    {{-- Nếu chưa đăng nhập --}}
+                                    @guest
+                                        <div class="d-none d-sm-block">
+                                            <a href="{{ route('showLoginForm') }}" class="btn btn-warning">
+                                                Đăng nhập để ứng tuyển
+                                            </a>
+                                        </div>
+                                    @endguest
+
                                 </div>
                             </div>
                         </div> {{-- row --}}
@@ -130,27 +141,8 @@
                         </section>
                         <section class="mb-4">
                             <h2 class="h5 mb-3">Phúc lợi</h2>
-                            <div>
-                                @php
-                                    $benefits = [];
-                                    if (!empty($job->benefits)) {
-                                        if (is_array($job->benefits))
-                                            $benefits = $job->benefits;
-                                        else
-                                            $benefits = preg_split('/\r\n|\n|\r|,/', $job->benefits);
-                                    }
-                                    $benefits = array_values(array_filter(array_map('trim', $benefits), fn($b) => $b !== ''));
-                                @endphp
-                                @if (!empty($benefits))
-                                    <ul class="list-unstyled m-0">
-                                        @foreach ($benefits as $benefit)
-                                            <li class="d-flex align-items-start gap-2 py-1"><i
-                                                    class="icofont-check text-success mt-1"></i><span>{{ $benefit }}</span></li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    <p class="text-muted mb-0">Không có thông tin phúc lợi.</p>
-                                @endif
+                           <div class="ob-content lh-lg">
+                                {!! nl2br(e($job->benefits)) !!}
                             </div>
                         </section>
                     </div>

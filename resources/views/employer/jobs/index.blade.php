@@ -35,24 +35,23 @@
                         <div class="card h-100 shadow-sm border">
 
                             {{-- HEADER --}}
-<div class="d-flex align-items-center p-3 border-bottom" style="min-height: 85px;">
-    <img src="{{ $job->company?->logo_url }}"
-        alt="{{ $job->company->name ?? 'Company' }}"
-        class="rounded border me-3 bg-white shadow-sm"
-        style="width: 56px; height: 56px; object-fit: contain;">
+                            <div class="d-flex align-items-center p-3 border-bottom" style="min-height: 85px;">
+                                <img src="{{ asset('storage/' . $job->company->logo_url) }}"
+                                    alt="{{ $job->company->name ?? 'Company' }}" class="rounded border me-3 bg-white shadow-sm"
+                                    style="width: 56px; height: 56px; object-fit: contain;">
 
-    <div class="flex-grow-1">
-        <h6 class="fw-bold mb-1 text-truncate">
-            <a href="#" class="text-dark">
-                {{ $job->company->name ?? 'Công ty chưa cập nhật' }}
-            </a>
-        </h6>
-        <small class="text-muted">
-            <i class="bi bi-geo-alt"></i>
-            {{ $job->address ?? 'Chưa cập nhật' }}
-        </small>
-    </div>
-</div>
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold mb-1 text-truncate">
+                                        <a href="#" class="text-dark">
+                                            {{ $job->company->name ?? 'Công ty chưa cập nhật' }}
+                                        </a>
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-geo-alt"></i>
+                                        {{ $job->address ?? 'Chưa cập nhật' }}
+                                    </small>
+                                </div>
+                            </div>
 
 
                             {{-- BODY --}}
@@ -122,8 +121,7 @@
                                     </strong>
                                     <div class="text-muted small">/tháng</div>
                                 </div>
-                                <a href="{{ route('employer.jobs.show', $job->id) }}"
-                                    class="btn btn-outline-primary btn-sm">
+                                <a href="{{ route('employer.jobs.show', $job->id) }}" class="btn btn-outline-primary btn-sm">
                                     Xem chi tiết
                                 </a>
                             </div>

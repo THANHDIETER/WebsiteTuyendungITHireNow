@@ -12,13 +12,7 @@
             <ul class="nav-menu list-unstyled">
                 <li><a href="{{ route('home') }}"><i class="bi bi-house-door me-2"></i>Trang chủ</a></li>
 
-                <li>
-                    <a href="{{ route('cong-viec') }}"><i class="bi bi-search me-2"></i>Tìm việc</a>
-                    <ul class="sub-menu list-unstyled ms-3">
-                        <li><a href="{{ route('cong-viec') }}"><i class="bi bi-list-ul me-2"></i>Danh sách việc làm</a></li>
-                        <li><a href="{{ route('chi-tiet-cong-viec') }}"><i class="bi bi-file-earmark-text me-2"></i>Chi tiết việc làm</a></li>
-                    </ul>
-                </li>
+                <li><a href="{{ route('jobs.index') }}"><i class="bi bi-search me-2"></i>Tìm việc làm</a></li>
 
                 <!-- <li><a href="{{ route('chi-tiet-nhan-vien') }}"><i class="bi bi-building me-2"></i>Chi tiết nhà tuyển dụng</a></li> -->
 <!-- 

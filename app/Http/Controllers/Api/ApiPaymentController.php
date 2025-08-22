@@ -33,7 +33,7 @@ class ApiPaymentController extends Controller
 
         $pendingPayments = Payment::where('status', 'pending')
             ->orderBy('created_at')
-            ->limit(100)
+            ->limit(5)
             ->get();
 
         foreach ($pendingPayments as $payment) {

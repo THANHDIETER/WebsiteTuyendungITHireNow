@@ -43,7 +43,7 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body d-flex align-items-center">
                     <div class="me-4">
-                        <img src="{{ $job->company->logo_url ? asset($job->company->logo_url) : asset('assets/img/default-logo.png') }}"
+                        <img src="{{asset('storage/'.$job->company->logo_url) ?? '' }}"
                             alt="{{ $job->company->name }}" class="rounded border"
                             style="width:80px; height:80px; object-fit:cover;">
                     </div>
@@ -70,8 +70,10 @@
                             <p><strong>Cấp bậc:</strong> {{ $job->level?->name ?? '-' }}</p>
                             <p><strong>Kinh nghiệm:</strong> {{ $job->experience?->name ?? '-' }}</p>
                             <p><strong>Hình thức:</strong> {{ $job->jobType?->name ?? '-' }}</p>
+                            @if(false)
                             <p><strong>Hạn nộp hồ sơ:</strong>
                                 {{ $job->deadline ? $job->deadline->format('d/m/Y') : 'Không giới hạn' }}</p>
+                            @endif
                             <p><strong>Lượt xem:</strong> {{ $job->views }}</p>
                         </div>
                     </div>
@@ -108,7 +110,7 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <h5 class="fw-semibold mb-3"><i class="bi bi-file-earmark-text me-2 text-info"></i> Mô tả công việc</h5>
-                    <div>{!! html_entity_decode($job->description ?: '<em>Không có mô tả.</em>') !!}</div>
+                    <div>{!! $job->description ?: '<em>Không có mô tả.</em>' !!}</div>
                 </div>
             </div>
 
@@ -116,7 +118,7 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <h5 class="fw-semibold mb-3"><i class="bi bi-check-all me-2 text-warning"></i> Yêu cầu</h5>
-                    <div>{!! html_entity_decode($job->requirements ?: '<em>Không có yêu cầu.</em>') !!}</div>
+                    <div>{!! $job->requirements ?: '<em>Không có yêu cầu.</em>' !!}</div>
                 </div>
             </div>
 
@@ -124,22 +126,7 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <h5 class="fw-semibold mb-3"><i class="bi bi-gift me-2 text-success"></i> Quyền lợi</h5>
-                    @php
-                        $benefitsArray = $job->benefits  ?? null;
-                    @endphp
-
-                    <div>
-                        @if (is_array($benefitsArray))
-                            <ul>
-                                @foreach ($benefitsArray as $benefit)
-                                    <li>{{ $benefit }}</li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <em>Không rõ quyền lợi.</em>
-                        @endif
-                    </div>
-
+                    <div>{!! $job->benefits ?: '<em>Không có Quyền lợi.</em>' !!}</div>
                 </div>
             </div>
 
@@ -160,6 +147,7 @@
             </div>
 
             {{-- SEO Section --}}
+            @if(false)
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="fw-semibold mb-3 text-muted"><i class="bi bi-search me-2"></i> Thông tin SEO</h5>
@@ -171,7 +159,7 @@
                     </p>
                 </div>
             </div>
-
+            @endif
         </div>
     </main>
 @endsection

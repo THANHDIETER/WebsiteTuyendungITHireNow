@@ -64,7 +64,7 @@ class JobApprovalController extends Controller
         $jobs = Job::where('status', 'pending')
             ->whereNull('ai_processed_at')
             ->orderBy('created_at', 'asc')
-            ->limit(10)
+            ->limit(5)
             ->get();
 
         $approvedCount = 0;
@@ -132,18 +132,7 @@ class JobApprovalController extends Controller
             if (empty($job->location_id) && empty($job->address) && empty($job->remote_policy_id)) {
                 $fieldErrors[] = 'Chưa xác định địa điểm làm việc hoặc chính sách làm việc từ xa.';
             }
-            if (empty($job->deadline)) {
-                $fieldErrors[] = 'Hạn nộp hồ sơ chưa được cung cấp.';
-            } else {
-                $deadlineTimestamp = strtotime($job->deadline);
-                $now = time();
-                if ($deadlineTimestamp < $now) {
-                    $fieldErrors[] = 'Hạn nộp hồ sơ đã hết hạn.';
-                }
-                if ($deadlineTimestamp > strtotime('+1 year', $now)) {
-                    $fieldErrors[] = 'Hạn nộp hồ sơ không được vượt quá 1 năm.';
-                }
-            }
+            
             if (empty($job->company_id)) {
                 $fieldErrors[] = 'Công ty đăng tin không hợp lệ.';
             }

@@ -255,16 +255,17 @@
             @endphp
 
             <div class="d-flex flex-wrap gap-2 mb-4">
+                 <a href="{{ request()->fullUrlWithQuery(['location' => null, 'page' => 1]) }}"
+                    class="btn btn-outline-secondary rounded-pill btn-sm {{ empty($selectedLocation) ? 'active' : '' }}">
+                    Tất cả
+                </a>
                 @foreach ($locations as $location)
                 <a href="{{ request()->fullUrlWithQuery(['location' => $location->id, 'page' => 1]) }}"
                     class="btn btn-outline-primary rounded-pill btn-sm {{ $selectedLocation == $location->id ? 'active' : '' }}">
                     {{ $location->name }}
                 </a>
                 @endforeach
-                <a href="{{ request()->fullUrlWithQuery(['location' => null, 'page' => 1]) }}"
-                    class="btn btn-outline-secondary rounded-pill btn-sm {{ empty($selectedLocation) ? 'active' : '' }}">
-                    Tất cả
-                </a>
+               
             </div>
 
 
@@ -303,13 +304,10 @@
 
                         {{-- Nội dung thẻ --}}
                         <div class="d-flex flex-column h-100 gap-2">
-
-
-                            {{-- Logo công ty --}}
                             <div class="text-center mb-3">
                                 <a href="{{ route('jobs.show', $job->slug) }}" class="d-inline-block"
                                     style="width: 70px; height: 70px;">
-                                    <img src="{{ $job->company?->logo_url ?? asset('assets/img/default-logo.png') }}"
+                                    <img src="{{ asset('storage/'.$job->company->logo_url ?? '') }}"
                                         alt="{{ $job->company?->name ?? 'Company Logo' }}"
                                         class="img-fluid rounded-circle border p-1 bg-white shadow-sm"
                                         style="width:100%; height:100%; object-fit:contain;">
@@ -326,16 +324,12 @@
                                     class="d-inline-flex align-items-center gap-1 text-decoration-none text-dark"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $titleTooltip }}">
                                     <i class="bi bi-briefcase-fill text-primary small"></i>
-                                    <span class="text-truncate" style="max-width: 100%;">
+                                    <span class="d-inline-block text-wrap ms-2" style="max-width: 100%;">
                                         {{ $job->title }}
                                     </span>
+
                                 </a>
                             </h6>
-
-
-
-
-
 
                             {{-- Tên công ty --}}
                             <div class="text-muted small">

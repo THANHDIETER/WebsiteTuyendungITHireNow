@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\RegisterRequest;
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Company;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\RegisterEmployerRequest;
-use App\Notifications\Admin\NewEmployerRegisteredNotification;
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
+use Illuminate\Support\Str;
 
+use App\Notifications\Admin\NewEmployerRegisteredNotification;
 use App\Notifications\Admin\NewJobseekerRegisteredNotification;
 
 class RegisterController extends Controller
@@ -43,9 +45,7 @@ class RegisterController extends Controller
             }
 
             // Nếu muốn đăng nhập luôn sau khi đăng ký:
-            // Auth::login($user);
-
-            // Trả về view login (hoặc redirect nếu bạn dùng route login)
+            Auth::login($user);
             return redirect()->route('showLoginForm')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
         } catch (\Exception $e) {
             session()->flash('error', 'Lỗi khi đăng ký: ' . $e->getMessage());
@@ -60,31 +60,42 @@ class RegisterController extends Controller
 
     public function registerEmployer(RegisterEmployerRequest $request)
     {
+        // dd($request);
         try {
-            // dd('Form đã gửi thành công vào POST!');
 
             $validated = $request->validated();
-
             // Đảm bảo vai trò là 'employer'
-            $validated['role'] = 'employer';
-
+            $rolee= 'employer';
             // Tạo tài khoản cho Employer
             $user = User::create([
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role' => 'employer', // Mặc định vai trò là employer
-                'status' => 'active', // Mặc định trạng thái là active
+                "name" => $validated['full_name'],
+                "phone_number" => $validated['phone'],
+                'role' => $rolee,
+                'status' => 'active',
             ]);
 
-            // Gán vai trò cho người dùng
+            $company = Company::create([
+                'user_id' => $user->id,
+                'name' => $validated['company_name'] ?? null,
+                'slug' => Str::slug($validated['company_name'] ?? 'company') . '-' . Str::random(12),
+                'email' => $validated['email'],
+                "website" => $validated['website_url'],
+                'phone' => $validated['phone'] ?? null,
+                'city' => $validated['company_lovation'] ?? null,
+                'status' => 'active',
+                'is_verified' => false,
+            ]);
+
             try {
                 $user->assignRole('employer');
             } catch (RoleDoesNotExist $e) {
-                $user->assignRole('job_seeker');  // Mặc định gán vai trò 'job_seeker' nếu không có role 'employer'
+                $user->assignRole('job_seeker');
             }
-
-            session()->flash('success', 'Đăng ký nhà tuyển dụng thành công! Bạn có thể đăng nhập ngay.');
-            return redirect()->route('showLoginForm');
+            Auth::login($user);
+            session()->flash('success', 'Đăng ký nhà tuyển dụng thành công! Vui lòng cập nhật thông tin công ty.');
+            return redirect()->route('employer.companies.show', $company->id);
         } catch (\Exception $e) {
             session()->flash('error', 'Lỗi khi đăng ký nhà tuyển dụng: ' . $e->getMessage());
             return redirect()->route('showRegisterEmployerForm')->withInput();

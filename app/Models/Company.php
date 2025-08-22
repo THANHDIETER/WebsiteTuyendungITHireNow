@@ -118,6 +118,24 @@ class Company extends Model
             && $this->free_post_quota_expired_at
             && now()->lt($this->free_post_quota_expired_at);
     }
+    // App\Models\Company.php
+public function isComplete()
+{
+    return $this->name
+        && $this->slug
+        && $this->logo_url
+        && $this->cover_image_url
+        && $this->website
+        && $this->email
+        && $this->phone
+        && $this->address
+        && $this->city
+        && $this->company_size
+        && $this->founded_year
+        && $this->industry
+        && $this->description
+        && $this->benefits;
+}
 
     public function startFreeQuotaIfNotYet()
     {
