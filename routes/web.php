@@ -85,6 +85,7 @@ Route::get('/job_seeker', function () {
 
 // ================= HOME =================
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/jobs', [HomeController::class, 'indexjson']);
 
 
 

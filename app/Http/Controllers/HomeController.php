@@ -18,7 +18,7 @@ class HomeController extends Controller
         if ($page == 1) {
             $baseQuery = Job::with(['company', 'category'])
                 ->where('status', 'published')
-                ->when($locationId, fn ($q) => $q->where('location_id', $locationId));
+                ->when($locationId, fn($q) => $q->where('location_id', $locationId));
 
             // Việc có trả phí (ưu tiên hiển thị đầu tiên)
             $paidJobs = (clone $baseQuery)
@@ -52,18 +52,28 @@ class HomeController extends Controller
         $jobs = Job::with(['company', 'category', 'skills'])
             ->where(function ($query) {
                 $query->where('status', 'published')
-                      ->orWhereNull('status');
+                    ->orWhereNull('status');
             })
-            ->when($locationId, fn ($q) => $q->where('location_id', $locationId))
+            ->when($locationId, fn($q) => $q->where('location_id', $locationId))
             ->orderByDesc('created_at')
-            ->paginate(6);
+            ->simplePaginate(6);
+
+        $latestJobs = Job::with(['company', 'category', 'skills'])
+            ->where('status', 'published')
+            ->orderByDesc('created_at')
+            ->limit(6)
+            ->get();
 
         // Ngành nghề
         $categories = Category::where('is_active', true)
-            ->withCount('jobs')
+            ->withCount([
+                'jobs as jobs_count' => function ($q) {
+                    $q->where('status', 'published');
+                }
+            ])
             ->orderBy('sort_order')
             ->get();
 
-        return view('website.index', compact('jobs', 'categories', 'featuredJobs'));
+        return view('website.index', compact('jobs', 'categories', 'featuredJobs', 'latestJobs'));
     }
 }

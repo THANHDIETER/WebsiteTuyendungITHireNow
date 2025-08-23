@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\EmployerJobApiController;
 use App\Http\Controllers\Api\admin\SeekerProfileController;
 use App\Http\Controllers\Api\Employer\JobApplicationController;
 use App\Http\Controllers\Api\Admin\AdminJobApplicationController;
+use App\Http\Controllers\Api\HomeController;
 
 
 Route::get('/user', function (Request $request) {
