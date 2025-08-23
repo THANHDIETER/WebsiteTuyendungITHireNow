@@ -1,8 +1,8 @@
 @push('stype')
 <style></style>
 @endpush
-<section class="recent-job-area bg-light py-5">
-    <div class="container" data-aos="fade-up">
+<section class="recent-job-area bg-light">
+    <div class="container" data-aos="fade-up" style="margin-top: -120px;">
         {{-- Tiêu đề --}}
         <div class="row mb-5">
             <div class="col-12 text-center">
@@ -67,6 +67,8 @@
                         @php
                         $isFavorited = auth()->check() && auth()->user()->favoriteJobs->contains($job->id);
                         @endphp
+                         @auth
+                            @if (auth()->user()->role === 'job_seeker')
                         <div class="mt-auto text-end">
                             <hr>
                             <button type="button"
@@ -75,7 +77,8 @@
                                 <i class="bi {{ $isFavorited ? 'bi-heart-fill' : 'bi-heart' }}"></i>
                             </button>
                         </div>
-
+                        @endif
+                        @endauth
                     </div>
                 </div>
             </div>

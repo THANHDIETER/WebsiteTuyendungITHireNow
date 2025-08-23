@@ -1,4 +1,4 @@
-@extends('website.layouts.master')
+@extends('website.layouts.master1')
 
 @section('content')
   <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"

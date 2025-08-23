@@ -326,17 +326,18 @@
                             @php
                             $isFavorited = auth()->check() && auth()->user()->favoriteJobs->contains($job->id);
                             @endphp
-
+                             @auth
+                            @if (auth()->user()->role === 'job_seeker')
                             <div class="mt-auto text-end">
                                 <hr>
-
                                 <button type="button"
                                     class="btn btn-sm rounded-circle save-job-btn {{ $isFavorited ? 'btn-danger' : 'btn-outline-secondary' }}"
                                     data-job-id="{{ $job->id }}" title="Lưu việc làm">
                                     <i class="bi {{ $isFavorited ? 'bi-heart-fill' : 'bi-heart' }}"></i>
                                 </button>
                             </div>
-
+                             @endif
+                        @endauth
                         </div>
                     </div>
                 </div>
@@ -344,17 +345,17 @@
                 <div class="col-12 text-center text-muted">Không có việc làm nào được hiển thị.</div>
                 @endforelse
             </div>
-            <div class="mt-3 d-flex justify-content-center">
+            <div class="mt-5 d-flex justify-content-center">
                 {{ $jobs->links() }}
             </div>
         </div>
     </section>
 
     <!--== Start Job Category Area Wrapper ==-->
-    <section class="job-category-area py-5 bg-light">
-        <div class="container" data-aos="fade-up " style="margin-top: -70px;">
+    <section class="job-category-area bg-light">
+        <div class="container" data-aos="fade-up " style="margin-top: -120px;">
             {{-- Tiêu đề --}}
-            <div class="row mb-4">
+            <div class="row">
                 <div class="col-12 text-center">
                     <h2 class="fw-bold text-primary mb-2">Ngành nghề nổi bật</h2>
                     <p class="text-muted mb-0">Khám phá các lĩnh vực đang được tuyển dụng nhiều nhất</p>

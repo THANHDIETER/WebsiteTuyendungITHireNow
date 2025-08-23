@@ -1,4 +1,4 @@
-@extends('website.layouts.master')
+@extends('website.layouts.master1')
 
 @section('content')
  <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
@@ -33,7 +33,10 @@
                     <h6 class="fw-semibold text-center mb-3">👋 Xin
                         chào,{{ $profile && $profile->name ? $profile->name : Auth::user()->name }}</h6>
                     <hr>
+                    
                     <ul class="nav nav-pills flex-column">
+                        @auth
+                                        @if (auth()->user()->role === 'job_seeker')
                         <li class="nav-item mb-2">
                             <a class="nav-link {{ request()->routeIs('profile.dashboard') ? 'active' : 'text-dark' }}"
                                 href="{{ route('profile.dashboard') }}">
@@ -54,7 +57,8 @@
                                 <i class="fa-solid fa-briefcase me-2"></i> Việc làm của tôi
                             </a>
                         </li>
-
+                          @endif
+                                    @endauth
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('profile.settings') ? 'active' : 'text-dark' }}"
                                 href="{{ route('profile.settings') }}">

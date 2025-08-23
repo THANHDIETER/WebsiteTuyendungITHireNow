@@ -166,6 +166,8 @@
                                                 <i class="bi bi-caret-down-fill ms-1"></i>
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
+                                                 @auth
+                                        @if (auth()->user()->role === 'job_seeker')
                                                 <li>
                                                     <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active' : '' }}"
                                                         href="{{ route('profile.dashboard') }}">
@@ -179,7 +181,8 @@
                                                         yêu thích
                                                     </a>
                                                 </li>
-
+                                                 @endif
+                                    @endauth
                                                 @if (Auth::user()->role === 'admin')
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
