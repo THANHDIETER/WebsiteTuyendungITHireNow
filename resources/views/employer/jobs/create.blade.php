@@ -298,7 +298,7 @@
                             <h6 class="text-success mb-2">{{ number_format($pkg->package->price, 0, ',', '.') }} VNĐ</h6>
 
                             <ul class="list-unstyled mb-2 small">
-                                <li><strong>Thời hạn:</strong> {{ $pkg->package->duration }} ngày</li>
+                                <li><strong>Thời hạn sử dụng:</strong> {{ $pkg->package->duration_days }} ngày</li>
                                 <li><strong>Số lượt đăng:</strong> {{ $pkg->package->post_limit }}</li>
                                 <li><strong>Nổi bật:</strong> {{ $pkg->package->highlight_days }} ngày</li>
                                 @if(false)

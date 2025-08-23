@@ -236,7 +236,7 @@
                 </table>
             </div>
 
-            <div class="text-end mt-4">
+            <div class="text-end mt-4 mb-4">
                 <button type="button" id="btn-save-all" class="btn btn-lg btn-success shadow-sm px-4">
                     💾 Lưu tất cả
                 </button>

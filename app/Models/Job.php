@@ -153,6 +153,11 @@ class Job extends Model
         return $this->belongsTo(JobLanguage::class, 'language_id', 'id');
     }
 
+    public function packageUsage()
+    {
+        return $this->belongsTo(EmployerPackageUsage::class, 'company_id', 'company_id')
+            ->where('is_active', true);
+    }
 
 
     public function remotePolicy()

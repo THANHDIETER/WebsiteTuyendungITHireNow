@@ -1,18 +1,8 @@
-import { createApp } from "vue";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
-import job_list from "./components/JobList.vue";
-
-const app = createApp({});
 
 window.Pusher = Pusher;
 
-app.component("job-list", job_list);
-
-const el = document.getElementById("vue-wrapper");
-if (el) {
-    app.mount("#vue-wrapper");
-}
 window.Echo = new Echo({
     broadcaster: "pusher",
     key: "1ea633f39dfb08c3c0c2",

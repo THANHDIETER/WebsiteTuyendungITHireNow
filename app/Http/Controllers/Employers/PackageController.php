@@ -19,10 +19,11 @@ class PackageController extends Controller
         $packages = EmployerPackage::where('is_active', 1)
             ->orderByDesc('sort_order')
             ->get();
+        $Bank = BankAccount::where('is_active', 1)->exists();
 
         // Lấy thông tin công ty của người dùng hiện tại
         $company = Auth::user()->company;
-        if(!$company) {
+        if (!$company) {
             return redirect()->route('employer')->with('error', 'Bạn cần tạo công ty trước khi mua gói.');
         }
 
@@ -36,13 +37,8 @@ class PackageController extends Controller
             ->get();
 
         // Truyền dữ liệu ra view
-        return view('employer.packages.index', compact(
-            'packages',
-            'currentSubscription',
-            'payments'
-        ));
+        return view('employer.packages.index', compact('packages', 'currentSubscription', 'payments', 'Bank'));
     }
-
 
 
     public function purchase($id)
@@ -53,7 +49,6 @@ class PackageController extends Controller
         $vatAmount = round($package->price * ($vat / 100));
         $totalWithVat = $package->price + $vatAmount;
         return view('employer.packages.purchase', compact('package', 'bankAccounts', 'vat', 'vatAmount', 'totalWithVat'));
-
     }
 
     public function history()
@@ -67,8 +62,6 @@ class PackageController extends Controller
 
         return view('employer.packages.history', compact('payments'));
     }
-
-
 
 
     public function subscribe(Request $request, $packageId)
@@ -121,9 +114,4 @@ class PackageController extends Controller
 
         return view('employer.packages.payment_detail', compact('payment'));
     }
-
-
-
-
-
 }

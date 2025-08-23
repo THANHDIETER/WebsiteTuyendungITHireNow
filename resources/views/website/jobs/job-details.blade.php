@@ -142,7 +142,7 @@
                         <section class="mb-4">
                             <h2 class="h5 mb-3">Phúc lợi</h2>
                            <div class="ob-content lh-lg">
-                                {!! nl2br(e($job->benefits)) !!}
+                                {!! $job->benefits !!}
                             </div>
                         </section>
                     </div>

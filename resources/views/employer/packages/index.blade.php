@@ -48,12 +48,14 @@
                                                 <strong>Nổi bật:</strong> {{ $pkg->highlight_days }} ngày
                                             </div>
                                         </li>
-                                        <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
-                                            <i class="fas fa-eye text-info mt-1"></i>
-                                            <div>
-                                                <strong>Lượt xem CV:</strong> {{ $pkg->cv_view_limit }}
-                                            </div>
-                                        </li>
+                                        @if(false)
+                                            <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
+                                                <i class="fas fa-eye text-info mt-1"></i>
+                                                <div>
+                                                    <strong>Lượt xem CV:</strong> {{ $pkg->cv_view_limit }}
+                                                </div>
+                                            </li>
+                                        @endif
                                         <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
                                             <i class="fas fa-headset text-secondary mt-1"></i>
                                             <div>
@@ -68,10 +70,18 @@
                                         <div class="flex-grow-1"></div>
                                     @endif
 
-                                     <a href="{{ route('employer.packages.purchase', $pkg->id) }}"
-                                    class="btn btn-gradient-primary mt-auto w-100 rounded-pill fw-bold shadow-sm text-black">
-                                        <i class="fas fa-shopping-cart me-2"></i> Mua ngay
-                                    </a>
+                                    @if ($Bank)
+                                        <a href="{{ route('employer.packages.purchase', $pkg->id) }}"
+                                            class="btn btn-gradient-primary mt-auto w-100 rounded-pill fw-bold shadow-sm text-black">
+                                            <i class="fas fa-shopping-cart me-2"></i> Mua ngay
+                                        </a>
+                                    @else
+                                        <div class="alert alert-warning text-center mt-auto w-100 rounded-pill fw-bold shadow-sm">
+                                            Admin chưa cài thông tin thanh toán
+                                        </div>
+                                    @endif
+
+
                                 </div>
                             </div>
                         @endforeach
@@ -171,19 +181,25 @@
                                                 toán</h6>
                                             <ul class="list-group list-group-flush mb-3">
                                                 <li class="list-group-item"><strong>Tên gói:</strong>
-                                                    {{ $payment->package->name ?? 'Đã xóa' }}</li>
+                                                    {{ $payment->package->name ?? 'Đã xóa' }}
+                                                </li>
                                                 <li class="list-group-item"><strong>Số tiền:</strong>
-                                                    {{ number_format($payment->amount, 0, ',', '.') }} VNĐ</li>
+                                                    {{ number_format($payment->amount, 0, ',', '.') }} VNĐ
+                                                </li>
                                                 <li class="list-group-item"><strong>VAT:</strong> {{ $payment->vat_percent }}%</li>
                                                 <li class="list-group-item"><strong>Phương thức:</strong>
-                                                    {{ strtoupper($payment->payment_method) }}</li>
+                                                    {{ strtoupper($payment->payment_method) }}
+                                                </li>
                                                 <li class="list-group-item"><strong>Mã giao dịch:</strong>
-                                                    {{ $payment->transaction_id ?? 'Chưa có' }}</li>
+                                                    {{ $payment->transaction_id ?? 'Chưa có' }}
+                                                </li>
                                                 <li class="list-group-item"><strong>Ngày tạo:</strong>
-                                                    {{ $payment->created_at->format('d/m/Y H:i') }}</li>
+                                                    {{ $payment->created_at->format('d/m/Y H:i') }}
+                                                </li>
                                                 @if ($payment->paid_at)
                                                     <li class="list-group-item"><strong>Ngày thanh toán:</strong>
-                                                        {{ $payment->paid_at->format('d/m/Y H:i') }}</li>
+                                                        {{ $payment->paid_at->format('d/m/Y H:i') }}
+                                                    </li>
                                                 @endif
                                             </ul>
                                         </div>
@@ -199,8 +215,10 @@
                                                             đăng:</strong> {{ $payment->package->post_limit }}</li>
                                                     <li class="list-group-item"><strong><i class="fas fa-star me-1"></i> Ngày làm nổi
                                                             bật:</strong> {{ $payment->package->highlight_days }}</li>
-                                                    <li class="list-group-item"><strong><i class="fas fa-eye me-1"></i> Giới hạn xem
-                                                            CV:</strong> {{ $payment->package->cv_view_limit }}</li>
+                                                    @if(false)
+                                                        <li class="list-group-item"><strong><i class="fas fa-eye me-1"></i> Giới hạn xem
+                                                                CV:</strong> {{ $payment->package->cv_view_limit }}</li>
+                                                    @endif
                                                     <li class="list-group-item"><strong><i class="fas fa-headset me-1"></i> Hỗ
                                                             trợ:</strong> {{ $payment->package->support_level ?? 'Không có' }}</li>
                                                     <li class="list-group-item"><strong><i class="fas fa-toggle-on me-1"></i> Kích

@@ -1,6 +1,6 @@
 @extends('admin.settings.layout')
 
-@section('settings-content_content')
+@section('settings-content')
     <div class="card shadow-sm mb-4 border-0">
         <div class="card-header bg-primary text-white fw-semibold">
             <i class="bi bi-plus-circle me-2"></i> Thêm hoặc cập nhật cấu hình

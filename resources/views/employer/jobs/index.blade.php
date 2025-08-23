@@ -112,19 +112,26 @@
 
                             {{-- FOOTER --}}
                             <div class="card-footer d-flex justify-content-between align-items-center bg-light border-0">
+                                {{-- Lương --}}
                                 <div>
                                     <strong class="text-success">
-                                        {{ $job->salary_min ? number_format($job->salary_min) : 0 }}
-                                        -
-                                        {{ $job->salary_max ? number_format($job->salary_max) : 'Thương lượng' }}
-                                        {{ $job->currency ?? 'VND' }}
+                                        {{ $job->salary_display ?? '' }}
                                     </strong>
-                                    <div class="text-muted small">/tháng</div>
                                 </div>
-                                <a href="{{ route('employer.jobs.show', $job->id) }}" class="btn btn-outline-primary btn-sm">
-                                    Xem chi tiết
-                                </a>
+
+                                {{-- Action buttons --}}
+                                <div class="btn-group" role="group" aria-label="Job actions">
+                                    <a href="{{ route('employer.jobs.show', $job->id) }}" class="btn btn-outline-primary btn-sm me-2"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('employer.jobs.edit', $job->id) }}" class="btn btn-outline-warning btn-sm"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Sửa">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 @empty
@@ -142,4 +149,15 @@
             </div>
         </div>
     </main>
+
 @endsection
+
+@push('script')
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+    </script>
+@endpush

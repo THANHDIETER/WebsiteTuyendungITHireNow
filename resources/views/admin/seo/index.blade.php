@@ -1,7 +1,7 @@
 @extends('admin.settings.layout')
 
 @section('settings-content')
-<div class="container py-4">
+<div class="container">
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">

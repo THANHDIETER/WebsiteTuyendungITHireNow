@@ -14,6 +14,7 @@
         font-size: 0.75rem;
     }
 
+    
     .job-title {
         font-size: 1.1rem;
         line-height: 1.5;

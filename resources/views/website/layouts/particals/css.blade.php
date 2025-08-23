@@ -12,7 +12,7 @@
 <meta name="author" content="hastech" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="application-name" content="{{ $seo->title ?? '' }}">
-<meta property="og:title" content="{{ $seo->title}}">
+<meta property="og:title" content="{{ $seo->title ?? ''}}">
 <meta name="description" content="{{ $seo->description ?? 'Mô tả website của bạn ở đây' }}" />
 <meta property="og:description" content="{{ $seo->description ?? 'Mô tả website của bạn ở đây' }}">
 <meta name="twitter:description" content="{{ $seo->description ?? 'Mô tả website của bạn ở đây' }}">

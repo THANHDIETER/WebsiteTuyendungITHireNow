@@ -111,7 +111,8 @@ class JobController extends Controller
         $freeRemain = $freePosting->post_limit - $freePosting->post_used;
 
         // Kiểm tra các gói dịch vụ đang active và còn lượt
-        $activePackages = EmployerPackageUsage::where('company_id', $company->id)
+        $activePackages = EmployerPackageUsage::with('package')
+            ->where('company_id', $company->id)
             ->where('is_active', true)
             ->whereColumn('posts_used', '<', 'post_limit')
             ->orderBy('end_date')
@@ -160,7 +161,7 @@ class JobController extends Controller
         }
 
 
-        $validated['deadline'] = $request->input('application_deadline') ?? null;
+        $validated['deadline'] = now()->addMonth();
         $validated['currency'] = $validated['currency'] ?? 'VND';
         $validated['salary_negotiable'] = $request->boolean('salary_negotiable', false);
 
@@ -181,7 +182,8 @@ class JobController extends Controller
         $validated['status'] = 'pending';
         $validated['is_approved'] = false;
         $validated['views'] = 0;
-        $validated['is_featured'] = false;
+        $validated['is_featured'] = $selectedPackage&& $selectedPackage->package && $selectedPackage->package->highlight_days > 0;
+
         $validated['search_index'] = $request->boolean('search_index', false);
         $validated['is_paid'] = $selectedPackage !== null;
         $validated['category_id'] = $validated['categories'][0];
@@ -240,13 +242,6 @@ class JobController extends Controller
         $company = $user->company;
 
         $job = $company->jobs()->with(['skills', 'categories'])->findOrFail($id);
-
-        // ✅ Nếu trạng thái không phải "pending" thì chuyển về "pending"
-        if ($job->status !== 'pending') {
-            $job->status = 'pending';
-            $job->save();
-        }
-
         $jobTypes = JobType::where('is_active', true)->get();
         $locations = Location::where('is_active', true)->orderBy('name')->get();
         $categories = Category::all();
@@ -279,14 +274,22 @@ class JobController extends Controller
         ));
     }
 
-
-
     public function update(Request $request, $id)
     {
+
         $user = Auth::user();
         $company = $user->company;
         $job = $company->jobs()->findOrFail($id);
+        // dd($job->toArray());
+        $status = strtolower(trim($job->status));
+        // dd( $status);
+        $allowedStatuses = ['pending', 'rejected', 'published'];
 
+        if (!in_array($status, $allowedStatuses)) {
+            return redirect()->back()->withErrors([
+                'error' => 'Công việc ở trạng thái ' . $job->status . ' không thể chỉnh sửa.'
+            ]);
+        }
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -303,7 +306,6 @@ class JobController extends Controller
             'categories' => 'required|array',
             'categories.*' => 'integer|exists:categories,id',
             'skills_text' => 'nullable|string',
-            'application_deadline' => 'nullable|date|after_or_equal:today',
             'meta_title' => 'nullable|string|max:150',
             'meta_description' => 'nullable|string',
             'keyword' => 'nullable|string|max:150',
@@ -317,6 +319,9 @@ class JobController extends Controller
         $validated['search_index'] = $request->boolean('search_index', false);
         $validated['salary_negotiable'] = $request->boolean('salary_negotiable', false);
         $validated['currency'] = $validated['currency'] ?? 'VND';
+        $validated['status'] = 'pending';
+        $validated['ai_processed_at'] = null;
+
 
         // Tính salary_display
         if ($validated['salary_negotiable']) {

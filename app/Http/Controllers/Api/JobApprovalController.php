@@ -16,9 +16,7 @@ use App\Notifications\Employer\JobRejectedNotification;
 
 class JobApprovalController extends Controller
 {
-    /**
-     * Làm sạch text đầu vào
-     */
+
     private function sanitizeText($raw): string
     {
         if (is_array($raw)) {
@@ -31,18 +29,17 @@ class JobApprovalController extends Controller
         return trim($text);
     }
 
-    /**
-     * Kiểm tra blacklist trong text
-     */
     private function checkBlacklist(string $text, array $blacklist): ?string
     {
         foreach ($blacklist as $word) {
-            if (stripos($text, $word) !== false) {
+            // Regex kiểm tra nguyên từ, không phân biệt hoa thường
+            if (preg_match('/\b' . preg_quote($word, '/') . '\b/i', $text)) {
                 return $word;
             }
         }
         return null;
     }
+
 
     public function sync(Request $request)
     {
@@ -132,7 +129,7 @@ class JobApprovalController extends Controller
             if (empty($job->location_id) && empty($job->address) && empty($job->remote_policy_id)) {
                 $fieldErrors[] = 'Chưa xác định địa điểm làm việc hoặc chính sách làm việc từ xa.';
             }
-            
+
             if (empty($job->company_id)) {
                 $fieldErrors[] = 'Công ty đăng tin không hợp lệ.';
             }
@@ -163,9 +160,9 @@ class JobApprovalController extends Controller
                     . "Công ty ID: {$job->company_id}\n"
                     . "Tin ID: {$job->id}\n"
                     . "Lý do: " . implode(' | ', $fieldErrors);
-                    
+                $reason = implode(' | ', $fieldErrors);
                 $employer = $job->company->user;
-                $employer->notify(new JobRejectedNotification($job));
+                $employer->notify(new JobRejectedNotification($job, $reason), );
                 try {
                     SendTelegramMessage::dispatch($message);
                 } catch (\Exception $e) {
@@ -238,9 +235,9 @@ class JobApprovalController extends Controller
                     . "Công ty ID: {$job->company_id}\n"
                     . "Tin ID: {$job->id}\n"
                     . "Lý do: {$result['reason']}";
-
+                $reason = $result['reason'];
                 $employer = $job->company->user;
-                $employer->notify(new JobRejectedNotification($job));
+                $employer->notify(new JobRejectedNotification($job, $reason));
                 try {
                     SendTelegramMessage::dispatch($message);
                 } catch (\Exception $e) {
@@ -252,7 +249,7 @@ class JobApprovalController extends Controller
         }
 
         return response()->json([
-            'message'  => 'Hoàn thành xử lý tin tuyển dụng',
+            'message' => 'Hoàn thành xử lý tin tuyển dụng',
             'approved' => $approvedCount,
             'rejected' => $rejectedCount,
         ], 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
