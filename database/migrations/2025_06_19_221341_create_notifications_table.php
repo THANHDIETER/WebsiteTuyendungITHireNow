@@ -8,10 +8,10 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('notifications', function (Blueprint $table) {
-            $table->uuid('id')->primary(); // Laravel uses UUID for notification ID
+           $table->uuid('id')->primary(); // ID kiểu số tự tăng
             $table->string('type'); // class name of the notification
-            $table->morphs('notifiable'); // creates notifiable_type + notifiable_id
-            $table->json('data'); // JSON data payload
+            $table->morphs('notifiable'); // tạo notifiable_type và notifiable_id
+            $table->json('data'); // dữ liệu JSON
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });

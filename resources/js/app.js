@@ -1,11 +1,8 @@
-// ✅ 1. Import Echo, Pusher, window setup
+// ❌ Bỏ import bootstrap ở đây
 import "./bootstrap";
 
-
-// ✅ 2. Các CSS
 import '../css/app.css';
 
-// ✅ 3. Import Vue và các components
 import { createApp } from "vue";
 import SeekerProfileAdmin from "./components/SeekerProfileAdmin.vue";
 import PaymentList from "./components/payments/PaymentList.vue";
@@ -13,9 +10,7 @@ import EmployerJobPortal from "./components/employers/EmployerJobPortal.vue";
 import JobApplicationsList from "./components/JobApplicationsList.vue";
 import bank_account from "./components/bank_account/bank_account.vue";
 import bank_log from "./components/bank_log/Listbanklog.vue";
-// import chat_box from "./components/chatbox/ChatBox.vue";
 
-// ✅ 4. Khởi tạo Vue
 const app = createApp({});
 app.component("seeker-profile-admin", SeekerProfileAdmin);
 app.component("payment-admin", PaymentList);
@@ -23,15 +18,17 @@ app.component("employer-job-portal", EmployerJobPortal);
 app.component("employer-job-application", JobApplicationsList);
 app.component("bank-account-admin", bank_account);
 app.component("banklog-account-admin", bank_log);
-// app.component("chat-box", chat_box);
+
 const el = document.getElementById("vue-wrapper");
 if (el) {
     app.mount("#vue-wrapper");
 }
 
-
-
-
-
-
-
+// ✅ Delay import bootstrap (Pusher/Echo) 2 giây sau khi UI render
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        import("./bootstrap").then(() => {
+            console.log("Pusher/Echo đã được khởi tạo sau khi UI render");
+        });
+    }, 2000); // 2 giây delay
+});

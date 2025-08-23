@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ChatBotController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\JobApplicationController;
 
 // Load các route tách riêng
 require __DIR__ . '/admin.php';
@@ -18,9 +21,10 @@ require __DIR__ . '/jobseeker.php';
 require __DIR__ . '/notification.php';
 require __DIR__ . '/channels.php';
 
-use App\Models\User;
+use App\Http\Controllers\JobApplicationController;
 use App\Notifications\NewJobSubmittedNotification;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 Route::get('/test-notification', function (Request $request) {
     $user = User::find(2); // user id = 2
@@ -35,20 +39,24 @@ Route::get('/test-notification', function (Request $request) {
     return "Đã gửi notification cho user #{$user->id} với nội dung: {$message}";
 });
 
-
-
 Route::get('/chatbot/history', [ChatBotController::class, 'history']);
 Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 Route::get('/register/employer', [RegisterController::class, 'showRegisterEmployerForm'])->name('showRegisterEmployerForm');
 Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('registerEmployer');
 
 Route::get('/showLoginForm', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/post-login', [LoginController::class, 'login'])->name('post-login');
+
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 Route::get('/auth/redirect', [LoginController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [LoginController::class, 'callback'])->name('auth.callback');
@@ -58,6 +66,12 @@ Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
 Route::middleware('auth')->post('/favorites/{job}', [FavoriteController::class, 'store']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/{job}', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites/{job}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+    Route::get('/favorites/job/{id}', [FavoriteController::class, 'show'])->name('favorites.show');
+});
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
@@ -71,12 +85,19 @@ Route::get('/job_seeker', function () {
 
 // ================= HOME =================
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/jobs', [HomeController::class, 'indexjson']);
+
 
 
 // ================= JOB =================
 Route::get('/cong-viec', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/cong-viec/tim-kiem', [JobController::class, 'search'])->name('jobs.search'); // <--- Route search mới
 Route::get('/cong-viec/{slug}', [JobController::class, 'show'])->name('jobs.show');
+
+// Route::get('/jobs/{job}/apply', [JobApplicationController::class, 'show'])
+//         ->name('jobs.showApply');
 Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+
 
 
 // ================= EMPLOYER =================
@@ -156,44 +177,21 @@ Route::get('/registration', function () {
     return view('website.login-register.registration');
 });
 
-Route::post('/jobs/{job}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
 
-
-
-Route::get('/admin/noti/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans()
-        ];
-    }));
-})->name('admin.notifications.latest');
-Route::get('/employer/noti/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans()
-        ];
-    }));
-})->name('employer.notifications.latest');
-
-Route::get('/seeker/notifications/latest', function () {
-    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-    return response()->json($notifications->map(function ($noti) {
-        return [
-            'id' => $noti->id,
-            'message' => $noti->data['message'],
-            'link_url' => $noti->data['link_url'],
-            'time' => $noti->created_at->diffForHumans(),
-        ];
-    }));
+// routes/web.php
+Route::get('/notifications/latest', function () {
+    $notis = auth()->user()
+        ->unreadNotifications()
+        ->orderBy('created_at', 'desc')
+        ->take(6)
+        ->get()
+        ->map(function ($noti) {
+            return [
+                'id' => $noti->id,
+                'message' => $noti->data['message'] ?? '',
+                'link_url' => $noti->data['link_url'] ?? '#',
+                'created_at' => $noti->created_at->diffForHumans(),
+            ];
+        });
+    return response()->json($notis);
 })->middleware('auth');

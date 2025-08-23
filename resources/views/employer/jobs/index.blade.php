@@ -36,13 +36,15 @@
 
                             {{-- HEADER --}}
                             <div class="d-flex align-items-center p-3 border-bottom" style="min-height: 85px;">
-                                <img src="{{ $job->company && $job->company->logo_url ? Storage::url($job->company->logo_url) : asset('assets/img/default-logo.png') }}"
-                                    alt="{{ $job->company->name ?? 'Company' }}" class="rounded border me-3"
-                                    style="width: 56px; height: 56px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . $job->company->logo_url) }}"
+                                    alt="{{ $job->company->name ?? 'Company' }}" class="rounded border me-3 bg-white shadow-sm"
+                                    style="width: 56px; height: 56px; object-fit: contain;">
 
                                 <div class="flex-grow-1">
                                     <h6 class="fw-bold mb-1 text-truncate">
-                                        <a href="#" class="text-dark">{{ optional($job->company)->name }}</a>
+                                        <a href="#" class="text-dark">
+                                            {{ $job->company->name ?? 'Công ty chưa cập nhật' }}
+                                        </a>
                                     </h6>
                                     <small class="text-muted">
                                         <i class="bi bi-geo-alt"></i>
@@ -50,6 +52,7 @@
                                     </small>
                                 </div>
                             </div>
+
 
                             {{-- BODY --}}
                             <div class="card-body pb-2">
@@ -69,7 +72,7 @@
                                     {{-- NẾU CÓ NỔI BẬT --}}
 
                                     @if ($job->is_featured)
-                                        <span class="badge bg-danger ms-1">Nổi bật</span>
+                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2">Nổi bật</span>
                                     @endif
                                 </h4>
 
@@ -109,20 +112,26 @@
 
                             {{-- FOOTER --}}
                             <div class="card-footer d-flex justify-content-between align-items-center bg-light border-0">
+                                {{-- Lương --}}
                                 <div>
                                     <strong class="text-success">
-                                        {{ $job->salary_min ? number_format($job->salary_min) : 0 }}
-                                        -
-                                        {{ $job->salary_max ? number_format($job->salary_max) : 'Thương lượng' }}
-                                        {{ $job->currency ?? 'VND' }}
+                                        {{ $job->salary_display ?? '' }}
                                     </strong>
-                                    <div class="text-muted small">/tháng</div>
                                 </div>
-                                <a href="{{ route('employer.jobs.show', $job->id) }}"
-                                    class="btn btn-outline-primary btn-sm">
-                                    Xem chi tiết
-                                </a>
+
+                                {{-- Action buttons --}}
+                                <div class="btn-group" role="group" aria-label="Job actions">
+                                    <a href="{{ route('employer.jobs.show', $job->id) }}" class="btn btn-outline-primary btn-sm me-2"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('employer.jobs.edit', $job->id) }}" class="btn btn-outline-warning btn-sm"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Sửa">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 @empty
@@ -140,4 +149,15 @@
             </div>
         </div>
     </main>
+
 @endsection
+
+@push('script')
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+    </script>
+@endpush

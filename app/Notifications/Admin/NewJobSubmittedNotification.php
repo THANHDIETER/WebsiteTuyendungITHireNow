@@ -3,12 +3,12 @@
 namespace App\Notifications\Admin;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class NewJobSubmittedNotification extends Notification implements ShouldBroadcastNow
+class NewJobSubmittedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -21,9 +21,15 @@ class NewJobSubmittedNotification extends Notification implements ShouldBroadcas
 
     public function toArray($notifiable)
     {
+        $company = $this->job->company->name ?? 'Nhà tuyển dụng';
+        $title   = $this->job->title ?? 'Tin tuyển dụng';
+
         return [
-            'message' => "Nhà tuyển dụng '{$this->job->company->name}' đã gửi tin tuyển dụng: '{$this->job->title}'.",
-            'link_url' => route('notifications.index'),
+            'type'     => 'admin.new_job_submitted',
+            'title'    => 'Tin tuyển dụng mới',
+            'icon'     => 'bi-briefcase-fill',
+            'message'  => "Nhà tuyển dụng '{$company}' đã gửi tin tuyển dụng: '{$title}'.",
+            'link_url' => route('admin.jobs.show', $this->job->id),
         ];
     }
 

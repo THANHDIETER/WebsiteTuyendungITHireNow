@@ -33,7 +33,21 @@ class SettingSeeder extends Seeder
             [
                 'name' => 'Thời gian Show nạp tiền',
                 'key' => 'payment_timeout_minutes',
-                'value' => '6',
+                'value' => '10',
+            ],[
+                'name' => 'Token Cron',
+                'key' => 'token_cron',
+                'value' => 'ABC123',
+            ],
+            [
+                'name' => 'Telegram Bot Token',
+                'key' => 'telegram_bot_token',
+                'value' => '',
+            ],
+            [
+                'name' => 'Telegram Chat ID',
+                'key' => 'telegram_chat_id',
+                'value' => '',
             ],
         ];
 

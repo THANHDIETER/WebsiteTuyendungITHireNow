@@ -2,14 +2,6 @@
 <html lang="vi">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Finate - Nền tảng việc làm & tuyển dụng sử dụng Bootstrap 5" />
-    <meta name="keywords" content="việc làm, tuyển dụng, website việc làm, hiện đại, responsive, tìm việc" />
-    <meta name="author" content="hastech" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>HireNow - Nền tảng tuyển dụng IT hiện đại</title>
     @include('website.layouts.particals.css')
 
 </head>

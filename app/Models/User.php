@@ -40,11 +40,11 @@ class User extends Authenticatable
     public $timestamps = true;
 
     public function favoriteJobs()
-{
-    return $this->belongsToMany(\App\Models\Job::class, 'favorites', 'user_id', 'job_id')
-        ->withPivot('note')
-        ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(\App\Models\Job::class, 'favorites', 'user_id', 'job_id')
+            ->withPivot('note')
+            ->withTimestamps();
+    }
 
 
     public function getAuthPassword()
@@ -64,6 +64,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Company::class, 'user_id', 'id');
     }
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'user_id');
+    }
+
     public function messages()
     {
         return $this->hasMany(Message::class, 'sender_id');

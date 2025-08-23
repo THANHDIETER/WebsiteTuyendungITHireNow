@@ -3,13 +3,17 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\CloseJobs;
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Api\BankLogController;
 use App\Http\Controllers\Api\BankSyncController;
+use App\Http\Controllers\Api\FeaturedController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\ApiPaymentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Api\BankAccountController;
+use App\Http\Controllers\Api\JobApprovalController;
 use App\Http\Controllers\Api\Admin\PaymentController;
 use App\Http\Controllers\Api\EmployerJobApiController;
 use App\Http\Controllers\Api\admin\SeekerProfileController;
@@ -34,6 +38,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/bank-logs', [BankLogController::class, 'index']);
 });
 
+Route::middleware(['auth:sanctum', 'admin'])->name('admin/job-applications.')->controller(AdminJobApplicationController::class)->group(function () {
+    Route::get('admin/job-applications', 'index')->name('index');
+    Route::get('admin/job-applications/{job_application}', 'show')->name('show');
+    Route::put('admin/job-applications/{job_application}', 'update')->name('update');
+    Route::delete('admin/job-applications/{job_application}', 'destroy')->name('destroy');
+});
+
+
 Route::middleware(['auth:sanctum', 'employer'])->group(function () {
     Route::apiResource('job-applications', JobApplicationController::class);
 });
@@ -55,4 +67,8 @@ Route::middleware(['auth:sanctum', 'employer'])->group(function () {
 });
 Route::get('/check-pending-payments', [ApiPaymentController::class, 'handlePending']);
 Route::get('/sync-bank', [BankSyncController::class, 'sync']);
+Route::get('/jobs', [JobApprovalController::class, 'sync']);
+Route::get('/close-jobs', [CloseJobs::class, 'index']);
+Route::get('/featured/pending', [FeaturedController::class, 'handlePending']);
+
 Route::middleware('auth')->post('/favorites/{job}', [FavoriteController::class, 'store'])->name('favorites.store');

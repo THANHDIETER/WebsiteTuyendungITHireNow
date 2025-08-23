@@ -19,8 +19,6 @@ class JobController extends Controller
 
         if ($request->has('is_approved')) {
             $query->where('is_approved', $request->is_approved);
-        } else {
-            $query->where('is_approved', false);
         }
 
         if ($request->filled('category')) {
@@ -38,28 +36,27 @@ class JobController extends Controller
     }
 
     public function show($id)
+    {
+        $job = Job::with([
+            'company',
+            'categories',
+            'skills',
+            'jobType',
+            'level',
+            'experience',
+            'language',
+            'remotePolicy',
+            'location',
 
-{
-    $job = Job::with([
-        'company',
-        'categories',
-        'skills',
-        'jobType',
-        'level',
-        'experience',
-        'language',
-        'remotePolicy',
-        'location',
 
+        ])->find($id);
 
-    ])->find($id);
-
-   if (!$job) {
-    return response()->json([
-        'success' => false,
-        'message' => 'Tin tuyển dụng không tồn tại.',
-    ], 404);
-}
+        if (!$job) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tin tuyển dụng không tồn tại.',
+            ], 404);
+        }
 
         if (!$job) {
             return response()->json([
@@ -70,7 +67,6 @@ class JobController extends Controller
 
         return view('admin.jobs.show', compact('job'));
     }
-
 
     public function approve(Request $request, $id)
     {
@@ -99,15 +95,13 @@ class JobController extends Controller
         // Gửi notification cho nhà tuyển dụng
         $employer = $job->company->user;
         $employer->notify(new JobApprovedNotification($job));
-        event(new GlobalNotificationEvent("Tin tuyển dụng '{$job->title}' đã được duyệt!"));
-
+        // event(new GlobalNotificationEvent("Tin tuyển dụng '{$job->title}' đã được duyệt!"));
         return response()->json([
             'success' => true,
             'message' => 'Tin đã được duyệt.',
             'status_html' => $job->status_badge,
         ]);
     }
-
 
     public function reject(Request $request, Job $job)
     {
@@ -133,12 +127,6 @@ class JobController extends Controller
         ]);
     }
 
-
-
-
-
-
-
     public function destroy($id)
     {
         $job = Job::find($id);
@@ -157,7 +145,6 @@ class JobController extends Controller
             'message' => 'Tin tuyển dụng đã được xoá.'
         ]);
     }
-
 
     public function revertToPending(Request $request, $id)
     {

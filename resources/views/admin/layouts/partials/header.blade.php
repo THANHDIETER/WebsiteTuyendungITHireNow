@@ -1,581 +1,624 @@
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description"
-    content="Edmin admin is super flexible, powerful, clean &amp; modern responsive bootstrap admin template with unlimited possibilities.">
-<meta name="keywords"
-    content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
-<meta name="author" content="pixelstrap">
-<meta name="csrf-token" content="{{ csrf_token() }}">
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
+
+  <header class="page-header row justify-content-between align-items-center bg-white">
+      <div class="logo-wrapper d-flex align-items-center col-4" style="padding-left: 80px;">
+          <div class="d-flex justify-content-center align-items-center" style="height: 70px; width: 90px;">
+              @php $logo = \App\Models\Logo::where('type', 'admin')->where('is_active', true)->first(); @endphp
+              <a href="{{ route('home') }}">
+                  <img src="{{ $logo ? asset('storage/' . $logo->image_path) : "" }}"
+                      alt="Admin Logo" class="logo-img" style="height:60px; width: auto;">
+              </a>
+          </div>
+          <a class="close-btn ms-4" href="javascript:void(0)">
+              <div class="toggle-sidebar">
+                  <div class="line"></div>
+                  <div class="line"></div>
+                  <div class="line"></div>
+              </div>
+          </a>
+      </div>
+
+      <div class="page-main-header d-flex align-items-center col-auto">
+          <div class="nav-right">
+              <ul class="header-right">
+                  <li class="modes d-flex">
+                      <a href="#" class="dark-mode text-dark" title="Chế độ tối">
+                          <i class="bi bi-moon-fill svg-color fs-5"></i>
+                      </a>
+                  </li>
+
+                  <!-- Trang chủ -->
+                  <li class="modes d-flex">
+                      <a href="{{ route('home') }}" class="text-dark" title="Trang chủ">
+                          <i class="bi bi-house-door-fill svg-color fs-5"></i>
+                      </a>
+                  </li>
+
+                  <!-- Nhà tuyển dụng -->
+                  <li class="modes d-flex">
+                      <a href="{{ route('employer.dashboard') }}" class="text-dark" title="Nhà tuyển dụng">
+                          <i class="bi bi-person-badge svg-color fs-5"></i>
+                      </a>
+                  </li>
+
+                  {{-- 🔔 Notifications: 3 item đầu + cuộn trong dropdown + nút "Đánh dấu tất cả đã đọc" --}}
+                  <li class="custom-dropdown" id="admin-noti-dropdown">
+                      <a href="javascript:void(0)" id="notification-toggle" aria-label="Thông báo">
+                          <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24"
+                              fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                              <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor"
+                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2"
+                                  stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+                      </a>
+
+                      @php
+                      $unreadCount = auth()->check() ? auth()->user()->unreadNotifications()->count() : 0;
+                      $notifications = auth()->check()
+                      ? auth()->user()->notifications()->latest()->take(30)->get()
+                      : collect();
+                      @endphp
+
+                      <span class="badge rounded-pill badge-secondary" id="noti-count">
+                          {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                      </span>
+
+                      <div class="custom-menu notification-dropdown py-0 noti-card shadow">
+                          {{-- Header --}}
+                          <div class="noti-card__header d-flex align-items-center justify-content-between">
+                              <div class="d-flex align-items-center gap-2">
+                                  <div class="noti-card__chip d-flex align-items-center justify-content-center">
+                                      <i class="bi bi-bell-fill"></i>
+                                  </div>
+                                  <div class="fw-semibold">Thông báo</div>
+                              </div>
+                              <a href="{{ route('admin.notifications.index') }}" class="noti-card__link">Xem tất cả</a>
+                          </div>
+
+                          {{-- Vùng cuộn (JS sẽ set chiều cao đúng bằng 3 item đầu) --}}
+                          <div id="noti-scroll" class="noti-card__list">
+                              <ul class="list-unstyled m-0" id="noti-list">
+                                  @if ($notifications->count())
+                                  @foreach ($notifications as $noti)
+                                  @php
+                                  $data = $noti->data ?? [];
+                                  $msg = is_string(data_get($data, 'message'))
+                                  ? data_get($data, 'message')
+                                  : (data_get($data, 'message')
+                                  ? json_encode(data_get($data, 'message'), JSON_UNESCAPED_UNICODE)
+                                  : (data_get($data, 'title') ?:
+                                  'Bạn có thông báo mới!'));
+                                  $link = data_get($data, 'link_url', '#');
+                                  $isRead = !is_null($noti->read_at);
+                                  @endphp
+                                  <li class="noti-item {{ $isRead ? 'is-read' : '' }}"
+                                      data-id="{{ $noti->id }}" data-read="{{ $isRead ? '1' : '0' }}">
+                                      <a class="noti-item__inner" href="{{ $link }}">
+                                          <div class="noti-item__avatar"><i class="bi bi-bell"></i></div>
+                                          <div class="noti-item__body">
+                                              <div class="noti-item__title">{{ $msg }}</div>
+                                              <div class="noti-item__meta">
+                                                  {{ $noti->created_at->diffForHumans() }}
+                                              </div>
+                                          </div>
+                                          <span class="noti-item__dot" aria-hidden="true"></span>
+                                      </a>
+                                  </li>
+                                  @endforeach
+                                  @else
+                                  <li class="noti-empty empty-row">
+                                      <div class="noti-empty__icon"><i class="bi bi-bell-slash"></i></div>
+                                      <div class="noti-empty__text">Chưa có thông báo</div>
+                                  </li>
+                                  @endif
+                              </ul>
+                          </div>
+
+                          {{-- Footer: nút đánh dấu tất cả đã đọc + liên kết xem tất cả --}}
+                          <div class="noti-card__footer">
+                              @php
+                              $readAllUrl = \Illuminate\Support\Facades\Route::has('admin.notifications.readAll')
+                              ? route('admin.notifications.readAll')
+                              : null;
+                              @endphp
+                              <button id="read-all-btn" type="button" class="btn btn-sm btn-outline-secondary"
+                                  {{ $readAllUrl ? '' : 'disabled' }} data-action="{{ $readAllUrl ?? '' }}">
+                                  Đánh dấu tất cả đã đọc
+                              </button>
+                              <a href="{{ route('admin.notifications.index') }}"
+                                  class="btn btn-sm btn-link text-secondary">Xem tất cả</a>
+                          </div>
+                      </div>
+                  </li>
+
+                  <li class="profile-dropdown custom-dropdown">
+                      <div class="d-flex align-items-center">
+                          <img loading="lazy" src="{{ asset('assets/images/profile.png') }}" alt="">
+                          <div class="flex-grow-1">
+                              <h5>
+                                  @if (auth()->check())
+                                  {{ auth()->user()->name }}
+                                  <sup class="text-danger" style="font-size: 0.7em;">{{ auth()->user()->id }}</sup>
+                                  @else
+                                  <span class="text-muted">Guest</span>
+                                  @endif
+                              </h5>
+                              <span>{{ auth()->check() ? auth()->user()->email : 'Chưa đăng nhập' }}</span>
+                          </div>
+                      </div>
+                      <div class="custom-menu overflow-hidden">
+                          <ul class="list-unstyled m-0 p-0">
+                              <li>
+                                  <a href="{{ route('logout') }}"
+                                      class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
+                                 
+                                      </svg><span>Log Out</span>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                  </li>
+
+              </ul>
+          </div>
+      </div>
 
 
-<title>{{ $title ?? 'Admin' }}</title>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </header>
 
-<!-- Bootstrap JS Bundle (kèm Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  @if (session('access_token'))
+  <script>
+      localStorage.setItem('access_token', "{{ session('access_token') }}");
+  </script>
+  @endif
 
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
 
-<!-- Favicon icon-->
-<link rel="icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
-<!-- Google font-->
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
-    rel="stylesheet">
-<!-- Font awesome icon css -->
+  <script>
+      // Dark Mode
+      document.addEventListener("DOMContentLoaded", function() {
+          const btn = document.querySelector('.dark-mode');
+          if (btn) {
+              btn.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  document.documentElement.classList.toggle('dark');
+                  localStorage.setItem('theme', document.documentElement.classList.contains('dark') ?
+                      'dark' : 'light');
+              });
+          }
+          if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+      });
 
-<!-- Ico Icon css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}">
-<!-- Flag Icon css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css') }}">
-<!-- Themify Icon css -->
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/css/vendors/themify-icons/themify-icons/css/themify.css') }}">
-<!-- Animation css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css/animate.css') }}">
-<!-- Whether Icon css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
-<!-- Apex Chart css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/apexcharts.css') }}">
-<!-- Data Table css-->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/simple-datatables/dist/style.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
-<!-- App css-->
-<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-<link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
-<meta property="og:url" content="{{ url()->current() }}">
-<header class="page-header row">
-    <div class="logo-wrapper d-flex align-items-center col-auto"><a href=""><img class="for-light" loading="lazy"
-                src="{{ asset('assets/images/logo/logo.png') }}" alt="logo"><img class="for-dark" loading="lazy"
-                src="{{ asset('assets/images/logo/dark-logo.png') }}" alt="logo"></a><a class="close-btn"
-            href="javascript:void(0)">
-            <div class="toggle-sidebar">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
-        </a></div>
-    <div class="page-main-header col">
-        <div class="header-left d-lg-block d-none">
-            <form class="search-form mb-0">
-                <div class="input-group"><span class="input-group-text pe-0">
-                        <!-- Icon Search -->
-                        <svg class="search-bg svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                    <input class="form-control" type="text" placeholder="Search anything...">
-                </div>
-            </form>
-        </div>
-        <div class="nav-right">
-            <ul class="header-right">
-                <li class="modes d-flex"><a class="dark-mode">
-                        <!-- Icon Moon -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a></li>
-                <li class="serchinput d-lg-none d-flex"><a class="search-mode">
-                        <!-- Icon Search -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    <div class="form-group search-form">
-                        <input type="text" placeholder="Search here...">
-                    </div>
-                </li>
-                <!-- Notification menu -->
-                <li class="custom-dropdown">
-                    <a href="{{ route('notifications.index') }}" id="notification-toggle">
-                        <!-- Icon Bell -->
-                        <svg class="svg-color circle-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    <span class="badge rounded-pill badge-secondary" id="noti-count">
-                        {{ auth()->user()->unreadNotifications->count() }}
-                    </span>
+      // Echo/Pusher
+      window.Pusher = Pusher;
+      window.Echo = new Echo({
+          broadcaster: 'pusher',
+          key: '{{ config('
+          broadcasting.connections.pusher.key ', '
+          1 ea633f39dfb08c3c0c2 ') }}',
+          cluster: '{{ config('
+          broadcasting.connections.pusher.options.cluster ', '
+          ap1 ') }}',
+          forceTLS: true,
+      });
 
+      // JSON detail URL (admin) - chỉ dùng nếu có route
+        const NOTI_DETAIL_URL_TMPL = @json(
+            \Illuminate\Support\Facades\Route::has('admin.notifications.json')
+                ? route('admin.notifications.json', ['id' => '__ID__'])
+                : null
+        );
 
+      // Keep height = exactly 3 items
+      function setNotiScrollHeight() {
+          const scroll = document.getElementById('noti-scroll');
+          const list = document.getElementById('noti-list');
+          if (!scroll || !list) return;
 
+          const items = list.querySelectorAll('li.noti-item');
+          if (items.length === 0) {
+              scroll.style.maxHeight = '0px';
+              return;
+          }
 
-                    {{-- <div class="custom-menu notification-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">
-                            Notifications
-                            <a href="{{ route('notifications.index') }}">
-                                <span class="font-primary">View</span>
-                            </a>
-                        </h5>
-                        <ul class="activity-update" id="noti-list">
-                            <li class="mt-3 d-flex justify-content-center">
-                                <div class="button-group">
-                                    <a class="btn btn-secondary"
-                                        href="">AllNotification</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div> --}}
-                </li>
+          const firstRect = items[0].getBoundingClientRect();
+          const target = items[Math.min(2, items.length - 1)];
+          const targetRect = target.getBoundingClientRect();
+          const visibleH = Math.max(0, targetRect.bottom - firstRect.top) + 10;
+          scroll.style.maxHeight = visibleH + 'px';
+          scroll.style.overflowY = 'auto';
+      }
+      document.addEventListener('DOMContentLoaded', setNotiScrollHeight);
+      window.addEventListener('resize', setNotiScrollHeight);
 
-                <!-- Bookmark menu-->
-                <li class="custom-dropdown"><a href="javascript:void(0)">
-                        <!-- Icon Star -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9" stroke="currentColor"
-                                stroke-width="2" stroke-linejoin="round" fill="none" />
-                        </svg>
-                    </a>
-                    <div class="custom-menu bookmark-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Bookmark</h5>
-                        <ul>
-                            <li>
-                                <form class="mb-3">
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="Search Bookmark..."><span
-                                            class="input-group-text">
-                                            <!-- Icon Search -->
-                                            <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </span>
-                                    </div>
-                                </form>
-                            </li>
-                            <li class="d-flex align-items-center bg-light-primary">
-                                <div class="flex-shrink-0 me-2"><a href="">
-                                        <!-- Icon Home -->
-                                        <svg class="svg-color stroke-primary" width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z"
-                                                stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                            <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </a></div>
-                                <div class="d-flex justify-content-between align-items-center w-100"><a
-                                        href="">Dashboard</a>
-                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
-                                            fill="none" />
-                                    </svg>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center bg-light-secondary">
-                                <div class="flex-shrink-0 me-2"><a href="">
-                                        <!-- Icon Pie -->
-                                        <svg class="svg-color stroke-secondary" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                            <path d="M12 2v10h10" stroke="currentColor" stroke-width="2"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </a></div>
-                                <div class="d-flex justify-content-between align-items-center w-100"><a
-                                        href="">To-do</a>
-                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
-                                            fill="none" />
-                                    </svg>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center bg-light-tertiary">
-                                <div class="flex-shrink-0 me-2"><a href="">
-                                        <!-- Icon Chart -->
-                                        <svg class="svg-color stroke-tertiary" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3 3v18h18" stroke="currentColor" stroke-width="2"
-                                                stroke-linejoin="round" />
-                                            <path d="M18 15l-5-5-4 4-3-3" stroke="currentColor" stroke-width="2"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </a></div>
-                                <div class="d-flex justify-content-between align-items-center w-100"><a
-                                        href="">Chart</a>
-                                    <svg class="svg-color icon-star" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
-                                            fill="none" />
-                                    </svg>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <!-- Cart menu-->
-                <li class="custom-dropdown"><a href="javascript:void(0)">
-                        <!-- Icon Bag -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 2l3 0a3 3 0 016 0l3 0a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"
-                                stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none" />
-                            <path d="M6 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        </svg>
-                    </a>
-                    <div class="custom-menu cart-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Cart<span>Total : <span
-                                    class="font-primary">4350.9</span></span></h5>
-                        <ul>
-                            <li class="cartbox d-flex bg-light-primary">
-                                <div class="flex-shrink-0 border-primary"><img loading="lazy"
-                                        src="{{ asset('assets/images/dashboard2/product/1.png') }}" alt="">
-                                </div>
-                                <div class="touchpin-details"><a href="">
-                                        <h5>Apple Computers</h5>
-                                    </a><span>$2600.00</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <!-- Icon Minus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-primary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <!-- Icon Plus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="cartbox d-flex bg-light-secondary">
-                                <div class="flex-shrink-0 border-secondary"><img loading="lazy"
-                                        src="{{ asset('assets/images/dashboard2/product/2.png') }}" alt="">
-                                </div>
-                                <div class="touchpin-details"><a href="">
-                                        <h5>Microwave</h5>
-                                    </a><span>$1450.45</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <!-- Icon Minus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-secondary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <!-- Icon Plus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="cartbox d-flex bg-light-tertiary">
-                                <div class="flex-shrink-0 border-tertiary"><img loading="lazy"
-                                        src="{{ asset('assets/images/dashboard2/product/3.png') }}" alt="">
-                                </div>
-                                <div class="touchpin-details"><a href="">
-                                        <h5>Mackup Kit</h5>
-                                    </a><span>$300.45</span>
-                                    <div class="touchspin-wrapper">
-                                        <button class="decrement-touchspin btn-touchspin">
-                                            <!-- Icon Minus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                        <input class="form-control input-touchspin bg-light-tertiary" type="number"
-                                            value="5">
-                                        <button class="increment-touchspin btn-touchspin">
-                                            <!-- Icon Plus -->
-                                            <svg class="svg-color" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-close"></button>
-                                </div>
-                            </li>
-                            <li class="mt-3 p-0 d-flex justify-content-center">
-                                <div><a class="btn btn-secondary" href="">Checkout</a></div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <!-- Bookmark menu-->
-                <li class="custom-dropdown"><a href="javascript:void(0)">
-                        <!-- Icon Message -->
-                        <svg class="svg-color" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z" stroke="currentColor"
-                                stroke-width="2" stroke-linejoin="round" />
-                        </svg>
-                    </a><span class="badge rounded-pill badge-tertiary">3</span>
-                    <div class="custom-menu message-dropdown py-0 overflow-hidden">
-                        <h5 class="title bg-primary-light">Messages</h5>
-                        <ul>
-                            <li class="d-flex b-t-primary">
-                                <div class="d-block"><a href="">
-                                        <h5>Design meeting</h5>
-                                    </a>
-                                    <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg><span>Just Now</span>
-                                    </h6>
-                                </div>
-                                <div class="badge badge-light-danger">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg><span>Open</span>
-                                </div>
-                            </li>
-                            <li class="d-flex b-t-secondary">
-                                <div class="d-block"><a href="">
-                                        <h5>Weekly scurm Meeting</h5>
-                                    </a>
-                                    <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg><span>1 Hour Ago</span>
-                                    </h6>
-                                </div>
-                                <div class="badge badge-light-danger">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg><span>Open</span>
-                                </div>
-                            </li>
-                            <li class="d-flex b-t-tertiary">
-                                <div class="d-block"><a href="">
-                                        <h5>Check your login page</h5>
-                                    </a>
-                                    <h6>
-                                        <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg><span>2 Hour Ago</span>
-                                    </h6>
-                                </div>
-                                <div class="badge badge-light-success">
-                                    <svg class="feather me-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg><span>Closed</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="profile-dropdown custom-dropdown">
-                    <div class="d-flex align-items-center"><img loading="lazy"
-                            src="{{ asset('assets/images/profile.png') }}" alt="">
-                        <div class="flex-grow-1">
-                            <h5>
+      // Chỉ cuộn dropdown, không cuộn trang
+      const scrollBox = document.getElementById('noti-scroll');
+      if (scrollBox) {
+          scrollBox.addEventListener('wheel', function(e) {
+              const atTop = this.scrollTop === 0;
+              const atBottom = Math.ceil(this.scrollTop + this.clientHeight) >= this.scrollHeight;
+              if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) e.preventDefault();
+          }, {
+              passive: false
+          });
+      }
 
-                                @if (auth()->check())
-                                    {{ auth()->user()->role }}
-                                    <sup style="font-size: 0.7em; color: red;">{{ auth()->user()->id }}</sup>
-                                @else
-                                    <span class="text-muted">Guest</span>
-                                @endif
+      // Recalc khi list thay đổi & dropdown đang mở
+      const listUl = document.getElementById('noti-list');
+      if (listUl) {
+          new MutationObserver(() => setNotiScrollHeight()).observe(listUl, {
+              childList: true
+          });
+      }
 
+      // Fallback JSON khi payload thiếu
+      async function resolveNotificationPayload(evt) {
+          const d = evt?.data || {};
+          let message = (typeof d.message === 'string' && d.message.trim() !== '') ? d.message : null;
+          let link = (typeof d.link_url === 'string' && d.link_url.trim() !== '') ? d.link_url : null;
+          if (message && link) return {
+              message,
+              link
+          };
 
+          if (!NOTI_DETAIL_URL_TMPL) {
+              return {
+                  message: message || d.title || 'Bạn có thông báo mới!',
+                  link: link || '#'
+              };
+          }
 
-                            </h5>
-                            @if (auth()->check())
-                                <span>{{ auth()->user()->email }}</span>
-                            @else
-                                <span class="text-muted">Chưa đăng nhập</span>
-                            @endif
+          try {
+              const url = NOTI_DETAIL_URL_TMPL.replace('__ID__', evt.id);
+              const res = await fetch(url, {
+                  headers: {
+                      'Accept': 'application/json'
+                  },
+                  credentials: 'same-origin'
+              });
+              if (res.ok) {
+                  const j = await res.json();
+                  return {
+                      message: (j.message && j.message.trim() !== '') ? j.message : (message || d.title ||
+                          'Bạn có thông báo mới!'),
+                      link: (j.link_url && j.link_url.trim() !== '') ? j.link_url : (link || '#'),
+                  };
+              }
+          } catch (_) {}
+          return {
+              message: message || d.title || 'Bạn có thông báo mới!',
+              link: link || '#'
+          };
+      }
 
-                        </div>
+      // Realtime: badge ++, prepend item
+      const userId = {{ auth()->id() ?? 'null' }};
+      };
+      if (userId && window.Echo) {
+          window.Echo.private(`App.Models.User.${userId}`)
+              .notification(async (evt) => {
+                  const badge = document.getElementById('noti-count');
+                  const list = document.getElementById('noti-list');
 
-                    </div>
-                    <div class="custom-menu overflow-hidden">
-                        <ul class="list-unstyled m-0 p-0">
-                            <!-- Account -->
-                            <li>
-                                <a href="#"
-                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
-                                        <path d="M5.5 21h13a8.38 8.38 0 00-13 0z" stroke="currentColor" stroke-width="2"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                    <span>Account</span>
-                                </a>
-                            </li>
+                  // badge
+                  if (badge) {
+                      let txt = (badge.textContent || '').trim();
+                      let c = (txt === '99+') ? 99 : parseInt(txt) || 0;
+                      c = isNaN(c) ? 0 : c + 1;
+                      badge.textContent = c > 99 ? '99+' : c;
+                      badge.style.display = 'inline-block';
+                  }
 
-                            <!-- Inbox -->
-                            <li>
-                                <a href="#"
-                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                    </svg>
-                                    <span>Inbox</span>
-                                </a>
-                            </li>
+                  const payload = await resolveNotificationPayload(evt);
 
-                            <!-- Task -->
-                            <li>
-                                <a href="#"
-                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
-                                            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                        <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                    <span>Task</span>
-                                </a>
-                            </li>
+                  if (list) {
+                      list.querySelectorAll('.empty-row').forEach(el => el.remove());
 
-                            <!-- Log Out -->
-                            <li>
-                                <a href="{{ route('logout') }}"
-                                    class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark rounded menu-link">
-                                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke="currentColor"
-                                            stroke-width="2" stroke-linejoin="round" />
-                                        <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2"
-                                            stroke-linejoin="round" stroke-linecap="round" />
-                                        <path d="M15 12H3" stroke="currentColor" stroke-width="2"
-                                            stroke-linejoin="round" stroke-linecap="round" />
-                                    </svg>
-                                    <span>Log Out</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</header>
-@if (session('access_token'))
-    <script>
-        localStorage.setItem('access_token', "{{ session('access_token') }}");
-    </script>
-@endif
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const darkModeBtn = document.querySelector('.dark-mode');
+                      const li = document.createElement('li');
+                      li.className = 'noti-item';
+                      li.setAttribute('data-id', evt.id || '');
+                      li.setAttribute('data-read', '0');
+                      li.innerHTML = `
+            <a class="noti-item__inner" href="${payload.link}">
+              <div class="noti-item__avatar"><i class="bi bi-bell"></i></div>
+              <div class="noti-item__body">
+                <div class="noti-item__title">${payload.message}</div>
+                <div class="noti-item__meta">Vừa xong</div>
+              </div>
+              <span class="noti-item__dot" aria-hidden="true"></span>
+            </a>
+          `;
 
-        darkModeBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.documentElement.classList.toggle('dark');
+                      const first = list.querySelector('.noti-item');
+                      if (first) list.insertBefore(li, first);
+                      else list.prepend(li);
 
-            // Lưu trạng thái vào localStorage để giữ trạng thái khi reload
-            if (document.documentElement.classList.contains('dark')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        });
+                      // giới hạn ~50 item
+                      const items = list.querySelectorAll('.noti-item');
+                      if (items.length > 50)
+                          for (let i = 50; i < items.length; i++) items[i].remove();
 
-        // Auto load theme nếu đã lưu
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        }
-    });
-</script>
-<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
-<script>
-    window.Pusher = Pusher;
+                      setNotiScrollHeight();
+                  }
+              });
+      }
 
-    window.Echo = new Echo({
-        broadcaster: 'pusher',
-        key: '1ea633f39dfb08c3c0c2',
-        cluster: 'ap1',
-        forceTLS: true,
-    });
-    console.log('ffff', window.Echo);
+      // Click => mark-as-read => update badge theo server + điều hướng
+      document.addEventListener('DOMContentLoaded', function() {
+          const list = document.getElementById('noti-list');
+          const badge = document.getElementById('noti-count');
+          const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+          if (!list) return;
 
-    const userId = {{ auth()->id() }};
+          const readUrlTmpl = "{{ route('admin.notifications.read', '__ID__') }}";
 
-    if (userId && window.Echo) {
-        window.Echo.private(`App.Models.User.${userId}`)
-            .notification((notification) => {
-                console.log('Received new notification via Pusher:', notification);
+          list.addEventListener('click', async function(e) {
+              const a = e.target.closest('a.noti-item__inner');
+              const li = e.target.closest('li.noti-item[data-id]');
+              if (!a || !li) return;
 
-                const notiCount = document.getElementById('noti-count');
-                if (notiCount) {
-                    let count = parseInt(notiCount.textContent) || 0;
-                    notiCount.textContent = count + 1; // tăng số badge lên 1
-                    notiCount.style.display = 'inline-block';
-                }
-            });
+              if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+              e.preventDefault();
 
-    } else {
-        console.warn('User is not logged in or Echo is not initialized.');
-    }
-</script>
+              const id = li.getAttribute('data-id');
+              const href = a.getAttribute('href') || '#';
+
+              try {
+                  const res = await fetch(readUrlTmpl.replace('__ID__', id), {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                          'X-CSRF-TOKEN': csrf,
+                          'Accept': 'application/json'
+                      },
+                      credentials: 'same-origin',
+                      body: JSON.stringify({})
+                  });
+
+                  if (res.ok) {
+                      // Nếu controller trả unread_count thì cập nhật; nếu không, chỉ làm mờ item
+                      let c;
+                      try {
+                          const data = await res.json();
+                          c = parseInt(data.unread_count ?? NaN);
+                      } catch (_) {}
+                      if (badge && Number.isFinite(c)) {
+                          badge.textContent = c > 99 ? '99+' : c;
+                          badge.style.display = c > 0 ? 'inline-block' : 'none';
+                      }
+                      li.classList.add('is-read');
+                      li.setAttribute('data-read', '1');
+                  }
+              } catch (err) {
+                  console.error('Mark-as-read error:', err);
+              } finally {
+                  if (href && href !== '#') window.location.href = href;
+              }
+          });
+      });
+
+      // Đánh dấu tất cả đã đọc (footer button)
+      document.addEventListener('DOMContentLoaded', function() {
+          const btn = document.getElementById('read-all-btn');
+          const list = document.getElementById('noti-list');
+          const badge = document.getElementById('noti-count');
+          const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+          if (!btn) return;
+          const action = btn.getAttribute('data-action');
+
+          if (!action) {
+              // Chưa có route -> ẩn/disable nút cho gọn
+              btn.disabled = true;
+              btn.title = 'Vui lòng thêm route admin.notifications.readAll để dùng tính năng này';
+              return;
+          }
+
+          btn.addEventListener('click', async function() {
+              btn.disabled = true;
+              const orig = btn.textContent;
+              btn.textContent = 'Đang xử lý...';
+
+              try {
+                  const res = await fetch(action, {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                          'X-CSRF-TOKEN': csrf,
+                          'Accept': 'application/json'
+                      },
+                      credentials: 'same-origin',
+                      body: JSON.stringify({})
+                  });
+
+                  if (res.ok) {
+                      let unread = 0;
+                      try {
+                          const data = await res.json();
+                          unread = parseInt(data.unread_count ?? 0);
+                      } catch (_) {}
+                      if (badge) {
+                          badge.textContent = '0';
+                          badge.style.display = 'none';
+                      }
+                      // đánh dấu mờ toàn bộ item trong dropdown
+                      if (list) {
+                          list.querySelectorAll('.noti-item').forEach(el => {
+                              el.classList.add('is-read');
+                              el.setAttribute('data-read', '1');
+                          });
+                      }
+                  }
+              } catch (err) {
+                  console.error('Read-all error:', err);
+              } finally {
+                  btn.disabled = false;
+                  btn.textContent = orig;
+              }
+          });
+      });
+  </script>
+
+  <style>
+      /* Card styles (đồng bộ với web) */
+      .noti-card {
+          width: 360px;
+          border: none;
+          border-radius: 14px;
+          box-shadow: 0 12px 28px rgba(0, 0, 0, .16), 0 2px 4px rgba(0, 0, 0, .08);
+          overflow: hidden;
+      }
+
+      .noti-card__header {
+          padding: 10px 14px;
+          background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+          color: #fff;
+      }
+
+      .noti-card__chip {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, .18);
+          backdrop-filter: blur(6px);
+          font-size: 16px;
+      }
+
+      .noti-card__link {
+          color: rgba(255, 255, 255, .9);
+          text-decoration: none;
+          font-size: .9rem;
+      }
+
+      .noti-card__link:hover {
+          text-decoration: underline;
+      }
+
+      .noti-card__list {
+          padding: 6px 0;
+          background: var(--noti-bg, #fff);
+          max-height: 320px;
+          /* sẽ bị JS override, giữ làm fallback */
+          overflow-y: auto;
+          overscroll-behavior: contain;
+          -webkit-overflow-scrolling: touch;
+      }
+
+      .noti-card__footer {
+          position: sticky;
+          bottom: 0;
+          display: flex;
+          gap: .5rem;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 12px;
+          background: linear-gradient(180deg, rgba(0, 0, 0, .02), rgba(0, 0, 0, .06));
+          backdrop-filter: blur(6px);
+      }
+
+      /* Item */
+      .noti-item+.noti-item {
+          border-top: 1px solid rgba(0, 0, 0, .05);
+      }
+
+      .noti-item__inner {
+          display: grid;
+          grid-template-columns: 36px 1fr auto;
+          gap: 10px;
+          align-items: start;
+          padding: 10px 14px;
+          text-decoration: none;
+          transition: background .15s ease, transform .06s ease;
+      }
+
+      .noti-item__inner:hover {
+          background: rgba(0, 0, 0, .04);
+      }
+
+      .noti-item__inner:active {
+          transform: scale(.996);
+      }
+
+      .noti-item__avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          background: #eef2ff;
+          color: #4f46e5;
+          display: grid;
+          place-items: center;
+          font-size: 18px;
+      }
+
+      .noti-item__body {
+          min-width: 0;
+      }
+
+      .noti-item__title {
+          font-size: .95rem;
+          line-height: 1.3;
+          color: #111827;
+          font-weight: 600;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+      }
+
+      .noti-item__meta {
+          font-size: .8rem;
+          color: #6b7280;
+          margin-top: 2px;
+      }
+
+      .noti-item__dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #ef4444;
+          margin-top: 4px;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, .18);
+      }
+
+      .noti-item.is-read .noti-item__title {
+          font-weight: 500;
+          color: #374151;
+      }
+
+      .noti-item.is-read .noti-item__dot {
+          visibility: hidden;
+      }
+
+      .noti-empty {
+          padding: 24px 12px;
+          text-align: center;
+          color: #6b7280;
+      }
+
+      .noti-empty__icon {
+          font-size: 28px;
+          opacity: .5;
+          margin-bottom: 6px;
+      }
+
+      html.dark .noti-card__list {
+          --noti-bg: #0b1220;
+      }
+
+      html.dark .noti-item__inner:hover {
+          background: rgba(255, 255, 255, .06);
+      }
+
+      html.dark .noti-item__title {
+          color: #e5e7eb;
+      }
+
+      html.dark .noti-item__meta {
+          color: #9ca3af;
+      }
+
+      html.dark .noti-item.is-read .noti-item__title {
+          color: #cbd5e1;
+      }
+  </style>

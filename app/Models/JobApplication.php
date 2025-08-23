@@ -13,6 +13,10 @@ class JobApplication extends Model
         'job_id',
         'user_id',
         'company_id',
+        'full_name',       // thêm
+        'email',           // thêm
+        'phone',           // thêm
+        'image',           // thêm
         'cv_url',
         'cover_letter',
         'applied_at',
@@ -33,16 +37,17 @@ class JobApplication extends Model
     // Relationships
     public function job()
     {
-        return $this->belongsTo(Job::class);
+        return $this->belongsTo(Job::class, 'job_id');
     }
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
-    
+
+
 }

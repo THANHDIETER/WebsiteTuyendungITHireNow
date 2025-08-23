@@ -64,6 +64,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Ngôn ngữ
     Route::post('/profile/languages', [ProfileController::class, 'storeLanguage'])->name('profile.languages.store');
+    Route::post('/profile/upload-cvs', [ProfileController::class, 'uploadCVs'])->name('profile.uploadCVs');
+    Route::delete('/profile/cv/{id}', [ProfileController::class, 'deleteCV'])->name('profile.cv.delete');
+
+
 });
 
 Route::middleware(['job_seeker'])->group(function () {

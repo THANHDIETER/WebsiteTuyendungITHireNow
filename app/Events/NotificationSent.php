@@ -2,12 +2,13 @@
 
 namespace App\Events;
 
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\{Channel, PrivateChannel};
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 
-class NotificationSent implements ShouldBroadcast
+class NotificationSent implements ShouldQueue
 {
     use Dispatchable, SerializesModels;
 

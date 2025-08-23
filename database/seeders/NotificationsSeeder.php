@@ -19,7 +19,7 @@ class NotificationsSeeder extends Seeder
 
         DB::table('notifications')->insert([
             [
-                'id' => (string) Str::uuid(),
+                'id' => (string) Str::uuid(), // Bỏ dòng này nếu dùng auto-increment ID
                 'type' => 'App\\Notifications\\Employer\\JobApprovedNotification',
                 'notifiable_type' => 'App\\Models\\User',
                 'notifiable_id' => $user->id,

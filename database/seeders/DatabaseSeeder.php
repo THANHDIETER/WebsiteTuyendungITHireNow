@@ -33,6 +33,7 @@ use Database\Seeders\ServicePackagesSeeder;
 use Database\Seeders\EmployerPackagesSeeder;
 use Database\Seeders\job_applicationsSeeder;
 use Database\Seeders\BlogSeeder;
+use Database\Seeders\AiConfigSeeder;
 
 use Database\Seeders\JobApplicationsSeeder;
 
@@ -47,7 +48,7 @@ class DatabaseSeeder extends Seeder
             SkillsSeeder::class,
             LocationsSeeder::class,
             SalariesSeeder::class,
-            CompaniesSeeder::class, 
+            CompaniesSeeder::class,
             LevelSeeder::class,
             RemotePolicySeeder::class,
             JobExperienceSeeder::class,
@@ -72,6 +73,8 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             JobTypesSeeder::class,
             BankAccountsSeeder::class,
+            BlogSeeder::class,
+            AiConfigSeeder::class,  
         ]);
     }
 }

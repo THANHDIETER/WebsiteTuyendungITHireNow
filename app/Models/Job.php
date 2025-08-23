@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\JobApplication;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Job extends Model
 {
+    protected $table = 'jobs';
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
@@ -41,9 +44,17 @@ class Job extends Model
         'level_id',
         'job_type_id',
         'location_id',
-          'employer_id'
+        'employer_id',
+        'approved_by',
+        'ai_processed_at'
     ];
-
+    public function applications(): HasMany
+    {
+        // Model liên quan là JobApplication
+        // Bảng mặc định: job_applications
+        // Khóa ngoại mặc định: job_id
+        return $this->hasMany(JobApplication::class, 'job_id');
+    }
 
     protected $casts = [
         'salary_negotiable' => 'boolean',
@@ -58,7 +69,7 @@ class Job extends Model
     // 🔗 Relations
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     public function categories()
@@ -131,10 +142,23 @@ class Job extends Model
         return $this->belongsTo(Category::class);
     }
 
+
     public function language()
     {
-        return $this->belongsTo(JobLanguage::class);
+        return $this->belongsTo(JobLanguage::class, 'language_id');
     }
+
+    public function jobLanguage()
+    {
+        return $this->belongsTo(JobLanguage::class, 'language_id', 'id');
+    }
+
+    public function packageUsage()
+    {
+        return $this->belongsTo(EmployerPackageUsage::class, 'company_id', 'company_id')
+            ->where('is_active', true);
+    }
+
 
     public function remotePolicy()
     {
@@ -146,9 +170,9 @@ class Job extends Model
         return $this->belongsTo(Location::class);
     }
     public function recruiter()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function interviews()
     {

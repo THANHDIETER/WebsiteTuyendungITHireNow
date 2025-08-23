@@ -1,9 +1,8 @@
 <style>
     /* Default (Light Mode) */
     .page-sidebar {
-        top: 24px;
+        top: 22px;
         width: 250px;
-        background: #fff;
         min-height: 100vh;
     }
 
@@ -98,7 +97,11 @@
                 <i class="bi bi-briefcase sidebar-icon"></i> Duyệt tin tuyển dụng
             </a>
         </li>
-
+         <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.employers.index') }}">
+                <i class="bi bi-journal-arrow-down sidebar-icon"></i> Nhà tuyển dụng
+            </a>
+        </li>
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.seekerprofile.index') }}">
                 <i class="bi bi-person-lines-fill sidebar-icon"></i> Duyệt CV ứng viên
@@ -130,8 +133,8 @@
         </li>
 
         <li class="sidebar-list">
-            <a class="sidebar-link" href="{{ route('admin.employers.index') }}">
-                <i class="bi bi-journal-arrow-down sidebar-icon"></i> Nhà tuyển dụng
+            <a class="sidebar-link" href="{{ route('admin.blogs.index') }}">
+                <i class="bi bi-journal-text sidebar-icon"></i> Quản lý Blog
             </a>
         </li>
 
@@ -145,7 +148,7 @@
 
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.settings.index') }}">
-                <i class="bi bi-gear sidebar-icon"></i> Cài đặt hệ thống
+                <i class="bi bi-gear sidebar-icon"></i> Cài đặt
             </a>
         </li>
 
@@ -160,15 +163,5 @@
                 <i class="bi bi-journal-arrow-down sidebar-icon"></i> Lịch sử Nhận tiền
             </a>
         </li>
-<<<<<<< HEAD
-        <li class="sidebar-list">
-            <a class="sidebar-link" href="{{ route('admin.logos.index') }}">
-                <i class="bi bi-image sidebar-icon"></i> Logo
-            </a>
-        </li>
-
-=======
->>>>>>> 45aff071f646e7291ddfc422a2b5dd7f837f012b
-
     </ul>
 </aside>

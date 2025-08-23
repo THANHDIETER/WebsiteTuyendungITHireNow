@@ -6,9 +6,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class InterviewResponseConfirmedNotification extends Notification implements ShouldBroadcastNow
+class InterviewResponseConfirmedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

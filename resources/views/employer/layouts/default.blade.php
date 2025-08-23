@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
-    
-    @include('employer.layouts.partials.header')
+    @include('employer.layouts.partials.css')
+    <!-- Gọi app.js và app.scss -->
     @stack('style')
-
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-
     @vite(['resources/js/app.js'])
+
+    @include('employer.layouts.partials.header')
 
     <!-- Navbar -->
     @include('employer.layouts.partials.navbar')

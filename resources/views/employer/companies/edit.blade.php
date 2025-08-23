@@ -132,25 +132,15 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Trạng thái</label>
-                                    <select id="status" class="form-select @error('status') is-invalid @enderror"
-                                        name="status">
-                                        <option value="active"
-                                            {{ old('status', $company->status) == 'active' ? 'selected' : '' }}>Active
-                                        </option>
-                                        <option value="inactive"
-                                            {{ old('status', $company->status) == 'inactive' ? 'selected' : '' }}>Inactive
-                                        </option>
-                                        <option value="banned"
-                                            {{ old('status', $company->status) == 'banned' ? 'selected' : '' }}>Banned
-                                        </option>
-                                    </select>
-                                    @error('status')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Trạng thái</label>
+                                <select id="status" class="form-select" name="status" disabled>
+                                    <option value="active" {{ $company->status == 'active' ? 'selected' : '' }}>Active</option>
+                                    <option value="inactive" {{ $company->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                    <option value="banned" {{ $company->status == 'banned' ? 'selected' : '' }}>Banned</option>
+                                </select>
+                                <input type="hidden" name="status" value="{{ $company->status }}">
+                            </div>
                             </div>
                         </div>
                     </fieldset>

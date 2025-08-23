@@ -1,50 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
 
-// Nhóm route thông báo, yêu cầu user đã đăng nhập
-Route::middleware(['auth'])->group(function () {
+Route::middleware('auth')->group(function () {
+    // Trang danh sách thông báo
+    Route::get('/notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index');
 
-    // 🛡️ Admin notification route
-    Route::get('/admin/noti/latest', function () {
-        $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+    // Đánh dấu 1 thông báo đã đọc
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
 
-        return response()->json($notifications->map(function ($noti) {
-            return [
-                'id' => $noti->id,
-                'message' => $noti->data['message'],
-                'link_url' => $noti->data['link_url'],
-                'time' => $noti->created_at->diffForHumans()
-            ];
-        }));
-    })->name('admin.notifications.latest');
+    // Đánh dấu tất cả đã đọc
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
+        ->name('notifications.readAll');
 
-    // 🏢 Employer notification route
-    Route::get('/employer/noti/latest', function () {
-        $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-        return response()->json($notifications->map(function ($noti) {
-            return [
-                'id' => $noti->id,
-                'message' => $noti->data['message'],
-                'link_url' => $noti->data['link_url'],
-                'time' => $noti->created_at->diffForHumans()
-            ];
-        }));
-    })->name('employer.notifications.latest');
-
-    // 🙋 Job Seeker notification route
-    Route::get('/seeker/notifications/latest', function () {
-        $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-
-        return response()->json($notifications->map(function ($noti) {
-            return [
-                'id' => $noti->id,
-                'message' => $noti->data['message'],
-                'link_url' => $noti->data['link_url'],
-                'time' => $noti->created_at->diffForHumans(),
-            ];
-        }));
-    })->name('seeker.notifications.latest');
-
+    // ⬅️ JSON detail để client “resolve” message/link khi payload realtime thiếu
+    Route::get('/notifications/{id}/json', [NotificationController::class, 'json'])
+        ->name('notifications.json');
 });

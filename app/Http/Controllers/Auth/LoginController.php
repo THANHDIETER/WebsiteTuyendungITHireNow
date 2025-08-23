@@ -82,10 +82,11 @@ class LoginController extends Controller
     public function redirect()
     {
         $provider = new Google([
-            'clientId' => env('GOOGLE_CLIENT_ID'),
-            'clientSecret' => env('GOOGLE_CLIENT_SECRET'),
-            'redirectUri' => route('auth.callback'),
+            'clientId' => config('services.google.client_id'),
+            'clientSecret' => config('services.google.client_secret'),
+            'redirectUri' => config('services.google.redirect'),
         ]);
+
 
         $authUrl = $provider->getAuthorizationUrl();
         Session::put('oauth2state', $provider->getState());
@@ -96,11 +97,12 @@ class LoginController extends Controller
     public function callback(Request $request)
     {
         $provider = new Google([
-            'clientId' => env('GOOGLE_CLIENT_ID'),
-            'clientSecret' => env('GOOGLE_CLIENT_SECRET'),
-            'redirectUri' => route('auth.callback'),
-            'scopes' => ['email', 'profile'],
+            'clientId'     => config('services.google.client_id'),
+            'clientSecret' => config('services.google.client_secret'),
+            'redirectUri'  => config('services.google.redirect'),
+            'scopes'       => ['email', 'profile'],
         ]);
+
 
         if ($request->get('state') !== Session::pull('oauth2state')) {
             session()->flash('error', 'Invalid state');

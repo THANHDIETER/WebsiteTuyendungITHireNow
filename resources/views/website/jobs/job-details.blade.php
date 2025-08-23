@@ -1,633 +1,312 @@
 @extends('website.layouts.master')
 
 @section('content')
-    <main class="main-content">
-        <!--== Bắt đầu header trang ==-->
-        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
-            <div class="container pt--0 pb--0">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="col-12">
-                            <div class="job-search-wrap">
-                                <div class="job-search-form">
-                                    <form action="index.html#">
-                                        <div class="row row-gutter-10">
-                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Tiêu đề việc làm hoặc từ khóa">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                                <div class="form-group">
-                                                    <select class="form-control">
-                                                        <option value="1" selected>Chọn Thành Phố</option>
-                                                        <option value="2">Hà Nội</option>
-                                                        <option value="3">Hồ Chí Minh</option>
-                                                        <option value="4">Đà Nẵng</option>
-                                                        <option value="5">Huế</option>
-                                                        <option value="6">Hà Nam</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                                <div class="form-group">
-                                                    <select class="form-control">
-                                                        <option value="1" selected>Loại Công Việc</option>
-                                                        <option value="2">Web Designer</option>
-                                                        <option value="3">Web Developer</option>
-                                                        <option value="4">Graphic Designer</option>
-                                                        <option value="5">App Developer</option>
-                                                        <option value="6">UI &amp; UX Expert</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                                <div class="form-group">
-                                                    <button type="button" class="btn-form-search"><i
-                                                            class="icofont-search-1"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    {{-- ======= Compact Banner (no extra top gap) ======= --}}
+    <div class="page-header-area d-flex justify-content-center align-items-center text-center"
+        style="height:72px;max-height:72px;padding:0!important;background:url('{{ asset('client/assets/img/banner/15.png') }}') center/cover no-repeat;"
+        role="img" aria-label="Job details banner">
+        <span class="visually-hidden">Job details</span>
+    </div>
 
-        <!--== Kết thúc header trang ==-->
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show"
-                role="alert">
-                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+    {{-- ======= Flash messages ======= --}}
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <div class="d-flex align-items-start gap-2">
+                <i class="bi bi-check-circle-fill fs-5"></i>
                 <div>{{ session('success') }}</div>
-                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Đóng"></button>
             </div>
-        @endif
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+        </div>
+    @endif
 
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible d-flex align-items-center p-3 rounded shadow-sm fade show"
-                role="alert">
-                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <div class="d-flex align-items-start gap-2">
+                <i class="bi bi-exclamation-triangle-fill fs-5"></i>
                 <div>{{ session('error') }}</div>
-                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Đóng"></button>
             </div>
-        @endif
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+        </div>
+    @endif
 
-        <!--== Bắt đầu chi tiết công việc ==-->
-        <section class="job-details-area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div
-                            class="job-details-wrap d-flex justify-content-between align-items-center flex-wrap border rounded p-4 shadow-sm">
-                            {{-- Logo công ty --}}
-                            <div class="job-details-info d-flex align-items-center">
-                                <div class="thumb me-4">
-                                    <img src="{{ $job->company->logo_url ?? asset('client/assets/img/companies/default-logo.webp') }}"
-                                        width="130" height="130" alt="Logo {{ $job->company->name ?? 'Công ty' }}">
-                                </div>
-
-                                {{-- Tiêu đề + công ty + thông tin --}}
-                                <div class="content">
-                                    <h4 class="title mb-1">{{ $job->title }}</h4>
-                                    <h5 class="sub-title mb-2">{{ $job->company->name ?? 'Tên công ty' }}</h5>
-                                    <ul class="info-list list-unstyled d-flex flex-wrap gap-3">
-                                        <li><i class="icofont-location-pin me-1"></i>
-                                            {{ optional($job->location)->name ?? 'N/A' }}</li>
-                                        <li><i class="icofont-phone me-1"></i> {{ $job->company->phone ?? 'N/A' }}</li>
-                                    </ul>
-                                </div>
+    {{-- ======= Job header card ======= --}}
+    <section class="">
+        <div class="container">
+            <div class="row g-3 g-lg-4">
+                <div class="col-12">
+                    <div class="border rounded-3 p-3 p-md-4 shadow-sm bg-white">
+                        <div class="row align-items-center g-3 g-md-4">
+                            {{-- Company logo --}}
+                            <div class="col-12 col-sm-auto text-center mt-4">
+                                @php
+                                    $company = optional($job->company);
+                                @endphp
+                                <img src="{{ asset('storage/' . $company->logo_url) }}" alt="{{ $company->name ?? ''}}"
+                                    class="img-fluid rounded border bg-light"
+                                    style="width: 110px; height: 110px; object-fit: contain;" loading="lazy">
                             </div>
 
-                            {{-- Mức lương + hình thức làm việc --}}
-                            <div class="job-details-price text-end mt-3 mt-md-0">
-                                @if ($job->salary_min && $job->salary_max)
-                                    <h4 class="fw-bold mb-1" style="color: #0d6efd;">
-                                        {{ number_format($job->salary_min, 0, '.', ',') }} -
-                                        {{ number_format($job->salary_max, 0, '.', ',') }}
-                                        <span style="text-transform: uppercase">{{ $job->currency }}</span>
-                                        <small class="text-muted fs-6">/tháng</small>
-                                    </h4>
-                                @else
-                                    <h4 class="text-muted mb-1">Lương thỏa thuận</h4>
-                                @endif
-
-                                @if ($job->jobType)
-                                    <p class="text-muted mb-0 d-flex align-items-center justify-content-end">
-                                        <i class="icofont-briefcase me-1 fs-5 text-secondary"></i>
-                                        <span>{{ $job->jobType->name }}</span>
-                                    </p>
-                                @endif
-
-                                <button type="button" class="btn btn-apply-now btn-success mt-3" data-bs-toggle="modal"
-                                    data-bs-target="#applyModal">
-                                    Ứng tuyển ngay
-                                </button>
+                            {{-- Title + meta --}}
+                            <div class="col-12 col-sm">
+                                <h1 class="h5 h4-md mb-1 text-wrap">{{ $job->title }}</h1>
+                                <p class="h6 text-muted mb-2">{{ $company->name ?? ''}} </p>
+                                <ul class="list-unstyled d-flex flex-wrap gap-3 small mb-0">
+                                    <li class="d-inline-flex align-items-center">
+                                        <i class="icofont-location-pin me-1"></i>
+                                        <span>{{ optional($job->location)->name ?? 'N/A' }}</span>
+                                    </li>
+                                    <li class="d-inline-flex align-items-center">
+                                        <i class="icofont-phone me-1"></i>
+                                        <span>{{ $company->phone ?? 'N/A' }}</span>
+                                    </li>
+                                </ul>
                             </div>
 
+                            {{-- Salary + type + CTA --}}
+                            <div class="col-12 col-sm-auto text-sm-end">
+                                @php
+                                    $hasMin = !is_null($job->salary_min);
+                                    $hasMax = !is_null($job->salary_max);
+                                    $currency = $job->currency ?: 'VND';
+                                @endphp
 
+                                <div class="d-flex flex-column align-items-stretch align-items-sm-end">
+                                    @if ($hasMin && $hasMax)
+                                        <div class="fw-bold mb-1 text-primary">
+                                            {{ number_format($job->salary_min, 0, '.', ',') }} -
+                                            {{ number_format($job->salary_max, 0, '.', ',') }}
+                                            <span class="text-uppercase">{{ $currency }}</span>
+                                            <small class="text-muted">/tháng</small>
+                                        </div>
+                                    @elseif ($hasMin)
+                                        <div class="fw-bold mb-1 text-primary">
+                                            Từ {{ number_format($job->salary_min, 0, '.', ',') }} <span
+                                                class="text-uppercase">{{ $currency }}</span>
+                                        </div>
+                                    @elseif ($hasMax)
+                                        <div class="fw-bold mb-1 text-primary">
+                                            Lên đến {{ number_format($job->salary_max, 0, '.', ',') }} <span
+                                                class="text-uppercase">{{ $currency }}</span>
+                                        </div>
+                                    @else
+                                        <div class="text-muted mb-1">Lương thỏa thuận</div>
+                                    @endif
 
-                        </div>
+                                    @if ($job->jobType)
+                                        <div class="text-muted small mb-2 d-flex align-items-center justify-content-sm-end">
+                                            <i class="icofont-briefcase me-1"></i>
+                                            <span>{{ $job->jobType->name }}</span>
+                                        </div>
+                                    @endif
+
+                                    {{-- Nếu đã đăng nhập và là ứng viên --}}
+                                    @auth
+                                        @if (auth()->user()->role === 'job_seeker')
+                                            <div class="d-none d-sm-block">
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                                    data-bs-target="#applyModal">
+                                                    Ứng tuyển ngay
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endauth
+
+                                    {{-- Nếu chưa đăng nhập --}}
+                                    @guest
+                                        <div class="d-none d-sm-block">
+                                            <a href="{{ route('showLoginForm') }}" class="btn btn-warning">
+                                                Đăng nhập để ứng tuyển
+                                            </a>
+                                        </div>
+                                    @endguest
+
+                                </div>
+                            </div>
+                        </div> {{-- row --}}
+                    </div>
+                </div>
+            </div>
+
+            {{-- ======= Body ======= --}}
+            <div class="row g-3 g-lg-4 mt-1 mt-md-3">
+                <div class="col-lg-7 col-xl-8 order-2 order-lg-1">
+                    <div class="job-details-content">
+                        <section class="mb-4">
+                            <h2 class="h5 mb-3">Mô tả công việc</h2>
+                            <div class="job-content lh-lg">{!! $job->description !!}</div>
+                        </section>
+                        <section class="mb-4">
+                            <h2 class="h5 mb-3">Yêu cầu</h2>
+                            <div class="job-content lh-lg">{!! $job->requirements !!}</div>
+                        </section>
+                        <section class="mb-4">
+                            <h2 class="h5 mb-3">Phúc lợi</h2>
+                           <div class="ob-content lh-lg">
+                                {!! $job->benefits !!}
+                            </div>
+                        </section>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-lg-7 col-xl-8">
-                        <div class="job-details-content">
-                            <div class="content">
-                                <h4 class="title">Mô tả công việc</h4>
-                                <div class="desc job-content">
-                                    {!! $job->description !!}
-                                </div>
+                {{-- Sidebar --}}
+                <div class="col-lg-5 col-xl-4 order-1 order-lg-2">
+                    <aside>
+                        <div class="border rounded-3 shadow-sm bg-white">
+                            <div class="border-bottom px-3 px-md-4 py-3">
+                                <h3 class="h6 mb-0">Thông tin</h3>
                             </div>
-
-                            <div class="content">
-                                <h4 class="title">Yêu cầu</h4>
-                                <div class="desc job-content">
-                                    {!! $job->requirements !!}
-                                </div>
-                            </div>
-
-
-
-                            <div class="content">
-                                <h4 class="title">Phúc lợi</h4>
-                                <div class="desc job-content">
-                                    @php
-                                        $benefits = [];
-
-                                        if (!empty($job->benefits)) {
-                                            if (is_array($job->benefits)) {
-                                                $benefits = $job->benefits;
-                                            } elseif (is_string($job->benefits)) {
-                                                // Tách theo dòng \r\n hoặc \n
-                                                $benefits = preg_split('/\r\n|\n|\r/', $job->benefits);
-                                            }
-                                        }
-                                    @endphp
-
-                                    @if (!empty($benefits))
-                                        <ul class="job-details-list">
-                                            @foreach ($benefits as $benefit)
-                                                @if (trim($benefit) !== '')
-                                                    <li><i class="icofont-check"></i> {{ $benefit }}</li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        <p class="desc">Không có thông tin phúc lợi.</p>
-                                    @endif
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-lg-5 col-xl-4">
-                        <div class="job-sidebar">
-                            <div class="widget-item">
-                                <div class="widget-title">
-                                    <h3 class="title">Thông tin</h3>
-                                </div>
-                                <div class="summery-info">
-                                    <table class="table">
+                            <div class="p-3 p-md-4">
+                                <div class="table-responsive">
+                                    <table class="table table-sm align-middle mb-0">
                                         <tbody>
                                             <tr>
-                                                <td class="table-name">Loại công việc</td>
-                                                <td class="dotted">:</td>
-                                                <td>{{ $job->jobType->name ?? '-' }}</td>
+                                                <td class="text-muted small">Loại công việc</td>
+                                                <td class="text-end">{{ optional($job->jobType)->name ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Mức lương</td>
-                                                <td class="dotted">:</td>
-                                                <td>
-                                                    @if ($job->salary_min && $job->salary_max)
+                                                <td class="text-muted small">Mức lương</td>
+                                                <td class="text-end">
+                                                    @if ($hasMin && $hasMax)
                                                         {{ number_format($job->salary_min) }} -
-                                                        {{ number_format($job->salary_max) }}
-                                                        {{ $job->currency ?? 'VND' }}
-                                                    @elseif ($job->salary_min)
-                                                        Từ {{ number_format($job->salary_min) }}
-                                                        {{ $job->currency ?? 'VND' }}
-                                                    @elseif ($job->salary_max)
-                                                        Lên đến {{ number_format($job->salary_max) }}
-                                                        {{ $job->currency ?? 'VND' }}
+                                                        {{ number_format($job->salary_max) }} {{ $currency }}
+                                                    @elseif ($hasMin)
+                                                        Từ {{ number_format($job->salary_min) }} {{ $currency }}
+                                                    @elseif ($hasMax)
+                                                        Lên đến {{ number_format($job->salary_max) }} {{ $currency }}
                                                     @else
                                                         Thỏa thuận
                                                     @endif
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Địa chỉ</td>
-                                                <td class="dotted">:</td>
-                                                <td>{{ $job->address ?? '-' }}</td>
+                                                <td class="text-muted small">Địa chỉ</td>
+                                                <td class="text-end">{{ $job->address ?: '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Chính sách làm việc từ xa</td>
-                                                <td class="dotted">:</td>
-                                                <td>{{ $job->remotePolicy->name ?? '-' }}</td>
+                                                <td class="text-muted small">Chính sách làm việc từ xa</td>
+                                                <td class="text-end">{{ optional($job->remotePolicy)->name ?? '-' }}
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Cấp bậc</td>
-                                                <td class="dotted">:</td>
-                                                <td>{{ $job->level->name ?? '-' }}</td>
+                                                <td class="text-muted small">Cấp bậc</td>
+                                                <td class="text-end">{{ optional($job->level)->name ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Kinh nghiệm</td>
-                                                <td class="dotted">:</td>
-                                                <td>{{ $job->experience->name ?? '-' }}</td>
+                                                <td class="text-muted small">Kinh nghiệm</td>
+                                                <td class="text-end">{{ optional($job->experience)->name ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Ngôn ngữ</td>
-                                                <td class="dotted">:</td>
-                                                <td>{{ $job->language->name ?? '-' }}</td>
+                                                <td class="text-muted small">Ngôn ngữ</td>
+                                                <td class="text-end">{{ optional($job->language)->name ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Ngày đăng</td>
-                                                <td class="dotted">:</td>
-                                                <td>{{ $job->created_at ? $job->created_at->format('d/m/Y') : '-' }}</td>
+                                                <td class="text-muted small">Ngày đăng</td>
+                                                <td class="text-end">
+                                                    {{ $job->created_at ? $job->created_at->format('d/m/Y') : '-' }}
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <td class="table-name">Hạn nộp hồ sơ</td>
-                                                <td class="dotted">:</td>
-                                                <td>{{ $job->deadline ? $job->deadline->format('d/m/Y') : '-' }}</td>
+                                                <td class="text-muted small">Hạn nộp hồ sơ</td>
+                                                <td class="text-end">
+                                                    {{ $job->deadline ? $job->deadline->format('d/m/Y') : '-' }}
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
-
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--== Kết thúc chi tiết công việc ==-->
-
-        <!--== Bắt đầu công việc liên quan ==-->
-        <section class="related-jobs-area py-5" style="background: linear-gradient(135deg, #f0f4ff, #e8f0fe);">
-            <div class="container">
-                <div class="row mb-4">
-                    <div class="col-12 text-center">
-                        <h3 class="title section-title border-bottom pb-2 d-inline-block">Công việc liên quan</h3>
-                    </div>
-                </div>
-                @if ($relatedJobs->count() > 0)
-                    <div id="relatedJobsCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            @foreach ($relatedJobs->chunk(2) as $chunk)
-                                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                    <div class="row g-4">
-                                        @foreach ($chunk as $relatedJob)
-                                            <div class="col-md-6">
-                                                <div class="card h-100 border-0 shadow rounded-4 overflow-hidden bg-white">
-                                                    <div class="row g-0 align-items-center">
-                                                        <div class="col-auto">
-                                                            <img src="{{ $relatedJob->thumbnail ? asset('storage/' . $relatedJob->thumbnail) : asset('client/assets/img/default-thumbnail.jpg') }}"
-                                                                alt="{{ $relatedJob->title }}" width="100"
-                                                                height="100"
-                                                                class="img-fluid rounded-start object-fit-cover m-3">
-                                                        </div>
-                                                        <div class="col">
-                                                            <div class="card-body">
-                                                                <h5 class="card-title mb-1 text-dark fw-bold">
-                                                                    {{ $relatedJob->title }}
-                                                                </h5>
-                                                                <p class="mb-1 text-muted small fw-semibold">
-                                                                    {{ $relatedJob->company->name }}</p>
-                                                                <ul class="list-unstyled small text-muted mb-0">
-                                                                    <li><i
-                                                                            class="icofont-location-pin me-1"></i>{{ $relatedJob->location ?? 'N/A' }}
-                                                                    </li>
-                                                                    <li><i
-                                                                            class="icofont-money-bag me-1"></i>{{ number_format($relatedJob->salary_min) }}
-                                                                        - {{ number_format($relatedJob->salary_max) }}đ
-                                                                    </li>
-                                                                    <li><i
-                                                                            class="icofont-clock-time me-1"></i>{{ ucfirst($relatedJob->job_type) }}
-                                                                    </li>
-                                                                    <li><i class="icofont-calendar me-1"></i>Hạn nộp:
-                                                                        {{ optional($relatedJob->deadline)->format('d/m/Y') }}
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                        @if ($relatedJobs->count() > 2)
-                            <button class="carousel-control-prev" type="button" data-bs-target="#relatedJobsCarousel"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"
-                                    aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#relatedJobsCarousel"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon bg-dark rounded-circle p-2"
-                                    aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        @endif
-                    </div>
-                @else
-                    <div class="alert alert-info text-center">
-                        Không có công việc liên quan nào.
-                    </div>
-                @endif
-            </div>
-        </section>
-
-
-
-        <!--== Kết thúc công việc liên quan ==-->
-    </main>
-
-    <!-- Modal Form Nộp CV -->
-    <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="applyModalLabel">Nộp đơn ứng tuyển</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <form action="{{ route('jobs.apply', $job) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="full_name" class="form-label">Họ và tên(bắt buộc)</label>
-                            <input type="text" class="form-control @error('full_name') is-invalid @enderror"
-                                id="full_name" name="full_name" value="{{ old('full_name', Auth::user()->name ?? '') }}"
-                                required>
-                            @error('full_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email(bắt buộc)</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                id="email" name="email" value="{{ old('email', Auth::user()->email ?? '') }}"
-                                required>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Số điện thoại(bắt buộc)</label>
-                            <input type="tel" class="form-control @error('phone') is-invalid @enderror"
-                                id="phone" name="phone"
-                                value="{{ old('phone', Auth::user()->phone_number ?? '') }}" required>
-                            @error('phone')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="cv_file" class="form-label">CV của bạn (PDF)</label>
-                            <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                id="image" name="image" accept=".pdf" required>
-                            @error('image')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <small class="text-muted">Tối đa 5MB, định dạng PDF</small>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="cover_letter" class="form-label">Thư giới thiệu (không bắt buộc)</label>
-                            <textarea class="form-control @error('cover_letter') is-invalid @enderror" id="cover_letter" name="cover_letter"
-                                rows="4">{{ old('cover_letter') }}</textarea>
-                            @error('cover_letter')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="text-end">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary">Gửi đơn ứng tuyển</button>
-                        </div>
-                    </form>
+                    </aside>
                 </div>
             </div>
         </div>
+    </section>
+
+    {{-- Related jobs --}}
+    @include('website.jobs.partials.related-jobs', ['relatedJobs' => $relatedJobs])
+    </main>
+
+    {{-- Sticky mobile apply bar --}}
+    <div class="position-sticky bottom-0 start-0 end-0 d-sm-none p-3 bg-body border-top shadow-sm" style="z-index:1030;">
+        <div class="container">
+            <button type="button" class="btn btn-success w-100 py-2" data-bs-toggle="modal" data-bs-target="#applyModal"
+                aria-label="Ứng tuyển ngay">Ứng tuyển ngay</button>
+        </div>
     </div>
 
+    {{-- Apply modal --}}
+    @include('website.jobs.partials.apply-modal', ['job' => $job])
+@endsection
+
+@push('styles')
     <style>
-        body {
-            background-color: #f8f9fa;
+        :root {
+            --header-h: 64px;
         }
 
-        .related-jobs-area {
-            margin-top: -30px;
-            padding-top: 0;
-            background: #f8f9fa;
-            padding-bottom: 50px;
+        /* If your site header is fixed, we compute real height via JS; this fallback ensures no overlap */
+        body.has-fixed-header main.main-content {
+            padding-top: calc(var(--header-h) + 8px);
         }
 
-        .section-title {
-            margin-bottom: 25px;
+        /* Remove unexpected large gaps near top */
+        .page-header-area {
+            margin: 0 !important;
         }
 
-        .section-title .title {
-            font-size: 1.5rem;
-            margin-bottom: 0;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #0da1f0;
-            display: inline-block;
+        .main-content {
+            margin-top: 0 !important;
         }
 
-        .job-card {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            margin: 10px;
-            padding: 20px;
-            transition: transform 0.3s ease;
-            height: 100%;
-        }
-
-        .job-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .job-card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .company-logo {
-            margin-right: 15px;
-        }
-
-        .company-logo img {
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .job-info {
-            flex: 1;
-        }
-
-        .job-title {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-
-        .job-title a {
-            color: #333;
-            text-decoration: none;
-        }
-
-        .job-title a:hover {
-            color: #0da1f0;
-        }
-
-        .company-name {
-            font-size: 0.9rem;
-            color: #666;
-            margin: 0;
-        }
-
-
-        .widget-item {
-            margin-left: 20px;
-        }
-
-        .job-card-body {
-            margin-bottom: 15px;
-        }
-
-        .job-meta {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .job-meta li {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
-
-        .job-meta li i {
-            color: #0da1f0;
-            margin-right: 8px;
-        }
-
-        .job-card-footer {
-            text-align: right;
-            margin-top: auto;
-        }
-
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background: #007bff;
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.8;
-        }
-
-        .carousel-control-prev {
-            left: -20px;
-        }
-
-        .carousel-control-next {
-            right: -20px;
-        }
-
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-            opacity: 1;
-        }
-
-        .carousel-inner {
-            padding: 10px 0;
-        }
-
-        .carousel-item {
-            padding: 10px 0;
-        }
-
-        .row {
-            margin: 0 -10px;
-        }
-
-        .col-md-6 {
-            padding: 0 10px;
-        }
-
-        .job-content p b,
-        .job-content p strong,
-        .job-content h5 {
-            display: block;
-            margin-left: 2ch;
-            font-weight: bold;
+        /* Improve readability of rich HTML from CMS */
+        .job-content p {
+            margin-bottom: .75rem;
         }
 
         .job-content ul {
-            padding-left: 4ch;
-            margin-bottom: 1rem;
+            padding-left: 1.25rem;
+            margin-bottom: .75rem;
         }
 
-        .job-content ul li {
-            margin-bottom: 0.5rem;
-            line-height: 1.6;
+        .job-content li+li {
+            margin-top: .25rem;
         }
 
-        .job-details-wrap .title {
-            color: #0da1f0;
-            font-weight: 600;
-        }
-
-
-
-        .job-details-wrap .info-list i {
-            color: #0da1f0;
-        }
-
-        .btn-theme {
-            background-color: #0da1f0;
-            border: none;
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-
-        .btn-theme:hover {
-            background-color: #0da1f0;
+        /* Card rounding on small screens */
+        @media (max-width: 575.98px) {
+            .border.rounded-3 {
+                border-radius: 1rem !important;
+            }
         }
     </style>
-@endsection
+@endpush
 
 @push('scripts')
     <script>
-        // Reset form when modal is closed
-        document.getElementById('applyModal').addEventListener('hidden.bs.modal', function() {
-            this.querySelector('form').reset();
-        });
+        // Auto-fix top spacing if header is fixed
+        (function () {
+            const header = document.querySelector('#siteHeader, .navbar.fixed-top, header.fixed-top');
+            const main = document.getElementById('jobDetailsMain');
+            if (!main) return;
+            let h = 0;
+            if (header) {
+                const rect = header.getBoundingClientRect();
+                h = Math.max(rect.height, header.offsetHeight || 0);
+                document.documentElement.style.setProperty('--header-h', h + 'px');
+                document.body.classList.add('has-fixed-header');
+            } else {
+                document.body.classList.remove('has-fixed-header');
+            }
+            // Recompute on resize for responsive headers
+            window.addEventListener('resize', () => {
+                if (!header) return;
+                const rect2 = header.getBoundingClientRect();
+                const nh = Math.max(rect2.height, header.offsetHeight || 0);
+                if (Math.abs(nh - h) > 1) {
+                    h = nh;
+                    document.documentElement.style.setProperty('--header-h', h + 'px');
+                }
+            });
+        })();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 @endpush

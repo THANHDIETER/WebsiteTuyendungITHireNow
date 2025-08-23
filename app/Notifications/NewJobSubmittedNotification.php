@@ -2,11 +2,15 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue; // 👈 thêm dòng này
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class NewJobSubmittedNotification extends Notification
+class NewJobSubmittedNotification extends Notification implements ShouldQueue // 👈 implements ShouldQueue
 {
+    use Queueable;
+
     protected $message;
 
     public function __construct($message)

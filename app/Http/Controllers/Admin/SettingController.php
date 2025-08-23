@@ -10,8 +10,9 @@ class SettingController extends Controller
 {
     public function index()
     {
+        $title = 'Cấu hình chung';
         $settings = Setting::orderByDesc('id')->get();
-        return view('admin.settings.index', compact('settings'));
+        return view('admin.settings.index', compact('settings','title'));
     }
 
     public function storeOrUpdate(Request $request)

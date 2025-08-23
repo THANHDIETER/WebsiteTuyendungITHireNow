@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
-    @include('admin.layouts.partials.header')
+    @include('admin.layouts.partials.css')
     <!-- Gọi app.js và app.scss -->
-    @vite(['resources/js/app.js'])
-   
+    @stack('style')
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+    @vite(['resources/js/app.js'])
+
+    @include('admin.layouts.partials.header')
 
     <!-- Navbar -->
     @include('admin.layouts.partials.navbar')
@@ -23,7 +25,6 @@
                     @yield('content')
                 </div>
 
-                @stack('scripts')
             </div>
         </main>
     </div>
@@ -41,6 +42,9 @@
         };
         window.APP_NAME = "{{ config('app.name') }}";
     </script> -->
+    @stack('scripts')
+    @yield('scripts')
+
 </body>
 
 </html>

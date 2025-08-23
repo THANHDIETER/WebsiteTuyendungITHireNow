@@ -3,59 +3,10 @@
 @section('content')
     <main class="main-content">
         <!--== Start Page Header Area Wrapper ==-->
-        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="../client/assets/img/banner/15.png">
-            <div class="container pt--0 pb--0">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="col-12">
-                            <div class="job-search-wrap">
-                                <div class="job-search-form">
-                                    <form action="index.html#">
-                                        <div class="row row-gutter-10">
-                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Tiêu đề việc làm hoặc từ khóa">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                                <div class="form-group">
-                                                    <select class="form-control">
-                                                        <option value="1" selected>Chọn Thành Phố</option>
-                                                        <option value="2">Hà Nội</option>
-                                                        <option value="3">Hồ Chí Minh</option>
-                                                        <option value="4">Đà Nẵng</option>
-                                                        <option value="5">Huế</option>
-                                                        <option value="6">Hà Nam</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                                <div class="form-group">
-                                                    <select class="form-control">
-                                                        <option value="1" selected>Loại Công Việc</option>
-                                                        <option value="2">Web Designer</option>
-                                                        <option value="3">Web Developer</option>
-                                                        <option value="4">Graphic Designer</option>
-                                                        <option value="5">App Developer</option>
-                                                        <option value="6">UI &amp; UX Expert</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-auto col-sm-6 col-12 flex-grow-1">
-                                                <div class="form-group">
-                                                    <button type="button" class="btn-form-search"><i
-                                                            class="icofont-search-1"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
+            data-bg-img="{{ asset('client/assets/img/banner/15.png') }}"
+            style="max-height: 80px; height: 80px; padding: 0 !important;">
+            &nbsp;
         </div>
         <!--== End Page Header Area Wrapper ==-->
 
@@ -67,8 +18,7 @@
                         <div class="contact-info-wrap">
                             <div class="info-item">
                                 <div class="icon">
-                                    <img src="../client/assets/img/icons/c1.webp" alt="Hình ảnh" width="42"
-                                        height="42">
+                                    <img src="../client/assets/img/icons/c1.webp" alt="Hình ảnh" width="42" height="42">
                                 </div>
                                 <div class="info">
                                     <h5 class="title">Gọi cho chúng tôi:</h5>
@@ -80,8 +30,7 @@
                             </div>
                             <div class="info-item">
                                 <div class="icon">
-                                    <img src="../client/assets/img/icons/c2.webp" alt="Hình ảnh" width="43"
-                                        height="73">
+                                    <img src="../client/assets/img/icons/c2.webp" alt="Hình ảnh" width="43" height="73">
                                 </div>
                                 <div class="info">
                                     <h5 class="title">Email:</h5>
@@ -93,8 +42,7 @@
                             </div>
                             <div class="info-item">
                                 <div class="icon">
-                                    <img src="../client/assets/img/icons/c3.webp" alt="Hình ảnh" width="36"
-                                        height="46">
+                                    <img src="../client/assets/img/icons/c3.webp" alt="Hình ảnh" width="36" height="46">
                                 </div>
                                 <div class="info">
                                     <h5 class="title">Địa chỉ:</h5>
@@ -121,8 +69,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <input class="form-control" type="email" name="con_email"
-                                                placeholder="Email:">
+                                            <input class="form-control" type="email" name="con_email" placeholder="Email:">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -132,7 +79,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <textarea class="form-control" name="con_message" placeholder="Tin nhắn"></textarea>
+                                            <textarea class="form-control" name="con_message"
+                                                placeholder="Tin nhắn"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

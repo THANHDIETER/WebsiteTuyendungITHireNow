@@ -41,7 +41,7 @@
         <!-- Table -->
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle mb-4">
-                <thead class="table-light text-center">
+                <thead class="table-dark text-center">
                     <tr>
                         <th style="width: 5%;">ID</th>
                         <th style="width: 20%;">Ứng viên</th>
@@ -333,12 +333,21 @@
 
                         </div>
                     </div>
-                    <div class="modal-footer bg-light rounded-bottom-4">
-                        <button type="button" class="btn btn-outline-secondary" @click="detailApp = null"
-                            aria-label="Đóng chi tiết">
-                            Đóng
-                        </button>
-                    </div>
+                    <div class="modal-footer bg-light rounded-bottom-4 d-flex gap-2">
+    <a v-if="detailApp.user"
+       :href="`/chat/start/${detailApp.user.id}`"
+       target="_blank"
+       class="btn btn-success flex-fill d-flex align-items-center justify-content-center gap-2">
+        <i class="bi bi-chat-dots-fill"></i> Nhắn tin ứng viên
+    </a>
+    <button type="button"
+            class="btn btn-outline-secondary flex-fill d-flex align-items-center justify-content-center"
+            @click="detailApp = null"
+            aria-label="Đóng chi tiết">
+        Đóng
+    </button>
+</div>
+
                 </div>
             </div>
         </div>

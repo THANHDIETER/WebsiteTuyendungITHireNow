@@ -1,86 +1,57 @@
-@extends('admin.layouts.default')
+<form id="createNotificationForm" action="{{ secure_url(route('admin.notifications.store', [], false)) }}" method="POST">
+    @csrf
 
-@section('content')
-<div class="container py-4">
-    <h1 class="mb-4">Thêm Notification mới</h1>
+    <!-- Loại thông báo -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Loại thông báo <span class="text-danger">*</span></label>
+        <select name="type" class="form-select" required>
+            <option value="">-- Chọn loại --</option>
+            <option value="App\Notifications\System\GeneralNotification">GeneralNotification</option>
+            <option value="App\Notifications\System\MaintenanceNotification">MaintenanceNotification</option>
+        </select>
+    </div>
 
-    <form action="{{ route('admin.notifications.store') }}" method="POST" novalidate>
-        @csrf
-
-        <div class="mb-3">
-            <label for="type" class="form-label">Type</label>
-            <select
-                id="type"
-                name="type"
-                class="form-select @error('type') is-invalid @enderror"
-                required
-            >
-                <option value="">-- Chọn type --</option>
-                <option value="App\Notifications\Employer\JobApprovedNotification" {{ old('type') == 'App\Notifications\Employer\JobApprovedNotification' ? 'selected' : '' }}>JobApprovedNotification</option>
-                <option value="App\Notifications\Employer\JobRejectedNotification" {{ old('type') == 'App\Notifications\Employer\JobRejectedNotification' ? 'selected' : '' }}>JobRejectedNotification</option>
-                <option value="App\Notifications\NewMessageNotification" {{ old('type') == 'App\Notifications\NewMessageNotification' ? 'selected' : '' }}>NewMessageNotification</option>
-            </select>
-            @error('type')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+    <!-- Nội dung JSON -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Nội dung (JSON) <span class="text-danger">*</span></label>
+        <textarea name="data" class="form-control font-monospace" rows="5" required>{"message":""}</textarea>
+        <div class="form-text">
+            Ví dụ: <code>{"message": "Thông báo nội dung ở đây"}</code>
         </div>
+    </div>
 
-        <div class="mb-3">
-            <label for="notifiable_id" class="form-label">Người nhận (User)</label>
-            <select
-                id="notifiable_id"
-                name="notifiable_id"
-                class="form-select @error('notifiable_id') is-invalid @enderror"
-                required
-            >
-                <option value="all" {{ old('notifiable_id') == 'all' ? 'selected' : '' }}>Tất cả người dùng</option>
-                @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ old('notifiable_id') == $user->id ? 'selected' : '' }}>
-                        {{ $user->name }} (ID: {{ $user->id }})
-                    </option>
-                @endforeach
-            </select>
-            @error('notifiable_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="data" class="form-label">Data (JSON)</label>
-            <textarea
-                id="data"
-                name="data"
-                class="form-control @error('data') is-invalid @enderror"
-                rows="5"
-                placeholder='{"message": "Nội dung thông báo"}'
-                required
-            >{{ old('data') ?? '{"message":""}' }}</textarea>
-            @error('data')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="read_at" class="form-label">Read At (nullable)</label>
-            <input
-                type="datetime-local"
-                id="read_at"
-                name="read_at"
-                class="form-control @error('read_at') is-invalid @enderror"
-                value="{{ old('read_at') }}"
-                placeholder="Chọn thời gian đã đọc (nếu có)"
-            >
-            @error('read_at')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <button type="submit" class="btn btn-success me-2">
-            <i class="bi bi-check-lg me-1"></i> Lưu
+    <!-- Nút -->
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save me-1"></i> Lưu
         </button>
-        <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-secondary">
-            <i class="bi bi-x-lg me-1"></i> Hủy
-        </a>
-    </form>
-</div>
-@endsection
+    </div>
+</form>
+
+<script>
+document.getElementById('createNotificationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(resp => {
+        alert(resp.message);
+        location.reload();
+    });
+});
+</script>
+
+<style>
+    .form-label { font-size: 0.9rem; }
+    textarea { font-size: 0.85rem; line-height: 1.4; }
+    code {
+        background-color: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+</style>

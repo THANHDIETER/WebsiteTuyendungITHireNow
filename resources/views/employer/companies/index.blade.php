@@ -3,12 +3,14 @@
 @section('content')
     <div class="container py-5">
         {{-- Tiêu đề và nút thêm --}}
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
-            <h2 class="h4 mb-0"><i class="bi bi-building me-2"></i>Quản lý Công ty</h2>
-            <a href="{{ route('employer.companies.create') }}" class="btn btn-success d-flex align-items-center shadow-sm rounded-pill px-3">
-                <i class="bi bi-plus-lg me-1"></i>Thêm Công ty
-            </a>
-        </div>
+       <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+    <h2 class="h4 mb-0"><i class="bi bi-building me-2"></i>Quản lý Công ty</h2>
+    @if ($companies->count() == 0)
+        <a href="{{ route('employer.companies.create') }}" class="btn btn-success d-flex align-items-center shadow-sm rounded-pill px-3">
+            <i class="bi bi-plus-lg me-1"></i>Thêm Công ty
+        </a>
+    @endif
+</div>
 
         {{-- Thông báo thành công --}}
         @if (session('success'))
@@ -17,11 +19,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-<<<<<<< HEAD
-        {{-- Bảng danh sách --}}
-        <div class="card border-0 shadow-sm rounded-3">
-=======
-
         {{-- Bảng danh sách --}}
         <div class="card border-0 shadow-sm rounded-3 mb-2">
             <div class="card-body p-0">
@@ -72,6 +69,7 @@
                                                 class="btn btn-circle btn-edit" data-bs-toggle="tooltip" title="Sửa">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
+                                                @if(false)
                                                 <button type="button"
                                                         class="btn btn-circle btn-delete delete-btn"
                                                         data-bs-toggle="tooltip" title="Xóa"
@@ -80,6 +78,7 @@
                                                         data-action="{{ route('employer.companies.destroy', $company) }}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

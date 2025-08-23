@@ -60,7 +60,7 @@
                     {{-- Edit Profile Button --}}
                     <button type="button" class="btn btn-sm btn-light border position-absolute top-0 end-0 m-3"
                         data-bs-toggle="modal" data-bs-target="#editProfileModal" title="Chỉnh sửa hồ sơ">
-                        <i class="fa-solid fa-pencil-alt text-danger"></i>
+                        <i class="bi bi-plus-circle text-danger"></i>
                     </button>
 
                     {{-- Avatar and Information --}}
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     {{-- About Me Section --}}
                     <div class="mt-5">
                         <h4 class="fw-bold mb-2">Giới thiệu bản thân</h4>
@@ -124,10 +124,52 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#aboutMeModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
+                    {{-- CV Section --}}
+                <div class="mt-5">
+                    <h4 class="fw-bold mb-2">CV của tôi</h4>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="w-100 me-3 me-5">
+                            @if ($profile && $profile->cvs && count($profile->cvs) > 0)
+                                <ul class="list-group">
+                                    @foreach ($profile->cvs as $cv)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="bi bi-file-earmark-pdf text-danger fs-7"></i>
+                                                <a href="{{ asset('storage/' . $cv->file_path) }}" target="_blank" class="fw-semibold text-decoration-none">
+                                                    {{ $cv->title ?? basename($cv->file_path) }}
+                                                </a>
+                                            </div>
+
+                                            <div class="d-flex align-items-center gap-3">
+                                                <span class="badge bg-light text-dark border">
+                                                    <i class="bi bi-calendar-event"></i> {{ $cv->created_at->format('d/m/Y') }}
+                                                </span>
+
+                                                <form action="{{ route('profile.cv.delete', $cv->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xoá CV này?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <h6 class="text-muted">Bạn chưa tải lên CV nào</h6>
+                            @endif
+                        </div>
+                        <button type="button" class="ms-2 btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
+                            data-bs-toggle="modal" data-bs-target="#cvModal">
+                            <i class="bi bi-plus-circle text-danger"></i>
+                        </button>
+                    </div>
+                </div>
 
                     {{-- Education Section --}}
                     <div class="mt-5">
@@ -138,7 +180,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#educationModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -152,7 +194,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#workExperienceModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -166,7 +208,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#skillModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -180,7 +222,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#languageModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -194,7 +236,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#projectModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -208,7 +250,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#certificateModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
@@ -222,10 +264,11 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-light border position-absolute top-60 end-0 m-3"
                                 data-bs-toggle="modal" data-bs-target="#awardModal">
-                                <i class="fa-solid fa-plus text-danger"></i>
+                                <i class="bi bi-plus-circle text-danger"></i>
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -354,6 +397,37 @@
             </div>
         </div>
     </div>
+    {{-- Modal Upload CV --}}
+<div class="modal fade" id="cvModal" tabindex="-1" aria-labelledby="cvModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{{ route('profile.uploadCVs') }}" enctype="multipart/form-data">
+                @csrf
+
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="cvModalLabel">Tải lên CV (PDF)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Chọn CV (nhiều file)</label>
+                        <input type="file" name="cv_files[]" class="form-control" accept="application/pdf" multiple>
+                        <div class="form-text">Chỉ hỗ trợ file PDF, dung lượng tối đa 2MB.</div>
+                        @error('cv_files')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <!-- Modal: Giới thiệu bản thân -->
     <div class="modal fade" id="aboutMeModal" tabindex="-1" aria-labelledby="aboutMeModalLabel" aria-hidden="true">

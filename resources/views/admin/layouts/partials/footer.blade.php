@@ -1,14 +1,15 @@
 <footer class="footer bg-light border-top py-3 mt-auto">
   <div class="container-fluid text-center text-muted small">
-    Copyright 2024 © by ITHireNow.
+    Copyright {{ date('Y') }} © by ITHireNow.
   </div>
 </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- jquery-->
 <script src="{{ asset('assets/js/vendors/jquery/dist/jquery.min.js')}}"></script>
 <!-- bootstrap js-->
 <script src="{{ asset('assets/js/vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{ asset('assets/js/config.js')}}"></script>
+<!-- <script src="{{ asset('assets/js/config.js')}}"></script> -->
 <!-- Sidebar js-->
 <script src="{{ asset('assets/js/sidebar.js')}}"></script>
 <!-- Apexchart js-->

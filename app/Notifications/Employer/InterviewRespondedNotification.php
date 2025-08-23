@@ -4,11 +4,12 @@ namespace App\Notifications\Employer;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class InterviewRespondedNotification extends Notification implements ShouldBroadcastNow
+class InterviewRespondedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

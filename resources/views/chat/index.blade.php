@@ -93,8 +93,8 @@
                             @php
                                 $otherUser =
                                     $conversation->user_one === auth()->id()
-                                        ? $conversation->userTwo
-                                        : $conversation->userOne;
+                                    ? $conversation->userTwo
+                                    : $conversation->userOne;
                                 $isActive = isset($chatWith) && $chatWith->id === $otherUser->id;
                                 $lastMsgTime = optional($conversation->latestMessage)->created_at
                                     ? $conversation->latestMessage->created_at->diffForHumans()
@@ -144,7 +144,7 @@
                                     class="mb-2 d-flex {{ $msg->sender_id === auth()->id() ? 'justify-content-end' : 'justify-content-start' }}">
                                     <div
                                         class="d-inline-block px-3 py-2 rounded shadow-sm 
-                                                        {{ $msg->sender_id === auth()->id() ? 'bg-primary text-white' : 'bg-light text-dark' }}">
+                                                                    {{ $msg->sender_id === auth()->id() ? 'bg-primary text-white' : 'bg-light text-dark' }}">
                                         {{ $msg->message }}
                                     </div>
                                 </div>
@@ -204,7 +204,7 @@
             }
 
             // Gửi typing event (debounce ~1.2s)
-            messageInput?.addEventListener('input', function() {
+            messageInput?.addEventListener('input', function () {
                 if (!conversationId || !typingUrl) return;
                 if (Date.now() - lastTyped > 1200) {
                     fetch(typingUrl, {
@@ -219,21 +219,21 @@
             });
 
             // Gửi message
-            chatForm?.addEventListener('submit', function(e) {
+            chatForm?.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const message = messageInput.value.trim();
                 if (message === '' || !sendUrl) return;
                 fetch(sendUrl, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            message
-                        })
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message
                     })
+                })
                     .then(res => res.json())
                     .then(data => {
                         appendMessage(true, message);
@@ -251,10 +251,10 @@
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mb-2 d-flex ' + alignClass;
                 msgDiv.innerHTML = `
-                    <div class="d-inline-block px-3 py-2 rounded shadow-sm ${bubbleClass}">
-                        ${message}
-                    </div>
-                `;
+                        <div class="d-inline-block px-3 py-2 rounded shadow-sm ${bubbleClass}">
+                            ${message}
+                        </div>
+                    `;
                 messageBox.appendChild(msgDiv);
                 messageBox.scrollTop = messageBox.scrollHeight;
             }
@@ -263,14 +263,14 @@
             function showTyping(userName, userAvatar = '') {
                 if (!typingIndicator) return;
                 typingIndicator.innerHTML = `
-                    ${userAvatar ? `<img src="${userAvatar}" class="typing-avatar" alt="avatar">` : ''}
-                    <span>${userName} đang soạn tin nhắn</span>
-                    <span class="typing-dots">
-                        <span class="typing-dot"></span>
-                        <span class="typing-dot"></span>
-                        <span class="typing-dot"></span>
-                    </span>
-                `;
+                        ${userAvatar ? `<img src="${userAvatar}" class="typing-avatar" alt="avatar">` : ''}
+                        <span>${userName} đang soạn tin nhắn</span>
+                        <span class="typing-dots">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                        </span>
+                    `;
                 typingIndicator.style.display = 'flex';
                 if (typingTimeout) clearTimeout(typingTimeout);
                 typingTimeout = setTimeout(() => {

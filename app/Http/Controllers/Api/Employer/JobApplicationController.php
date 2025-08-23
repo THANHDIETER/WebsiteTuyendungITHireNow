@@ -10,6 +10,7 @@ use App\Models\JobApplication;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\offeredScheduledNotification;
 use App\Notifications\InterviewRejectedNotification;
 use App\Notifications\InterviewScheduledNotification;
 use App\Notifications\Jobseeker\ApplicationApprovedNotification;
@@ -21,7 +22,14 @@ class JobApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = JobApplication::with(['job', 'user', 'company']);
+        $companies = Auth::user()->companies;
+        $query = JobApplication::with(['job', 'user', 'company'])
+            ->whereIn('company_id', $companies->pluck('id'))
+            ->whereHas('job', function ($q) {
+                $q->whereNull('deleted_at');
+            });
+
+
 
         if ($request->search) {
             $query->where(function ($q) use ($request) {
@@ -62,6 +70,7 @@ class JobApplicationController extends Controller
 
     public function update(Request $request, JobApplication $jobApplication)
     {
+
         $data = $request->validate([
             'status' => [
                 'required',
@@ -181,8 +190,14 @@ class JobApplicationController extends Controller
         // ✅ Lấy các model liên quan
         $jobseeker = $jobApplication->user;
         $job = $jobApplication->job;
+
+        if (!$job) {
+            return response()->json(['message' => 'Không tìm thấy công việc hoặc công ty liên quan'], 422);
+        }
+
         $company = $job->company;
-        $employerId = $company->user_id ?? null;
+        $employerId = $company->user_id;
+
 
         if (!$employerId) {
             return response()->json(['message' => 'Không tìm thấy nhà tuyển dụng.'], 422);
@@ -206,7 +221,7 @@ class JobApplicationController extends Controller
                     Carbon::parse($data['interview_date'])
                 ));
             }
-            
+
             // mail gửi thông báo từ chối phỏng vấn
             if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
                 $rejectionReason = $data['note'] ?? null;
@@ -215,6 +230,15 @@ class JobApplicationController extends Controller
                     $rejectionReason
                 ));
             }
+            if ($currentStatus !== 'offered' && $newStatus === 'offered') {
+                // TH trúng tuyển
+                $offerDetails = $data['note'] ?? null; // có thể truyền mức lương, ngày đi làm...
+                $jobseeker->notify(new offeredScheduledNotification(
+                    $job,
+                    $offerDetails
+                ));
+            }
+
 
             if (
                 !empty($data['interview_date']) &&
