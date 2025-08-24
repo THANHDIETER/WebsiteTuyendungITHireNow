@@ -61,69 +61,77 @@
             <div class="col-12 p-0">
                 <div class="login-card login-dark">
                     <div>
-                        <div><a class="logo text-center" href="index.html"><img class="img-fluid for-light"
-                                    src="{{ asset('../assets/images/logo/logo.png') }}" alt="registerpage"><img
-                                    class="img-fluid for-dark m-auto"
-                                    src="{{ asset('../assets/images/logo/dark-logo.png') }}" alt="logo"></a></div>
-                        <div class="login-main">
+                        <div style="align-items: center;
+                                display: flex;
+                                justify-content: center;
+                                height: 100px;">
+                            <a href="{{ route('home') }}">
+                                @php
+                                $clientLogo = \App\Models\Logo::where('type', 'client')
+                                ->where('is_active', true)
+                                ->first();
+                                @endphp
+
+                                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
+                                    alt="Client Logo" style="height: 120px; " {{-- hoặc dùng class --}}>
+                            </a>
+                        </div>
+                        <div class="login-main mt-3">
                             <form class="theme-form" method="POST" action="{{ route('registerEmployer') }}">
                                 @csrf
-                                <h2 class="text-center">Create Employer Account</h2>
-                                <p class="text-center">Enter your personal details to create account</p>
+                                <h2 class="text-center">Tạo tài khoản Employer</h2>
                                 @if (session('success'))
-                                    <div class="alert alert-success">
-                                        {{ session('success') }}
-                                    </div>
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
                                 @endif
                                 @if (session('error'))
-                                    <div class="alert alert-danger">
-                                        {{ session('error') }}
-                                    </div>
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
                                 @endif
 
                                 <!-- Thông tin liên lạc của bạn -->
-                                <h4 class="mt-4">Your contact information</h4>
                                 <div class="form-group">
-                                    <label class="col-form-label">Full name <span class="text-danger">*</span></label>
+                                    <label class="col-form-label mt-2">Họ và Tên <span class="text-danger">*</span></label>
                                     <input class="form-control @error('full_name') is-invalid @enderror" type="text"
-                                        name="full_name" value="{{ old('full_name') }}" placeholder="Full name">
+                                        name="full_name" value="{{ old('full_name') }}" placeholder="Họ và tên">
                                     @error('full_name')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-form-label">Work Title <span class="text-danger">*</span></label>
+                                <!-- <div class="form-group">
+                                    <label class="col-form-label"> <span class="text-danger">*</span></label>
                                     <input class="form-control @error('work_title') is-invalid @enderror" type="text"
                                         name="work_title" value="{{ old('work_title') }}" placeholder="Work Title">
                                     @error('work_title')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
-                                </div>
+                                </div> -->
                                 <div class="form-group">
-                                    <label class="col-form-label">Work Email <span
+                                    <label class="col-form-label">Email<span
                                             class="text-danger">*</span></label>
                                     <input class="form-control @error('email') is-invalid @enderror" type="email"
-                                        name="email" value="{{ old('email') }}" placeholder="Work Email">
+                                        name="email" value="{{ old('email') }}" placeholder="Email">
                                     @error('email')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label">Phone Number <span
+                                    <label class="col-form-label">Số điện thoại<span
                                             class="text-danger">*</span></label>
                                     <input class="form-control @error('phone') is-invalid @enderror" type="tel"
-                                        name="phone" value="{{ old('phone') }}" placeholder="Phone Number">
+                                        name="phone" value="{{ old('phone') }}" placeholder="Số điện thoại">
                                     @error('phone')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label">How did you know HireNow?</label>
+                                    <label class="col-form-label">Bạn biết đến website từ đâu ?</label>
                                     <select class="form-control @error('itvie_experience') is-invalid @enderror"
                                         name="itvie_experience">
                                         <option value="" disabled
-                                            {{ old('itvie_experience') === null ? 'selected' : '' }}>-- How did you
-                                            know HireNow? --
+                                            {{ old('itvie_experience') === null ? 'selected' : '' }}>-- Bạn biết đến website từ đâu ? --
                                         </option>
                                         <option value="google"
                                             {{ old('itvie_experience') === 'google' ? 'selected' : '' }}>Google
@@ -136,96 +144,86 @@
                                         </option>
                                     </select>
                                     @error('itvie_experience')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <!-- Thông tin công ty -->
-                                <h4 class="mt-4">Company information</h4>
+                                <h4 class="mt-4">Thông tin công ty</h4>
                                 <div class="form-group">
-                                    <label class="col-form-label">Company Name <span
+                                    <label class="col-form-label">Tên công ty<span
                                             class="text-danger">*</span></label>
                                     <input class="form-control @error('company_name') is-invalid @enderror"
                                         type="text" name="company_name" value="{{ old('company_name') }}"
-                                        placeholder="Company Name">
+                                        placeholder="Tên công Name">
                                     @error('company_name')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-form-label">Company Location <span
-                                            class="text-danger">*</span></label>
-                                    <select class="form-control @error('company_location') is-invalid @enderror"
-                                        name="company_location">
-                                        <option value="" disabled
-                                            {{ old('company_location') === null ? 'selected' : '' }}>-- Company
-                                            Location
-                                            --</option>
-                                        <option value="hanoi"
-                                            {{ old('company_location') === 'hanoi' ? 'selected' : '' }}>Hà Nội</option>
-                                        <option value="hcm"
-                                            {{ old('company_location') === 'hcm' ? 'selected' : '' }}>TP. Hồ Chí Minh
-                                        </option>
-                                        <option value="danang"
-                                            {{ old('company_location') === 'danang' ? 'selected' : '' }}>Đà Nẵng
-                                        </option>
-                                        <option value="khac"
-                                            {{ old('company_location') === 'khac' ? 'selected' : '' }}>Khác
-                                        </option>
+                               <div class="form-group">
+                                    <label class="col-form-label">Thành phố<span class="text-danger">*</span></label>
+                                    <select class="form-control @error('city_id') is-invalid @enderror"
+                                        name="city_id">
+                                        <option value="">-- Chọn Thành phố công ty --</option>
+                                        @foreach($locations as $location)
+                                            <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                        @endforeach
                                     </select>
-                                    @error('company_location')
+                                    @error('city_id')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+
                                 <div class="form-group">
-                                    <label class="col-form-label">Website Url</label>
-                                    <input class="form-control @error('website_url') is-invalid @enderror"
-                                        type="url" name="website_url" value="{{ old('website_url') }}"
-                                        placeholder="Website Url">
-                                    @error('website_url')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <label class="col-form-label">Địa chỉ</label>
+                                    <input class="form-control @error('address') is-invalid @enderror"
+                                        type="text" name="address" value="{{ old('address') }}"
+                                        placeholder="Địa chỉ công ty">
+                                    @error('address')
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="form-group mb-0 checkbox-checked">
                                     <div class="form-group">
-                                        <label class="col-form-label">Password <span
+                                        <label class="col-form-label">Mật khẩu<span
                                                 class="text-danger">*</span></label>
                                         <input class="form-control @error('password') is-invalid @enderror"
-                                            type="password" name="password" placeholder="Password">
+                                            type="password" name="password" placeholder="Nhập mật khẩu">
                                         @error('password')
-                                            <span class="text-danger">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-form-label">Confirm Password <span
+                                        <label class="col-form-label">Nhập lại mật khẩu<span
                                                 class="text-danger">*</span></label>
                                         <input
                                             class="form-control @error('password_confirmation') is-invalid @enderror"
                                             type="password" name="password_confirmation"
-                                            placeholder="Confirm Password">
+                                            placeholder="Nhập lại mật khẩu">
                                         @error('password_confirmation')
-                                            <span class="text-danger">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-check checkbox-solid-info">
                                         <input class="form-check-input @error('terms') is-invalid @enderror"
                                             id="solid6" type="checkbox" name="terms">
-                                        <label class="form-check-label" for="solid6">I have read and agree to
-                                            HireNow<a href="#">Terms & Conditions</a> and <a
-                                                href="#">Privacy Policy</a>in relation to my privacy
-                                            information.</label>
+                                        <label class="form-check-label" for="solid6">
+                                        Tôi đã đọc và đồng ý với HireNow
+                                        <a href="#">Điều khoản & Điều kiện </a> 
+                                         Và  
+                                         <a href="#"> Chính sách bảo mật </a>
+                                          liên quan đến thông tin riêng tư của tôi. </label>
                                         @error('terms')
-                                            <span class="text-danger">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <button class="btn btn-primary btn-block w-100 mt-3" type="submit">Create
-                                        Account</button>
+                                    <button class="btn btn-primary btn-block w-100 mt-3" type="submit">Tạo tài khoản</button>
                                 </div>
                                 <p
                                     class="mt-4 mb-0 text-center d-flex align-items-center justify-content-center gap-2">
-                                    Already have an account?
-                                    <a href="{{ route('showLoginForm') }}" class="ms-2">Sign in</a>
+                                   Bạn đã có tài khoản?
+                                    <a href="{{ route('showLoginForm') }}" class="ms-2">Đăng nhập</a>
                                 </p>
                             </form>
                         </div>

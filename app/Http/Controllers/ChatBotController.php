@@ -9,13 +9,17 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ChatLimitLog;
+use App\Models\AiConfig; // ✅ thêm dòng này
 
 class ChatBotController extends Controller
-{
+{    
+    protected $apiKey;
+
     public function chat(Request $request)
     {
         $message = $request->input('message');
         $user = Auth::user();
+        $this->apiKey = AiConfig::getValue('ai_api_key');
 
         $userId = $user?->id;
         $sessionId = $user ? null : session()->getId();
@@ -126,7 +130,7 @@ class ChatBotController extends Controller
 
 
         // --- Gọi GPT ---
-        $response = Http::withToken(env('OPENAI_API_KEY'))
+        $response = Http::withToken($this->apiKey)
             ->post('https://api.openai.com/v1/chat/completions', [
                 'model' => 'gpt-4o',
                 'messages' => [

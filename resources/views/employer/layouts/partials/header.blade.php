@@ -76,7 +76,7 @@
                                   </div>
                                   <div class="fw-semibold">Thông báo</div>
                               </div>
-                              <a href="{{ route('notifications.index') }}" class="noti-card__link">Xem tất
+                              <a href="{{ route('employer.notifications.index') }}" class="noti-card__link">Xem tất
                                   cả</a>
                           </div>
 

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CompanyBranchController;
 use App\Http\Controllers\Employers\JobController;
 use App\Http\Controllers\Employers\StatsController;
 use App\Http\Controllers\Employers\CompanyController;
@@ -56,7 +57,14 @@ Route::middleware(['auth', 'employer'])
         Route::put('/companies/{id}', [CompanyController::class, 'update'])->name('companies.update');
         // Xóa
         Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('companies.destroy');
-        
+        Route::prefix('companies/{company}')->group(function () {
+    Route::get('branches', [CompanyBranchController::class, 'index'])->name('company.branches.index');
+    Route::get('branches/create', [CompanyBranchController::class, 'create'])->name('company.branches.create');
+    Route::post('branches', [CompanyBranchController::class, 'store'])->name('company.branches.store');
+    Route::get('branches/{branch}/edit', [CompanyBranchController::class, 'edit'])->name('company.branches.edit');
+    Route::put('branches/{branch}', [CompanyBranchController::class, 'update'])->name('company.branches.update');
+    Route::delete('branches/{branch}', [CompanyBranchController::class, 'destroy'])->name('company.branches.destroy');
+});
         // (Tuỳ chọn) Cập nhật hoặc xoá tin
         Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
         Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');

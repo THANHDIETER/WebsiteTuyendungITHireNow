@@ -56,10 +56,6 @@
                                 @endforeach
                             </select>
                         </div>
-
-
-
-
                     </div>
 
                     <div class="mb-3">
@@ -168,33 +164,107 @@
                         </div>
                         @endif
                     </div>
-                    <div class="row">
-                        <div class="mb-3 col">
-                            <label>Địa chỉ làm việc <span class="text-danger">*</span></label>
-                            <select name="address" class="form-select" required>
-                                @foreach ($company_addresses as $address)
-                                <option value="{{ $address }}"
-                                    {{ old('address') == $address ? 'selected' : '' }}>{{ $address }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3 col">
-                            <label for="location_id" class="form-label  select2 ">Địa điểm khu vực <span
-                                    class="text-danger">*</span></label>
-                            <select name="location_id" id="location_id" class="form-select shadow-sm border-primary"
-                                required>
-                                <option value="" disabled {{ old('location_id') ? '' : 'selected' }}>-- Chọn khu
-                                    vực --</option>
-                                @foreach ($locations as $location)
-                                <option value="{{ $location->id }}"
-                                    {{ old('location_id') == $location->id ? 'selected' : '' }}>
-                                    {{ $location->name }}
-                                </option>
-                                @endforeach
-                            </select>
+                    {{-- Vị trí tuyển dụng --}}
+                    <div class="card mb-4 shadow-sm border-0 rounded-3">
+                        <div class="card-header bg-primary text-white fw-semibold">Vị trí tuyển dụng</div>
+                        <div class="card-body">
+                            <div class="row">
+                                {{-- Chọn chi nhánh / địa chỉ --}}
+                                <div class="mb-3 col-md-6">
+                                    <label for="branch_id" class="form-label fw-semibold">
+                                        Địa chỉ làm việc <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="branch_id" id="branch_id" class="form-select" required>
+                                        <!-- Địa chỉ mặc định công ty -->
+                                        <option value="0"
+                                            data-city-id="{{ $company->city_id ?? '' }}"
+                                            data-address="{{ $company->address }}"
+                                            class="text-danger fw-bold"
+                                            {{ old('branch_id') == 0 ? 'selected' : '' }}>
+                                            {{ $company->address }} - {{ $company->city?->name }}
+                                        </option>
+
+                                        <!-- Danh sách chi nhánh -->
+                                        @foreach ($branches as $branch)
+                                        <option value="{{ $branch->id }}"
+                                            data-city-id="{{ $branch->city_id }}"
+                                            data-address="{{ $branch->address }}"
+                                            {{ old('branch_id') == $branch->id ? 'selected' : '' }}>
+                                            {{ $branch->name ?? 'Chi nhánh' }} - {{ $branch->address }} - {{ $branch->city?->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Chọn thành phố (location_id) --}}
+                                <div class="mb-3 col-md-6">
+                                    <label for="location_id" class="form-label">
+                                        Thành phố / Khu vực <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="location_id" id="location_id" class="form-select shadow-sm border-primary" required>
+                                        <option value="" disabled {{ old('location_id') ? '' : 'selected' }}>-- Chọn khu vực --</option>
+                                        @foreach ($locations as $location)
+                                        <option value="{{ $location->id }}"
+                                            {{ old('location_id') == $location->id ? 'selected' : '' }}>
+                                            {{ $location->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- Nhập địa chỉ chi tiết --}}
+                            <div class="mb-3">
+                                <label for="address" class="form-label fw-semibold">
+                                    Địa chỉ chi tiết <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                    name="address"
+                                    id="address"
+                                    class="form-control"
+                                    value="{{ old('address', $company->address) }}"
+                                    placeholder="VD: Số 25 ngõ 80 Xuân Phương, Nam Từ Liêm">
+                            </div>
                         </div>
                     </div>
+                    @push('scripts')
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const branchSelect = document.getElementById('branch_id');
+                            const locationSelect = document.getElementById('location_id');
+                            const addressInput = document.getElementById('address');
+
+                            function syncLocationAndAddress() {
+                                const selected = branchSelect.options[branchSelect.selectedIndex];
+                                const cityId = selected.dataset.cityId;
+                                const addr = selected.dataset.address;
+
+                                // sync location_id
+                                if (cityId) {
+                                    locationSelect.value = cityId;
+                                } else {
+                                    locationSelect.value = "";
+                                }
+
+                                // sync address
+                                if (addr) {
+                                    addressInput.value = addr;
+                                }
+
+                                // Nếu location có select2 thì trigger lại
+                                if ($(locationSelect).hasClass("select2")) {
+                                    $(locationSelect).trigger('change');
+                                }
+                            }
+
+                            branchSelect.addEventListener('change', syncLocationAndAddress);
+
+                            // chạy khi load trang
+                            syncLocationAndAddress();
+                        });
+                    </script>
+                    @endpush
+
                 </div>
             </div>
             {{-- Kỹ năng --}}
@@ -299,7 +369,7 @@
 
                             <ul class="list-unstyled mb-2 small">
                                 <li><strong>Thời hạn sử dụng:</strong> {{ $pkg->package->duration_days }} ngày</li>
-                                <li><strong>Số lượt đăng:</strong> {{ $pkg->package->post_limit }}</li>
+                                <li><strong>Số lượt đăng:</strong> {{ $pkg->posts_used }} / {{ $pkg->post_limit }}</li>
                                 <li><strong>Nổi bật:</strong> {{ $pkg->package->highlight_days }} ngày</li>
                                 @if(false)
                                 <li><strong>Lượt xem CV:</strong> {{ $pkg->package->cv_views }}</li>

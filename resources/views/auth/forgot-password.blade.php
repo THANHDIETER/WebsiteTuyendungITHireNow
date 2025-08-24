@@ -20,18 +20,22 @@
             <div class="col-12 p-0">
                 <div class="login-card login-dark">
                     <div>
-                        <div style="align-items: center; display: flex; justify-content: center; height: 100px;">
+                                               <div style="align-items: center;
+                                display: flex;
+                                justify-content: center;
+                                height: 100px;">
                             <a href="{{ route('home') }}">
                                 @php
                                     $clientLogo = \App\Models\Logo::where('type', 'client')
                                         ->where('is_active', true)
                                         ->first();
                                 @endphp
+
                                 <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
-                                    alt="Client Logo" style="height: 120px;">
+                                    alt="Client Logo" style="height: 120px; " {{-- hoặc dùng class --}}>
                             </a>
                         </div>
-                        <div class="login-main">
+                        <div class="login-main mt-4">
                             <form class="theme-form" method="POST" action="{{ route('password.email') }}">
                                 @csrf
                                 <h2 class="text-center">Quên mật khẩu</h2>

@@ -63,8 +63,7 @@
             <div class="col-12 p-0">
                 <div class="login-card login-dark">
                     <div>
-                        <div
-                            style="align-items: center;
+                        <div style="align-items: center;
                                 display: flex;
                                 justify-content: center;
                                 height: 100px;">
@@ -79,11 +78,10 @@
                                     alt="Client Logo" style="height: 120px; " {{-- hoặc dùng class --}}>
                             </a>
                         </div>
-                        <div class="login-main">
+                        <div class="login-main mt-4">
                             <form class="theme-form" method="POST" action="{{ route('post-login') }}">
                                 @csrf
-                                <h2 class="text-center">Sign in to account</h2>
-                                <p class="text-center">Enter your email &amp; password to login</p>
+                                <h2 class="text-center">Đăng nhập tài khoản</h2>
                                 @if (session('success'))
                                     <div class="alert alert-success">
                                         {{ session('success') }}
@@ -95,20 +93,20 @@
                                     </div>
                                 @endif
                                 <div class="form-group">
-                                    <label class="col-form-label">Email Address</label>
-                                    <input class="form-control" type="email" name="email"
-                                        placeholder="Email Address">
+                                    <label class="col-form-label">Email</label>
+                                    <input class="form-control" type="email" name="email" placeholder="Địa chỉ Email">
                                     @error('email')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label mt-3">Password</label>
+                                    <label class="col-form-label mt-3">Mật khẩu</label>
                                     <div class="form-input position-relative">
                                         <input class="form-control" type="password" id="password" name="password"
                                             placeholder="*********">
                                         <div class="show-hide" onclick="togglePassword()">
-                                            <span class="show">👁️</span> {{-- bạn có thể thay bằng icon FontAwesome hoặc Bootstrap Icons --}}
+                                            <span class="show">👁️</span> {{-- bạn có thể thay bằng icon FontAwesome
+                                            hoặc Bootstrap Icons --}}
                                         </div>
                                     </div>
                                     @error('password')
@@ -116,12 +114,13 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mb-0 checkbox-checked row" style="row-gap: 2rem;">
-                                    <a class="link-two " href="{{ route('password.request') }}">Forgot password?</a>
-                                    
-                                    <button class="btn btn-primary btn-block w-100 mt-4" type="submit">Sign in</button>
+                                    <a class="link-two " href="{{ route('password.request') }}">Quên mật khẩu</a>
+
+                                    <button class="btn btn-primary btn-block w-100 mt-4" type="submit">Đăng
+                                        Nhập</button>
                                 </div>
                                 <div class="login-social-title">
-                                    <h6>Or Sign in with </h6>
+                                    <h6>Đăng nhập khác</h6>
                                 </div>
                                 <div class="form-group">
                                     <ul class="login-social">
@@ -129,11 +128,10 @@
                                                     class="fa-brands fa-google"></i></a></li>
                                     </ul>
                                 </div>
-                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn"
-                                    data-theme="dark">
+                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">
                                 </div>
-                                <p class="mt-4 mb-0 text-center">Don't have account?<a class="ms-2"
-                                        href="{{ route('register') }}">Create Account</a></p>
+                                <p class="mt-4 mb-0 text-center">Tôi chưa có tài khoản<a class="ms-2"
+                                        href="{{ route('register') }}">Tạo tài khoản</a></p>
                             </form>
                         </div>
                     </div>

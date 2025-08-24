@@ -4,14 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Models\Company;
+use App\Models\Location;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\RegisterEmployerRequest;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
-use Illuminate\Support\Str;
 
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use App\Notifications\Admin\NewEmployerRegisteredNotification;
 use App\Notifications\Admin\NewJobseekerRegisteredNotification;
 
@@ -55,12 +56,13 @@ class RegisterController extends Controller
 
     public function showRegisterEmployerForm()
     {
-        return view('auth.registerEmployer');
+        $locations = Location::all();
+        return view('auth.registerEmployer',compact('locations'));
     }
 
     public function registerEmployer(RegisterEmployerRequest $request)
     {
-        // dd($request);
+        // dd($request->toArray());
         try {
 
             $validated = $request->validated();
@@ -81,9 +83,9 @@ class RegisterController extends Controller
                 'name' => $validated['company_name'] ?? null,
                 'slug' => Str::slug($validated['company_name'] ?? 'company') . '-' . Str::random(12),
                 'email' => $validated['email'],
-                "website" => $validated['website_url'],
+                "address" => $validated['address'],
                 'phone' => $validated['phone'] ?? null,
-                'city' => $validated['company_lovation'] ?? null,
+                'city_id' => $validated['city_id'],
                 'status' => 'active',
                 'is_verified' => false,
             ]);

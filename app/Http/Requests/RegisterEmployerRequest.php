@@ -16,7 +16,7 @@ class RegisterEmployerRequest extends FormRequest
         return [
             // Thông tin liên lạc
             'full_name' => 'required|string|max:255',
-            'work_title' => 'required|string|max:255',
+            // 'work_title' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|string|max:20',
 
@@ -25,8 +25,8 @@ class RegisterEmployerRequest extends FormRequest
 
             // Thông tin công ty
             'company_name' => 'required|string|max:255',
-            'company_location' => 'required|in:hanoi,hcm,danang,khac',
-            'website_url' => 'nullable|url',
+            'city_id' => 'required|exists:locations,id',
+            'address' => 'nullable|string|max:255',
 
             // Mật khẩu
             'password' => 'required|string|min:6|confirmed',

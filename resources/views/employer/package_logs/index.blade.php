@@ -6,28 +6,36 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-4">📜 Lịch sử gói dịch vụ</h2>
+    <h2 class="mb-4">📜 Lịch sử </h2>
 
     <div class="table-responsive shadow-sm border rounded">
         <table id="logsTable" class="table table-striped table-bordered align-middle">
             <thead class="table-light">
                 <tr>
                     <th>#</th>
-                    <th>Order</th>
+                    <!-- <th>Order</th>
                     <th>Job</th>
-                    <!-- <th>Thời gian sử dụng</th> -->
+                    <th>Thời gian sử dụng</th> -->
                     <th>Hành động</th>
-                    <th>Ngày tạo</th>
+                    <th>Thời gian</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($logs as $log)
                     <tr>
                         <td>{{ $log->id }}</td>
-                        <td>{{ $log->order?->id ?? '-' }}</td>
+                        <!-- <td>{{ $log->order?->id ?? '-' }}</td>
                         <td>{{ $log->job?->title ?? $log->job_id ?? '-' }}</td>
-                        <!-- <td>{{ $log->used_at ? $log->used_at->format('d/m/Y H:i') : '-' }}</td> -->
-                        <td>{{ $log->action }}</td>
+                        <td>{{ $log->used_at ? $log->used_at->format('d/m/Y H:i') : '-' }}</td> -->
+<td>
+    {{ $log->action }}
+    @if($log->order_id)
+        - Order #{{ $log->order_id }}
+    @elseif($log->job_id)
+        - Job #{{ $log->job_id }}
+    @endif
+</td>
+                        <!-- <td>{{ $log->action }}</td> -->
                         <td>{{ $log->created_at->format('d/m/Y H:i') }}</td>
                     </tr>
                 @endforeach

@@ -269,7 +269,7 @@
                 <div class="col">
                     <div class="card h-100 border-0 shadow-lg shadow-sm rounded-4 p-3 position-relative">
                         @if ($job->is_featured)
-                        <span class="badge bg-success position-absolute top-0 start-0 m-2">TOP</span>
+                        <span class="badge bg-success position-absolute top-0 start-0 m-2"> <i class="bi bi-star-fill me-1"></i> TOP</span>
                         @endif
                         @if ($job->is_paid)
                         <span class="badge badge-hot position-absolute top-0 end-0 m-2">HOT</span>
@@ -376,7 +376,7 @@
                             @endif
                         </div>
                         <h6 class="fw-semibold mb-1 text-truncate">
-                            <a href="{{ route('jobs.index', ['category' => $category->id]) }}"
+                            <a href="{{ route('jobs.index', ['category_id' => $category->id]) }}"
                                 class="stretched-link text-decoration-none text-dark">
                                 {{ $category->name }}
                             </a>

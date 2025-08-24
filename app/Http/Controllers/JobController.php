@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class JobController extends Controller
 {
@@ -93,23 +94,35 @@ class JobController extends Controller
             'language',
             'remotePolicy',
         ])->where('slug', $slug)->where('status', 'published')->firstOrFail();
-        $relatedJobs = collect();
         $user = Auth::user();
         $profile = $user->profile ?? null;
         // Lấy danh sách CV của ứng viên
         $cvs = $profile ? $profile->cvs : collect();
         // Lấy các công việc liên quan cùng danh mục (nếu có)
-        $relatedJobs = collect();
+        $relatedJobs = Job::with(['company', 'location', 'category'])
+            ->where('status', 'published')
+            ->where('id', '!=', $job->id) // bỏ job hiện tại
+            ->when($job->category_id, function ($q) use ($job) {
+                $q->where('category_id', $job->category_id);
+            })
+            ->when($job->location_id, function ($q) use ($job) {
+                $q->orWhere('location_id', $job->location_id);
+            })
+            ->when($job->level_id, function ($q) use ($job) {
+                $q->orWhere('level_id', $job->level_id);
+            })
+            ->limit(5) // số lượng gợi ý
+            ->get();
+
         return view('website.jobs.job-details', compact('job', 'relatedJobs', 'cvs', 'profile'));
     }
-
     /* ======================= Helpers ======================= */
 
     private function buildQuery(Request $request, array $skills, string $skillsMode): Builder
     {
         $q = Job::with(['company', 'skills', 'jobType', 'location', 'level', 'experience', 'language'])
             ->where('status', 'published');
-
+        
         // Từ khóa
         if ($request->filled('q')) {
             $kw = trim($request->input('q'));
@@ -267,7 +280,15 @@ class JobController extends Controller
         $expOrder = $this->pickOrderable('job_experiences', ['name']);
         $langOrder = $this->pickOrderable('job_languages', ['name', 'language_name']);
 
-        $categories = Category::orderBy($categoriesOrder)->get();
+        $categories = Cache::remember('categories_active', 3600, function () use ($categoriesOrder) {
+            return Category::where('is_active', true)
+                ->withCount([
+                    'jobs as jobs_count' => fn($q) => $q->where('status', 'published')
+                ])
+                ->having('jobs_count', '>', 0) // chỉ lấy category có job published
+                ->orderBy($categoriesOrder)
+                ->get();
+        });
         $companies = Company::orderBy($companiesOrder)->get();
         $skills = Skill::orderBy($skillsOrder)->get();
         $locations = Location::orderBy($locationsOrder)->get();

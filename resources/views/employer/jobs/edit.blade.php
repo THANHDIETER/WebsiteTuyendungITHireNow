@@ -181,10 +181,25 @@
                 <div class="card-header bg-primary text-white fw-semibold">Kỹ năng & Cài đặt khác</div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label>Kỹ năng</label>
-                        <input type="text" name="skills_text" id="skills_text" class="form-control"
-                            value="{{ old('skills_text', $selectedSkills ?? '') }}">
+                        <label for="skills_text" class="form-label fw-semibold">
+                            Kỹ năng <span class="text-muted small">(phân cách bằng dấu phẩy)</span>
+                        </label>
+                        <input
+    type="text"
+    name="skills_text"
+    id="skills_text"
+    class="form-control border-primary shadow-sm"
+    placeholder="Ví dụ: PHP, Laravel, MySQL"
+    value="{{ old('skills_text', $selectedSkills) }}">
+
                     </div>
+
+
+
+
+
+
+
                     <div class="mb-3">
                         <label>Chính sách làm việc</label>
                         <select name="remote_policy_id" class="form-select">
@@ -247,11 +262,35 @@
     </div>
 </main>
 <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
-
+<!-- Tagify CSS + JS qua CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js"></script>
 <script>
     CKEDITOR.replace('description');
     CKEDITOR.replace('requirements');
     CKEDITOR.replace('benefits');
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const input = document.getElementById("skills_text");
 
+    new Tagify(input, {
+        delimiters: ",",
+        maxTags: 20,
+        dropdown: { enabled: 0 },
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(", ")
+    });
+});
+
+</script>
+<style>
+    /* Ẩn khối thông báo CKEditor nhưng vẫn giữ chiều cao để không làm "giật layout" */
+    .cke_notifications_area {
+        visibility: hidden;
+        height: 0 !important;
+        overflow: hidden;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+</style>
 @endsection

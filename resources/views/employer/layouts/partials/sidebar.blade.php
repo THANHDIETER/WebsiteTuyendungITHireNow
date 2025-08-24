@@ -149,11 +149,17 @@
                     <span>Quản lý công ty</span>
                 </a>
             </li>
+             <li class="sidebar-list">
+                <a class="sidebar-link" href="{{ route('employer.company.branches.index', $employerCompany->id) }}">
+                    <i class="bi bi-people"></i>
+                    <span>Quản lý chi nhánh</span>
+                </a>
+            </li>
 
             <li class="sidebar-list">
                 <a class="sidebar-link" href="{{ route('employer.package.logs.index') }}">
                     <i class="bi bi-clock-history"></i>
-                    <span>Lịch sử gói dịch vụ</span>
+                    <span>Lịch sử</span>
                 </a>
             </li>
         </ul>

@@ -44,6 +44,7 @@ class JobController extends Controller
     {
         $user = Auth::user();
         $company = $user->company;
+        $branches = $company->branches;
         if (!$company) {
             return redirect()
                 ->route('employer.companies.index')
@@ -71,13 +72,15 @@ class JobController extends Controller
             'categories',
             'jobTypes',
             'skills',
+            'company',
             'company_addresses',
             'locations',
             'levels',
             'experiences',
             'languages',
             'remote_policies',
-            'activePackages'
+            'activePackages',
+            'branches'
         ));
     }
 
@@ -182,7 +185,7 @@ class JobController extends Controller
         $validated['status'] = 'pending';
         $validated['is_approved'] = false;
         $validated['views'] = 0;
-        $validated['is_featured'] = $selectedPackage&& $selectedPackage->package && $selectedPackage->package->highlight_days > 0;
+        $validated['is_featured'] = $selectedPackage && $selectedPackage->package && $selectedPackage->package->highlight_days > 0;
 
         $validated['search_index'] = $request->boolean('search_index', false);
         $validated['is_paid'] = $selectedPackage !== null;
@@ -197,7 +200,7 @@ class JobController extends Controller
                 'order_id' => $selectedPackage->order_id,
                 'job_id' => $job->id,
                 'used_at' => now(),
-                'action' => 'create',
+                'action' => 'Tạo tin tuyển dụng',
             ]);
         } else {
             $freePosting->increment('post_used');
@@ -337,6 +340,12 @@ class JobController extends Controller
         }
 
         $job->update($validated);
+        EmployerPackageLog::create([
+            'order_id' => optional($job->packageUsage)->order_id, // lấy order_id từ gói đang dùng
+            'job_id'   => $job->id,
+            'used_at'  => now(),
+            'action'   => 'Sửa tin tuyển dụng',
+        ]);
         // Gửi thông báo cho tất cả admin
         User::where('role', 'admin')->get()->each(function ($admin) use ($job) {
             $admin->notify(new JobEditedNotification($job));

@@ -58,6 +58,7 @@
                                     <i class="bi bi-info-circle me-2 text-primary"></i>Thông tin cơ bản
                                 </h5>
                                 <ul class="list-unstyled small mb-0">
+                                    @if(false)
                                     <li class="mb-3">
                                         <i class="bi bi-globe me-2 text-secondary"></i><strong>Website:</strong>
                                         @if ($company->website)
@@ -67,6 +68,7 @@
                                             <span class="text-muted">—</span>
                                         @endif
                                     </li>
+                                    @endif
                                     <li class="mb-3"><i
                                             class="bi bi-envelope me-2 text-secondary"></i><strong>Email:</strong>
                                         {{ $company->email ?? '—' }}</li>
@@ -75,7 +77,7 @@
                                     <li class="mb-3"><i class="bi bi-geo-alt me-2 text-secondary"></i><strong>Địa
                                             chỉ:</strong> {{ $company->address ?? '—' }}</li>
                                     <li class="mb-3"><i class="bi bi-building me-2 text-secondary"></i><strong>Thành
-                                            phố:</strong> {{ $company->city ?? '—' }}</li>
+                                            phố:</strong> {{ $company->city?->name ?? '—' }}</li>
                                     <li class="mb-3"><i class="bi bi-people me-2 text-secondary"></i><strong>Quy
                                             mô:</strong> {{ $company->company_size ?? '—' }}</li>
                                     <li class="mb-3"><i class="bi bi-calendar-event me-2 text-secondary"></i><strong>Năm
@@ -138,15 +140,18 @@
                         <div class="table-responsive">
                             <table class="table table-borderless align-middle mb-0">
                                 <tbody class="text-sm">
+                                    @if(false)
                                     <tr class="border-bottom">
                                         <th class="text-muted fw-semibold" style="width: 200px;">
                                             <i class="bi bi-shield-check me-2 text-secondary"></i>Xác thực
                                         </th>
+
                                         <td>
                                             <span class="badge bg-{{ $company->is_verified ? 'success' : 'secondary' }}">
                                                 {{ $company->is_verified ? 'Đã xác thực' : 'Chưa xác thực' }}
                                             </span>
                                         </td>
+
                                     </tr>
                                     <tr class="border-bottom">
                                         <th class="text-muted fw-semibold">
@@ -159,6 +164,8 @@
                                             </span>
                                         </td>
                                     </tr>
+                                                                        @endif
+
                                     <!-- <tr class="border-bottom">
                                         <th class="text-muted fw-semibold">
                                             <i class="bi bi-box-seam me-2 text-secondary"></i>Quota miễn phí

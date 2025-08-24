@@ -23,5 +23,10 @@ class Location extends Model
 {
     return $this->hasMany(Job::class);
 }
+public function branches()
+{
+    return $this->hasMany(CompanyBranch::class, 'city_id');
+}
+
 
 }

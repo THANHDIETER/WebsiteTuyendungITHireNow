@@ -23,7 +23,7 @@ class Company extends Model
         'email',
         'phone',
         'address',
-        'city',
+        'city_id',
         'company_size',
         'founded_year',
         'industry',
@@ -45,7 +45,15 @@ class Company extends Model
         'latitude' => 'float',
         'longitude' => 'float',
     ];
+     public function city()
+    {
+        return $this->belongsTo(Location::class, 'city_id');
+    }
 
+     public function branches()
+    {
+        return $this->hasMany(CompanyBranch::class);
+    }
     // Chủ sở hữu công ty
    public function user()
 {

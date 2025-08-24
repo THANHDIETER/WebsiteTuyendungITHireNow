@@ -24,15 +24,14 @@
                             <div class="card-body">
 
                                 <div class="mb-3 form-floating">
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        id="name" name="name" placeholder="Tên công ty"
-                                        value="{{ old('name', $company->name) }}">
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                                        name="name" placeholder="Tên công ty" value="{{ old('name', $company->name) }}">
                                     <label for="name"><i class="bi bi-building me-1"></i>Tên công ty *</label>
                                     @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
+                                @if(false)
                                 <div class="mb-3 form-floating">
                                     <input type="url" class="form-control @error('website') is-invalid @enderror"
                                         id="website" name="website" placeholder="https://example.com"
@@ -42,10 +41,10 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
+                                @endif
                                 <div class="mb-3 form-floating">
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        id="email" name="email" placeholder="email@domain.com"
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                                        name="email" placeholder="email@domain.com"
                                         value="{{ old('email', $company->email) }}">
                                     <label for="email"><i class="bi bi-envelope me-1"></i>Email</label>
                                     @error('email')
@@ -54,9 +53,8 @@
                                 </div>
 
                                 <div class="mb-3 form-floating">
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                        id="phone" name="phone" placeholder="0123 456 789"
-                                        value="{{ old('phone', $company->phone) }}">
+                                    <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone"
+                                        name="phone" placeholder="0123 456 789" value="{{ old('phone', $company->phone) }}">
                                     <label for="phone"><i class="bi bi-phone me-1"></i>Điện thoại</label>
                                     @error('phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -74,19 +72,27 @@
                                 <strong class="text-muted">2. Địa chỉ</strong>
                             </div>
                             <div class="card-body">
-                                <div class="mb-3 form-floating">
-                                    <input type="text" class="form-control @error('city') is-invalid @enderror"
-                                        id="city" name="city" placeholder="Hà Nội"
-                                        value="{{ old('city', $company->city) }}">
-                                    <label for="city">Thành phố</label>
-                                    @error('city')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                <div class="mb-3">
+    <label for="city_id" class="form-label">Thành phố</label>
+    <select name="city_id" id="city_id" class="form-select @error('city_id') is-invalid @enderror">
+        <option value="">-- Chọn thành phố --</option>
+        @foreach($locations as $loc)
+            <option value="{{ $loc->id }}" {{ old('city_id', $company->city_id) == $loc->id ? 'selected' : '' }}>
+                {{ $loc->name }}
+            </option>
+        @endforeach
+    </select>
+    @error('city_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+
 
                                 <div class="mb-3 form-floating">
-                                    <textarea class="form-control @error('address') is-invalid @enderror" placeholder="Số nhà, phố, quận" id="address"
-                                        name="address" style="height: 100px">{{ old('address', $company->address) }}</textarea>
+                                    <textarea class="form-control @error('address') is-invalid @enderror"
+                                        placeholder="Số nhà, phố, quận" id="address" name="address"
+                                        style="height: 100px">{{ old('address', $company->address) }}</textarea>
                                     <label for="address">Địa chỉ</label>
                                     @error('address')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -104,7 +110,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="mb-3 form-floating">
-                                    <input type="text" class="form-control @error('company_size') is-invalid @enderror"
+                                    <input type="number" class="form-control @error('company_size') is-invalid @enderror"
                                         id="company_size" name="company_size" placeholder="Quy mô"
                                         value="{{ old('company_size', $company->company_size) }}">
                                     <label for="company_size">Quy mô công ty</label>
@@ -132,15 +138,18 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            <div class="mb-3">
-                                <label for="status" class="form-label">Trạng thái</label>
-                                <select id="status" class="form-select" name="status" disabled>
-                                    <option value="active" {{ $company->status == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="inactive" {{ $company->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                    <option value="banned" {{ $company->status == 'banned' ? 'selected' : '' }}>Banned</option>
-                                </select>
-                                <input type="hidden" name="status" value="{{ $company->status }}">
-                            </div>
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Trạng thái</label>
+                                    <select id="status" class="form-select" name="status" disabled>
+                                        <option value="active" {{ $company->status == 'active' ? 'selected' : '' }}>Active
+                                        </option>
+                                        <option value="inactive" {{ $company->status == 'inactive' ? 'selected' : '' }}>
+                                            Inactive</option>
+                                        <option value="banned" {{ $company->status == 'banned' ? 'selected' : '' }}>Banned
+                                        </option>
+                                    </select>
+                                    <input type="hidden" name="status" value="{{ $company->status }}">
+                                </div>
                             </div>
                         </div>
                     </fieldset>
@@ -153,7 +162,8 @@
                             </div>
                             <div class="card-body">
                                 <div class="mb-3 form-floating">
-                                    <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                    <textarea class="form-control @error('description') is-invalid @enderror"
+                                        id="description" name="description"
                                         style="height: 100px">{{ old('description', $company->description) }}</textarea>
                                     <label for="description">Mô tả</label>
                                     @error('description')
@@ -162,7 +172,8 @@
                                 </div>
 
                                 <div class="mb-3 form-floating">
-                                    <textarea class="form-control @error('benefits') is-invalid @enderror" id="benefits" name="benefits"
+                                    <textarea class="form-control @error('benefits') is-invalid @enderror" id="benefits"
+                                        name="benefits"
                                         style="height: 100px">{{ old('benefits', is_array($company->benefits) ? implode(', ', $company->benefits) : $company->benefits) }}</textarea>
                                     <label for="benefits">Phúc lợi</label>
                                     @error('benefits')
@@ -182,15 +193,14 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label for="logo" class="form-label">Logo công ty</label>
-                                    <input type="file" class="form-control @error('logo') is-invalid @enderror"
-                                        id="logo" name="logo" accept="image/*"
-                                        onchange="previewImage(this, '#logoPreview')">
+                                    <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo"
+                                        name="logo" accept="image/*" onchange="previewImage(this, '#logoPreview')">
                                     @error('logo')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                     @if ($company->logo_url)
-                                        <img src="{{ asset('storage/' . $company->logo_url) }}"
-                                            class="mt-2 border rounded" style="max-height: 100px;">
+                                        <img src="{{ asset('storage/' . $company->logo_url) }}" class="mt-2 border rounded"
+                                            style="max-height: 100px;">
                                     @endif
                                 </div>
 

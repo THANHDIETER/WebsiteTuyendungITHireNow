@@ -63,15 +63,25 @@
             <div class="col-12 p-0">
                 <div class="login-card login-dark">
                     <div>
-                        <div><a class="logo text-center" href="index.html"><img class="img-fluid for-light"
-                                    src="{{ asset('../assets/images/logo/logo.png') }}" alt="looginpage"><img
-                                    class="img-fluid for-dark m-auto"
-                                    src="{{ asset('../assets/images/logo/dark-logo.png') }}" alt="logo"></a></div>
-                        <div class="login-main">
+                        <div style="align-items: center;
+                                display: flex;
+                                justify-content: center;
+                                height: 100px;">
+                            <a href="{{ route('home') }}">
+                                @php
+                                    $clientLogo = \App\Models\Logo::where('type', 'client')
+                                        ->where('is_active', true)
+                                        ->first();
+                                @endphp
+
+                                <img src="{{ $clientLogo ? asset('storage/' . $clientLogo->image_path) : asset('images/default.png') }}"
+                                    alt="Client Logo" style="height: 120px; " {{-- hoặc dùng class --}}>
+                            </a>
+                        </div>
+                        <div class="login-main mt-4">
                             <form class="theme-form" method="POST" action="{{ route('register.post') }}">
                                 @csrf
-                                <h2 class="text-center">Create your account</h2>
-                                <p class="text-center">Enter your personal details to create account</p>
+                                <h2 class="text-center">Tạo tài khoản</h2>
                                 @if (session('success'))
                                     <div class="alert alert-success">
                                         {{ session('success') }}
@@ -83,15 +93,14 @@
                                     </div>
                                 @endif
                                 <div class="form-group">
-                                    <label class="col-form-label">Email Address</label>
-                                    <input class="form-control" type="email" name="email"
-                                        placeholder="Email Address">
+                                    <label class="col-form-label">Email</label>
+                                    <input class="form-control" type="email" name="email" placeholder="Địa chỉ Email">
                                     @error('email')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label">Password</label>
+                                    <label class="col-form-label">Mật khẩu</label>
                                     <div class="form-input position-relative">
                                         <input class="form-control" type="password" id="password" name="password"
                                             placeholder="*********">
@@ -102,7 +111,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label">Confirm Password</label>
+                                    <label class="col-form-label">Nhập lại mật khẩu</label>
                                     <div class="form-input position-relative">
                                         <input class="form-control" type="password" id="password_confirmation"
                                             name="password_confirmation" placeholder="*********">
@@ -117,11 +126,11 @@
                                         <input class="form-check-input" id="solid6" type="checkbox">
                                         <label class="form-check-label" for="solid6">Remember password</label>
                                     </div> --}}
-                                    <button class="btn btn-primary btn-block w-100 mt-3" type="submit">Create
-                                        Account</button>
+                                    <button class="btn btn-primary btn-block w-100 mt-3" type="submit">
+                                        TẠO TÀI KHOẢN </button>
                                 </div>
                                 <div class="login-social-title">
-                                    <h6>Or Sign in with </h6>
+                                    <h6>đăng ký khác </h6>
                                 </div>
                                 <div class="form-group">
                                     <ul class="login-social">
@@ -129,15 +138,14 @@
                                                     class="fa-brands fa-google"></i></a></li>
                                     </ul>
                                 </div>
-                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn"
-                                    data-theme="dark"></div>
+                                <div id="googleButton" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">
+                                </div>
                                 <p
-                                    class="mt-4 mb-0 text-center d-flex align-items-center justify-content-center gap-2">
-                                    Already have an account?
-                                    <a href="{{ route('showLoginForm') }}" class="ms-2">Sign in</a>
+                                    class="mt-4 ms-5 mb-0 text-center d-flex align-items-center justify-content-center gap-2">
+                                    <a href="{{ route('showLoginForm') }}" class="ms-2">Đăng nhập</a>
                                     <span>|</span>
-                                    <a href="{{ route('registerEmployer') }}" class="ms-2">Create Employer
-                                        Account</a>
+                                    <a href="{{ route('registerEmployer') }}" class="ms-2">Tạo tài khoản Employer
+                                    </a>
                                 </p>
                             </form>
                         </div>

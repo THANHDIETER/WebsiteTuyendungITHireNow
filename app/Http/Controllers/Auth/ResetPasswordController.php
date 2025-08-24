@@ -23,6 +23,7 @@ class ResetPasswordController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
@@ -32,7 +33,7 @@ class ResetPasswordController extends Controller
                 $user->save();
             }
         );
-
+        
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('showLoginForm')->with('status', 'Đặt lại mật khẩu thành công.')
             : back()->withErrors(['email' => [__($status)]]);

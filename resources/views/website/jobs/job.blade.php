@@ -416,7 +416,7 @@
                         <div class="col-sm-6">
                             <div class="d-flex align-items-center gap-2 mb-2">
                                 @if($job->is_featured) <span class="badge badge-top"><i class="bi bi-star-fill me-1"></i>TOP</span> @endif
-                                @if($job->is_paid) <span class="badge badge-hot"><i class="bi bi-fire me-1"></i>HOT</span> @endif
+                                <!-- @if($job->is_paid) <span class="badge badge-hot"><i class="bi bi-fire me-1"></i>HOT</span> @endif -->
                             </div>
                             <h5 class="mb-2 fw-semibold"><a class="text-dark text-decoration-none" href="{{ route('jobs.show', $job->slug) }}">{{ Str::limit($job->title, 60) }}</a></h5>
                             <div class="small text-muted mb-3 d-flex flex-wrap gap-2">
