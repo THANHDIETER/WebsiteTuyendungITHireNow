@@ -45,6 +45,10 @@ class User extends Authenticatable
             ->withPivot('note')
             ->withTimestamps();
     }
+    public function favorites()
+{
+    return $this->hasMany(Favorite::class);
+}
 
 
     public function getAuthPassword()

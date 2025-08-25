@@ -75,6 +75,10 @@ class Job extends Model
     {
         return $this->belongsTo(CompanyBranch::class, 'branch_id');
     }
+    public function favorites()
+{
+    return $this->hasMany(Favorite::class);
+}
 
     public function categories()
     {

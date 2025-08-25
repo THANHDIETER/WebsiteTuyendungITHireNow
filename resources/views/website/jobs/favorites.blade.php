@@ -1,4 +1,4 @@
-@extends('website.layouts.master1')
+@extends('website.layouts.master')
 
 @section('content')
 <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
@@ -8,129 +8,163 @@
 </div>
 
 <div class="container py-4">
-    <h3 class="mb-4"><i class="bi bi-heart-fill text-danger me-2"></i> Việc làm yêu thích</h3>
+    <div class="row">
+        {{-- Cột trái: Việc làm yêu thích --}}
+        <div class="col-lg-8">
+            <h3 class="mb-4"><i class="bi bi-heart-fill text-danger me-2"></i> Việc làm yêu thích</h3>
 
-    @if($favorites->count())
-        <div class="list-group shadow-sm rounded">
-            @foreach($favorites as $job)
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">
-                            <a href="javascript:void(0)" 
-                               class="text-decoration-none text-dark fw-semibold view-job" 
-                               data-id="{{ $job->id }}">
-                                {{ $job->title }}
+            @if($favorites->count())
+                <div id="favorites-list">
+                    @foreach($favorites as $job)
+                        <div class="card shadow-sm border-0 mb-3 job-item-{{ $job->id }}">
+                            <div class="card-body d-flex flex-column flex-md-row align-items-start">
+                                {{-- Logo công ty --}}
+                                <div class="me-md-3 mb-2 mb-md-0 d-flex align-items-center justify-content-center border rounded bg-white"
+                                     style="width:90px; height:90px; flex-shrink:0;">
+                                    <img src="{{ $job->company->logo_url ? asset('storage/'.$job->company->logo_url) : asset('client/assets/img/default-company.png') }}" 
+                                         alt="{{ $job->company->name ?? 'Công ty' }}" 
+                                         class="img-fluid" style="max-height:80px; object-fit:contain;">
+                                </div>
+
+                                {{-- Nội dung --}}
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <h5 class="mb-1">
+                                        <a href="{{ route('jobs.show', $job->slug) }}" 
+                                           class="text-decoration-none text-dark fw-bold">
+                                           {{ $job->title }}
+                                        </a>
+                                    </h5>
+                                    <p class="mb-1 text-muted"><i class="bi bi-building"></i> {{ $job->company->name ?? 'Công ty' }}</p>
+                                    <p class="mb-1"><i class="bi bi-geo-alt"></i> {{ $job->location->name ?? 'Địa điểm' }}</p>
+                                    <p class="mb-1"><i class="bi bi-cash-coin"></i> {{ $job->salary_min }} - {{ $job->salary_max }} {{ $job->currency }}</p>
+
+                                    {{-- Footer --}}
+                                    <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+                                        <span class="text-muted small">
+                                            <i class="bi bi-clock-history"></i> {{ $job->created_at->format('d/m/Y') }}
+                                        </span>
+                                        <div class="d-flex align-items-center">
+                                            <a href="{{ route('jobs.show', $job->slug) }}" 
+                                               class="btn btn-sm btn-success me-2">
+                                               <i class="bi bi-send-check"></i> Ứng tuyển
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-danger btn-remove-favorite" 
+                                                    data-id="{{ $job->id }}" title="Bỏ yêu thích">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="mt-4">
+                    {{ $favorites->links() }}
+                </div>
+            @else
+                <div class="alert alert-info shadow-sm">
+                    <i class="bi bi-info-circle"></i> Bạn chưa có công việc yêu thích nào.
+                </div>
+            @endif
+        </div>
+
+        {{-- Cột phải: Gợi ý việc làm --}}
+        <div class="col-lg-4">
+            @if(!empty($suggestedJobs) && count($suggestedJobs))
+            <h4 class="mb-4"><i class="bi bi-lightbulb-fill text-warning me-2"></i> Gợi ý việc làm</h4>
+            <div class="list-group shadow-sm">
+                @foreach($suggestedJobs as $job)
+                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <a href="{{ route('jobs.show', $job['slug']) }}" 
+                               class="fw-semibold text-dark text-decoration-none d-block">
+                               {{ $job['title'] }}
                             </a>
-                        </h5>
-                        <small class="text-muted">
-                            <i class="bi bi-building me-1"></i>{{ $job->company->name ?? 'Công ty' }}
-                        </small>
-                    </div>
-
-                    <div class="d-flex">
-                        <!-- Nút xem chi tiết -->
-                        <button type="button" 
-                                class="btn btn-sm btn-primary me-2 view-job" 
-                                data-id="{{ $job->id }}">
-                            <i class="bi bi-eye"></i> Xem
+                            <div class="small text-muted">
+                                <i class="bi bi-building"></i> {{ $job['company']['name'] }}
+                            </div>
+                            <div class="small">
+                                <i class="bi bi-geo-alt"></i> {{ $job['location'] }}
+                            </div>
+                            <div class="small text-success fw-semibold">
+                                <i class="bi bi-cash-coin"></i> {{ $job['salary'] }}
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger ms-2 btn-toggle-favorite align-self-center" 
+                                data-id="{{ $job['id'] }}">
+                            <i class="bi bi-heart"></i>
                         </button>
-
-                        <!-- Nút bỏ yêu thích -->
-                        <form action="{{ route('favorites.destroy', $job->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger" title="Bỏ yêu thích">
-                                <i class="bi bi-x-circle"></i>
-                            </button>
-                        </form>
                     </div>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="mt-3">
-            {{ $favorites->links() }}
-        </div>
-    @else
-        <div class="alert alert-info shadow-sm">
-            <i class="bi bi-info-circle"></i> Bạn chưa có công việc yêu thích nào.
-        </div>
-    @endif
-</div>
-
-<!-- Modal xem chi tiết -->
-<div class="modal fade" id="jobDetailModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content shadow-lg border-0">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title"><i class="bi bi-briefcase-fill me-2"></i> Chi tiết công việc</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                @endforeach
             </div>
-            <div class="modal-body">
-                <h4 id="jobTitle" class="fw-bold"></h4>
-                <p class="mb-1"><i class="bi bi-building me-2"></i><strong>Công ty:</strong> <span id="jobCompany"></span></p>
-                <p class="mb-1"><i class="bi bi-geo-alt me-2"></i><strong>Địa điểm:</strong> <span id="jobLocation"></span></p>
-                <p class="mb-1"><i class="bi bi-cash-coin me-2"></i><strong>Mức lương:</strong> <span id="jobSalary"></span></p>
-                <p class="mb-1"><i class="bi bi-clock-history me-2"></i><strong>Ngày đăng:</strong> <span id="jobDate"></span></p>
-                <p class="mb-3"><i class="bi bi-person-badge me-2"></i><strong>Cấp bậc:</strong> <span id="jobLevel"></span></p>
-
-                <hr>
-                <div class="mb-3">
-                    <h6 class="fw-semibold text-primary"><i class="bi bi-card-text me-1"></i> Mô tả công việc</h6>
-                    <div id="jobDescription" class="text-muted"></div>
-                </div>
-                <div class="mb-3">
-                    <h6 class="fw-semibold text-primary"><i class="bi bi-list-check me-1"></i> Yêu cầu</h6>
-                    <div id="jobRequirements" class="text-muted"></div>
-                </div>
-                <div class="mb-3">
-                    <h6 class="fw-semibold text-primary"><i class="bi bi-gift me-1"></i> Quyền lợi</h6>
-                    <div id="jobBenefits" class="text-muted"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <form id="applyForm" action="" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-success">
-                        <i class="bi bi-send-check"></i> Ứng tuyển ngay
-                    </button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
+            @endif
         </div>
     </div>
 </div>
 @endsection
 
+@push('styles')
+<style>
+.card { transition: all 0.2s ease-in-out; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+.list-group-item { border: none; border-bottom: 1px solid #eee; }
+.list-group-item:last-child { border-bottom: none; }
+.btn-toggle-favorite.active i { color: red; }
+</style>
+@endpush
+
 @push('scripts')
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const modal = new bootstrap.Modal(document.getElementById('jobDetailModal'));
-
-    document.querySelectorAll(".view-job").forEach(btn => {
+    // Xóa yêu thích bằng AJAX
+    document.querySelectorAll(".btn-remove-favorite").forEach(btn => {
         btn.addEventListener("click", function() {
             let jobId = this.dataset.id;
+            if(!confirm("Bạn có chắc chắn muốn bỏ yêu thích công việc này?")) return;
 
-            fetch(`/favorites/job/${jobId}`)
-                .then(res => res.json())
-                .then(data => {
-                    // Fill data
-                    document.getElementById("jobTitle").innerText = data.title;
-                    document.getElementById("jobCompany").innerText = data.company;
-                    document.getElementById("jobLocation").innerText = data.location;
-                    document.getElementById("jobSalary").innerText = data.salary;
-                    document.getElementById("jobDate").innerText = data.created_at;
-                    document.getElementById("jobLevel").innerText = data.level;
+            fetch(`/favorites/${jobId}`, {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Accept": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    document.querySelector(".job-item-" + jobId).remove();
+                } else {
+                    alert(data.message || "Có lỗi xảy ra!");
+                }
+            })
+            .catch(() => alert("Có lỗi xảy ra khi kết nối server!"));
+        });
+    });
 
-                    document.getElementById("jobDescription").innerHTML = data.description || '<em>Chưa có mô tả</em>';
-                    document.getElementById("jobRequirements").innerHTML = data.requirements || '<em>Chưa có yêu cầu</em>';
-                    document.getElementById("jobBenefits").innerHTML = data.benefits || '<em>Chưa có quyền lợi</em>';
-
-                    // Gán action cho form apply
-                    document.getElementById("applyForm").action = `/jobs/${jobId}/apply`;
-
-                    modal.show();
-                });
+    // Toggle yêu thích trong gợi ý
+    document.querySelectorAll(".btn-toggle-favorite").forEach(btn => {
+        btn.addEventListener("click", function() {
+            let jobId = this.dataset.id;
+            fetch(`/favorites/${jobId}`, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Accept": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.favorited) {
+                    this.classList.add("active");
+                    this.querySelector("i").classList.replace("bi-heart", "bi-heart-fill");
+                } else {
+                    this.classList.remove("active");
+                    this.querySelector("i").classList.replace("bi-heart-fill", "bi-heart");
+                }
+            })
+            .catch(() => alert("Có lỗi xảy ra khi kết nối server!"));
         });
     });
 });

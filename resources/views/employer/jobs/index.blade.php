@@ -72,7 +72,7 @@
                                     {{-- NẾU CÓ NỔI BẬT --}}
 
                                     @if ($job->is_featured)
-                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2">Nổi bật</span>
+                                        <span class="badge bg-danger position-absolute top-0 end-0 m-2">Nổi bật</span>
                                     @endif
                                 </h4>
 

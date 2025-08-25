@@ -43,15 +43,16 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body d-flex align-items-center">
                     <div class="me-4">
-                        <img src="{{asset('storage/'.$job->company->logo_url) ?? '' }}"
-                            alt="{{ $job->company->name }}" class="rounded border"
+                        <img src="{{asset('storage/'.$job->thumbnail) ?? '' }}"
+                            alt="{{ $job->title ?? '' }}" class="rounded border"
                             style="width:80px; height:80px; object-fit:cover;">
                     </div>
                     <div>
                         <h3 class="fw-bold mb-1">{{ $job->title }}</h3>
                         <div class="small text-muted">
                             <i class="bi bi-building me-1"></i> {{ $job->company->name }} |
-                            <i class="bi bi-geo-alt me-1"></i> {{ $job->address ?? 'Không rõ địa chỉ' }}
+                            <i class="bi bi-geo-alt me-1"></i> {{ $job->address ?? 'Không rõ địa chỉ' }} |
+                            <i class="bi bi-geo-alt me-1"></i> {{ $job->location->name ?? 'Không rõ địa chỉ' }}
                         </div>
                     </div>
                 </div>

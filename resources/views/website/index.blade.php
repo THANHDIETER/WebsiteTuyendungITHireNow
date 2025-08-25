@@ -321,7 +321,7 @@
                             {{-- Địa chỉ --}}
                             <div class="text-muted small">
                                 <i class="bi bi-geo-alt-fill text-danger me-1"></i>
-                                {{ $job->address ?? 'Không rõ địa chỉ' }}
+                                {{ $job->location->name ?? 'Không rõ địa chỉ' }}
                             </div>
                             @php
                             $isFavorited = auth()->check() && auth()->user()->favoriteJobs->contains($job->id);

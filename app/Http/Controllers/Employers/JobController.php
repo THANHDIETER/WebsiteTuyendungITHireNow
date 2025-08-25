@@ -279,6 +279,7 @@ class JobController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->toArray());
 
         $user = Auth::user();
         $company = $user->company;
@@ -317,7 +318,11 @@ class JobController extends Controller
             'apply_url' => 'nullable|url',
             'job_type' => 'nullable|in:full-time,part-time,internship,remote,freelance',
         ]);
-
+         if ($request->hasFile('thumbnail')) {
+                $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+            } else {
+                unset($validated['thumbnail']); // không ghi đè thumbnail cũ
+            }
         $validated['deadline'] = $request->input('application_deadline') ?? null;
         $validated['search_index'] = $request->boolean('search_index', false);
         $validated['salary_negotiable'] = $request->boolean('salary_negotiable', false);
