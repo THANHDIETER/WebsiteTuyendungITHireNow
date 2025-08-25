@@ -113,210 +113,207 @@
             </div>
 
             {{-- Vị trí tuyển dụng --}}
-            <div class="card mb-4 shadow-sm border-0 rounded-3">
-                <div class="card-header bg-primary text-white fw-semibold">Vị trí tuyển dụng</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label for="categories[]" class="form-label fw-semibold">Ngành nghề <span
-                                    class="text-danger">*</span></label>
-                            <select name="categories[]" class="form-select select2" multiple required>
-                                @foreach ($categories as $cat)
-                                <option value="{{ $cat->id }}"
-                                    {{ collect(old('categories'))->contains($cat->id) ? 'selected' : '' }}>
-                                    {{ $cat->name }}
-                                </option>
-                                @endforeach
-                            </select>
-
-                        </div>
-
-                        <div class="col">
-                            <label>Cấp bậc</label>
-                            <select name="level_id" class="form-select" required>
-                                @foreach ($levels as $level)
-                                <option value="{{ $level->id }}"
-                                    {{ old('level_id') == $level->id ? 'selected' : '' }}>
-                                    {{ $level->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col">
-                            <label>Kinh nghiệm</label>
-                            <select name="experience_id" class="form-select shadow-sm border-primary">
-                                <option value="">-- Chọn kinh nghiệm --</option>
-                                @foreach ($experiences as $exp)
-                                <option value="{{ $exp->id }}"
-                                    {{ old('experience_id') == $exp->id ? 'selected' : '' }}>
-                                    {{ $exp->name }}
-                                </option>
-                                @endforeach
-                            </select>
-
-                        </div>
-                        @if(false)
-                        <div class="mb-3 col">
-                            <label>Hạn ứng tuyển</label>
-                            <input type="date" name="application_deadline" class="form-control"
-                                value="{{ old('application_deadline') }}">
-                        </div>
-                        @endif
-                    </div>
-                    {{-- Vị trí tuyển dụng --}}
-                    <div class="card mb-4 shadow-sm border-0 rounded-3">
-                        <div class="card-header bg-primary text-white fw-semibold">Vị trí tuyển dụng</div>
-                        <div class="card-body">
-                            <div class="row">
-                                {{-- Chọn chi nhánh / địa chỉ --}}
-                                <div class="mb-3 col-md-6">
-                                    <label for="branch_id" class="form-label fw-semibold">
-                                        Địa chỉ làm việc <span class="text-danger">*</span>
-                                    </label>
-                                    <select name="branch_id" id="branch_id" class="form-select" required>
-                                        <!-- Địa chỉ mặc định công ty -->
-                                        <option value="0"
-                                            data-city-id="{{ $company->city_id ?? '' }}"
-                                            data-address="{{ $company->address }}"
-                                            class="text-danger fw-bold"
-                                            {{ old('branch_id') == 0 ? 'selected' : '' }}>
-                                            {{ $company->address }} - {{ $company->city?->name }}
-                                        </option>
-
-                                        <!-- Danh sách chi nhánh -->
-                                        @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}"
-                                            data-city-id="{{ $branch->city_id }}"
-                                            data-address="{{ $branch->address }}"
-                                            {{ old('branch_id') == $branch->id ? 'selected' : '' }}>
-                                            {{ $branch->name ?? 'Chi nhánh' }} - {{ $branch->address }} - {{ $branch->city?->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                {{-- Chọn thành phố (location_id) --}}
-                                <div class="mb-3 col-md-6">
-                                    <label for="location_id" class="form-label">
-                                        Thành phố / Khu vực <span class="text-danger">*</span>
-                                    </label>
-                                    <select name="location_id" id="location_id" class="form-select shadow-sm border-primary" required>
-                                        <option value="" disabled {{ old('location_id') ? '' : 'selected' }}>-- Chọn khu vực --</option>
-                                        @foreach ($locations as $location)
-                                        <option value="{{ $location->id }}"
-                                            {{ old('location_id') == $location->id ? 'selected' : '' }}>
-                                            {{ $location->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            {{-- Nhập địa chỉ chi tiết --}}
-                            <div class="mb-3">
-                                <label for="address" class="form-label fw-semibold">
-                                    Địa chỉ chi tiết <span class="text-danger">*</span>
-                                </label>
-                                <input type="text"
-                                    name="address"
-                                    id="address"
-                                    class="form-control"
-                                    value="{{ old('address', $company->address) }}"
-                                    placeholder="VD: Số 25 ngõ 80 Xuân Phương, Nam Từ Liêm">
-                            </div>
-                        </div>
-                    </div>
-                    @push('scripts')
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            const branchSelect = document.getElementById('branch_id');
-                            const locationSelect = document.getElementById('location_id');
-                            const addressInput = document.getElementById('address');
-
-                            function syncLocationAndAddress() {
-                                const selected = branchSelect.options[branchSelect.selectedIndex];
-                                const cityId = selected.dataset.cityId;
-                                const addr = selected.dataset.address;
-
-                                // sync location_id
-                                if (cityId) {
-                                    locationSelect.value = cityId;
-                                } else {
-                                    locationSelect.value = "";
-                                }
-
-                                // sync address
-                                if (addr) {
-                                    addressInput.value = addr;
-                                }
-
-                                // Nếu location có select2 thì trigger lại
-                                if ($(locationSelect).hasClass("select2")) {
-                                    $(locationSelect).trigger('change');
-                                }
-                            }
-
-                            branchSelect.addEventListener('change', syncLocationAndAddress);
-
-                            // chạy khi load trang
-                            syncLocationAndAddress();
-                        });
-                    </script>
-                    @endpush
-
-                </div>
+            <div class="card mb-4 shadow border-0 rounded-3">
+    <div class="card-header bg-primary text-white fw-semibold">
+        Vị trí tuyển dụng
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            {{-- Ngành nghề --}}
+            <div class="col-md-4">
+                <label for="categories[]" class="form-label fw-semibold">
+                    Ngành nghề <span class="text-danger">*</span>
+                </label>
+                <select name="categories[]" class="form-select select2" multiple required>
+                    @foreach ($categories as $cat)
+                        <option value="{{ $cat->id }}"
+                            {{ collect(old('categories'))->contains($cat->id) ? 'selected' : '' }}>
+                            {{ $cat->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-            {{-- Kỹ năng --}}
-            <div class="card mb-4 shadow-sm border-0 rounded-3">
-                <div class="card-header bg-primary text-white fw-semibold">
-                    Kỹ năng & Cài đặt khác
-                </div>
-                <div class="card-body">
 
-                    {{-- Nhập kỹ năng --}}
-                    <div class="mb-4">
-                        <label for="skills_text" class="form-label fw-semibold">Kỹ năng <span
-                                class="text-muted small">(phân cách bằng dấu phẩy)</span></label>
-                        <input type="text" name="skills_text" id="skills_text"
-                            class="form-control border-primary shadow-sm" placeholder="Ví dụ: PHP, Laravel, MySQL"
-                            value="{{ old('skills_text', $selectedSkills ?? '') }}">
-                    </div>
-
-                    {{-- Chính sách làm việc --}}
-                    <div class="mb-4">
-                        <label for="remote_policy_id" class="form-label fw-semibold">Chính sách làm việc</label>
-                        <select name="remote_policy_id" id="remote_policy_id"
-                            class="form-select shadow-sm border-primary">
-                            <option value="">-- Chọn chính sách --</option>
-                            @foreach ($remote_policies as $policy)
-                            <option value="{{ $policy->id }}"
-                                {{ old('remote_policy_id') == $policy->id ? 'selected' : '' }}>
-                                {{ $policy->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- Ngôn ngữ sử dụng --}}
-                    <div class="mb-2">
-                        <label for="language_id" class="form-label fw-semibold">Ngôn ngữ sử dụng</label>
-                        <select name="language_id" id="language_id" class="form-select shadow-sm border-primary">
-                            <option value="">-- Chọn ngôn ngữ --</option>
-                            @foreach ($languages as $lang)
-                            <option value="{{ $lang->id }}"
-                                {{ old('language_id') == $lang->id ? 'selected' : '' }}>
-                                {{ $lang->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-
-                </div>
+            {{-- Cấp bậc --}}
+            <div class="col-md-4">
+                <label for="level_id" class="form-label fw-semibold">Cấp bậc <span class="text-danger">*</span></label>
+                <select name="level_id" id="level_id" class="form-select" required>
+                    @foreach ($levels as $level)
+                        <option value="{{ $level->id }}"
+                            {{ old('level_id') == $level->id ? 'selected' : '' }}>
+                            {{ $level->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-            {{-- SEO --}}
-            <!-- <div class="card mb-4 shadow-sm border-0 rounded-3">
+
+            {{-- Kinh nghiệm --}}
+            <div class="col-md-4">
+                <label for="experience_id" class="form-label fw-semibold">Kinh nghiệm</label>
+                <select name="experience_id" id="experience_id" class="form-select">
+                    <option value="">-- Chọn kinh nghiệm --</option>
+                    @foreach ($experiences as $exp)
+                        <option value="{{ $exp->id }}"
+                            {{ old('experience_id') == $exp->id ? 'selected' : '' }}>
+                            {{ $exp->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row g-3">
+            {{-- Chi nhánh / địa chỉ --}}
+            <div class="col-md-6">
+                <label for="branch_id" class="form-label fw-semibold">
+                    Địa chỉ làm việc <span class="text-danger">*</span>
+                </label>
+                <select name="branch_id" id="branch_id" class="form-select" required>
+                    <!-- Địa chỉ mặc định công ty -->
+                    <option value="0"
+                        data-city-id="{{ $company->city_id ?? '' }}"
+                        data-address="{{ $company->address }}"
+                        class="text-danger fw-bold"
+                        {{ old('branch_id') == 0 ? 'selected' : '' }}>
+                        {{ $company->address }} - {{ $company->city?->name }}
+                    </option>
+
+                    <!-- Danh sách chi nhánh -->
+                    @foreach ($branches as $branch)
+                        <option value="{{ $branch->id }}"
+                            data-city-id="{{ $branch->city_id }}"
+                            data-address="{{ $branch->address }}"
+                            {{ old('branch_id') == $branch->id ? 'selected' : '' }}>
+                            {{ $branch->name ?? 'Chi nhánh' }} - {{ $branch->address }} - {{ $branch->city?->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Thành phố --}}
+            <div class="col-md-6">
+                <label for="location_id" class="form-label fw-semibold">
+                    Thành phố / Khu vực <span class="text-danger">*</span>
+                </label>
+                <select name="location_id" id="location_id" class="form-select" required>
+                    <option value="" disabled {{ old('location_id') ? '' : 'selected' }}>-- Chọn khu vực --</option>
+                    @foreach ($locations as $location)
+                        <option value="{{ $location->id }}"
+                            {{ old('location_id') == $location->id ? 'selected' : '' }}>
+                            {{ $location->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            {{-- Địa chỉ chi tiết --}}
+            <label for="address" class="form-label fw-semibold">
+                Địa chỉ chi tiết <span class="text-danger">*</span>
+            </label>
+            <input type="text"
+                name="address"
+                id="address"
+                class="form-control"
+                value="{{ old('address', $company->address) }}"
+                placeholder="VD: Số 25 ngõ 80 Xuân Phương, Nam Từ Liêm">
+        </div>
+    </div>
+</div>
+
+            @push('scripts')
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const branchSelect = document.getElementById('branch_id');
+                    const locationSelect = document.getElementById('location_id');
+                    const addressInput = document.getElementById('address');
+
+                    function syncLocationAndAddress() {
+                        const selected = branchSelect.options[branchSelect.selectedIndex];
+                        const cityId = selected.dataset.cityId;
+                        const addr = selected.dataset.address;
+
+                        // sync location_id
+                        if (cityId) {
+                            locationSelect.value = cityId;
+                        } else {
+                            locationSelect.value = "";
+                        }
+
+                        // sync address
+                        if (addr) {
+                            addressInput.value = addr;
+                        }
+
+                        // Nếu location có select2 thì trigger lại
+                        if ($(locationSelect).hasClass("select2")) {
+                            $(locationSelect).trigger('change');
+                        }
+                    }
+
+                    branchSelect.addEventListener('change', syncLocationAndAddress);
+
+                    // chạy khi load trang
+                    syncLocationAndAddress();
+                });
+            </script>
+            @endpush
+
+    </div>
+    </div>
+    {{-- Kỹ năng --}}
+    <div class="card mb-4 shadow-sm border-0 rounded-3">
+        <div class="card-header bg-primary text-white fw-semibold">
+            Kỹ năng & Cài đặt khác
+        </div>
+        <div class="card-body">
+
+            {{-- Nhập kỹ năng --}}
+            <div class="mb-4">
+                <label for="skills_text" class="form-label fw-semibold">Kỹ năng <span
+                        class="text-muted small">(phân cách bằng dấu phẩy)</span></label>
+                <input type="text" name="skills_text" id="skills_text"
+                    class="form-control border-primary shadow-sm" placeholder="Ví dụ: PHP, Laravel, MySQL"
+                    value="{{ old('skills_text', $selectedSkills ?? '') }}">
+            </div>
+
+            {{-- Chính sách làm việc --}}
+            <div class="mb-4">
+                <label for="remote_policy_id" class="form-label fw-semibold">Chính sách làm việc</label>
+                <select name="remote_policy_id" id="remote_policy_id"
+                    class="form-select shadow-sm border-primary">
+                    <option value="">-- Chọn chính sách --</option>
+                    @foreach ($remote_policies as $policy)
+                    <option value="{{ $policy->id }}"
+                        {{ old('remote_policy_id') == $policy->id ? 'selected' : '' }}>
+                        {{ $policy->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Ngôn ngữ sử dụng --}}
+            <div class="mb-2">
+                <label for="language_id" class="form-label fw-semibold">Ngôn ngữ sử dụng</label>
+                <select name="language_id" id="language_id" class="form-select shadow-sm border-primary">
+                    <option value="">-- Chọn ngôn ngữ --</option>
+                    @foreach ($languages as $lang)
+                    <option value="{{ $lang->id }}"
+                        {{ old('language_id') == $lang->id ? 'selected' : '' }}>
+                        {{ $lang->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+
+        </div>
+    </div>
+    {{-- SEO --}}
+    <!-- <div class="card mb-4 shadow-sm border-0 rounded-3">
                     <div class="card-header bg-primary text-white fw-semibold">SEO & Tìm kiếm</div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -343,131 +340,131 @@
                         </div>
                     </div>
                 </div> -->
-            {{-- Chọn gói dịch vụ nếu có --}}
-            @if ($activePackages->count())
-            <div class="mb-3">
-                <label class="form-label fw-semibold d-block">Chọn gói dịch vụ muốn sử dụng</label>
+    {{-- Chọn gói dịch vụ nếu có --}}
+    @if ($activePackages->count())
+    <div class="mb-3">
+        <label class="form-label fw-semibold d-block">Chọn gói dịch vụ muốn sử dụng</label>
 
-                <div class="d-flex flex-wrap gap-3">
-                    @foreach ($activePackages as $pkg)
-                    <div class="package-wrapper" style="position: relative; min-width:280px; max-width:320px; flex:1;">
-                        {{-- Radio ẩn --}}
-                        <input type="radio" name="selected_package_id"
-                            id="pkg{{ $pkg->id }}" value="{{ $pkg->id }}"
-                            {{ old('selected_package_id') == $pkg->id ? 'checked' : '' }}
-                            class="package-radio">
+        <div class="d-flex flex-wrap gap-3">
+            @foreach ($activePackages as $pkg)
+            <div class="package-wrapper" style="position: relative; min-width:280px; max-width:320px; flex:1;">
+                {{-- Radio ẩn --}}
+                <input type="radio" name="selected_package_id"
+                    id="pkg{{ $pkg->id }}" value="{{ $pkg->id }}"
+                    {{ old('selected_package_id') == $pkg->id ? 'checked' : '' }}
+                    class="package-radio">
 
-                        {{-- Card --}}
-                        <label for="pkg{{ $pkg->id }}"
-                            class="package-card card shadow-sm p-3 w-100">
+                {{-- Card --}}
+                <label for="pkg{{ $pkg->id }}"
+                    class="package-card card shadow-sm p-3 w-100">
 
-                            {{-- Vòng tròn hiển thị trong card --}}
-                            <span class="radio-circle"></span>
+                    {{-- Vòng tròn hiển thị trong card --}}
+                    <span class="radio-circle"></span>
 
-                            <h5 class="card-title text-primary mb-1">{{ $pkg->package->name }}</h5>
-                            <h6 class="text-success mb-2">{{ number_format($pkg->package->price, 0, ',', '.') }} VNĐ</h6>
+                    <h5 class="card-title text-primary mb-1">{{ $pkg->package->name }}</h5>
+                    <h6 class="text-success mb-2">{{ number_format($pkg->package->price, 0, ',', '.') }} VNĐ</h6>
 
-                            <ul class="list-unstyled mb-2 small">
-                                <li><strong>Thời hạn sử dụng:</strong> {{ $pkg->package->duration_days }} ngày</li>
-                                <li><strong>Số lượt đăng:</strong> {{ $pkg->posts_used }} / {{ $pkg->post_limit }}</li>
-                                <li><strong>Nổi bật:</strong> {{ $pkg->package->highlight_days }} ngày</li>
-                                @if(false)
-                                <li><strong>Lượt xem CV:</strong> {{ $pkg->package->cv_views }}</li>
-                                @endif
-                                <li><strong>Hỗ trợ:</strong> {{ $pkg->package->support_level }}</li>
-                            </ul>
+                    <ul class="list-unstyled mb-2 small">
+                        <li><strong>Thời hạn sử dụng:</strong> {{ $pkg->package->duration_days }} ngày</li>
+                        <li><strong>Số lượt đăng:</strong> {{ $pkg->posts_used }} / {{ $pkg->post_limit }}</li>
+                        <li><strong>Nổi bật:</strong> {{ $pkg->package->highlight_days }} ngày</li>
+                        @if(false)
+                        <li><strong>Lượt xem CV:</strong> {{ $pkg->package->cv_views }}</li>
+                        @endif
+                        <li><strong>Hỗ trợ:</strong> {{ $pkg->package->support_level }}</li>
+                    </ul>
 
-                            @if (!empty($pkg->package->description))
-                            <p class="text-muted small">{{ $pkg->package->description }}</p>
-                            @endif
-                        </label>
-                    </div>
-                    @endforeach
-                </div>
-
-                <small class="text-muted d-block mt-2">
-                    Nếu không chọn, hệ thống sẽ tự động chọn gói đầu tiên còn lượt.
-                </small>
+                    @if (!empty($pkg->package->description))
+                    <p class="text-muted small">{{ $pkg->package->description }}</p>
+                    @endif
+                </label>
             </div>
-            @else
-            <div class="alert alert-info">
-                Bạn chưa có gói dịch vụ nào.
-                <a href="{{ route('employer.packages.index') }}" class="btn btn-primary btn-sm ms-2">
-                    Mua gói dịch vụ
-                </a>
-            </div>
-            @endif
+            @endforeach
+        </div>
+
+        <small class="text-muted d-block mt-2">
+            Nếu không chọn, hệ thống sẽ tự động chọn gói đầu tiên còn lượt.
+        </small>
+    </div>
+    @else
+    <div class="alert alert-info">
+        Bạn chưa có gói dịch vụ nào.
+        <a href="{{ route('employer.packages.index') }}" class="btn btn-primary btn-sm ms-2">
+            Mua gói dịch vụ
+        </a>
+    </div>
+    @endif
 
 
-            {{-- CSS --}}
-            @push('styles')
-            <style>
-                .package-radio {
-                    display: none;
-                    /* Ẩn radio mặc định */
-                }
+    {{-- CSS --}}
+    @push('styles')
+    <style>
+        .package-radio {
+            display: none;
+            /* Ẩn radio mặc định */
+        }
 
-                .package-card {
-                    border: 2px solid transparent;
-                    transition: all 0.25s ease;
-                    position: relative;
-                    border-radius: 12px;
-                    cursor: pointer;
-                }
+        .package-card {
+            border: 2px solid transparent;
+            transition: all 0.25s ease;
+            position: relative;
+            border-radius: 12px;
+            cursor: pointer;
+        }
 
-                /* Vòng tròn góc phải */
-                .radio-circle {
-                    position: absolute;
-                    top: 12px;
-                    right: 12px;
-                    width: 20px;
-                    height: 20px;
-                    border: 2px solid #007bff;
-                    border-radius: 50%;
-                    background: #fff;
-                    pointer-events: none;
-                    transition: all 0.2s;
-                }
+        /* Vòng tròn góc phải */
+        .radio-circle {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #007bff;
+            border-radius: 50%;
+            background: #fff;
+            pointer-events: none;
+            transition: all 0.2s;
+        }
 
-                /* Khi chọn → vòng tròn xanh + dấu tick */
-                .package-radio:checked+.package-card .radio-circle {
-                    background: #007bff;
-                }
+        /* Khi chọn → vòng tròn xanh + dấu tick */
+        .package-radio:checked+.package-card .radio-circle {
+            background: #007bff;
+        }
 
-                .package-radio:checked+.package-card .radio-circle::after {
-                    content: "✓";
-                    color: #fff;
-                    font-size: 14px;
-                    position: absolute;
-                    top: -2px;
-                    left: 4px;
-                }
+        .package-radio:checked+.package-card .radio-circle::after {
+            content: "✓";
+            color: #fff;
+            font-size: 14px;
+            position: absolute;
+            top: -2px;
+            left: 4px;
+        }
 
-                /* Khi chọn card */
-                .package-radio:checked+.package-card {
-                    border-color: #007bff;
-                    background: #f8fbff;
-                    box-shadow: 0 0 15px rgba(0, 123, 255, 0.25);
-                    transform: scale(1.02);
-                }
+        /* Khi chọn card */
+        .package-radio:checked+.package-card {
+            border-color: #007bff;
+            background: #f8fbff;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.25);
+            transform: scale(1.02);
+        }
 
-                /* Hover */
-                .package-card:hover {
-                    border-color: #80bdff;
-                    background: #f9fcff;
-                }
-            </style>
-            @endpush
-
-
+        /* Hover */
+        .package-card:hover {
+            border-color: #80bdff;
+            background: #f9fcff;
+        }
+    </style>
+    @endpush
 
 
 
-            {{-- Submit --}}
-            <div class="text-end">
-                <button type="submit" class="btn btn-primary px-5">Đăng tin</button>
-            </div>
-        </form>
+
+
+    {{-- Submit --}}
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary px-5">Đăng tin</button>
+    </div>
+    </form>
     </div>
 
 

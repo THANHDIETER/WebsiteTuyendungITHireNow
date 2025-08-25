@@ -423,11 +423,14 @@
         if (current === 'pending') {
             return ['interview_scheduled', 'rejected', 'saved']
         }
-
+        if (current === 'saved') {
+            return ['interview_scheduled', 'rejected']
+        }
+        
         if (current === 'interview_scheduled') {
             return ['offered', 'no_response', 'rejected']
         }
-
+        
         if (['rejected', 'hired', 'offered', 'candidate_declined', 'no_response'].includes(current)) {
             return [current]
         }
@@ -435,6 +438,7 @@
         if (current === 'rejected') {
             return ['rejected']
         }
+        
 
         const idx = statusFlow.indexOf(current)
         if (idx === -1) return statusFlow
@@ -464,18 +468,22 @@
             return false
         }
 
-        if (newIndex < currentIndex) {
-            showError('Không thể quay lại trạng thái trước.')
-            return false
-        }
+        if (currentStatus !== 'saved' && newIndex < currentIndex) {
+    showError('Không thể quay lại trạng thái trước.')
+    return false
+  }
 
-        if (currentStatus === 'rejected' && newStatus !== 'rejected') {
+        if (currentStatus === 'rejected' && newStatus == 'rejected') {
             showError('Không thể cập nhật đơn đã bị từ chối.')
             return false
         }
 
         if (currentStatus === 'hired' && newStatus !== 'hired') {
             showError('Không thể thay đổi trạng thái sau khi ứng viên đã nhận việc.')
+            return false
+        }
+        if (currentStatus === 'offered' && newStatus === 'offered') {
+            showError('Không thể cập nhật đơn đã trúng tuyển.')
             return false
         }
 
@@ -690,7 +698,9 @@
             'bg-secondary': status === 'pending',
             'bg-info text-dark': ['viewed', 'under_review', 'contacting', 'interview_scheduled'].includes(status),
             'bg-success': ['offered', 'hired'].includes(status),
-            'bg-danger': ['rejected', 'no_response'].includes(status)
+            'bg-danger': ['rejected', 'no_response'].includes(status),
+            'bg-warning': ['saved' ].includes(status)
+
         }
     }
 

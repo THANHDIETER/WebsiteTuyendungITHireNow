@@ -268,10 +268,13 @@
                 @forelse($jobs as $job)
                 <div class="col">
                     <div class="card h-100 border-0 shadow-lg shadow-sm rounded-4 p-3 position-relative">
-                        @if ($job->is_featured)
-                        <span class="badge bg-success position-absolute top-0 start-0 m-2"> <i class="bi bi-star-fill me-1"></i> TOP</span>
+                       @if ($job->is_featured)
+                            <span class="badge bg-danger  position-absolute top-0 start-0 m-2 px-3 py-2 rounded-pill shadow">
+                                <i class="bi bi-star-fill me-1"></i> HOT
+                            </span>
                         @endif
-                        @if ($job->is_paid)
+
+                        @if (false)
                         <span class="badge badge-hot position-absolute top-0 end-0 m-2">HOT</span>
                         @endif
 

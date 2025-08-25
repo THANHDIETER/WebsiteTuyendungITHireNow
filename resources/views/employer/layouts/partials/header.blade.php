@@ -155,7 +155,7 @@
                           <div class="flex-grow-1">
                               <h5>
                                   @if (auth()->check())
-                                  {{ auth()->user()->role }}
+                                  {{ auth()->user()->name }}
                                   <sup style="font-size:.7em;color:red;">{{ auth()->user()->id }}</sup>
                                   @else
                                   <span class="text-muted">Guest</span>

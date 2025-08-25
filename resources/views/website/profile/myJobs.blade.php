@@ -79,7 +79,7 @@
                                         </p>
 
                                         <div class="d-flex justify-content-end gap-2">
-                                            <a href="{{ route('profile.view-job', $application->job->slug) }}"
+                                            <a href="{{ route('jobs.show', $application->job->slug) }}"
                                                class="btn btn-sm btn-outline-primary">
                                                 Xem chi tiết
                                             </a>

@@ -87,20 +87,25 @@ class LoginController extends Controller
             'redirectUri' => config('services.google.redirect'),
         ]);
 
+        // Thêm tham số cho URL
+        $authUrl = $provider->getAuthorizationUrl([
+            'scope' => ['email', 'profile'],
+            'prompt' => 'select_account consent', // 👈 ép hiện popup chọn tài khoản
+        ]);
 
-        $authUrl = $provider->getAuthorizationUrl();
         Session::put('oauth2state', $provider->getState());
 
         return redirect($authUrl);
     }
 
+
     public function callback(Request $request)
     {
         $provider = new Google([
-            'clientId'     => config('services.google.client_id'),
+            'clientId' => config('services.google.client_id'),
             'clientSecret' => config('services.google.client_secret'),
-            'redirectUri'  => config('services.google.redirect'),
-            'scopes'       => ['email', 'profile'],
+            'redirectUri' => config('services.google.redirect'),
+            'scopes' => ['email', 'profile'],
         ]);
 
 

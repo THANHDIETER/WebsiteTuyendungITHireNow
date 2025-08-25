@@ -120,7 +120,9 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Trạng thái không hợp lệ.'], 400);
         }
 
-        if ($newIndex < $currentIndex) {
+        if ($currentStatus === 'saved') {
+            // Cho phép đi sang bất kỳ trạng thái nào
+        } elseif ($newIndex < $currentIndex) {
             return response()->json(['message' => 'Không thể quay lại trạng thái trước.'], 422);
         }
 

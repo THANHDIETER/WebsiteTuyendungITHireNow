@@ -52,6 +52,7 @@
                     <th><i class="fa fa-star text-warning me-2"></i>Làm nổi bật</th>
                     <td>{{ $package->highlight_days }} ngày</td>
                   </tr>
+                  @if(false)
                   <tr>
                     <th><i class="fa fa-eye text-info me-2"></i>Lượt xem hồ sơ</th>
                     <td>{{ $package->cv_view_limit }} lượt</td>
@@ -60,6 +61,7 @@
                     <th><i class="fa fa-headset text-secondary me-2"></i>Hỗ trợ</th>
                     <td>{{ $package->support_level }}</td>
                   </tr>
+                  @endif
                 </tbody>
               </table>
             </div>

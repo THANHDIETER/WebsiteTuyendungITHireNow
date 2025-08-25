@@ -55,13 +55,14 @@
                                                     <strong>Lượt xem CV:</strong> {{ $pkg->cv_view_limit }}
                                                 </div>
                                             </li>
-                                        @endif
                                         <li class="list-group-item px-0 border-0 d-flex align-items-start gap-2">
                                             <i class="fas fa-headset text-secondary mt-1"></i>
                                             <div>
                                                 <strong>Hỗ trợ:</strong> {{ $pkg->support_level ?? 'Không có' }}
                                             </div>
                                         </li>
+                                                                                @endif
+
                                     </ul>
 
                                     @if ($pkg->description)
@@ -218,10 +219,11 @@
                                                     @if(false)
                                                         <li class="list-group-item"><strong><i class="fas fa-eye me-1"></i> Giới hạn xem
                                                                 CV:</strong> {{ $payment->package->cv_view_limit }}</li>
-                                                    @endif
                                                     <li class="list-group-item"><strong><i class="fas fa-headset me-1"></i> Hỗ
                                                             trợ:</strong> {{ $payment->package->support_level ?? 'Không có' }}</li>
-                                                    <li class="list-group-item"><strong><i class="fas fa-toggle-on me-1"></i> Kích
+                                                                                                       @endif
+
+                                                            <li class="list-group-item"><strong><i class="fas fa-toggle-on me-1"></i> Kích
                                                             hoạt:</strong> {{ $payment->package->is_active ? 'Có' : 'Không' }}</li>
                                                 </ul>
                                             @else

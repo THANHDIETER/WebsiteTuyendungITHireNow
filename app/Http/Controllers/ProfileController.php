@@ -45,7 +45,7 @@ class ProfileController extends Controller
             'gender' => 'required|in:nam,nữ,khác',
             'city' => 'required|string|max:100',
             'address' => 'required|string|max:255',
-            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:5048',
         ]);
 
         $userId = Auth::id();
@@ -324,7 +324,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'cv_files' => 'required',
-            'cv_files.*' => 'mimes:pdf|max:2048',
+            'cv_files.*' => 'mimes:pdf|max:5048',
         ]);
 
         $user = Auth::user();
