@@ -3,7 +3,7 @@
 @section('content')
 <div class="page-header-area sec-overlay sec-overlay-black d-flex justify-content-center align-items-center text-center"
      data-bg-img="{{ asset('client/assets/img/banner/15.png') }}"
-     style="max-height: 80px; height: 80px; padding: 0 !important;">
+     style="max-height: 80px; height: 80px; padding: 0 !important;" loading="lazy">
     &nbsp;
 </div>
 
@@ -23,7 +23,7 @@
                                      style="width:90px; height:90px; flex-shrink:0;">
                                     <img src="{{ $job->company->logo_url ? asset('storage/'.$job->company->logo_url) : asset('client/assets/img/default-company.png') }}" 
                                          alt="{{ $job->company->name ?? 'Công ty' }}" 
-                                         class="img-fluid" style="max-height:80px; object-fit:contain;">
+                                         class="img-fluid" style="max-height:80px; object-fit:contain;" loading="lazy">
                                 </div>
 
                                 {{-- Nội dung --}}
@@ -89,13 +89,16 @@
                                 <i class="bi bi-geo-alt"></i> {{ $job['location'] }}
                             </div>
                             <div class="small text-success fw-semibold">
-                                <i class="bi bi-cash-coin"></i> {{ $job['salary'] }}
+                                <i class="bi bi-cash-coin"></i> {{ $job['salary_display'] }}
                             </div>
                         </div>
-                        <button class="btn btn-sm btn-outline-danger ms-2 btn-toggle-favorite align-self-center" 
-                                data-id="{{ $job['id'] }}">
-                            <i class="bi bi-heart"></i>
-                        </button>
+                        {{-- Nút tim --}}
+                        <i class="bi {{ $job['favorited'] ? 'bi-heart-fill text-danger' : 'bi-heart text-muted' }} 
+                                  fs-4 btn-toggle-favorite"
+                           role="button"
+                           style="cursor:pointer;"
+                           data-id="{{ $job['id'] }}">
+                        </i>
                     </div>
                 @endforeach
             </div>
@@ -111,14 +114,15 @@
 .card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
 .list-group-item { border: none; border-bottom: 1px solid #eee; }
 .list-group-item:last-child { border-bottom: none; }
-.btn-toggle-favorite.active i { color: red; }
+.btn-toggle-favorite { transition: color 0.2s ease-in-out; }
+.btn-toggle-favorite:hover { color: red !important; }
 </style>
 @endpush
 
 @push('scripts')
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Xóa yêu thích bằng AJAX
+    // Xóa yêu thích trong favorites
     document.querySelectorAll(".btn-remove-favorite").forEach(btn => {
         btn.addEventListener("click", function() {
             let jobId = this.dataset.id;
@@ -144,8 +148,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Toggle yêu thích trong gợi ý
-    document.querySelectorAll(".btn-toggle-favorite").forEach(btn => {
-        btn.addEventListener("click", function() {
+    document.querySelectorAll(".btn-toggle-favorite").forEach(icon => {
+        icon.addEventListener("click", function() {
             let jobId = this.dataset.id;
             fetch(`/favorites/${jobId}`, {
                 method: "POST",
@@ -157,11 +161,12 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(res => res.json())
             .then(data => {
                 if(data.favorited) {
-                    this.classList.add("active");
-                    this.querySelector("i").classList.replace("bi-heart", "bi-heart-fill");
+                    this.classList.add("text-danger");
+                    this.classList.replace("bi-heart", "bi-heart-fill");
                 } else {
-                    this.classList.remove("active");
-                    this.querySelector("i").classList.replace("bi-heart-fill", "bi-heart");
+                    this.classList.remove("text-danger");
+                    this.classList.replace("bi-heart-fill", "bi-heart");
+                    this.classList.add("text-muted");
                 }
             })
             .catch(() => alert("Có lỗi xảy ra khi kết nối server!"));

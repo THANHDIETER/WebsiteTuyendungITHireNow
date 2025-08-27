@@ -6,38 +6,29 @@ use App\Models\Conversation;
 
 /**
  * Channel chat.{conversationId}
- * -> kiểm tra user có trong cuộc trò chuyện không
- * -> cache 10 phút
+ * -> check user có trong conversation không
+ * -> dùng cache để tránh query DB liên tục
  */
 Broadcast::channel('chat.{conversationId}', function ($user, $conversationId) {
-    return Cache::remember("chat_access_{$user->id}_{$conversationId}", 600, function () use ($user, $conversationId) {
-        return Conversation::where('id', $conversationId)
-            ->where(function ($q) use ($user) {
-                $q->where('user_one', $user->id)
-                  ->orWhere('user_two', $user->id);
-            })
-            ->exists();
+    // Lấy danh sách conversationIds của user từ cache (10 phút)
+    $convIds = Cache::remember("user_conversations_{$user->id}", 600, function () use ($user) {
+        return Conversation::where('user_one', $user->id)
+            ->orWhere('user_two', $user->id)
+            ->pluck('id')
+            ->toArray();
     });
+
+    return in_array((int) $conversationId, $convIds, true);
 });
 
 /**
  * Channel user.{id}
- * -> cho phép user chỉ join channel của chính họ
- * -> cache 10 phút
+ * -> user chỉ join channel của chính họ
  */
-Broadcast::channel('user.{id}', function ($user, $id) {
-    return Cache::remember("broadcast_user_channel1_{$user->id}_{$id}", 600, function () use ($user, $id) {
-        return (int) $user->id === (int) $id;
-    });
-});
+Broadcast::channel('user.{id}', fn($user, $id) => (int) $user->id === (int) $id);
 
 /**
  * Channel App.Models.User.{id}
- * -> Laravel mặc định dùng cho notifications
- * -> cache 10 phút
+ * -> Laravel Notifications mặc định
  */
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return Cache::remember("broadcast_user_channel2_{$user->id}_{$id}", 600, function () use ($user, $id) {
-        return (int) $user->id === (int) $id;
-    });
-});
+Broadcast::channel('App.Models.User.{id}', fn($user, $id) => (int) $user->id === (int) $id);

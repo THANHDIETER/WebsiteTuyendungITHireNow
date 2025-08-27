@@ -64,6 +64,8 @@ class Job extends Model
         'search_index' => 'boolean',
         'deadline' => 'datetime',
         'deleted_at' => 'datetime',
+        'salary_min' => 'int',
+        'salary_max' => 'int'
     ];
 
     // 🔗 Relations
@@ -140,7 +142,20 @@ class Job extends Model
     {
         return $this->belongsTo(Level::class);
     }
-
+    public function scopeWithRelations($q)
+{
+    return $q->with([
+        'company:id,name,logo_url,phone',
+        'skills:id,skill_name',
+        'jobType:id,name',
+        'location:id,name',
+        'category:id,name',
+        'level:id,name',
+        'experience:id,name',
+        'language:id,name',
+        'remotePolicy:id,name',
+    ]);
+}
     public function experience()
     {
         return $this->belongsTo(JobExperience::class);

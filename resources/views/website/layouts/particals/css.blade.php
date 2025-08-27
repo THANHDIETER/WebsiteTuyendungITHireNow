@@ -39,7 +39,6 @@
   rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <!--== Swiper CSS ==-->
 <link href="{{ asset('client/assets/css/swiper.min.css') }}" rel="stylesheet" />
 <!--== Fancybox Min CSS ==-->

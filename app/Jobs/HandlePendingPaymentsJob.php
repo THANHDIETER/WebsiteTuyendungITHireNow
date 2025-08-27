@@ -85,7 +85,6 @@ class HandlePendingPaymentsJob implements ShouldQueue
                             'status' => 'active',
                         ]);
 
-                        // $company->increment('free_post_quota', $package->post_limit);
                         $orders = EmployerPackageUsage::create([
                             'company_id' => $company->id,
                             'employer_package_id' => $package->id,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
@@ -12,7 +13,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Cache;
 
 // Load các route tách riêng
 require __DIR__ . '/admin.php';
@@ -21,6 +22,7 @@ require __DIR__ . '/jobseeker.php';
 require __DIR__ . '/notification.php';
 require __DIR__ . '/channels.php';
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JobApplicationController;
 use App\Notifications\NewJobSubmittedNotification;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -65,13 +67,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/docs', fn() => view('docs.index'));
 
 Route::get('website/employer', [LoginController::class, 'employerDetails'])->name('employer.details');
-Route::middleware('auth')->post('/favorites/{job}', [FavoriteController::class, 'store']);
-Route::middleware(['auth'])->group(function () {
-    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
-    Route::post('/favorites/{job}', [FavoriteController::class, 'store'])->name('favorites.store');
-    Route::delete('/favorites/{job}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
-    Route::get('/favorites/job/{id}', [FavoriteController::class, 'show'])->name('favorites.show');
-});
+
 
 // Static Pages
 Route::get('/docs', fn() => view('docs.index'))->name('docs');
@@ -85,8 +81,16 @@ Route::get('/job_seeker', function () {
 
 // ================= HOME =================
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/jobs', [HomeController::class, 'indexjson']);
+Route::get('/api/jobs', [HomeController::class, 'jobsApi'])->name('api.jobs');
 
+Route::get('/api/locations', function () {
+    return Cache::remember('top_locations', now()->addMinutes(60), function () {
+        return Location::withCount('jobs')
+            ->orderByDesc('jobs_count')
+            ->take(6)
+            ->get(['id', 'name']);
+    });
+});
 
 
 // ================= JOB =================
@@ -179,19 +183,4 @@ Route::get('/registration', function () {
 
 
 // routes/web.php
-Route::get('/notifications/latest', function () {
-    $notis = auth()->user()
-        ->unreadNotifications()
-        ->orderBy('created_at', 'desc')
-        ->take(6)
-        ->get()
-        ->map(function ($noti) {
-            return [
-                'id' => $noti->id,
-                'message' => $noti->data['message'] ?? '',
-                'link_url' => $noti->data['link_url'] ?? '#',
-                'created_at' => $noti->created_at->diffForHumans(),
-            ];
-        });
-    return response()->json($notis);
-})->middleware('auth');
+

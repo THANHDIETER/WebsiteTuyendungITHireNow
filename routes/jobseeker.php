@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\NotificationController;
@@ -14,9 +15,12 @@ use App\Http\Controllers\InterviewResponseController;
 
 
 // profile routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['job_seeker'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+    Route::get('/notifications/latest', [NotificationController::class, 'latest'])
+        ->name('notifications.latest');
+
 
     // 📩 Xem chi tiết lời mời phỏng vấn
     Route::get('/interviews/{interview}', [InterviewController::class, 'show'])
@@ -66,6 +70,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/languages', [ProfileController::class, 'storeLanguage'])->name('profile.languages.store');
     Route::post('/profile/upload-cvs', [ProfileController::class, 'uploadCVs'])->name('profile.uploadCVs');
     Route::delete('/profile/cv/{id}', [ProfileController::class, 'deleteCV'])->name('profile.cv.delete');
+
+    // Route::post('/favorites/{job}', [FavoriteController::class, 'store']);
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/{job}', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::post('api/favorites/{job}', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites/{job}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+    Route::get('/favorites/job/{id}', [FavoriteController::class, 'show'])->name('favorites.show');
 
 
 });

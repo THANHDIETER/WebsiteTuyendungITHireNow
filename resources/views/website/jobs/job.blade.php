@@ -3,54 +3,18 @@
 @section('content')
     <div class="page-header-area d-flex justify-content-center align-items-center text-center"
         data-bg-img="{{ asset('client/assets/img/banner/15.png') }}"
-        style="max-height: 80px; height: 80px; padding: 0 !important;">
+        style="max-height: 80px; height: 80px; padding: 0 !important;" loading="lazy">
         &nbsp;
     </div>
 
     <main class="main-content container py-4 py-md-5">
         @php
             use Illuminate\Support\Str;
-
-            // Logic remains unchanged
             $view = in_array(request('view'), ['grid', 'list']) ? request('view') : 'grid';
             $sortDefault = request('sort', request('q') ? 'relevance' : 'newest');
-            $perPage = (int) request('per_page', 9);
-
-            $sym = ['VND' => '₫', 'VNĐ' => '₫', 'USD' => '$', 'EUR' => '€', 'JPY' => '¥', 'KRW' => '₩', 'GBP' => '£', 'AUD' => 'A$', 'CAD' => 'C$', 'SGD' => 'S$', 'THB' => '฿'];
-
-            $abbr = function (int $v, string $cur) {
-                $uc = strtoupper($cur);
-                if (in_array($uc, ['VND', 'VNĐ'])) {
-                    if ($v >= 1_000_000)
-                        return rtrim(number_format($v / 1_000_000, 0), '0') . 'tr';
-                    if ($v >= 1_000)
-                        return rtrim(number_format($v / 1_000, 0), '0') . 'k';
-                    return number_format($v);
-                }
-                if ($v >= 1_000_000)
-                    return rtrim(number_format($v / 1_000_000, 1), '0') . 'm';
-                if ($v >= 1_000)
-                    return rtrim(number_format($v / 1_000, 1), '0') . 'k';
-                return number_format($v);
-            };
-
-            $formatSalary = function ($job) use ($sym, $abbr) {
-                $cur = trim($job->currency ?? 'VND');
-                $min = (int) ($job->salary_min ?? 0);
-                $max = (int) ($job->salary_max ?? 0);
-                $sign = $sym[strtoupper($cur)] ?? $cur;
-
-                if (!$min && !$max)
-                    return 'Thỏa thuận';
-                $left = $sign . $abbr($min, $cur);
-                $right = $max ? $sign . $abbr($max, $cur) : '∞';
-                return "{$left} - {$right}/tháng";
-            };
+            $perPage = (int) request('per_page', 6);
         @endphp
 
-        {{-- ===================== --}}
-        {{-- SEARCH FILTER SECTION --}}
-        {{-- ===================== --}}
         <div class="search-section mb-5">
             <form action="{{ route('jobs.search') }}" method="GET"
                 class="search-wrap card border-2 border-primary shadow-sm rounded-4 p-4 animate__animated animate__fadeIn">
@@ -205,7 +169,7 @@
                             <div class="filter-header">
                                 <label class="form-label fw-semibold mb██
 
-                                mb-2 d-flex align-items-center gap-2">
+                                            mb-2 d-flex align-items-center gap-2">
                                     <i class="bi bi-person-workspace text-primary"></i> Hình thức
                                 </label>
                             </div>
@@ -316,7 +280,8 @@
                                 <option value="">Tất cả</option>
                                 @foreach($languages as $lang)
                                     <option value="{{ $lang->id }}" @selected(request('language_id') == $lang->id)>
-                                        {{ $lang->name }}</option>
+                                        {{ $lang->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -399,7 +364,7 @@
                 @if($view === 'grid')
                     <div class="row g-5">
                         @forelse($jobs as $job)
-                            <div class="col-md-6 col-lg-4">
+                            <div class="col-md-6 col-lg-4 mt-3">
                                 <div
                                     class="job-card card border-2 border-success shadow-sm rounded-4 h-100 position-relative animate__animated animate__fadeInUp">
                                     @if ($job->is_featured)
@@ -413,10 +378,10 @@
 
                                     <a href="{{ route('jobs.show', $job->slug) }}" class="d-block overflow-hidden rounded-top-4"
                                         style="height:180px;">
-                                        <img src="{{ $job->thumbnail ? asset('storage/' . $job->thumbnail) : asset('client/assets/img/default-thumbnail.jpg') }}"
+                                        <img src="{{ $job->thumbnail ? asset('storage/' . $job->thumbnail) : '' }}"
                                             alt="{{ $job->title }}"
                                             style="object-fit:cover;width:100%;height:100%;transition:transform 0.3s ease;"
-                                            class="job-card-img">
+                                            class="job-card-img" loading="lazy">
                                     </a>
 
                                     <div class="p-4">
@@ -437,7 +402,7 @@
                                             <span class="badge job-type-badge">{{ $job->jobType->name ?? 'N/A' }}</span>
                                             <div class="salary-display">
                                                 <span class="salary-text"><i
-                                                        class="bi bi-wallet2 me-1"></i>{{ $formatSalary($job) }}</span>
+                                                        class="bi bi-wallet2 me-1"></i>{{ $job->salary_display }}</span>
                                             </div>
                                         </div>
 
@@ -451,12 +416,12 @@
                                             @if($remain > 0)<span class="chip-mini more">+{{ $remain }}</span>@endif
                                         </div>
 
-                                        <div class="d-flex justify-content-between gap-2">
+                                        <div class="mt-auto d-flex justify-content-end">
                                             <a href="{{ route('jobs.show', $job->slug) }}"
-                                                class="btn btn-outline-primary btn-sm rounded-pill flex-fill">Xem chi tiết</a>
-                                            <a href="{{ route('jobs.show', $job->slug) }}"
-                                                class="btn btn-primary btn-sm rounded-pill flex-fill">Ứng tuyển</a>
+                                                class="btn btn-primary rounded-pill px-4 py-2">Ứng tuyển</a>
                                         </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -477,14 +442,14 @@
                                     <div class="col-sm-3">
                                         <a href="{{ route('jobs.show', $job->slug) }}" class="d-block rounded overflow-hidden"
                                             style="height:120px;">
-                                            <img src="{{ $job->thumbnail ? asset('storage/' . $job->thumbnail) : asset('client/assets/img/default-thumbnail.jpg') }}"
+                                            <img src="{{ $job->thumbnail ? asset('storage/' . $job->thumbnail) : '' }}"
                                                 alt="{{ $job->title }}"
                                                 style="object-fit:cover;width:100%;height:100%;transition:transform 0.3s ease;"
-                                                class="job-card-img">
+                                                class="job-card-img" loading="lazy">
                                         </a>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                        <div class="d-flex align-items-center gap-2 mb-2 mt-2">
                                             @if($job->is_featured) <span class="badge badge-hot"><i
                                             class="bi bi-star-fill me-1"></i>TOP</span> @endif
 
@@ -516,12 +481,10 @@
                                         <div class="mb-3">
                                             <div class="salary-display">
                                                 <span class="salary-text"><i
-                                                        class="bi bi-wallet2 me-1"></i>{{ $formatSalary($job) }}</span>
+                                                        class="bi bi-wallet2 me-1"></i>{{ $job->salary_display }}</span>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-end gap-2">
-                                            <a href="{{ route('jobs.show', $job->slug) }}"
-                                                class="btn btn-outline-primary btn-sm rounded-pill px-3">Chi tiết</a>
                                             <a href="{{ route('jobs.show', $job->slug) }}"
                                                 class="btn btn-primary btn-sm rounded-pill px-3">Ứng tuyển</a>
                                         </div>
@@ -536,18 +499,17 @@
                     </div>
                 @endif
 
-                <div class="pagination-section mt-6 d-flex justify-content-center">
-                    {{ $jobs->appends(request()->except('page'))->links() }}
+                <div class="pagination-section mt-5 d-flex justify-content-center">
+                    {{ $jobs->appends(request()->except('page'))->links('pagination::bootstrap-5') }}
                 </div>
+
             </section>
         </div>
     </main>
 
-    {{-- Styles --}}
     <style>
         .search-section,
-        .job-results-section,
-        .pagination-section {
+        .job-results-section {
             margin-bottom: 2rem;
         }
 
@@ -864,19 +826,27 @@
         }
 
         .salary-display {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.4rem 1rem;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #28a745 0%, #34c759 100%);
-            border: 1px solid #1f7a33;
+            display: inline-block;
+            background: #28a745;
+            /* hoặc bg-success */
             color: #fff;
-            font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.2);
-            transition: all 0.2s ease, transform 0.2s ease;
+            padding: 2px 8px;
+            /* thu nhỏ padding */
+            border-radius: 8px;
+            /* bo tròn nhẹ hơn */
+            font-size: 0.8rem;
+            /* chữ nhỏ lại */
+            font-weight: 500;
+            /* chữ vừa, không quá bold */
+            line-height: 1.2;
         }
+
+        .salary-display .bi {
+            font-size: 0.9rem;
+            /* icon nhỏ theo chữ */
+            margin-right: 4px;
+        }
+
 
         .salary-display:hover {
             background: linear-gradient(135deg, #23963d 0%, #2db74f 100%);
@@ -983,8 +953,7 @@
         @media (max-width: 576px) {
 
             .search-section,
-            .job-results-section,
-            .pagination-section {
+            .job-results-section {
                 margin-bottom: 1.5rem;
             }
 
@@ -1078,4 +1047,5 @@
             }
         }
     </style>
+
 @endsection

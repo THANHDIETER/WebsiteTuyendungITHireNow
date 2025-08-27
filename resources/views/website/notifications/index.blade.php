@@ -122,9 +122,11 @@
                         @endforelse
                     </div>
 
-                    <div class="mt-3 d-flex justify-content-center small">
-                        {{ $notifications->links() }}
-                    </div>
+                  
+                    <div class="pagination-section mt-6 d-flex justify-content-center">
+    {{ $notifications->appends(request()->except('page'))->links('pagination::bootstrap-5') }}
+</div>
+
                 </div>
             </div>
         </div>

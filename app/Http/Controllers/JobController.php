@@ -19,15 +19,14 @@ use Illuminate\Support\Facades\Cache;
 
 class JobController extends Controller
 {
-    /** Trang danh sách mặc định */
     public function index(Request $request)
     {
-        $perPage = $this->sanitizePerPage($request->input('per_page', 9));
+        $perPage = $this->sanitizePerPage($request->input('per_page', 6));
         $view = $request->input('view', 'grid');
-        $base = Job::with(['company', 'skills', 'jobType', 'location', 'level', 'experience', 'language'])
-            ->where('status', 'published');
 
-        $jobs = (clone $base)->orderByDesc('created_at')
+        $base = Job::withRelations()->where('status', 'published');
+
+        $jobs = (clone $base)->latest('created_at')
             ->paginate($perPage)
             ->appends($request->except('page'));
 
@@ -51,7 +50,6 @@ class JobController extends Controller
         ));
     }
 
-    /** Trang tìm kiếm (lọc nâng cao) */
     public function search(Request $request)
     {
         $perPage = $this->sanitizePerPage($request->input('per_page', 9));
@@ -66,64 +64,56 @@ class JobController extends Controller
 
         [$categories, $companies, $skillsList, $locations, $jobTypes, $levels, $experiences, $languages, $currencies] = $this->filtersData();
 
-        return view('website.jobs.job', [
-            'jobs' => $jobs,
-            'categories' => $categories,
-            'companies' => $companies,
-            'skills' => $skillsList,
-            'locations' => $locations,
-            'jobTypes' => $jobTypes,
-            'levels' => $levels,
-            'experiences' => $experiences,
-            'languages' => $languages,
-            'currencies' => $currencies,
-        ]);
-    }
-
-    /** Trang chi tiết (không đổi) */
-    public function show($slug)
-    {
-        $job = Job::with([
-            'company',
+        return view('website.jobs.job', compact(
+            'jobs',
+            'categories',
+            'companies',
             'skills',
-            'jobType',
-            'location',
-            'category',
-            'level',
-            'experience',
-            'language',
-            'remotePolicy',
-        ])->where('slug', $slug)->where('status', 'published')->firstOrFail();
-        $user = Auth::user();
-        $profile = $user->profile ?? null;
-        // Lấy danh sách CV của ứng viên
-        $cvs = $profile ? $profile->cvs : collect();
-        // Lấy các công việc liên quan cùng danh mục (nếu có)
-        $relatedJobs = Job::with(['company', 'location', 'category'])
-            ->where('status', 'published')
-            ->where('id', '!=', $job->id) // bỏ job hiện tại
-            ->when($job->category_id, function ($q) use ($job) {
-                $q->where('category_id', $job->category_id);
-            })
-            ->when($job->location_id, function ($q) use ($job) {
-                $q->orWhere('location_id', $job->location_id);
-            })
-            ->when($job->level_id, function ($q) use ($job) {
-                $q->orWhere('level_id', $job->level_id);
-            })
-            ->limit(5) // số lượng gợi ý
-            ->get();
-
-        return view('website.jobs.job-details', compact('job', 'relatedJobs', 'cvs', 'profile'));
+            'locations',
+            'jobTypes',
+            'levels',
+            'experiences',
+            'languages',
+            'currencies'
+        ));
     }
-    /* ======================= Helpers ======================= */
+
+    private function filtersData(): array
+    {
+        $categoriesOrder = $this->pickOrderable('categories', ['name', 'slug', 'category_name']);
+        $companiesOrder = $this->pickOrderable('companies', ['name', 'company_name', 'slug']);
+        $skillsOrder = $this->pickOrderable('skills', ['skill_name', 'name', 'slug']);
+        $locationsOrder = $this->pickOrderable('locations', ['name', 'city', 'slug']);
+        $jobTypesOrder = $this->pickOrderable('job_types', ['name', 'type_name', 'slug']);
+        $levelsOrder = $this->pickOrderable('levels', ['name', 'level_name']);
+        $expOrder = $this->pickOrderable('job_experiences', ['name']);
+        $langOrder = $this->pickOrderable('job_languages', ['name', 'language_name']);
+
+        $categories = Cache::remember('jobs:categories_active', 3600, function () use ($categoriesOrder) {
+            return Category::where('is_active', true)
+                ->withCount(['jobs as jobs_count' => fn($q) => $q->where('status', 'published')])
+                ->having('jobs_count', '>', 0)
+                ->orderBy($categoriesOrder)
+                ->get();
+        });
+
+        $companies = Cache::remember('jobs:companies', 3600, fn() => Company::orderBy($companiesOrder)->get());
+        $skills = Cache::remember('jobs:skills', 3600, fn() => Skill::orderBy($skillsOrder)->get());
+        $locations = Cache::remember('jobs:locations', 3600, fn() => Location::orderBy($locationsOrder)->get());
+        $jobTypes = Cache::remember('jobs:jobtypes', 3600, fn() => JobType::orderBy($jobTypesOrder)->get());
+        $levels = Cache::remember('jobs:levels', 3600, fn() => Level::orderBy($levelsOrder)->get());
+        $experiences = Cache::remember('jobs:experiences', 3600, fn() => JobExperience::orderBy($expOrder)->get());
+        $languages = Cache::remember('jobs:languages', 3600, fn() => JobLanguage::orderBy($langOrder)->get());
+        $currencies = $this->currenciesList();
+
+        return [$categories, $companies, $skills, $locations, $jobTypes, $levels, $experiences, $languages, $currencies];
+    }
 
     private function buildQuery(Request $request, array $skills, string $skillsMode): Builder
     {
-        $q = Job::with(['company', 'skills', 'jobType', 'location', 'level', 'experience', 'language'])
-            ->where('status', 'published');
-        
-        // Từ khóa
+        $q = Job::withRelations()->where('status', 'published');
+
+        // 🔍 Từ khóa
         if ($request->filled('q')) {
             $kw = trim($request->input('q'));
             $like = "%{$kw}%";
@@ -138,61 +128,42 @@ class JobController extends Controller
             });
         }
 
-        // Category: hỗ trợ 1-n (jobs.category_id) và many-to-many (jobs<->categories)
-        $categoryIds = [];
-        if ($request->filled('category_id'))
-            $categoryIds[] = (int) $request->input('category_id');
-        if ($request->filled('categories')) {
-            $raw = $request->input('categories');
-            if (is_string($raw))
-                $raw = explode(',', $raw);
-            foreach ((array) $raw as $cid)
-                if ((int) $cid)
-                    $categoryIds[] = (int) $cid;
-        }
-        $categoryIds = array_values(array_unique(array_filter($categoryIds)));
+        // 📌 Category
+        $categoryIds = collect((array) $request->input('categories', []))
+            ->merge([$request->input('category_id')])
+            ->filter()->map(fn($id) => (int) $id)->unique()->values()->all();
 
         if (!empty($categoryIds)) {
             if (Schema::hasColumn('jobs', 'category_id')) {
-                count($categoryIds) > 1
-                    ? $q->whereIn('category_id', $categoryIds)
-                    : $q->where('category_id', $categoryIds[0]);
+                $q->whereIn('category_id', $categoryIds);
             } else {
                 $q->whereHas('categories', fn($c) => $c->whereIn('categories.id', $categoryIds));
             }
         }
 
-        // Filter ID khác (trên bảng jobs)
+        // 📌 Filter khác (foreign keys)
         foreach (['location_id', 'company_id', 'job_type_id', 'level_id', 'experience_id', 'language_id', 'remote_policy_id'] as $col) {
             if ($request->filled($col))
                 $q->where($col, $request->input($col));
         }
 
-        // Tiền tệ
-        if ($request->filled('currency')) {
+        // 📌 Tiền tệ
+        if ($request->filled('currency'))
             $q->where('currency', $request->input('currency'));
-        }
 
-        // Lương: khoảng giao nhau
+        // 📌 Lương
         $min = (int) $request->input('min_salary');
         $max = (int) $request->input('max_salary');
         if ($min || $max) {
-            $q->where(function (Builder $w) use ($min, $max) {
-                if ($min && $max) {
-                    $w->whereBetween('salary_min', [$min, $max])
-                        ->orWhereBetween('salary_max', [$min, $max])
-                        ->orWhere(function (Builder $ww) use ($min, $max) {
-                            $ww->where('salary_min', '<=', $min)->where('salary_max', '>=', $max);
-                        });
-                } elseif ($min) {
+            $q->where(function ($w) use ($min, $max) {
+                if ($min)
                     $w->where('salary_max', '>=', $min);
-                } else {
+                if ($max)
                     $w->where('salary_min', '<=', $max);
-                }
             });
         }
 
-        // Kỹ năng: ANY/ALL
+        // 📌 Kỹ năng
         if (!empty($skills)) {
             if ($skillsMode === 'all') {
                 foreach ($skills as $sid) {
@@ -203,7 +174,7 @@ class JobController extends Controller
             }
         }
 
-        // Nổi bật
+        // 📌 Việc nổi bật
         if ($request->boolean('is_featured'))
             $q->where('is_featured', 1);
 
@@ -226,13 +197,13 @@ class JobController extends Controller
                     ELSE 1
                  END) DESC",
                 [$kw, "{$kw}%", "%{$kw}%", "%{$kw}%", "%{$kw}%"]
-            )->orderByDesc('created_at');
+            )->latest('created_at');
         }
 
         return match ($sort) {
             'views' => $query->orderByDesc('views'),
             'salary' => $query->orderByDesc('salary_min')->orderByDesc('salary_max'),
-            default => $query->orderByDesc('created_at'),
+            default => $query->latest('created_at'),
         };
     }
 
@@ -251,7 +222,6 @@ class JobController extends Controller
         return [];
     }
 
-    /** cột order an toàn */
     private function pickOrderable(string $table, array $candidates, string $fallback = 'id'): string
     {
         foreach ($candidates as $col)
@@ -260,44 +230,41 @@ class JobController extends Controller
         return $fallback;
     }
 
-    /** lấy list currency (distinct) */
     private function currenciesList(): array
     {
         $list = Job::query()->select('currency')->whereNotNull('currency')->distinct()
             ->pluck('currency')->filter()->values()->all();
-        return $list ?: ['VND', 'USD', 'EUR'];
+        return $list ?: ['VND', 'USD'];
     }
 
-    /** dữ liệu filter */
-    private function filtersData(): array
+    public function show($slug)
     {
-        $categoriesOrder = $this->pickOrderable('categories', ['name', 'slug', 'category_name']);
-        $companiesOrder = $this->pickOrderable('companies', ['name', 'company_name', 'slug']);
-        $skillsOrder = $this->pickOrderable('skills', ['skill_name', 'name', 'slug']);
-        $locationsOrder = $this->pickOrderable('locations', ['name', 'city', 'slug']);
-        $jobTypesOrder = $this->pickOrderable('job_types', ['name', 'type_name', 'slug']);
-        $levelsOrder = $this->pickOrderable('levels', ['name', 'level_name']);
-        $expOrder = $this->pickOrderable('job_experiences', ['name']);
-        $langOrder = $this->pickOrderable('job_languages', ['name', 'language_name']);
+        $job = Cache::remember("jobs:detail:$slug", 600, function () use ($slug) {
+            return Job::withRelations()
+                ->where('slug', $slug)
+                ->where('status', 'published')
+                ->firstOrFail();
+        });
 
-        $categories = Cache::remember('categories_active', 3600, function () use ($categoriesOrder) {
-            return Category::where('is_active', true)
-                ->withCount([
-                    'jobs as jobs_count' => fn($q) => $q->where('status', 'published')
-                ])
-                ->having('jobs_count', '>', 0) // chỉ lấy category có job published
-                ->orderBy($categoriesOrder)
+        $user = Auth::user();
+        $profile = $user->profile ?? null;
+        $cvs = $profile?->cvs()->get() ?? collect();
+
+        // Gợi ý việc làm liên quan
+        $relatedJobs = Cache::remember("jobs:related:{$job->id}", 600, function () use ($job) {
+            return Job::with(['company:id,name,logo_url,phone', 'location:id,name', 'category:id,name'])
+                ->where('status', 'published')
+                ->where('id', '!=', $job->id)
+                ->where(function ($q) use ($job) {
+                    $q->when($job->category_id, fn($q) => $q->orWhere('category_id', $job->category_id))
+                        ->when($job->location_id, fn($q) => $q->orWhere('location_id', $job->location_id))
+                        ->when($job->level_id, fn($q) => $q->orWhere('level_id', $job->level_id));
+                })
+                ->latest('created_at')
+                ->limit(6)
                 ->get();
         });
-        $companies = Company::orderBy($companiesOrder)->get();
-        $skills = Skill::orderBy($skillsOrder)->get();
-        $locations = Location::orderBy($locationsOrder)->get();
-        $jobTypes = JobType::orderBy($jobTypesOrder)->get();
-        $levels = Level::orderBy($levelsOrder)->get();
-        $experiences = JobExperience::orderBy($expOrder)->get();
-        $languages = JobLanguage::orderBy($langOrder)->get();
-        $currencies = $this->currenciesList();
 
-        return [$categories, $companies, $skills, $locations, $jobTypes, $levels, $experiences, $languages, $currencies];
+        return view('website.jobs.job-details', compact('job', 'relatedJobs', 'cvs', 'profile'));
     }
 }

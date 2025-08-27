@@ -23,3 +23,23 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# 🚫 Chặn file và thư mục nhạy cảm
+<FilesMatch "^(\.git|\.env|\.vscode|\.idea|\.aws|\.ssh)">
+    Require all denied
+</FilesMatch>
+
+# 🚫 Chặn truy cập thư mục cấu hình Laravel/PHP
+<DirectoryMatch "^(.*)/(config|application/config|app/etc)/">
+    Require all denied
+</DirectoryMatch>
+
+# 🚫 Chặn file debug / test
+<FilesMatch "(phpinfo|php-info|php_info|test|install|i|asdf|time|pinfo|infos)\.php$">
+    Require all denied
+</FilesMatch>
+
+# 🚫 Chặn các file cấu hình text/backup
+<FilesMatch "\.(yml|yaml|ini|json|sql|bak|old)$">
+    Require all denied
+</FilesMatch>

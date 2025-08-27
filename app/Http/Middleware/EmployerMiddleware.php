@@ -18,7 +18,7 @@ class EmployerMiddleware
 
         // Chỉ cho phép employer hoặc admin
         if (!in_array($user->role, ['employer', 'admin'])) {
-            return redirect()->route('showLoginForm');
+            return redirect()->route('/showLoginForm');
         }
 
         // if ($user->role === 'employer') {

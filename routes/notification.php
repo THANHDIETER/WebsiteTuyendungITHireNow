@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotificationController;
 
-Route::middleware('auth')->group(function () {
+Route::middleware('job_seeker')->group(function () {
     // Trang danh sách thông báo
     Route::get('/notifications', [NotificationController::class, 'index'])
         ->name('notifications.index');
