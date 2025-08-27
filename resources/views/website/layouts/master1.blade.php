@@ -33,7 +33,6 @@
     <!--=== jQuery Modernizr Min Js ===-->
     @include('website.layouts.particals.js')
     @include('chat')
-    @stack('scripts')
 
 </body>
 

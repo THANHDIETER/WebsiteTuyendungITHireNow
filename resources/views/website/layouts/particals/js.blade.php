@@ -31,3 +31,6 @@
   </style>
 
   <script src="{{ asset('client/assets/js/custom.js')}}"></script>
+  @yield('scripts')
+  @stack('scripts')
+

@@ -48,3 +48,4 @@
 
 <!--== Main Style CSS ==-->
 <link href="{{ asset('client/assets/css/style.css') }}" rel="stylesheet" />
+@stack('styles')

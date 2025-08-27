@@ -28,6 +28,7 @@ Route::prefix('admin')
 
         // 🎯 Dashboard + Stats
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/v2', [DashboardController::class, 'indexv2'])->name('dashboardv2');
         Route::get('/stats/users', [DashboardController::class, 'userStats'])->name('stats.users');
         Route::get('/stats/jobs', [DashboardController::class, 'jobStats'])->name('stats.jobs');
         Route::get('/stats/applications', [DashboardController::class, 'applicationStats'])->name('stats.applications');

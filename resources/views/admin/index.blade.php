@@ -1,211 +1,249 @@
 @extends('admin.layouts.default')
 
 @section('content')
-<div class="container mt-4">
-    <h3 class="mb-4">📊 Thống kê hệ thống</h3>
+    <div class="container-fluid">
 
-    <!-- Bộ lọc thời gian -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">🔍 Bộ lọc thời gian</h5>
+        <!-- Người dùng -->
+        <h5 class="mt-4 mb-3">
+            <i class="bi bi-people-fill me-2 text-primary"></i> Thống Kê Thành Viên
+        </h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card border-primary shadow-sm text-center p-2">
+                    <i class="bi bi-people-fill fs-2 text-primary mb-2"></i>
+                    <h6>Tổng thành viên</h6>
+                    <h4>{{ $totalUsers }}</h4>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="dateFrom" class="form-label">Từ ngày:</label>
-                            <input type="date" class="form-control" id="dateFrom" name="dateFrom">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="dateTo" class="form-label">Đến ngày:</label>
-                            <input type="date" class="form-control" id="dateTo" name="dateTo">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="filterType" class="form-label">Loại thống kê:</label>
-                            <select class="form-control" id="filterType">
-                                <option value="all">Tất cả</option>
-                                <option value="users">Người dùng</option>
-                                <option value="jobs">Việc làm</option>
-                                <option value="applications">Ứng tuyển</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 d-flex align-items-end">
-                            <button type="button" class="btn btn-primary me-2" onclick="applyFilter()">
-                                <i class="fas fa-filter"></i> Lọc
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="resetFilter()">
-                                <i class="fas fa-undo"></i> Reset
-                            </button>
-                        </div>
+            </div>
+            @foreach($usersByRole as $role => $count)
+                <div class="col-md-3">
+                    <div class="card border-info shadow-sm text-center p-2">
+                        <i class="bi bi-person-badge-fill fs-2 text-info mb-2"></i>
+                        <h6>{{ ucfirst($role) }}</h6>
+                        <h4>{{ $count }}</h4>
+                    </div>
+                </div>
+            @endforeach
+            <div class="col-md-3">
+                <div class="card border-success shadow-sm text-center p-2">
+                    <i class="bi bi-person-plus-fill fs-2 text-success mb-2"></i>
+                    <h6>Thành viên mới (tháng này)</h6>
+                    <h4>{{ $newUsersThisMonth }}</h4>
+                </div>
+            </div>
+            @foreach($newUsersByRole as $role => $count)
+                <div class="col-md-3">
+                    <div class="card border-success shadow-sm text-center p-2">
+                        <i class="bi bi-person-plus-fill fs-2 text-success mb-2"></i>
+                        <h6>{{ ucfirst($role) }} mới</h6>
+                        <h4>{{ $count }}</h4>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Đơn ứng tuyển -->
+        <h5 class="mt-4 mb-3">
+            <i class="bi bi-file-earmark-text-fill me-2 text-secondary"></i> Đơn Ứng Tuyển
+        </h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card border-dark shadow-sm text-center p-2">
+                    <i class="bi bi-file-earmark-text-fill fs-2 text-dark mb-2"></i>
+                    <h6>Tổng đơn</h6>
+                    <h4>{{ $totalApplications }}</h4>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-primary shadow-sm text-center p-2">
+                    <i class="bi bi-calendar-check-fill fs-2 text-primary mb-2"></i>
+                    <h6>Trong tháng</h6>
+                    <h4>{{ $applicationsThisMonth }}</h4>
+                </div>
+            </div>
+            @foreach($applicationsByStatus as $status => $count)
+                <div class="col-md-3">
+                    <div class="card border-info shadow-sm text-center p-2">
+                        <i class="bi bi-flag-fill fs-2 text-info mb-2"></i>
+                        <h6>{{ $status }}</h6>
+                        <h4>{{ $count }}</h4>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Việc làm -->
+        <h5 class="mt-4 mb-3">
+            <i class="bi bi-briefcase-fill me-2 text-success"></i> Thống Kê Việc Làm
+        </h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card border-success shadow-sm text-center p-2">
+                    <i class="bi bi-briefcase-fill fs-2 text-success mb-2"></i>
+                    <h6>Tổng việc làm</h6>
+                    <h4>{{ $totalJobs }}</h4>
+                </div>
+            </div>
+            @foreach($jobStatus as $status => $count)
+                <div class="col-md-3">
+                    <div class="card border-secondary shadow-sm text-center p-2">
+                        <i class="bi bi-flag-fill fs-2 text-secondary mb-2"></i>
+                        <h6>{{ ucfirst($status) }}</h6>
+                        <h4>{{ $count }}</h4>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Đơn hàng & Doanh thu -->
+        <h5 class="mt-4 mb-3">
+            <i class="bi bi-cart-fill me-2 text-warning"></i> Thống Kê Doanh Thu
+        </h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card border-warning shadow-sm text-center p-2">
+                    <i class="bi bi-cart-fill fs-2 text-warning mb-2"></i>
+                    <h6>Tổng đơn hàng</h6>
+                    <h4>{{ $totalOrders }}</h4>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-danger shadow-sm text-center p-2">
+                    <i class="bi bi-cash-stack fs-2 text-danger mb-2"></i>
+                    <h6>Tổng doanh thu</h6>
+                    <h4>{{ number_format($totalRevenue, 0, ',', '.') }} đ</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ -->
+        <h5 class="mt-4 mb-3">
+            <i class="bi bi-graph-up-arrow me-2 text-danger"></i> Biểu Đồ Phân Tích
+        </h5>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3 rounded-3">
+                    <h6 class="text-center">
+                        <i class="bi bi-flag-fill me-2 text-secondary"></i> Việc làm theo trạng thái
+                    </h6>
+                    <div class="d-flex justify-content-center align-items-center" style="height:220px">
+                        <canvas id="jobStatusChart" style="max-width:250px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3 rounded-3">
+                    <h6 class="text-center">
+                        <i class="bi bi-diagram-3-fill me-2 text-primary"></i> Job theo ngành nghề
+                    </h6>
+                    <div class="d-flex justify-content-center align-items-center" style="height:220px">
+                        <canvas id="jobsByCategoryChart" style="max-width:aoto; width:100%"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3 rounded-3">
+                    <h6 class="text-center">
+                        <i class="bi bi-lightbulb-fill me-2 text-info"></i> Kỹ năng phổ biến
+                    </h6>
+                    <div class="d-flex justify-content-center align-items-center" style="height:300px">
+                        <canvas id="skillsChart" style="width:auto"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3 rounded-3">
+                    <h6 class="text-center">
+                        <i class="bi bi-pie-chart-fill me-2 text-success"></i> Tỷ lệ Đơn Ứng Tuyển
+                    </h6>
+                    <div class="d-flex justify-content-center align-items-center" style="height:300px">
+                        <canvas id="applicationsChart" style="max-width:280px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-    <div class="row mb-5" id="stats">
-        <!-- Thống kê người dùng -->
-        <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-header">Ứng viên</div>
-                <div class="card-body">
-                    <h5 class="card-title" id="seeker-count">0</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-header">Nhà tuyển dụng</div>
-                <div class="card-body">
-                    <h5 class="card-title" id="employer-count">0</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-dark mb-3">
-                <div class="card-header">Admin</div>
-                <div class="card-body">
-                    <h5 class="card-title" id="admin-count">0</h5>
-                </div>
-            </div>
-        </div>
-
-        <!-- Thống kê việc làm -->
-        <div class="col-md-6">
-            <div class="card text-white bg-info mb-3">
-                <div class="card-header">Việc làm đang hoạt động</div>
-                <div class="card-body">
-                    <h5 class="card-title" id="active-jobs">0</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card text-white bg-secondary mb-3">
-                <div class="card-header">Việc làm đã đóng</div>
-                <div class="card-body">
-                    <h5 class="card-title" id="closed-jobs">0</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Biểu đồ -->
-    <h4 class="mt-4">📈 Lượt ứng tuyển theo tháng</h4>
-    <canvas id="applicationChart" height="100"></canvas>
-</div>
 @endsection
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    let currentChart = null;
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Job Status
+        const jobStatus = @json($jobStatus);
+        const statusColors = {
+            published: '#28a745',
+            pending: '#ffc107',
+            closed: '#dc3545',
+            draft: '#6c757d'
+        };
+        new Chart(document.getElementById('jobStatusChart'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(jobStatus),
+                datasets: [{
+                    data: Object.values(jobStatus),
+                    backgroundColor: Object.keys(jobStatus).map(stt => statusColors[stt.toLowerCase()] || '#0d6efd')
+                }]
+            },
+            options: { plugins: { legend: { position: 'bottom' } } }
+        });
 
-    // Khởi tạo ngày mặc định (30 ngày gần nhất)
-    function initializeDefaultDates() {
-        const today = new Date();
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(today.getDate() - 30);
-
-        document.getElementById('dateFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
-        document.getElementById('dateTo').value = today.toISOString().split('T')[0];
-    }
-
-    async function loadDashboard(dateFrom = null, dateTo = null) {
-        try {
-            const params = new URLSearchParams();
-            if (dateFrom) params.append('dateFrom', dateFrom);
-            if (dateTo) params.append('dateTo', dateTo);
-
-            const [userRes, jobRes, appRes] = await Promise.all([
-                fetch(`/api/admin/stats/users?${params}`),
-                fetch(`/api/admin/stats/jobs?${params}`),
-                fetch(`/api/admin/stats/applications?type=monthly&${params}`)
-            ]);
-
-            const users = await userRes.json();
-            const jobs = await jobRes.json();
-            const apps = await appRes.json();
-
-            // Hiển thị người dùng
-            document.getElementById('seeker-count').textContent = users.seeker ?? 0;
-            document.getElementById('employer-count').textContent = users.employer ?? 0;
-            document.getElementById('admin-count').textContent = users.admin ?? 0;
-
-            // Hiển thị công việc
-            document.getElementById('active-jobs').textContent = jobs.active ?? 0;
-            document.getElementById('closed-jobs').textContent = jobs.closed ?? 0;
-
-            // Vẽ biểu đồ ứng tuyển
-            updateChart(apps);
-
-        } catch (error) {
-            console.error('Lỗi khi load dashboard:', error);
-        }
-    }
-
-    function updateChart(apps) {
-        const ctx = document.getElementById('applicationChart').getContext('2d');
-
-        // Xóa biểu đồ cũ nếu có
-        if (currentChart) {
-            currentChart.destroy();
-        }
-
-        const appLabels = apps.map(item => 'Tháng ' + item.period);
-        const appCounts = apps.map(item => item.total);
-
-        currentChart = new Chart(ctx, {
+        // Job Category
+        const jobsByCategory = @json($jobsByCategory);
+        new Chart(document.getElementById('jobsByCategoryChart'), {
             type: 'bar',
             data: {
-                labels: appLabels,
+                labels: jobsByCategory.map(i => i.category),
                 datasets: [{
-                    label: 'Lượt ứng tuyển',
-                    data: appCounts,
-                    backgroundColor: '#007bff'
+                    data: jobsByCategory.map(i => i.total),
+                    backgroundColor: '#0d6efd'
                 }]
             },
             options: {
+                plugins: { legend: { display: false } },
                 responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
-                    }
-                }
+                maintainAspectRatio: false
             }
         });
-    }
 
-    function applyFilter() {
-        const dateFrom = document.getElementById('dateFrom').value;
-        const dateTo = document.getElementById('dateTo').value;
-        const filterType = document.getElementById('filterType').value;
+        // Skills
+        const skills = @json($skills);
+        new Chart(document.getElementById('skillsChart'), {
+            type: 'bar',
+            data: {
+                labels: skills.map(i => i.skill),
+                datasets: [{
+                    data: skills.map(i => i.total),
+                    backgroundColor: '#17a2b8'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
 
-        if (!dateFrom || !dateTo) {
-            alert('Vui lòng chọn khoảng thời gian!');
-            return;
-        }
-
-        if (new Date(dateFrom) > new Date(dateTo)) {
-            alert('Ngày bắt đầu không được lớn hơn ngày kết thúc!');
-            return;
-        }
-
-        loadDashboard(dateFrom, dateTo);
-    }
-
-    function resetFilter() {
-        initializeDefaultDates();
-        loadDashboard();
-    }
-
-    // Khởi tạo trang
-    document.addEventListener('DOMContentLoaded', function() {
-        initializeDefaultDates();
-        loadDashboard();
-    });
-</script>
-@endpush
+        // Applications by Status
+        const applicationsByStatus = @json($applicationsByStatus);
+        new Chart(document.getElementById('applicationsChart'), {
+            type: 'pie',
+            data: {
+                labels: Object.keys(applicationsByStatus),
+                datasets: [{
+                    data: Object.values(applicationsByStatus),
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545', '#0d6efd']
+                }]
+            },
+            options: { plugins: { legend: { position: 'bottom' } }, responsive: true }
+        });
+    </script>
+@endsection

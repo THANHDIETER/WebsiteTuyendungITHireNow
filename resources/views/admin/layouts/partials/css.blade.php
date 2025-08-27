@@ -42,13 +42,3 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
-<style>
-    .svg-color {
-        color: #000;
-        transition: color 0.3s ease;
-    }
-
-    html.dark .svg-color {
-        color: #ddd;
-    }
-</style>

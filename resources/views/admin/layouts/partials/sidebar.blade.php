@@ -78,26 +78,32 @@
         background-color: #495057;
         color: #0d6efd !important;
     }
-
 </style>
 
 <aside class="page-sidebar">
     <ul class="sidebar-menu">
 
         <li class="sidebar-main-title">Chức năng chính</li>
-
         <li class="sidebar-list">
+
             <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
                 <i class="bi bi-speedometer sidebar-icon"></i> Bảng điều khiển
             </a>
         </li>
 
         <li class="sidebar-list">
+            <a class="sidebar-link" href="{{ route('admin.dashboardv2') }}">
+                <i class="bi bi-speedometer2 sidebar-icon"></i> Bảng điều khiển v2
+            </a>
+        </li>
+
+
+        <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.jobs.index') }}">
                 <i class="bi bi-briefcase sidebar-icon"></i> Duyệt tin tuyển dụng
             </a>
         </li>
-         <li class="sidebar-list">
+        <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.employers.index') }}">
                 <i class="bi bi-journal-arrow-down sidebar-icon"></i> Nhà tuyển dụng
             </a>
