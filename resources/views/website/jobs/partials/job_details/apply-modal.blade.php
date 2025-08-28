@@ -1,188 +1,170 @@
 <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-            <div class="modal-header border-0">
-                <h5 class="modal-title" id="applyModalLabel">Nộp đơn ứng tuyển</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        <div class="modal-content border-0 shadow-lg rounded-3">
+            <div class="modal-header border-0 bg-primary text-white">
+                <h5 class="modal-title" id="applyModalLabel">
+                    <i class="bi bi-send-check me-2"></i>Nộp đơn ứng tuyển
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Đóng"></button>
             </div>
 
-            <div class="modal-body">
-                @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
+            <div class="modal-body p-3">
+                <div id="applyAlert"></div> {{-- AJAX messages here --}}
 
-                <form action="{{ route('jobs.apply', $job) }}" method="POST" enctype="multipart/form-data"
-                    id="applyForm">
+                <form id="applyForm" enctype="multipart/form-data">
                     @csrf
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="full_name" class="form-label">Họ và tên <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('full_name') is-invalid @enderror" id="full_name"
-                            name="full_name" value="{{ old('full_name', Auth::user()->name ?? '') }}" required>
-                        @error('full_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="text" class="form-control" id="full_name" name="full_name"
+                            value="{{ old('full_name', Auth::user()->name ?? '') }}">
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                            name="email" value="{{ old('email', Auth::user()->email ?? '') }}" required>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ old('email', Auth::user()->email ?? '') }}">
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                        <input type="tel" class="form-control @error('phone') is-invalid @enderror" id="phone"
-                            name="phone" value="{{ old('phone', Auth::user()->phone_number ?? '') }}" required>
-                        @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="tel" class="form-control" id="phone" name="phone"
+                            value="{{ old('phone', Auth::user()->phone_number ?? '') }}">
                     </div>
 
-                    {{-- Chọn CV --}}
-                    <div class="mb-3">
-                        <label class="form-label d-block">Chọn CV</label>
-
-                        @if($cvs->count() > 0)
-                            {{-- Radio chọn cách nộp --}}
-                            <div class="d-flex gap-4 mb-2">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_saved"
-                                        value="saved" checked>
-                                    <label class="form-check-label" for="cv_choice_saved">Dùng CV đã lưu</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="cv_choice" id="cv_choice_upload"
-                                        value="upload">
-                                    <label class="form-check-label" for="cv_choice_upload">Tải CV mới</label>
-                                </div>
-                            </div>
-
-                            {{-- Nhóm select CV đã có --}}
-                            <div id="cv_saved_group" class="mb-2">
-                                <select name="cv_id" id="cv_id" class="form-select">
-                                    <option value="">-- Chọn CV từ hồ sơ của bạn --</option>
-                                    @foreach($cvs as $cv)
-                                        <option value="{{ $cv->id }}">{{ $cv->title ?? basename($cv->file_path) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            {{-- Nhóm upload file (ẩn mặc định) --}}
-                            <div id="cv_upload_group" class="mb-2 d-none">
-                                <input type="file" name="cv_file" id="cv_file" class="form-control"
-                                    accept="application/pdf">
-                                <div class="form-text">Tải file PDF (tối đa 2MB).</div>
-                            </div>
-                        @else
-                            {{-- Không có CV trong hệ thống -> bắt buộc upload --}}
-                            <input type="hidden" name="cv_choice" value="upload">
-                            <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf"
-                                required>
-                            <div class="form-text">Bạn chưa có CV trong hệ thống, vui lòng upload file PDF (tối đa 2MB).
-                            </div>
-                        @endif
-
+                    <div class="mb-2">
+                        <label for="cv_file" class="form-label">Chọn CV <span class="text-muted">(PDF, tối đa
+                                2MB)</span></label>
+                        <input type="file" name="cv_file" id="cv_file" class="form-control" accept="application/pdf">
                     </div>
 
-
-                    <div class="mb-3">
-                        <label for="cover_letter" class="form-label">Thư giới thiệu (không bắt buộc)</label>
-                        <textarea class="form-control @error('cover_letter') is-invalid @enderror" id="cover_letter"
-                            name="cover_letter" rows="4"
-                            placeholder="Giới thiệu ngắn gọn về kinh nghiệm, thành tích và lý do phù hợp với vị trí này...">{{ old('cover_letter') }}</textarea>
-                        @error('cover_letter')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                    <div class="mb-2">
+                        <label for="cover_letter" class="form-label">Thư giới thiệu <small class="text-muted">(Không bắt
+                                buộc)</small></label>
+                        <textarea class="form-control" id="cover_letter" name="cover_letter" rows="3"></textarea>
                     </div>
 
                     <div class="text-end">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle"></i> Đóng
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="spinner-border spinner-border-sm d-none me-2" id="applyLoading"
+                                role="status"></span>
                             <i class="bi bi-send"></i> Gửi đơn ứng tuyển
                         </button>
                     </div>
                 </form>
             </div>
-        </div> {{-- /modal-content --}}
+        </div>
     </div>
 </div>
 
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const applyForm = document.getElementById('applyForm');
+            const applyAlert = document.getElementById('applyAlert');
+            const applyModal = document.getElementById('applyModal');
+            const applyLoading = document.getElementById('applyLoading');
+            const cvFile = document.getElementById('cv_file');
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Reset form khi đóng modal
-        const applyModal = document.getElementById('applyModal');
-        if (applyModal) {
-            applyModal.addEventListener('hidden.bs.modal', function () {
-                const form = document.getElementById('applyForm');
-                if (form) form.reset();
-            });
-        }
+            if (applyForm) {
+                applyForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
 
-        const savedRadio = document.getElementById('cv_choice_saved');
-        const uploadRadio = document.getElementById('cv_choice_upload');
-        const savedGroup = document.getElementById('cv_saved_group');
-        const uploadGroup = document.getElementById('cv_upload_group');
-        const cvSelect = document.getElementById('cv_id');
-        const cvFile = document.getElementById('cv_file');
+                    if (!cvFile.files || !cvFile.files.length) {
+                        applyAlert.innerHTML = `
+                            <div class="alert alert-danger d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <div>Bạn phải tải lên file CV.</div>
+                            </div>`;
+                        return;
+                    }
 
-        function toggleCVInput() {
-            if (savedRadio && savedRadio.checked) {
-                // Hiện select CV đã lưu
-                savedGroup.classList.remove('d-none');
-                uploadGroup.classList.add('d-none');
+                    if (cvFile.files[0].size > 2 * 1024 * 1024) {
+                        applyAlert.innerHTML = `
+                            <div class="alert alert-danger d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <div>File CV quá lớn (tối đa 2MB).</div>
+                            </div>`;
+                        return;
+                    }
 
-                if (cvSelect) cvSelect.setAttribute('required', 'required');
-                if (cvFile) cvFile.removeAttribute('required');
-            } else if (uploadRadio && uploadRadio.checked) {
-                // Hiện upload CV mới
-                savedGroup.classList.add('d-none');
-                uploadGroup.classList.remove('d-none');
+                    const formData = new FormData(applyForm);
+                    applyAlert.innerHTML = '';
+                    applyLoading.classList.remove('d-none');
 
-                if (cvSelect) {
-                    cvSelect.removeAttribute('required');
-                    cvSelect.value = '';
+                    fetch("{{ route('jobs.apply', $job) }}", {
+                        method: "POST",
+                        headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+                        body: formData
+                    })
+                        .then(async response => {
+                            applyLoading.classList.add('d-none');
+                            let data;
+                            try {
+                                data = await response.json();
+                            } catch (e) {
+                                applyAlert.innerHTML = `
+                                <div class="alert alert-danger d-flex align-items-center">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    <div>Lỗi: Server không trả về JSON hợp lệ.</div>
+                                </div>`;
+                                throw new Error("Invalid JSON");
+                            }
+
+                            if (!response.ok) {
+                                if (response.status === 422 && data.errors) {
+                                    let errs = '<div class="alert alert-danger"><ul class="mb-0">';
+                                    Object.values(data.errors).forEach(err => {
+                                        errs += `<li>${err}</li>`;
+                                    });
+                                    errs += '</ul></div>';
+                                    applyAlert.innerHTML = errs;
+                                } else if (data.error) {
+                                    applyAlert.innerHTML = `
+                                    <div class="alert alert-danger d-flex align-items-center">
+                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                        <div>${data.error}</div>
+                                    </div>`;
+                                } else {
+                                    applyAlert.innerHTML = `
+                                    <div class="alert alert-danger">Có lỗi xảy ra, vui lòng thử lại.</div>`;
+                                }
+                                throw new Error("Request failed");
+                            }
+
+                            return data;
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                applyAlert.innerHTML = `
+                                <div class="alert alert-success d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                    <div>${data.success}</div>
+                                </div>`;
+                                applyForm.reset();
+
+                                // ✅ Auto close modal sau 2s
+                                setTimeout(() => {
+                                    const modalInstance = bootstrap.Modal.getInstance(applyModal);
+                                    modalInstance.hide();
+                                }, 2000);
+                            }
+                        })
+                        .catch(err => console.error(err));
+                });
+
+                // Reset form + alert khi đóng modal
+                if (applyModal) {
+                    applyModal.addEventListener('hidden.bs.modal', function () {
+                        applyForm.reset();
+                        applyAlert.innerHTML = '';
+                        applyLoading.classList.add('d-none');
+                    });
                 }
-                if (cvFile) cvFile.setAttribute('required', 'required');
             }
-        }
-
-        if (savedRadio) savedRadio.addEventListener('change', toggleCVInput);
-        if (uploadRadio) uploadRadio.addEventListener('change', toggleCVInput);
-        toggleCVInput(); // chạy lần đầu
-
-        // Giới hạn file 2MB
-        if (cvFile) {
-            cvFile.addEventListener('change', function () {
-                const f = this.files?.[0];
-                if (f && f.size > 2 * 1024 * 1024) {
-                    alert('File quá lớn (tối đa 2MB). Vui lòng chọn file khác.');
-                    this.value = '';
-                }
-            });
-        }
-
-        // Swipe support cho carousel trên mobile
-        const carouselEl = document.getElementById('relatedJobsCarousel');
-        if (carouselEl) {
-            let startX = 0;
-            carouselEl.addEventListener('touchstart', (e) => {
-                startX = e.changedTouches[0].screenX;
-            });
-            carouselEl.addEventListener('touchend', (e) => {
-                const endX = e.changedTouches[0].screenX;
-                if (Math.abs(endX - startX) > 50) {
-                    const dir = endX < startX ? 'next' : 'prev';
-                    const c = bootstrap.Carousel.getOrCreateInstance(carouselEl);
-                    c[dir]();
-                }
-            });
-        }
-    });
-</script>
+        });
+    </script>
+@endpush

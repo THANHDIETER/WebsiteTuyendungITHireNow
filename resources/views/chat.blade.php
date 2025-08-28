@@ -1,11 +1,23 @@
-<!-- 🔘 Nút tròn mở chatbot -->
+@auth
+    @if(Auth::user()->role === 'job_seeker')
+        <!-- ⭐ Icon việc làm yêu thích (nhỏ hơn) -->
+        <a href="{{ route('favorites.index') }}"
+           class="position-fixed bg-danger text-white rounded-circle d-flex justify-content-center align-items-center shadow"
+           style="width: 35px; height: 35px; cursor: pointer; z-index: 8000; bottom: 85px; right: 25px; font-size: 18px;">
+           <i class="bi bi-heart-fill"></i>
+        </a>
+    @endif
+@endauth
+
+<!-- 💬 Icon Chatbot -->
 <div id="chatbot-toggle"
-    class="position-fixed bottom-0 end-0 m-4 bg-primary text-white rounded-circle d-flex justify-content-center align-items-center shadow"
-    style="width: 55px; height: 55px; cursor: pointer; z-index: 9999;" onclick="toggleChatbot(true)">
-    💬
+    class="position-fixed bg-primary text-white rounded-circle d-flex justify-content-center align-items-center shadow"
+    style="width: 45px; height: 45px; cursor: pointer; z-index: 9000; bottom: 25px; right: 25px;"
+    onclick="toggleChatbot(true)">
+<i class="bi bi-chat-dots-fill"></i>
 </div>
 
-<!-- 💬 Khung chatbot -->
+
 <div id="chatbot-widget" class="position-fixed bottom-0 end-0 m-4" style="z-index: 9999; width: 360px; display: none;">
     <div class="card shadow border-0 rounded-4 overflow-hidden chatbot-card">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center p-2">
@@ -302,3 +314,4 @@
         }
     });
 </script>
+>

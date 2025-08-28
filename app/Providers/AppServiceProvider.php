@@ -27,51 +27,34 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Bắt buộc https khi production
         if (app()->environment('production')) {
             URL::forceScheme('https');
         }
 
-        // Pagination Bootstrap 5
-        // Paginator::useBootstrapFive();
-
-        /**
-         * Favicon + SEO Settings (global)
-         * Cache 24h, xóa khi admin update
-         */
-        $favicon = Cache::remember('favicon', now()->addDay(), function () {
-            return Logo::select('id','image_path')
+        // Favicon + SEO Settings (global)
+        $favicon = Cache::rememberForever('favicon', function () {
+            return Logo::select('id', 'image_path')
                 ->where('type', 'site')
                 ->where('is_active', true)
                 ->first();
         });
 
-        $seo = Cache::remember('seo_settings', now()->addDay(), function () {
+        $seo = Cache::rememberForever('seo_settings', function () {
             return SeoSetting::select('title', 'description', 'keywords')->first();
         });
 
-        View::share([
-            'favicon' => $favicon,
-            'seo' => $seo,
-        ]);
+        View::share(compact('favicon', 'seo'));
 
-        /**
-         * Employer layout: gắn company cho user login
-         * Cache 10 phút theo user_id
-         */
+        // Employer layout: gắn company cho user login
         View::composer('employer.layouts.*', function ($view) {
-            if (Auth::check()) {
-                $userId = Auth::id();
-
-                $company = Cache::remember("employer_company_{$userId}", now()->addMinutes(60), function () use ($userId) {
-                    return Company::select('id')
-                        ->where('user_id', $userId)
-                        ->first();
+            if ($userId = Auth::id()) {
+                $company = Cache::remember("employer_company_{$userId}", 600, function () use ($userId) {
+                    return Company::select('id')->where('user_id', $userId)->first();
                 });
                 $view->with('employerCompany', $company);
             }
         });
-
     }
-    
+
+
 }

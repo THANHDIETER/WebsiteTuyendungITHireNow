@@ -56,6 +56,10 @@ class LoginController extends Controller
         if (Hash::check($credentials['password'], $user->password)) {
             Auth::login($user);
 
+            $user->update([
+                'ip_address' => $request->ip(),
+            ]);
+
             // Tạo token nếu dùng Laravel Sanctum
             $token = $user->createToken('access_token')->plainTextToken;
             session()->flash('access_token', $token);
@@ -167,6 +171,9 @@ class LoginController extends Controller
             }
 
             Auth::login($user);
+            $user->update([
+                'ip_address' => $request->ip(),
+            ]);
             $accessToken = $user->createToken('access_token')->plainTextToken;
             session(['access_token' => $accessToken]);
 

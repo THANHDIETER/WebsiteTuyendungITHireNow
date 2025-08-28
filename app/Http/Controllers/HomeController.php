@@ -109,8 +109,4 @@ class HomeController extends Controller
             'total' => $paginated->total()
         ]);
     }
-
-
-
-
 }

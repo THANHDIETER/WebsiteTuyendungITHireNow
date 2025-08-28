@@ -9,64 +9,70 @@ use Illuminate\Http\Request;
 use App\Models\JobApplication;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use App\Notifications\Admin\JobseekerAppliedNotification;
 use App\Notifications\Employer\NewApplicationNotification;
+use App\Jobs\ProcessCvUpload;
 
 class JobApplicationController extends Controller
 {
     public function store(Request $request, Job $job)
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để nộp đơn ứng tuyển.');
+            return response()->json(['error' => 'Vui lòng đăng nhập để nộp đơn.'], 401);
         }
 
-        // Xác định lựa chọn CV
-        $cvChoice = $request->input('cv_choice', 'saved');
-        if (!$cvChoice && !$request->has('cv_id')) {
-            $cvChoice = 'upload';
-        }
+        $cvChoice = $request->input('cv_choice', $request->has('cv_id') ? 'saved' : 'upload');
 
-        // Rule chung
+        // Rules
         $rules = [
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'cover_letter' => 'nullable|string|max:1000',
+            'cover_letter' => 'nullable|string|max:250',
+        ] + ($cvChoice === 'saved'
+            ? ['cv_id' => 'required|exists:seeker_cvs,id']
+            : ['cv_file' => 'required|file|mimes:pdf|max:2048'] // 2MB
+        );
+
+        $messages = [
+            'full_name.required' => 'Vui lòng nhập họ tên.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Email không hợp lệ.',
+            'phone.required' => 'Vui lòng nhập số điện thoại.',
+            'cv_id.required' => 'Bạn phải chọn CV đã lưu.',
+            'cv_id.exists' => 'CV đã chọn không tồn tại.',
+            'cv_file.required' => 'Bạn phải tải lên file CV.',
+            'cv_file.mimes' => 'CV phải là file PDF.',
+            'cv_file.max' => 'CV không được vượt quá 2MB.',
         ];
 
-        // Rule riêng
-        if ($cvChoice === 'saved') {
-            $rules['cv_id'] = 'required|exists:seeker_cvs,id';
-        } else {
-            $rules['cv_file'] = 'required|file|mimes:pdf|max:5120';
+        // Validate
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $request->validate($rules);
-
-        // Kiểm tra đã ứng tuyển trước đó
+        // Check duplicate
         if (JobApplication::where('job_id', $job->id)->where('user_id', Auth::id())->exists()) {
-            return redirect()->back()->with('error', 'Bạn đã ứng tuyển cho vị trí này rồi.');
+            return response()->json(['error' => 'Bạn đã ứng tuyển cho vị trí này rồi.'], 409);
         }
 
         try {
             $cvPath = null;
+            $tempPath = null;
 
             if ($cvChoice === 'saved') {
-                $cv = SeekerCV::findOrFail($request->cv_id);
-
-                // kiểm tra cột nào có dữ liệu (file_path hoặc image)
-                $cvPath = $cv->file_path ?? $cv->image;
-
+                $cvPath = optional(SeekerCV::find($request->cv_id))->file_path ?? null;
                 if (!$cvPath) {
-                    return redirect()->back()->with('error', 'CV đã chọn không có file.');
+                    return response()->json(['error' => 'CV đã chọn không hợp lệ.'], 422);
                 }
             } else {
-                $cvPath = $request->file('cv_file')->store('cvs', 'public');
+                $filename = 'job' . $job->id . '_' . uniqid() . '.pdf';
+                $request->file('cv_file')->move(storage_path('app/tmp'), $filename);
+                $tempPath = 'tmp/' . $filename;
             }
 
-
-            // Lưu JobApplication
             $application = JobApplication::create([
                 'job_id' => $job->id,
                 'user_id' => Auth::id(),
@@ -74,7 +80,7 @@ class JobApplicationController extends Controller
                 'full_name' => $request->full_name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'image' => $cvPath,
+                'image' => $cvPath ?? null,
                 'cover_letter' => $request->cover_letter,
                 'status' => 'pending',
                 'applied_at' => now(),
@@ -82,37 +88,21 @@ class JobApplicationController extends Controller
                 'source' => 'website',
             ]);
 
-            // Thông báo cho employer
-            $employer = User::find($job->company->user_id ?? null);
-            $jobseeker = Auth::user();
-            if ($employer) {
-                $employer->notify(new NewApplicationNotification($job, $jobseeker));
+            if ($cvChoice === 'upload' && $tempPath) {
+                ProcessCvUpload::dispatch($tempPath, $application->id);
             }
 
-            // Thông báo cho admin
-            User::where('role', 'admin')->get()->each(function ($admin) use ($job, $jobseeker) {
-                $admin->notify(new JobseekerAppliedNotification($job, $jobseeker));
-            });
-
-            // Update thông tin user
-            Auth::user()->update([
-                'name' => $request->full_name,
-                'phone_number' => $request->phone,
-            ]);
-
-            return redirect()->back()->with('success', 'Đơn ứng tuyển của bạn đã được gửi thành công!');
-        } catch (\Exception $e) {
-            dd($e->getMessage(), $e->getTraceAsString());
-            Log::error('Job apply error: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            if (isset($cvPath) && $cvChoice === 'upload' && Storage::disk('public')->exists($cvPath)) {
-                Storage::disk('public')->delete($cvPath);
+            // Notify employer & admin
+            if ($employer = $job->company->user ?? null) {
+                $employer->notify(new NewApplicationNotification($job, Auth::user()));
             }
+            User::where('role', 'admin')
+                ->each(fn($admin) => $admin->notify(new JobseekerAppliedNotification($job, Auth::user())));
 
-            return redirect()->back()
-                ->with('error', 'Có lỗi xảy ra khi gửi đơn ứng tuyển. Vui lòng thử lại sau.');
+            return response()->json(['success' => 'Đơn ứng tuyển đã được gửi thành công!']);
+        } catch (\Throwable $e) {
+            Log::error('Job apply error', ['msg' => $e->getMessage()]);
+            return response()->json(['error' => 'Có lỗi xảy ra, vui lòng thử lại.'], 500);
         }
     }
 }

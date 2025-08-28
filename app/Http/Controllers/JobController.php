@@ -3,19 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\Level;
 use App\Models\Skill;
 use App\Models\Company;
+use App\Models\JobType;
+use App\Models\JobView;
 use App\Models\Category;
 use App\Models\Location;
-use App\Models\JobType;
-use App\Models\Level;
-use App\Models\JobExperience;
 use App\Models\JobLanguage;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Schema;
+use App\Models\JobExperience;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class JobController extends Controller
 {
@@ -237,7 +238,7 @@ class JobController extends Controller
         return $list ?: ['VND', 'USD'];
     }
 
-    public function show($slug)
+    public function show(Request $request, $slug)
     {
         $job = Cache::remember("jobs:detail:$slug", 600, function () use ($slug) {
             return Job::withRelations()
@@ -249,7 +250,31 @@ class JobController extends Controller
         $user = Auth::user();
         $profile = $user->profile ?? null;
         $cvs = $profile?->cvs()->get() ?? collect();
+        $ip = $request->ip();
 
+        $alreadyViewed = JobView::where('job_id', $job->id)
+            ->where(function ($query) use ($user, $ip) {
+                if ($user) {
+                    // Nếu có user_id => check theo user_id hoặc ip_address
+                    $query->where('user_id', $user->id)
+                        ->orWhere('ip_address', $ip);
+                } else {
+                    // Nếu chưa login => check theo ip
+                    $query->where('ip_address', $ip);
+                }
+            })
+            ->whereDate('created_at', now()->toDateString())
+            ->exists();
+
+        if (!$alreadyViewed) {
+            $job->increment('views');
+
+            JobView::create([
+                'job_id' => $job->id,
+                'user_id' => $user?->id,
+                'ip_address' => $ip,
+            ]);
+        }
         // Gợi ý việc làm liên quan
         $relatedJobs = Cache::remember("jobs:related:{$job->id}", 600, function () use ($job) {
             return Job::with(['company:id,name,logo_url,phone', 'location:id,name', 'category:id,name'])
