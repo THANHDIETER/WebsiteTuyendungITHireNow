@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quên mật khẩu - Website Tuyển Dụng IT HireNow</title>
-    <link rel="icon" href="{{ asset('../assets/images/favicon/favicon.png') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css') }}">
-    <link href="{{ url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap') }}"
-        rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('../assets/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('../assets/css/color-1.css') }}">
+    @include('website.layouts.particals.css')
+    <style>
+        body {
+            background: linear-gradient(135deg, #1CB5E0, #000851);
+        }
+
+        .login-card {
+            background: #ffffffee;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
             <div class="col-12 p-0">
                 <div class="login-card login-dark">
                     <div>
-                                               <div style="align-items: center;
+                        <div style="align-items: center;
                                 display: flex;
                                 justify-content: center;
                                 height: 100px;">

@@ -27,8 +27,10 @@ class BankSyncController extends Controller
             new HandlePendingPaymentsJob(),
         ])->dispatch();
 
-        return response()->json([
-            'message' => 'Đã đưa vào hàng đợi xử lý (BankSync + HandlePendingPayments).'
-        ]);
+        return response(
+            "Đã đưa vào hàng đợi xử lý (BankSync + HandlePendingPayments).",
+            200
+        )->header('Content-Type', 'text/plain');
+
     }
 }

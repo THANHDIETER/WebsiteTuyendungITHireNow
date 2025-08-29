@@ -31,6 +31,16 @@ public/clien/
 
 app/Providers/RouteServiceProvider.php
 resources/views/admin.blade.php
-
-
+storage
+storage*
 cloudflared.exe.exe
+/node_modules
+/public/storage
+/storage/*.key
+/vendor
+.env
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log

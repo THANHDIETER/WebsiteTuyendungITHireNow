@@ -26,9 +26,11 @@ class ApiPaymentController extends Controller
         // Đẩy job vào queue thay vì xử lý trực tiếp
         // HandlePendingPaymentsJob::dispatch();
 
-        return response()->json([
-            'message' => 'Đã đưa vào hàng đợi xử lý payments pending. Vui lòng kiểm tra log.'
-        ]);
+        return response(
+            "Đã đưa vào hàng đợi xử lý payments pending. Vui lòng kiểm tra log.",
+            200
+        )->header('Content-Type', 'text/plain');
+
     }
 
 

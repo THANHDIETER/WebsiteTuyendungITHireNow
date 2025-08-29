@@ -68,7 +68,7 @@ Route::middleware(['auth:sanctum', 'employer'])->group(function () {
 Route::get('/sync-bank', [BankSyncController::class, 'sync']);
 
 Route::get('/check-pending-payments', [ApiPaymentController::class, 'handlePending']);
-Route::get('/jobs', [JobApprovalController::class, 'sync']);
+Route::get('/check-jobs', [JobApprovalController::class, 'sync']);
 Route::get('/close-jobs', [CloseJobs::class, 'index']);
 Route::get('/featured/pending', [FeaturedController::class, 'handlePending']);
 

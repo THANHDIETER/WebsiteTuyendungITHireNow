@@ -11,34 +11,29 @@ class CloseJobs extends Controller
 {
     public function index(Request $request)
     {
-        
+
         if ($request->query('token') !== Setting::getValue('token_cron')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-       if ($request->boolean('check')) {
-            $count = Job::where('status', 'published')
-                ->where('created_at', '<=', now()->subMonth())
-                ->count();
-
-            return response()->json([
-                'ok'    => true,
-                'count' => $count,
-                'time' => now()->toDateTimeString(),
-            ]);
-        }
-
+        
         $affected = Job::where('status', 'published')
             ->where('created_at', '<=', now()->subMonth())
             ->update([
-                'status'     => 'closed',
+                'status' => 'closed',
                 'updated_at' => now(),
             ]);
 
-        return response()->json([
-            'ok'       => true,
+        $data = [
+            'ok' => true,
             'affected' => $affected,
-            'time'   => now()->toDateTimeString(),
-        ]);
+            'time' => now()->toDateTimeString(),
+        ];
+
+        return response(
+            collect($data)->map(fn($v, $k) => "$k: $v")->implode("\n"),
+            200
+        )->header('Content-Type', 'text/plain');
+
     }
 }

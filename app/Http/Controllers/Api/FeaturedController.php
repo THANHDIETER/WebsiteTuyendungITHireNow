@@ -37,9 +37,10 @@ class FeaturedController extends Controller
                 }
             });
 
-        return response()->json([
-            'message' => 'Cron check is_featured completed',
-            'jobs_updated' => $updatedCount,
-        ]);
+        return response(
+            "jobs_updated: {$updatedCount}",
+            200
+        )->header('Content-Type', 'text/plain');
+
     }
 }

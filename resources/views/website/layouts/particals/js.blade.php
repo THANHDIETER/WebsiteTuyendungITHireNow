@@ -15,9 +15,6 @@
   <script src="{{ asset('client/assets/js/counterup.js')}}"></script>
   <!--=== jQuery Waypoint Js ===-->
   <script src="{{ asset('client/assets/js/waypoint.js')}}"></script>
-  {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
-
-  <!--=== jQuery Custom Js ===-->
 
   <script src="../client/assets/js/custom.js"></script>
   <style>

@@ -18,8 +18,9 @@ class JobApprovalController extends Controller
         // Đưa toàn bộ xử lý vào queue
         ProcessPendingJobs::dispatch();
 
-        return response()->json([
-            'message' => 'Đã đưa vào hàng đợi xử lý tin tuyển dụng. Vui lòng kiểm tra log sau.'
-        ]);
+        return response(
+            "Đã đưa vào hàng đợi xử lý tin tuyển dụng. Vui lòng kiểm tra log sau.",
+            200
+        )->header('Content-Type', 'text/plain');
     }
 }

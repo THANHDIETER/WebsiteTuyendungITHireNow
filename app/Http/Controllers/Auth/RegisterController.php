@@ -66,9 +66,7 @@ class RegisterController extends Controller
         try {
 
             $validated = $request->validated();
-            // Đảm bảo vai trò là 'employer'
             $rolee= 'employer';
-            // Tạo tài khoản cho Employer
             $user = User::create([
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),

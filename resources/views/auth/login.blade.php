@@ -1,50 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Edmin admin is super flexible, powerful, clean &amp; modern responsive bootstrap admin template with unlimited possibilities.">
-    <meta name="keywords"
-        content="admin template, Edmin admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app">
-    <meta name="author" content="pixelstrap">
-    <title>Website Tuyển Dụng IT HireNow</title>
-    <!-- Favicon icon-->
-    <link rel="icon" href="{{ asset('../assets/images/favicon/favicon.png') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('../assets/images/favicon/favicon.png') }}" type="image/x-icon">
-    <link rel="stylesheet"
-        href="{{ url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css') }}">
-    <!-- Google font-->
-    <link rel="preconnect" href="{{ url('https://fonts.googleapis.com/') }}">
-    <link rel="preconnect" href="{{ url('https://fonts.gstatic.com/') }}" crossorigin="">
-    <link
-        href="{{ url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap') }}"
-        rel="stylesheet">
-    <!-- Font awesome icon css -->
-    <link rel="stylesheet" href="{{ asset('../assets/css/vendors/%40fortawesome/fontawesome-free/css/all.min.css') }}">
-    <link rel="stylesheet"
-        href="{{ asset('../assets/css/vendors/%40fortawesome/fontawesome-free/css/fontawesome.css') }}">
-    <link rel="stylesheet" href="{{ asset('../assets/css/vendors/%40fortawesome/fontawesome-free/css/brands.css') }}">
-    <link rel="stylesheet" href="{{ asset('../assets/css/vendors/%40fortawesome/fontawesome-free/css/solid.css') }}">
-    <link rel="stylesheet" href="{{ asset('../assets/css/vendors/%40fortawesome/fontawesome-free/css/regular.css') }}">
-    <!-- Ico Icon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('../assets/css/vendors/%40icon/icofont/icofont.css') }}">
-    <!-- Flag Icon css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('../assets/css/vendors/flag-icon.css') }}">
-    <!-- Themify Icon css -->
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('../assets/css/vendors/themify-icons/themify-icons/css/themify.css') }}">
-    <!-- Animation css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('../assets/css/vendors/animate.css/animate.css') }}">
-    <!-- Whether Icon css-->
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('../assets/css/vendors/weather-icons/css/weather-icons.min.css') }}">
-    <!-- App css-->
+     <link rel="stylesheet" href="{{ url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('../assets/css/style.css') }}">
-    <link id="color" rel="stylesheet" href="{{ asset('../assets/css/color-1.css') }}" media="screen">
+    @include('website.layouts.particals.css')
     <script src="{{ url('https://apis.google.com/js/api:client') }}"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1CB5E0, #000851);
+        }
+
+        .login-card {
+            background: #ffffffee;
+        }
+    </style>
 </head>
 
 <body>
@@ -78,7 +47,7 @@
                                     alt="Client Logo" style="height: 120px; " {{-- hoặc dùng class --}}>
                             </a>
                         </div>
-                        <div class="login-main mt-4">
+                        <div class="login-main mt-2">
                             <form class="theme-form" method="POST" action="{{ route('post-login') }}">
                                 @csrf
                                 <h2 class="text-center">Đăng nhập tài khoản</h2>
@@ -105,8 +74,7 @@
                                         <input class="form-control" type="password" id="password" name="password"
                                             placeholder="*********">
                                         <div class="show-hide" onclick="togglePassword()">
-                                            <span class="show">👁️</span> {{-- bạn có thể thay bằng icon FontAwesome
-                                            hoặc Bootstrap Icons --}}
+                                            <span class="show"></span>
                                         </div>
                                     </div>
                                     @error('password')
@@ -149,31 +117,6 @@
         <!-- customizer-->
         <!-- custom script -->
         <script src="{{ asset('../assets/js/script.js') }}"></script>
-        <script>
-            function togglePassword() {
-                const input = document.getElementById('password');
-                const showHideIcon = document.querySelector('.show-hide span');
-
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    showHideIcon.textContent = '🙈'; // đổi biểu tượng nếu muốn
-                } else {
-                    input.type = 'password';
-                    showHideIcon.textContent = '👁️';
-                }
-            }
-        </script>
-
-        <style>
-            .show-hide {
-                position: absolute;
-                right: 10px;
-                top: 50%;
-                transform: translateY(-50%);
-                cursor: pointer;
-                user-select: none;
-            }
-        </style>
     </div>
 </body>
 
