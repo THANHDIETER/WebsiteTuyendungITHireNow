@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\Logo;
 use App\Models\Company;
+use App\Models\Message;
 use App\Models\SeoSetting;
+use App\Models\Conversation;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -14,47 +16,62 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
+
     }
 
-    /**
-     * Bootstrap any application services.
-     */
+
     public function boot(): void
     {
-        if (app()->environment('production')) {
+        if (app()->isProduction()) {
             URL::forceScheme('https');
         }
 
-        // Favicon + SEO Settings (global)
-        $favicon = Cache::rememberForever('favicon', function () {
-            return Logo::select('id', 'image_path')
+        Paginator::useBootstrap();
+
+        $favicon = Cache::rememberForever('settings:favicon', function () {
+            return Logo::query()
+                ->select('id', 'image_path')
                 ->where('type', 'site')
                 ->where('is_active', true)
                 ->first();
         });
 
-        $seo = Cache::rememberForever('seo_settings', function () {
-            return SeoSetting::select('title', 'description', 'keywords')->first();
+        $seo = Cache::rememberForever('settings:seo', function () {
+            return SeoSetting::query()
+                ->select('title', 'description', 'keywords')
+                ->first();
         });
 
         View::share(compact('favicon', 'seo'));
 
-        // Employer layout: gắn company cho user login
-        View::composer('employer.layouts.*', function ($view) {
-            if ($userId = Auth::id()) {
-                $company = Cache::remember("employer_company_{$userId}", 600, function () use ($userId) {
-                    return Company::select('id')->where('user_id', $userId)->first();
-                });
-                $view->with('employerCompany', $company);
-            }
-        });
+        // View::composer('*', function ($view) {
+        //     if (!Auth::check()) {
+        //         return;
+        //     }
+
+        //     $userId = Auth::id();
+        //     $conversations = Conversation::query()
+        //         ->where(function ($q) use ($userId) {
+        //             $q->where('user_one', $userId)
+        //                 ->orWhere('user_two', $userId);
+        //         })
+        //         ->pluck('id');
+
+        //     $totalUnread = 0;
+        //     if ($conversations->isNotEmpty()) {
+        //         $totalUnread = Message::query()
+        //             ->whereNull('read_at')
+        //             ->where('sender_id', '!=', $userId)
+        //             ->whereIn('conversation_id', $conversations)
+        //             ->count();
+        //     }
+
+        //     $view->with([
+        //         'userConversations' => $conversations->all(),
+        //         'totalUnread' => $totalUnread,
+        //     ]);
+        // });
     }
-
-
 }

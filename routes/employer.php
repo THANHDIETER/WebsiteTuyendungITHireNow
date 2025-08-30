@@ -19,7 +19,7 @@ Route::middleware(['auth', 'employer'])
     ->group(function () {
 
 
-        Route::get('/dashboard', [StatsController::class, 'index'])->name('dashboard');                        
+        Route::get('/dashboard', [StatsController::class, 'index'])->name('dashboard');
         Route::get('/dashboard/filter', [StatsController::class, 'filter'])->name('dashboard.filter');
         Route::get('/stats/filter/data', [StatsController::class, 'filterData'])->name('stats.filter.data');
 
@@ -57,14 +57,13 @@ Route::middleware(['auth', 'employer'])
         Route::put('/companies/{id}', [CompanyController::class, 'update'])->name('companies.update');
         // Xóa
         Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('companies.destroy');
-        Route::prefix('companies/{company}')->group(function () {
-    Route::get('branches', [CompanyBranchController::class, 'index'])->name('company.branches.index');
-    Route::get('branches/create', [CompanyBranchController::class, 'create'])->name('company.branches.create');
-    Route::post('branches', [CompanyBranchController::class, 'store'])->name('company.branches.store');
-    Route::get('branches/{branch}/edit', [CompanyBranchController::class, 'edit'])->name('company.branches.edit');
-    Route::put('branches/{branch}', [CompanyBranchController::class, 'update'])->name('company.branches.update');
-    Route::delete('branches/{branch}', [CompanyBranchController::class, 'destroy'])->name('company.branches.destroy');
-});
+        
+        Route::get('branches', [CompanyBranchController::class, 'index'])->name('branches.index');
+        Route::get('branches/create', [CompanyBranchController::class, 'create'])->name('branches.create');
+        Route::post('branches', [CompanyBranchController::class, 'store'])->name('branches.store');
+        Route::get('branches/{branch}/edit', [CompanyBranchController::class, 'edit'])->name('branches.edit');
+        Route::put('branches/{branch}', [CompanyBranchController::class, 'update'])->name('branches.update');
+        Route::delete('branches/{branch}', [CompanyBranchController::class, 'destroy'])->name('branches.destroy');
         // (Tuỳ chọn) Cập nhật hoặc xoá tin
         Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
         Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
@@ -72,7 +71,7 @@ Route::middleware(['auth', 'employer'])
 
         # Danh sách việc làm của nhà tuyển dụng
         Route::get('/jobs_applications', [JobApplicationController::class, 'index'])->name('jobs.applications');
-         // 🔹 Đọc tất cả (nút "Đánh dấu tất cả đã đọc")
+        // 🔹 Đọc tất cả (nút "Đánh dấu tất cả đã đọc")
         Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
             ->name('notifications.readAll');
 
@@ -84,15 +83,13 @@ Route::middleware(['auth', 'employer'])
         Route::get('/notifications/{id}/json', [NotificationController::class, 'showJson'])
             ->name('notifications.json');
         Route::get('/package-logs', [PackageLogController::class, 'index'])
-        ->name('package.logs.index');
+            ->name('package.logs.index');
     });
 
 
 Route::middleware(['auth', 'employer'])->prefix('employer')->name('employer.')->group(function () {
     Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
     Route::post('packages/{package}/subscribe', [PackageController::class, 'subscribe'])->name('packages.subscribe');
-
-
 });
 
 Route::prefix('employer/subscriptions')->middleware('auth')->group(function () {
@@ -107,14 +104,10 @@ Route::prefix('employer/packages')->middleware(['auth', 'employer'])->group(func
     Route::get('/{id}', [PackageController::class, 'show'])->name('employer.packages.show'); // tuỳ chọn
 });
 
-
-
-
 Route::middleware(['auth:sanctum', 'employer'])
     ->prefix('employer')
     ->name('employer.')
     ->group(function () {
         // 📌 Notifications
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-
     });

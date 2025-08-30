@@ -1,3 +1,35 @@
+@php
+use App\Models\Conversation;
+use App\Models\Message;
+
+$userConversations = [];
+$totalUnread = 0;
+
+if (auth()->check()) {
+    $userId = auth()->id();
+
+    // Lấy toàn bộ conversation id của user (dùng cho Echo subscribe)
+    $userConversations = Conversation::query()
+        ->where('user_one', $userId)
+        ->orWhere('user_two', $userId)
+        ->pluck('id')
+        ->all();
+
+    // Đếm số tin nhắn chưa đọc
+    $totalUnread = Message::query()
+        ->whereNull('read_at')
+        ->where('sender_id', '!=', $userId)
+        ->whereIn('conversation_id', function ($q) use ($userId) {
+            $q->select('id')
+              ->from('conversations')
+              ->where('user_one', $userId)
+              ->orWhere('user_two', $userId);
+        })
+        ->count();
+}
+@endphp
+
+
 
 <header class="page-header row justify-content-between align-items-center bg-white">
       <div class="logo-wrapper d-flex align-items-center col-4" style="padding-left: 80px; ">
@@ -143,7 +175,7 @@
                                   stroke-width="2" stroke-linejoin="round" />
                           </svg>
                       </a>
-                      <span id="chat-dot" class="badge rounded-pill badge-tertiary">
+                      <span id="chat-unread-count" class="badge rounded-pill badge-tertiary">
                           {{ ($totalUnread ?? 0) > 99 ? '99+' : $totalUnread ?? 0 }}
                       </span>
                   </li>
@@ -198,7 +230,40 @@
       localStorage.setItem('access_token', "{{ session('access_token') }}");
   </script>
   @endif
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const badge = document.getElementById("chat-unread-count");
 
+        // Lắng nghe tất cả cuộc trò chuyện mà user tham gia
+        @foreach($userConversations ?? [] as $convId)
+            Echo.private("chat.{{ $convId }}")
+                .listen("MessageSent", (e) => {
+                    // Nếu tin nhắn đến từ người khác thì tăng badge
+                    if (e.message.sender_id !== {{ auth()->id() }}) {
+                        let count = parseInt(badge.textContent) || 0;
+                        count++;
+                        badge.textContent = (count > 99) ? "99+" : count;
+                        badge.style.display = "inline-block";
+                    }
+                });
+        @endforeach
+
+        // Reset badge khi user click vào chat
+        document.querySelector("a[href='{{ route('chat.index') }}']").addEventListener("click", function () {
+            badge.textContent = "0";
+            badge.style.display = "none";
+
+            // Gọi API đánh dấu đã đọc toàn bộ
+            fetch("{{ route('chat.markAllRead') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Accept": "application/json",
+                },
+            });
+        });
+    });
+</script>
   <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
 

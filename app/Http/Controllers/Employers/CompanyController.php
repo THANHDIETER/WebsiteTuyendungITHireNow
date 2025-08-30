@@ -12,15 +12,17 @@ use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
-    public function index()
-    {
-        $companies = Company::with('user', 'city') // thêm quan hệ city
-            ->where('user_id', Auth::id())
-            ->latest('created_at')
-            ->paginate(10);
+        public function index()
+        {
+            $company = Company::where('user_id', Auth::id())->first();
 
-        return view('employer.companies.index', compact('companies'));
-    }
+            if ($company) {
+                return redirect()->route('employer.companies.show', $company->id);
+            }
+
+            return redirect()->route('employer.companies.create')
+                ->with('toast_info', 'Bạn chưa có công ty nào, hãy tạo mới.');
+        }
 
     public function show($id)
     {

@@ -1,3 +1,34 @@
+@php
+use App\Models\Conversation;
+use App\Models\Message;
+
+$userConversations = [];
+$totalUnread = 0;
+
+if (auth()->check()) {
+    $userId = auth()->id();
+
+    // Lấy toàn bộ conversation id của user (dùng cho Echo subscribe)
+    $userConversations = Conversation::query()
+        ->where('user_one', $userId)
+        ->orWhere('user_two', $userId)
+        ->pluck('id')
+        ->all();
+
+    // Đếm số tin nhắn chưa đọc
+    $totalUnread = Message::query()
+        ->whereNull('read_at')
+        ->where('sender_id', '!=', $userId)
+        ->whereIn('conversation_id', function ($q) use ($userId) {
+            $q->select('id')
+              ->from('conversations')
+              ->where('user_one', $userId)
+              ->orWhere('user_two', $userId);
+        })
+        ->count();
+}
+@endphp
+
 <header class="header-area transparent">
     <div class="container">
         <div class="row no-gutter align-items-center position-relative">
@@ -28,9 +59,6 @@
                             </ul>
                         </div>
                     </div>
-
-
-
                     <!-- Action -->
                     <div class="header-align-end">
                         <div class="header-action-area">
@@ -141,19 +169,18 @@
                                         </div>
                                     @endif
                                     <!-- Chat -->
+                                    
                                     <div class="col-auto">
                                         <div class="dropdown me-3">
-                                            <a class="btn btn-icon position-relative p-0 bg-transparent border-0"
-                                                href="{{ route('chat.index') }}" id="chatDropdown" aria-label="Tin nhắn">
-                                                <i id="chat-bubble" class="bi bi-chat-dots fs-4 text-white"></i>
-                                                @if (isset($totalUnread) && $totalUnread > 0)
-                                                    <span id="chat-dot"
-                                                        class="position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow"
-                                                        style="font-size:10px; min-width:18px; height:18px; padding:0 4px; border:2px solid #fff;">
-                                                        {{ $totalUnread > 99 ? '99+' : $totalUnread }}
-                                                    </span>
-                                                @endif
+                                            <a class="nav-link position-relative" href="{{ route('chat.index') }}">
+                                                <i class="bi bi-chat-dots fs-5 text-white"></i>
+                                                <span id="chat-unread-count"
+                                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                    style="display: {{ ($totalUnread ?? 0) > 0 ? 'inline-block' : 'none' }}; font-size:.75rem;">
+                                                    {{ ($totalUnread ?? 0) > 99 ? '99+' : ($totalUnread ?? 0) }}
+                                                </span>
                                             </a>
+
                                         </div>
                                     </div>
 
@@ -166,23 +193,23 @@
                                                 <i class="bi bi-caret-down-fill ms-1"></i>
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 200px;">
-                                                 @auth
-                                        @if (auth()->user()->role === 'job_seeker')
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active' : '' }}"
-                                                        href="{{ route('profile.dashboard') }}">
-                                                        <i class="bi bi-house-door me-2"></i> Tổng quan
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center {{ request()->routeIs('favorites.index') ? 'active' : '' }}"
-                                                        href="{{ route('favorites.index') }}">
-                                                        <i class="bi bi-bookmark-heart-fill text-danger me-2"></i> Việc làm
-                                                        yêu thích
-                                                    </a>
-                                                </li>
-                                                 @endif
-                                    @endauth
+                                                @auth
+                                                    @if (auth()->user()->role === 'job_seeker')
+                                                        <li>
+                                                            <a class="dropdown-item d-flex align-items-center {{ request()->is('dashboard') ? 'active' : '' }}"
+                                                                href="{{ route('profile.dashboard') }}">
+                                                                <i class="bi bi-house-door me-2"></i> Tổng quan
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item d-flex align-items-center {{ request()->routeIs('favorites.index') ? 'active' : '' }}"
+                                                                href="{{ route('favorites.index') }}">
+                                                                <i class="bi bi-bookmark-heart-fill text-danger me-2"></i> Việc làm
+                                                                yêu thích
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endauth
                                                 @if (Auth::user()->role === 'admin')
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center"
@@ -240,7 +267,40 @@
         localStorage.setItem('access_token', "{{ session('access_token') }}");
     </script>
 @endif
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const badge = document.getElementById("chat-unread-count");
 
+        // Lắng nghe tất cả cuộc trò chuyện mà user tham gia
+        @foreach($userConversations ?? [] as $convId)
+            Echo.private("chat.{{ $convId }}")
+                .listen("MessageSent", (e) => {
+                    // Nếu tin nhắn đến từ người khác thì tăng badge
+                    if (e.message.sender_id !== {{ auth()->id() }}) {
+                        let count = parseInt(badge.textContent) || 0;
+                        count++;
+                        badge.textContent = (count > 99) ? "99+" : count;
+                        badge.style.display = "inline-block";
+                    }
+                });
+        @endforeach
+
+        // Reset badge khi user click vào chat
+        document.querySelector("a[href='{{ route('chat.index') }}']").addEventListener("click", function () {
+            badge.textContent = "0";
+            badge.style.display = "none";
+
+            // Gọi API đánh dấu đã đọc toàn bộ
+            fetch("{{ route('chat.markAllRead') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Accept": "application/json",
+                },
+            });
+        });
+    });
+</script>
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
@@ -256,6 +316,15 @@
         forceTLS: true,
     });
 
+    Echo.channel('chat')
+        .listen('MessageSent', (e) => {
+            let badge = document.getElementById('chat-bubble');
+            let countEl = document.getElementById('chat-unread-count');
+
+            let current = parseInt(countEl.innerText || "0");
+            countEl.innerText = current + 1;
+            countEl.style.display = "inline-block";
+        });
     // Template URL chi tiết notification (để resolve payload nếu thiếu)
     const NOTI_DETAIL_URL_TMPL = "{{ url('/notifications') }}/__ID__/json";
 
@@ -463,36 +532,6 @@
                     console.error(error);
                 }
             });
-        }
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-        const authId = {{ auth()->id() ?? 'null' }};
-
-        if (window.Echo && authId) {
-            window.Echo.private('user.' + authId)
-                .listen('MessageNotification', (e) => {
-                    console.log('New message notification:', e);
-                    const unread = e.unread_total;
-                    let chatDot = document.getElementById('chat-dot');
-
-                    if (unread > 0) {
-                        if (!chatDot) {
-                            // Nếu chưa có badge -> tạo mới
-                            const link = document.getElementById('chatDropdown');
-                            chatDot = document.createElement('span');
-                            chatDot.id = 'chat-dot';
-                            chatDot.className =
-                                'position-absolute top-0 start-100 translate-middle bg-danger text-white d-flex justify-content-center align-items-center rounded-circle shadow';
-                            chatDot.style.cssText =
-                                'font-size:10px; min-width:18px; height:18px; padding:0 4px; border:2px solid #fff;';
-                            link.appendChild(chatDot);
-                        }
-                        chatDot.innerText = unread > 99 ? '99+' : unread;
-                        chatDot.style.display = 'flex';
-                    } else {
-                        if (chatDot) chatDot.remove(); // ẩn = xoá khỏi DOM
-                    }
-                });
         }
     });
 </script>

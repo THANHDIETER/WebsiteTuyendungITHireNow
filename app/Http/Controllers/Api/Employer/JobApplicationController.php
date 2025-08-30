@@ -70,7 +70,6 @@ class JobApplicationController extends Controller
 
     public function update(Request $request, JobApplication $jobApplication)
     {
-
         $data = $request->validate([
             'status' => [
                 'required',
@@ -138,7 +137,6 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Ứng viên đã trúng tuyển, không thể thay đổi trạng thái.'], 403);
         }
 
-
         $preInterviewStatuses = [
             'pending',
             'viewed',
@@ -156,7 +154,7 @@ class JobApplicationController extends Controller
             ], 422);
         }
 
-        if ($data['status'] === 'interview_scheduled' && empty($data['interview_date'])) {
+        if ($newStatus === 'interview_scheduled' && empty($data['interview_date'])) {
             return response()->json([
                 'message' => 'Khi chọn trạng thái "Mời phỏng vấn", bạn phải chọn ngày phỏng vấn.'
             ], 422);
@@ -172,7 +170,6 @@ class JobApplicationController extends Controller
             ], 422);
         }
 
-
         if ($newStatus === 'interview_scheduled' && !empty($data['interview_date'])) {
             $interviewDateTime = Carbon::parse($data['interview_date']);
 
@@ -183,8 +180,6 @@ class JobApplicationController extends Controller
                 ], 422);
             }
         }
-
-
 
         // ✅ Cập nhật đơn ứng tuyển
         $jobApplication->update($data);
@@ -200,7 +195,6 @@ class JobApplicationController extends Controller
         $company = $job->company;
         $employerId = $company->user_id;
 
-
         if (!$employerId) {
             return response()->json(['message' => 'Không tìm thấy nhà tuyển dụng.'], 422);
         }
@@ -208,15 +202,27 @@ class JobApplicationController extends Controller
         // ✅ Gửi thông báo nếu cần
         if ($jobseeker && $job) {
 
+            // TH trúng tuyển
             if ($currentStatus !== 'offered' && $newStatus === 'offered') {
+                $offerDetails = $data['note'] ?? null;
                 $jobseeker->notify(new ApplicationApprovedNotification($job));
+                $jobseeker->notify(new offeredScheduledNotification(
+                    $job,
+                    $offerDetails
+                ));
             }
 
+            // TH bị từ chối
             if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
+                $rejectionReason = $data['note'] ?? null;
                 $jobseeker->notify(new ApplicationRejectedNotification($job));
+                $jobseeker->notify(new InterviewRejectedNotification(
+                    $job,
+                    $rejectionReason
+                ));
             }
 
-            // mail gửi thông báo phỏng vấn
+            // TH được mời phỏng vấn
             if ($currentStatus !== 'interview_scheduled' && $newStatus === 'interview_scheduled') {
                 $jobseeker->notify(new InterviewScheduledNotification(
                     $job,
@@ -224,29 +230,12 @@ class JobApplicationController extends Controller
                 ));
             }
 
-            // mail gửi thông báo từ chối phỏng vấn
-            if ($currentStatus !== 'rejected' && $newStatus === 'rejected') {
-                $rejectionReason = $data['note'] ?? null;
-                $jobseeker->notify(new InterviewRejectedNotification(
-                    $job,
-                    $rejectionReason
-                ));
-            }
-            if ($currentStatus !== 'offered' && $newStatus === 'offered') {
-                // TH trúng tuyển
-                $offerDetails = $data['note'] ?? null; // có thể truyền mức lương, ngày đi làm...
-                $jobseeker->notify(new offeredScheduledNotification(
-                    $job,
-                    $offerDetails
-                ));
-            }
-
-
+            // ✅ Chỉ tạo Interview khi trạng thái là interview_scheduled
             if (
+                $newStatus === 'interview_scheduled' &&
                 !empty($data['interview_date']) &&
                 $jobApplication->getOriginal('interview_date') !== $data['interview_date']
             ) {
-                // Tạo lịch phỏng vấn mới
                 $interview = Interview::create([
                     'job_id' => $job->id,
                     'employer_id' => $employerId,
@@ -256,7 +245,6 @@ class JobApplicationController extends Controller
                     'message' => 'Bạn được mời phỏng vấn công việc "' . $job->title . '"',
                 ]);
 
-                // Gửi thông báo mời phỏng vấn
                 $jobseeker->notify(new InterviewInvitationNotification(
                     $job,
                     $data['interview_date'],
@@ -270,6 +258,7 @@ class JobApplicationController extends Controller
             'data' => $jobApplication->fresh()
         ]);
     }
+
 
     public function destroy(JobApplication $jobApplication)
     {

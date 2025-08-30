@@ -44,6 +44,9 @@ Route::get('/test-notification', function (Request $request) {
 Route::get('/chatbot/history', [ChatBotController::class, 'history']);
 Route::view('/chat', 'chat');
 Route::post('/chatbot', [ChatBotController::class, 'chat']);
+Route::post('/chat/mark-all-read', [ChatController::class, 'markAllRead'])
+    ->name('chat.markAllRead')
+    ->middleware('auth');
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.post');

@@ -4,76 +4,85 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\CompanyBranch;
-use App\Models\Location; // thêm vào
+use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyBranchController extends Controller
 {
-    public function index($companyId)
+    public function index()
     {
-        $company = Company::with('branches.city')->findOrFail($companyId); 
-        $locations = Location::all(); // lấy danh sách tỉnh/thành
+        $company = Company::where('user_id', Auth::id())->firstOrFail();
 
-        return view('employer.company_branches.index', compact('company', 'locations'));
+        $company->load('branches.city'); // eager load
+
+        $locations = Location::all();
+
+        return view('employer.branches.index', compact('company', 'locations'));
     }
 
-    public function create($companyId)
-    {
-        $company = Company::findOrFail($companyId);
-        $locations = Location::all(); 
 
-        return view('company_branches.create', compact('company','locations'));
-    }
-
-    public function store(Request $request, $companyId)
+    public function store(Request $request)
     {
-        $company = Company::findOrFail($companyId);
+        $company = Company::where('user_id', Auth::id())->firstOrFail();
 
         $data = $request->validate([
-            'name'    => 'nullable|string|max:255',
+            'name' => 'nullable|string|max:255',
             'address' => 'required|string|max:255',
             'city_id' => 'nullable|exists:locations,id',
-            'phone'   => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         $company->branches()->create($data);
 
-        return redirect()->route('employer.company.branches.index', $companyId)
-                         ->with('success', 'Thêm chi nhánh thành công!');
+        return redirect()
+            ->route('employer.branches.index')
+            ->with('success', 'Thêm chi nhánh thành công!');
     }
 
-    public function edit($companyId, $id)
+    public function edit($id)
     {
-        $branch  = CompanyBranch::where('company_id', $companyId)->findOrFail($id);
-        $company = Company::findOrFail($companyId);
+        $company = Company::where('user_id', Auth::id())->firstOrFail();
+
+        $branch = CompanyBranch::where('company_id', $company->id)->findOrFail($id);
+
         $locations = Location::all();
 
-        return view('company_branches.edit', compact('branch', 'company','locations'));
+        return view('employer.branches.edit', compact('branch', 'company', 'locations'));
     }
 
-    public function update(Request $request, $companyId, $id)
+
+    public function update(Request $request, $id)
     {
-        $branch = CompanyBranch::where('company_id', $companyId)->findOrFail($id);
+        $company = Company::where('user_id', Auth::id())->firstOrFail();
+
+        $branch = CompanyBranch::where('company_id', $company->id)->findOrFail($id);
 
         $data = $request->validate([
-            'name'    => 'nullable|string|max:255',
+            'name' => 'nullable|string|max:255',
             'address' => 'required|string|max:255',
             'city_id' => 'nullable|exists:locations,id',
-            'phone'   => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         $branch->update($data);
 
-        return redirect()->route('employer.company.branches.index', $companyId)
-                         ->with('success', 'Cập nhật chi nhánh thành công!');
+        return redirect()
+            ->route('employer.branches.index')
+            ->with('success', 'Cập nhật chi nhánh thành công!');
     }
 
-    public function destroy($companyId, $id)
+
+    public function destroy($id)
     {
-        $branch = CompanyBranch::where('company_id', $companyId)->findOrFail($id);
+        $company = Company::where('user_id', Auth::id())->firstOrFail();
+
+        $branch = CompanyBranch::where('company_id', $company->id)->findOrFail($id);
+
         $branch->delete();
 
-        return redirect()->route('employer.company.branches.index', $companyId)
-                         ->with('success', 'Xóa chi nhánh thành công!');
+        return redirect()
+            ->route('employer.branches.index')
+            ->with('success', 'Xóa chi nhánh thành công!');
     }
 }

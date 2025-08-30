@@ -144,13 +144,13 @@
             </li>
 
             <li class="sidebar-list">
-                <a class="sidebar-link" href="{{ route('employer.companies.show', $employerCompany->id) }}">
+                <a class="sidebar-link" href="{{ route('employer.companies.index') }}">
                     <i class="bi bi-people"></i>
                     <span>Quản lý công ty</span>
                 </a>
             </li>
-             <li class="sidebar-list">
-                <a class="sidebar-link" href="{{ route('employer.company.branches.index', $employerCompany->id) }}">
+            <li class="sidebar-list">
+                <a class="sidebar-link" href="{{ route('employer.branches.index') }}">
                     <i class="bi bi-people"></i>
                     <span>Quản lý chi nhánh</span>
                 </a>

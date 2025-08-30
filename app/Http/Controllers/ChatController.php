@@ -148,5 +148,21 @@ class ChatController extends Controller
 
         return response()->json(['status' => 'ok']);
     }
+    public function markAllRead(Request $request)
+    {
+        $userId = auth()->id();
+
+        $conversations = Conversation::where('user_one', $userId)
+            ->orWhere('user_two', $userId)
+            ->pluck('id');
+
+        Message::whereIn('conversation_id', $conversations)
+            ->whereNull('read_at')
+            ->where('sender_id', '!=', $userId)
+            ->update(['read_at' => now()]);
+
+        return response()->json(['status' => 'ok']);
+    }
+
 
 }
