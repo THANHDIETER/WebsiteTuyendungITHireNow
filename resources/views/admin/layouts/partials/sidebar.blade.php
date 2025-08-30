@@ -84,20 +84,25 @@
     <ul class="sidebar-menu">
 
         <li class="sidebar-main-title">Chức năng chính</li>
-        <li class="sidebar-list">
-
-            <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
-                <i class="bi bi-speedometer sidebar-icon"></i> Bảng điều khiển
-            </a>
-        </li>
-
-        <li class="sidebar-list">
-            <a class="sidebar-link" href="{{ route('admin.dashboardv2') }}">
-                <i class="bi bi-speedometer2 sidebar-icon"></i> Bảng điều khiển v2
-            </a>
-        </li>
-
-
+         <li class="sidebar-list">
+                <a class="sidebar-link" href="#">
+                    <i class="bi bi-briefcase"></i>
+                    <span>Quản lý thống kê</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}">
+                            <i class="bi bi-bar-chart-line me-2"></i> Thống kê v1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.dashboardv2') }}">
+                            <i class="bi bi-graph-up-arrow me-2"></i> Thống kê v2
+                        </a>
+                    </li>
+                </ul>
+            </li>
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.jobs.index') }}">
                 <i class="bi bi-briefcase sidebar-icon"></i> Duyệt tin tuyển dụng

@@ -10,8 +10,9 @@ class BlogController extends Controller
 {
     public function index()
     {
+        $title = 'Quản lý blog';
         $blogs = Blog::latest()->paginate(10);
-        return view('admin.blogs.index', compact('blogs'));
+        return view('admin.blogs.index', compact('blogs','title'));
     }
 
     public function show(Blog $blog)

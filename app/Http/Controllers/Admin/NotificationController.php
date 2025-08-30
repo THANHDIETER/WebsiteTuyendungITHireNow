@@ -11,8 +11,9 @@ class NotificationController extends Controller
 {
     public function index()
     {
+        $title = 'thông báo';
         $notifications = Notification::orderByDesc('created_at')->paginate(10);
-        return view('admin.notifications.index', compact('notifications'));
+        return view('admin.notifications.index', compact('notifications','title'));
     }
 
     // Lấy dữ liệu JSON cho modal

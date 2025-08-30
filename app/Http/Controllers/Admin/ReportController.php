@@ -11,11 +11,13 @@ class ReportController extends Controller
     // Hiển thị danh sách báo cáo
     public function index()
     {
+        $title = 'Quản lý vi phạm';
+
         $reports = Report::with(['reporter', 'target'])
             ->latest()
             ->paginate(10);
 
-        return view('admin.reports.index', compact('reports'));
+        return view('admin.reports.index', compact('reports','title'));
     }
 
     // Chi tiết một báo cáo

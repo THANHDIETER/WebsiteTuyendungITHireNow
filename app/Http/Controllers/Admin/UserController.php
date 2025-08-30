@@ -11,6 +11,7 @@ class UserController extends Controller
     // 📄 Lấy danh sách user có phân trang & lọc theo role
     public function index(Request $request)
     {
+        $title = 'Quản lý người dùng';
         $query = User::query();
 
         if ($request->filled('role')) {
@@ -19,7 +20,7 @@ class UserController extends Controller
 
         $users = $query->paginate(10);
 
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('users','title'));
     }
 
     // 👁️ Xem chi tiết 1 user

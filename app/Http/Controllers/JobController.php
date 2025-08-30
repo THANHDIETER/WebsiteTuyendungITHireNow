@@ -22,6 +22,7 @@ class JobController extends Controller
 {
     public function index(Request $request)
     {
+        $title = 'tìm việc làm';
         $perPage = $this->sanitizePerPage($request->input('per_page', 6));
         $view = $request->input('view', 'grid');
 
@@ -47,7 +48,8 @@ class JobController extends Controller
             'languages',
             'currencies',
             'sortDefault',
-            'perPage'
+            'perPage',
+            'title'
         ));
     }
 

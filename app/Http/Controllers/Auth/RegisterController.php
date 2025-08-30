@@ -20,7 +20,8 @@ class RegisterController extends Controller
 {
     public function showRegisterForm()
     {
-        return view('auth.register');
+        $title = 'Đăng ký';
+        return view('auth.register',compact('title'));
     }
 
     public function register(RegisterRequest $request)
@@ -56,8 +57,9 @@ class RegisterController extends Controller
 
     public function showRegisterEmployerForm()
     {
+        $title = 'Đăng ký nhà tuyển dụng';
         $locations = Location::all();
-        return view('auth.registerEmployer',compact('locations'));
+        return view('auth.registerEmployer',compact('locations','title'));
     }
 
     public function registerEmployer(RegisterEmployerRequest $request)

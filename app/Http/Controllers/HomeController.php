@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-
+        $title = 'Trang chủ';
         $latestJobs = Cache::remember('latest_jobs', 600, function () {
             return Job::with(['company', 'category', 'skills'])
                 ->where('status', 'published')
@@ -30,7 +30,7 @@ class HomeController extends Controller
                 ->get();
         });
 
-        return view('website.index', compact('categories', 'latestJobs'));
+        return view('website.index', compact('categories', 'latestJobs','title'));
     }
 
     public function jobsApi(Request $request)
@@ -38,64 +38,64 @@ class HomeController extends Controller
         $locationId = $request->input('location');
         $page = $request->get('page', 1);
         $perPage = 6;
-        $limit = 50;
+        $featuredPerPage = 2;
+        $otherPerPage = $perPage - $featuredPerPage;
 
         $allJobs = Job::with(['company', 'category', 'skills', 'location'])
             ->where('status', 'published')
             ->when($locationId, fn($q) => $q->where('location_id', $locationId))
             ->get();
 
-        $paidJobs = $allJobs->where('is_paid', true)->shuffle()->take($limit);
-        $featuredJobs = $allJobs->where('is_featured', true)->shuffle()->take($limit);
-        $topViewedJobs = $allJobs->sortByDesc('views')->shuffle()->take($limit);
-        $latestJobsAll = $allJobs->sortByDesc('created_at')->shuffle()->take($limit);
+        $featuredJobs = $allJobs->where('is_featured', true)->shuffle()->values();
+        $otherJobs = $allJobs->where('is_featured', false)->shuffle()->values();
 
-        $finalJobs = collect();
-        $max = max(
-            $paidJobs->count(),
-            $featuredJobs->count(),
-            $topViewedJobs->count(),
-            $latestJobsAll->count()
-        );
+        // ✅ Lấy 2 featured theo "batch" sau khi đã shuffle
+        $featuredPage = $featuredJobs
+            ->slice(($page - 1) * $featuredPerPage, $featuredPerPage)
+            ->values();
 
-        for ($i = 0; $i < $max; $i++) {
-            if (isset($paidJobs[$i])) {
-                $finalJobs->push($paidJobs[$i]);
-            }
-            if (isset($featuredJobs[$i])) {
-                $finalJobs->push($featuredJobs[$i]);
-            }
-            if (isset($topViewedJobs[$i])) {
-                $finalJobs->push($topViewedJobs[$i]);
-            }
-            if (isset($latestJobsAll[$i])) {
-                $finalJobs->push($latestJobsAll[$i]);
-            }
+        // ✅ Lấy 4 job khác
+        $otherPage = $otherJobs
+            ->slice(($page - 1) * $otherPerPage, $otherPerPage)
+            ->values();
+
+        // ✅ Nếu thiếu featured, bù thêm job khác
+        if ($featuredPage->count() < $featuredPerPage) {
+            $need = $featuredPerPage - $featuredPage->count();
+            $extraOther = $otherJobs
+                ->slice(($page - 1) * $otherPerPage + $otherPerPage, $need)
+                ->values();
+            $otherPage = $otherPage->merge($extraOther);
         }
 
-        // Unique + reset key để tránh lỗi null khi paginate
-        $finalJobs = $finalJobs->unique('id')->values();
+        // ✅ Ghép featured + other
+        $pageJobs = $featuredPage->merge($otherPage)->values();
 
-        // ✅ Thêm is_favorited dựa trên user login
+        // ✅ Thêm is_favorited
         if (auth()->check()) {
             $user = auth()->user();
             $favoritedIds = $user->favoriteJobs()->pluck('job_id')->toArray();
 
-            $finalJobs = $finalJobs->map(function ($job) use ($favoritedIds) {
+            $pageJobs = $pageJobs->map(function ($job) use ($favoritedIds) {
                 $job->is_favorited = in_array($job->id, $favoritedIds);
                 return $job;
             });
         } else {
-            $finalJobs = $finalJobs->map(function ($job) {
+            $pageJobs = $pageJobs->map(function ($job) {
                 $job->is_favorited = false;
                 return $job;
             });
         }
 
-        $total = $finalJobs->count();
+        // ✅ Tổng số trang
+        $totalPages = max(
+            ceil($featuredJobs->count() / $featuredPerPage),
+            ceil($otherJobs->count() / $otherPerPage)
+        );
+
         $paginated = new LengthAwarePaginator(
-            $finalJobs->forPage($page, $perPage)->values(),
-            $total,
+            $pageJobs,
+            $allJobs->count(),
             $perPage,
             $page,
             ['path' => url('/api/jobs')]
@@ -104,7 +104,7 @@ class HomeController extends Controller
         return response()->json([
             'data' => $paginated->items(),
             'current_page' => $paginated->currentPage(),
-            'last_page' => $paginated->lastPage(),
+            'last_page' => $totalPages,
             'per_page' => $paginated->perPage(),
             'total' => $paginated->total()
         ]);

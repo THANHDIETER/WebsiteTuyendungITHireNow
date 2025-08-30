@@ -11,7 +11,9 @@ class ForgotPasswordController extends Controller
 {
     public function showLinkRequestForm()
     {
-        return view('auth.forgot-password');
+        $title = 'Quên mật khẩu';
+
+        return view('auth.forgot-password',compact('title'));
     }
 
     public function sendResetLinkEmail(Request $request)

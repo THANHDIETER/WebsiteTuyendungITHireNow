@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <title>
     @if(!empty($title))
-        {{ $title }} | {{ $seo->title ?? '' }}
+        {{ $title }}
     @else
         {{ $seo->title ?? '' }}
     @endif

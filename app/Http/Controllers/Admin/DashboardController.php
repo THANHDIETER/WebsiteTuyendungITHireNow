@@ -16,6 +16,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $title = 'thống kê v1';
         $now = Carbon::now();
         $startOfMonth = $now->copy()->startOfMonth();
 
@@ -123,13 +124,14 @@ class DashboardController extends Controller
             'totalOrders',
             'ordersByMonth',
             'totalRevenue',
-            'revenueByMonth'
+            'revenueByMonth',
+            'title'
         ));
     }
 
     public function indexv2(Request $request)
     {
-        // ---- Lọc theo ngày ----
+        $title = 'thống kê v2';
         $filter = $request->input('filter', 'this_month'); // mặc định: tháng này
 
         $now = Carbon::now();
@@ -285,7 +287,8 @@ class DashboardController extends Controller
             'totalOrders',
             'ordersByMonth',
             'totalRevenue',
-            'revenueByMonth'
+            'revenueByMonth',
+            'title'
         ));
     }
 

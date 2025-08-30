@@ -11,8 +11,9 @@ class EmployerController extends Controller
     // Danh sách nhà tuyển dụng
     public function index()
     {
+        $title = 'nhà tuyển dụng';
         $employers = User::where('role', 'employer')->with('companies')->latest()->paginate(10);
-        return view('admin.employers.index', compact('employers'));
+        return view('admin.employers.index', compact('employers','title'));
     }
 
     // Trang tạo mới (nếu cần)

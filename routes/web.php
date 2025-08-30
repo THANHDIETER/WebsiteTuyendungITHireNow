@@ -130,7 +130,9 @@ Route::get('/about-us', function () {
 })->name('about-us');
 
 Route::get('/contact', function () {
-    return view('website.pages.contact');
+    return view('website.pages.contact', [
+        'title' => 'Liên lạc'
+    ]);
 })->name('contact');
 
 Route::get('/404', function () {

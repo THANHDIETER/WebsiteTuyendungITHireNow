@@ -16,7 +16,8 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        $title = 'Đăng nhập';
+        return view('auth.login',compact('title'));
     }
 
     public function login(Request $request)
