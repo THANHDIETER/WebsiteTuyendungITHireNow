@@ -125,9 +125,9 @@
         <div class="card-body">
           <div class="text-muted">Tổng Job</div>
           <div class="fs-3 fw-bold">{{ number_format($jobsTotal ?? 0) }}</div>
-          @isset($jobsActive)
+          <!-- @isset($jobsActive)
             <div class="small text-muted">Active: {{ number_format($jobsActive ?? 0) }}</div>
-          @endisset
+          @endisset -->
         </div>
       </div>
     </div>

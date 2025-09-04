@@ -42,6 +42,10 @@ class Payment extends Model
     {
         return $this->belongsTo(Company::class);
     }
+    public function order()
+    {
+        return $this->hasOne(EmployerPackageOrder::class, 'payment_id');
+    }
 
 
     public function statusLabel(): string

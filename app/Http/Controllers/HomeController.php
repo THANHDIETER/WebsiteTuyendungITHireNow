@@ -13,13 +13,12 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $title = 'Trang chủ';
-        $latestJobs = Cache::remember('latest_jobs', 600, function () {
-            return Job::with(['company', 'category', 'skills'])
-                ->where('status', 'published')
-                ->orderByDesc('created_at')
-                ->limit(6)
-                ->get();
-        });
+        $latestJobs = Job::with(['company', 'category', 'skills'])
+            ->where('status', 'published')
+            ->orderByDesc('created_at')
+            ->limit(6)
+            ->get();
+
 
         $categories = Cache::remember('categories_active', 3600, function () {
             return Category::where('is_active', true)

@@ -34,6 +34,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('payments/{id}/pdf', [PaymentController::class, 'downloadPdf']);
     Route::apiResource('seeker-profiles', SeekerProfileController::class);
     Route::apiResource('payments', PaymentController::class);
+    Route::post('payments/{id}/approve', [PaymentController::class, 'approve']);
+    Route::post('payments/{id}/reject', [PaymentController::class, 'reject']);
     Route::apiResource('bank-accounts', BankAccountController::class);
     Route::get('/bank-logs', [BankLogController::class, 'index']);
 });

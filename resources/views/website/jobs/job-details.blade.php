@@ -245,7 +245,7 @@
 
 
 {{-- Related jobs --}}
-@include('website.jobs.partials.job_details.related-jobs', ['relatedJobs' => $relatedJobs])
+@include('website.jobs.partials.job_details.related-jobs')
 </main>
 
 {{-- Sticky mobile apply bar --}}

@@ -35,11 +35,11 @@
                   </li>
 
                   <!-- Nhà tuyển dụng -->
-                  <li class="modes d-flex">
+                  <!-- <li class="modes d-flex">
                       <a href="{{ route('employer.dashboard') }}" class="text-dark" title="Nhà tuyển dụng">
                           <i class="bi bi-person-badge svg-color fs-5"></i>
                       </a>
-                  </li>
+                  </li> -->
 
                   {{-- 🔔 Notifications: 3 item đầu + cuộn trong dropdown + nút "Đánh dấu tất cả đã đọc" --}}
                   <li class="custom-dropdown" id="admin-noti-dropdown">

@@ -6,16 +6,15 @@ use Carbon\Carbon;
 use App\Models\BankLog;
 use App\Models\Payment;
 use App\Models\Setting;
-use App\Models\EmployerPackageLog;
-use App\Models\EmployerPackageOrder;
-use App\Models\EmployerPackageUsage;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
+use App\Services\PaymentService;
+use App\Models\EmployerPackageLog;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class HandlePendingPaymentsJob implements ShouldQueue
 {
@@ -34,7 +33,7 @@ class HandlePendingPaymentsJob implements ShouldQueue
 
         $pendingPayments = Payment::where('status', 'pending')
             ->orderBy('created_at')
-            ->limit(50) // có thể tăng lên nếu muốn
+            ->limit(50) // có thể tăng nếu muốn
             ->get();
 
         foreach ($pendingPayments as $payment) {
@@ -59,6 +58,7 @@ class HandlePendingPaymentsJob implements ShouldQueue
             $company = $payment->company ?? optional($user)->company;
 
             try {
+                // ✅ Khớp giao dịch
                 if ($matchedLog) {
                     $payment->status = 'paid';
                     $payment->paid_at = Carbon::parse($matchedLog->trans_time ?? $now);
@@ -71,45 +71,13 @@ class HandlePendingPaymentsJob implements ShouldQueue
 
                     $stats['paid']++;
 
-                    if ($package && $company) {
-                        $startDate = $payment->paid_at;
-                        $endDate = $startDate->copy()->addDays($package->duration_days);
+                    // Cấp gói qua service
+                    PaymentService::activatePackage($payment);
 
-                        $order = EmployerPackageOrder::create([
-                            'company_id' => $company->id,
-                            'employer_package_id' => $package->id,
-                            'post_limit' => $package->post_limit,
-                            'post_used' => 0,
-                            'start_date' => $startDate,
-                            'end_date' => $endDate,
-                            'status' => 'active',
-                        ]);
-
-                        $orders = EmployerPackageUsage::create([
-                            'company_id' => $company->id,
-                            'employer_package_id' => $package->id,
-                            'post_limit' => $package->post_limit,
-                            'posts_used' => 0,
-                            'start_date' => $startDate,
-                            'end_date' => $endDate,
-                            'is_active' => true,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]);
-
-                        EmployerPackageLog::create([
-                            'order_id' => $orders->id,
-                            'job_id' => null,
-                            'used_at' => now(),
-                            'action' => 'Mua gói thành công',
-                        ]);
-
-                        Log::info("Đã tạo order ID {$orders->id} cho công ty ID {$company->id}");
-                    }
                     continue;
                 }
 
-                // Sai số tiền
+                // ❌ Sai số tiền
                 $wrongAmountLog = BankLog::where('description', 'like', '%' . $transactionId . '%')
                     ->where('amount', '<>', $payment->amount)
                     ->whereBetween('trans_time', [$timeFrom, $timeTo])
@@ -133,7 +101,7 @@ class HandlePendingPaymentsJob implements ShouldQueue
                     continue;
                 }
 
-                // Sai nội dung
+                // ❌ Sai nội dung
                 $wrongContentLog = $logs->first(function ($log) use ($normalizedTarget) {
                     $normalizedDesc = strtoupper(preg_replace('/\s+/', '', $log->description));
                     return !Str::contains($normalizedDesc, $normalizedTarget);
@@ -156,7 +124,7 @@ class HandlePendingPaymentsJob implements ShouldQueue
                     continue;
                 }
 
-                // Hết hạn
+                // ⏰ Hết hạn
                 $timeoutMinutes = (int) Setting::getValue('payment_timeout_minutes', 6);
                 if ($payment->created_at <= $now->copy()->subMinutes($timeoutMinutes)) {
                     $payment->status = 'expired';
@@ -173,6 +141,7 @@ class HandlePendingPaymentsJob implements ShouldQueue
                 } else {
                     $stats['pending_no_match']++;
                 }
+
             } catch (\Exception $e) {
                 Log::error("Lỗi khi xử lý payment_id={$payment->id}: " . $e->getMessage());
             }

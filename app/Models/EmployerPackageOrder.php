@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EmployerPackageOrder extends Model
 {
     protected $fillable = [
+        'payment_id',
         'company_id',
         'employer_package_id',
         'post_limit',
@@ -14,6 +15,7 @@ class EmployerPackageOrder extends Model
         'start_date',
         'end_date',
         'status',
+        
     ];
 
     protected $casts = [
@@ -22,9 +24,9 @@ class EmployerPackageOrder extends Model
     ];
 
     public function company()
-{
-    return $this->belongsTo(Company::class, 'company_id');
-}
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
 
     public function package()
     {
@@ -35,5 +37,17 @@ class EmployerPackageOrder extends Model
     {
         return $this->hasMany(EmployerPackageLog::class, 'order_id');
     }
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class, 'payment_id');
+    }
+    public function employerPackage()
+{
+    return $this->belongsTo(\App\Models\EmployerPackage::class, 'employer_package_id');
+}
+
+
+
+
 }
 

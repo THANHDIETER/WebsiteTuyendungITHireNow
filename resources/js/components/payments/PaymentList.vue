@@ -74,30 +74,38 @@
               >
                 Xem chi tiết
               </button>
+              <button class="btn btn-success btn-sm" @click="approveInvoice(invoice.id)">
+  Duyệt
+</button>
+<button class="btn btn-danger btn-sm" @click="rejectInvoice(invoice.id)">
+  Từ chối
+</button>
+
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <nav class="mt-4 d-flex justify-content-center">
-      <ul class="pagination">
-        <li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
-          <button class="page-link" @click="changePage(pagination.current_page - 1)">Trang trước</button>
-        </li>
-        <li
-          v-for="page in pagination.last_page"
-          :key="page"
-          class="page-item"
-          :class="{ active: page === pagination.current_page }"
-        >
-          <button class="page-link" @click="changePage(page)">{{ page }}</button>
-        </li>
-        <li class="page-item" :class="{ disabled: pagination.current_page === pagination.last_page }">
-          <button class="page-link" @click="changePage(pagination.current_page + 1)">Trang sau</button>
-        </li>
-      </ul>
-    </nav>
+    <nav v-if="pagination.last_page > 1" class="mt-4 d-flex justify-content-center">
+  <ul class="pagination">
+    <li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
+      <button class="page-link" @click="changePage(pagination.current_page - 1)">Trang trước</button>
+    </li>
+    <li
+      v-for="page in pagination.last_page"
+      :key="page"
+      class="page-item"
+      :class="{ active: page === pagination.current_page }"
+    >
+      <button class="page-link" @click="changePage(page)">{{ page }}</button>
+    </li>
+    <li class="page-item" :class="{ disabled: pagination.current_page === pagination.last_page }">
+      <button class="page-link" @click="changePage(pagination.current_page + 1)">Trang sau</button>
+    </li>
+  </ul>
+</nav>
+
 
     <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -258,6 +266,62 @@ async function downloadInvoicePdf() {
     loadingDownload.value = false
   }
 }
+async function approveInvoice(id) {
+  showAlertModal({
+    title: "Xác nhận duyệt",
+    message: "Bạn có chắc chắn muốn DUYỆT hóa đơn này?",
+    type: "confirm",
+    status: "success",
+    onConfirm: async () => {
+      try {
+        const { data } = await axios.post(`/api/payments/${id}/approve`)
+        showAlertModal({
+          title: "Thông báo",
+          message: data.message,   // lấy message trả về từ API
+          type: "alert",
+          status: "success"
+        })
+        fetchInvoices(pagination.value.current_page)
+      } catch (e) {
+        showAlertModal({
+          title: "Lỗi",
+          message: e.response?.data?.error || "Có lỗi xảy ra khi duyệt hóa đơn.",
+          type: "alert",
+          status: "danger"
+        })
+      }
+    }
+  })
+}
+
+async function rejectInvoice(id) {
+  showAlertModal({
+    title: "Xác nhận từ chối",
+    message: "Bạn có chắc chắn muốn TỪ CHỐI hóa đơn này?",
+    type: "confirm",
+    status: "danger",
+    onConfirm: async () => {
+      try {
+        const { data } = await axios.post(`/api/payments/${id}/reject`)
+        showAlertModal({
+          title: "Thông báo",
+          message: data.message,   // lấy message trả về từ API
+          type: "alert",
+          status: "success"
+        })
+        fetchInvoices(pagination.value.current_page)
+      } catch (e) {
+        showAlertModal({
+          title: "Lỗi",
+          message: e.response?.data?.error || "Có lỗi xảy ra khi từ chối hóa đơn.",
+          type: "alert",
+          status: "danger"
+        })
+      }
+    }
+  })
+}
+
 
 onMounted(() => fetchInvoices())
 </script>

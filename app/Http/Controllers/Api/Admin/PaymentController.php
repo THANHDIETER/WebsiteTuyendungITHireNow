@@ -7,6 +7,8 @@ use App\Models\BankLog;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\PaymentService;
+use App\Models\EmployerPackageLog;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -60,7 +62,43 @@ class PaymentController extends Controller
         }
     }
 
-    
+    public function approve($id)
+    {
+        $payment = Payment::with('package', 'user')->findOrFail($id);
 
+        // if ($payment->status !== 'pending') {
+        //     return response()->json(['error' => 'Chỉ duyệt được đơn pending'], 400);
+        // }
+
+        $payment->status = 'paid';
+        $payment->paid_at = now();
+        $payment->save();
+
+        PaymentService::activatePackage($payment);
+
+        return response()->json(['message' => 'Duyệt thành công', 'payment' => $payment]);
+    }
+
+    public function reject($id)
+    {
+        $payment = Payment::with('package', 'user')->findOrFail($id);
+
+        if ($payment->status !== 'pending') {
+            return response()->json(['error' => 'Chỉ từ chối được đơn pending'], 400);
+        }
+
+        $payment->status = 'failed';
+        $payment->paid_at = now();
+        $payment->save();
+
+        EmployerPackageLog::create([
+            'order_id' => $payment->id,
+            'job_id' => null,
+            'used_at' => now(),
+            'action' => 'Thanh toán bị từ chối thủ công',
+        ]);
+
+        return response()->json(['message' => 'Đã từ chối đơn thanh toán', 'payment' => $payment]);
+    }
 
 }

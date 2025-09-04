@@ -8,6 +8,7 @@ use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use App\Models\EmployerPackage;
 use App\Http\Controllers\Controller;
+use App\Models\EmployerPackageOrder;
 use Illuminate\Support\Facades\Auth;
 
 class PackageController extends Controller
@@ -15,29 +16,36 @@ class PackageController extends Controller
 
     public function index()
     {
-        // Lấy tất cả gói đang hoạt động (is_active = 1), sắp xếp giảm dần theo độ ưu tiên
+        // Lấy tất cả gói đang hoạt động
         $packages = EmployerPackage::where('is_active', 1)
             ->orderByDesc('sort_order')
             ->get();
+
+        // Kiểm tra bank
         $Bank = BankAccount::where('is_active', 1)->exists();
 
-        // Lấy thông tin công ty của người dùng hiện tại
+        // Lấy công ty user
         $company = Auth::user()->company;
         if (!$company) {
-            return redirect()->route('employer')->with('error', 'Bạn cần tạo công ty trước khi mua gói.');
+            return redirect()->route('employer')
+                ->with('error', 'Bạn cần tạo công ty trước khi mua gói.');
         }
 
-        // Lấy gói hiện tại đang sử dụng từ quan hệ Company
+        // Gói hiện tại
         $currentSubscription = $company?->activePackage();
 
-        // Lấy tất cả các đơn thanh toán gói của user hiện tại
-        $payments = Payment::with('package')
+        // Lấy toàn bộ payment của user (kèm package + order)
+        $payments = Payment::with(['package', 'order.employerPackage'])
             ->where('user_id', Auth::id())
-            ->orderByDesc('id')
+            ->orderByDesc('created_at')
             ->get();
 
-        // Truyền dữ liệu ra view
-        return view('employer.packages.index', compact('packages', 'currentSubscription', 'payments', 'Bank'));
+        return view('employer.packages.index', compact(
+            'packages',
+            'currentSubscription',
+            'payments',
+            'Bank'
+        ));
     }
 
 
