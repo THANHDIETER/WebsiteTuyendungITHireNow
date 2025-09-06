@@ -1,13 +1,4 @@
-@auth
-    @if(Auth::user()->role === 'job_seeker')
-        <!-- ⭐ Icon việc làm yêu thích (nhỏ hơn) -->
-        <a href="{{ route('favorites.index') }}"
-           class="position-fixed bg-danger text-white rounded-circle d-flex justify-content-center align-items-center shadow"
-           style="width: 35px; height: 35px; cursor: pointer; z-index: 8000; bottom: 85px; right: 25px; font-size: 18px;">
-           <i class="bi bi-heart-fill"></i>
-        </a>
-    @endif
-@endauth
+
 
 <!-- 💬 Icon Chatbot -->
 <div id="chatbot-toggle"

@@ -66,9 +66,9 @@ class PaymentController extends Controller
     {
         $payment = Payment::with('package', 'user')->findOrFail($id);
 
-        // if ($payment->status !== 'pending') {
-        //     return response()->json(['error' => 'Chỉ duyệt được đơn pending'], 400);
-        // }
+        if ($payment->status !== 'pending') {
+            return response()->json(['error' => 'Chỉ duyệt được đơn pending'], 400);
+        }
 
         $payment->status = 'paid';
         $payment->paid_at = now();

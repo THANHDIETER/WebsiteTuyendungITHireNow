@@ -113,11 +113,11 @@
                 <i class="bi bi-journal-arrow-down sidebar-icon"></i> Nhà tuyển dụng
             </a>
         </li>
-        <li class="sidebar-list">
+        <!-- <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.seekerprofile.index') }}">
                 <i class="bi bi-person-lines-fill sidebar-icon"></i> Duyệt CV ứng viên
             </a>
-        </li>
+        </li> -->
 
         <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.service-packages.index') }}">
@@ -143,17 +143,17 @@
             </a>
         </li>
 
-        <li class="sidebar-list">
+        <!-- <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.blogs.index') }}">
                 <i class="bi bi-journal-text sidebar-icon"></i> Quản lý Blog
             </a>
-        </li>
+        </li> -->
 
-        <li class="sidebar-list">
+        <!-- <li class="sidebar-list">
             <a class="sidebar-link" href="{{ route('admin.reports.index') }}">
                 <i class="bi bi-flag sidebar-icon"></i> Nội dung vi phạm
             </a>
-        </li>
+        </li> -->
 
         <li class="sidebar-main-title">Khác</li>
 
